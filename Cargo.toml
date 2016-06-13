@@ -1,0 +1,7 @@
+[package]
+name = "libmodbus-rs"
+version = "0.1.0"
+authors = ["Stefan Müller <s.mueller@it.kls-glt.de>"]
+
+[dependencies]
+libc = "0.2.0"
