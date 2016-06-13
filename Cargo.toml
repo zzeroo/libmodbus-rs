@@ -2,6 +2,17 @@
 name = "libmodbus-rs"
 version = "0.1.0"
 authors = ["Stefan Müller <s.mueller@it.kls-glt.de>"]
+license = "LGPL-2.1"
+readme = "README.md"
+keywords = ["modbus"]
+repository = "https://github.com/zzeroo/libmodbus-rs.git"
+homepage = "https://github.com/zzeroo/libmodbus-rs.git"
+documentation = "https://github.com/zzeroo/libmodbus-rs.git"
+description = """
+Binding to libmodbus.
+libmodbus is a free software library to send/receive data with a device which respects the Modbus protocol. This library can use a serial port or an Ethernet connection.
+"""
 
 [dependencies]
 libc = "0.2.0"
+libmodbus-sys = { path = "libmodbus-sys", version = "0.1.0" }
