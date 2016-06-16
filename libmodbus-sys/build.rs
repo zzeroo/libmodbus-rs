@@ -12,11 +12,11 @@ use std::process::{Command, Stdio};
 fn main() {
     let has_pkgconfig = Command::new("pkg-config").output().is_ok();
 
-    if env::var("LIBMODBUS_SYS_USE_PKG_CONFIG").is_ok() {
+    //if env::var("LIBMODBUS_SYS_USE_PKG_CONFIG").is_ok() {
         if pkg_config::find_library("libmodbus").is_ok() {
             return
         }
-    }
+    //}
 
     if !Path::new("libmodbus/.git").exists() {
         let _ = Command::new("git").args(&["submodule", "update", "--init"])
@@ -48,7 +48,7 @@ fn main() {
 
     run(Command::new("sh")
             .arg("-c")
-            .arg(&config_opts.connect(" "))
+            .arg(&config_opts.join(" "))
             .current_dir(&dst.join("build")));
 
     run(Command::new(make())
