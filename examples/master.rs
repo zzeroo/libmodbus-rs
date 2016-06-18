@@ -217,7 +217,7 @@ fn main() {
     unsafe {
         let mut tab_reg = vec![0u16; 32];
 
-        let ctx = modbus_new_rtu(device, 9600, 'N' as i8, 8, 1);
+        let ctx = modbus_new_rtu(device, 9600, 'N' as c_char, 8, 1);
         modbus_set_slave(ctx, slave_id);
         modbus_set_debug(ctx, TRUE);
 
