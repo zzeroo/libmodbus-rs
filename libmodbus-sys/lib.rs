@@ -1,36 +1,41 @@
 #![doc(html_logo_url = "https://raw.githubusercontent.com/Kliemann-Service-GmbH/xMZ-Mod-Touch-Server/master/share/xmz-logo.png",
        html_favicon_url = "https://raw.githubusercontent.com/Kliemann-Service-GmbH/xMZ-Mod-Touch-Server/master/share/favicon.ico",
        html_root_url = "https://gaswarnanlagen.com/")]
-#![allow(non_camel_case_types)]
-
 extern crate libc;
-
 use libc::{c_char, c_int, uint8_t, uint16_t, uint32_t, c_void, timeval, c_uint, ssize_t, fd_set};
+
+pub const FALSE: c_int = 0;
+pub const TRUE: c_int = 1;
+pub const OFF: c_int = 0;
+pub const ON: c_int = 1;
 
 macro_rules! modbus_enum {
     (pub enum $name:ident { $($variants:tt)* }) => {
+        #[allow(non_camel_case_types)]
         #[cfg(target_env = "msvc")]
         pub type $name = i32;
+        #[allow(non_camel_case_types)]
         #[cfg(not(target_env = "msvc"))]
         pub type $name = u32;
         modbus_enum!(gen, $name, 0, $($variants)*);
     };
     (pub enum $name:ident: $t:ty { $($variants:tt)* }) => {
+        #[allow(non_camel_case_types)]
         pub type $name = $t;
         modbus_enum!(gen, $name, 0, $($variants)*);
     };
     (gen, $name:ident, $val:expr, $variant:ident, $($rest:tt)*) => {
+        #[allow(non_camel_case_types)]
         pub const $variant: $name = $val;
         modbus_enum!(gen, $name, $val+1, $($rest)*);
     };
     (gen, $name:ident, $val:expr, $variant:ident = $e:expr, $($rest:tt)*) => {
+        #[allow(non_camel_case_types)]
         pub const $variant: $name = $e;
         modbus_enum!(gen, $name, $e+1, $($rest)*);
     };
     (gen, $name:ident, $val:expr, ) => {}
 }
-
-
 modbus_enum! {
     pub enum  modbus_backend_type_t {
         _MODBUS_BACKEND_TYPE_RTU=0,
@@ -54,6 +59,7 @@ modbus_enum! {
 }
 
 #[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct modbus_backend_t {
     backend_type: c_uint,
     header_length: c_uint,
@@ -100,6 +106,7 @@ pub struct _modbus {
     backend_data: *mut c_void,
 }
 
+#[allow(non_camel_case_types)]
 pub type modbus_t = _modbus;
 
 #[repr(C)]
@@ -117,6 +124,18 @@ pub struct modbus_mapping_t {
     tab_input_registers: *mut uint16_t,
     tab_registers: *mut uint16_t,
 }
+
+// modbus-rtu.h
+pub const MODBUS_RTU_MAX_ADU_LENGTH: c_int = 256;
+
+pub const MODBUS_RTU_RS232: c_int = 0;
+pub const MODBUS_RTU_RS485: c_int = 1;
+
+pub const MODBUS_RTU_RTS_NONE: c_int = 0;
+pub const MODBUS_RTU_RTS_UP: c_int   = 1;
+pub const MODBUS_RTU_RTS_DOWN: c_int = 2;
+
+
 
 #[link(name = "modbus")]
 extern {
@@ -175,9 +194,22 @@ extern {
 
     pub fn modbus_reply(ctx: *mut modbus_t, req: *const uint8_t, req_length: c_int, mb_mapping: *mut modbus_mapping_t) -> c_int;
     pub fn modbus_reply_exception(ctx: *mut modbus_t, req: *const uint8_t, exception_code: c_uint) -> c_int;
+
+
 }
 
 // modbus-rtu.h
 extern {
-    pub fn modbus_new_rtu(device: *const c_char, baud: c_int, parity: c_int, data_bit: c_int, stop_bit: c_int) -> *mut modbus_t;
+    pub fn modbus_new_rtu(device: *const c_char, baud: c_int, parity: c_char, data_bit: c_int, stop_bit: c_int) -> *mut modbus_t;
+
+    pub fn modbus_rtu_set_serial_mode(ctx: *mut modbus_t, mode: c_int) -> c_int;
+    pub fn modbus_rtu_get_serial_mode(ctx: *mut modbus_t) -> c_int;
+
+    pub fn modbus_rtu_set_rts(ctx: *mut modbus_t, mode: c_int) -> c_int;
+    pub fn modbus_rtu_get_rts(ctx: *mut modbus_t) -> c_int;
+
+    pub fn modbus_rtu_set_custom_rts(ctx: *mut modbus_t, set_rts: extern fn(ctx: *mut modbus_t, on: c_int)) -> c_int;
+
+    pub fn modbus_rtu_set_rts_delay(ctx: *mut modbus_t, us: c_int) -> c_int;
+    pub fn modbus_rtu_get_rts_delay(ctx: *mut modbus_t) -> c_int;
 }
