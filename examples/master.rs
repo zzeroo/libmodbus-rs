@@ -1,3 +1,6 @@
+#![doc(html_logo_url = "https://raw.githubusercontent.com/Kliemann-Service-GmbH/xMZ-Mod-Touch-Server/master/share/xmz-logo.png",
+       html_favicon_url = "https://raw.githubusercontent.com/Kliemann-Service-GmbH/xMZ-Mod-Touch-Server/master/share/favicon.ico",
+       html_root_url = "https://gaswarnanlagen.com/")]
 extern crate libc;
 use libc::{c_char, c_int, uint8_t, uint16_t, uint32_t, c_void, timeval, c_uint, ssize_t, fd_set};
 
@@ -223,7 +226,7 @@ fn main() {
 
         modbus_rtu_set_serial_mode(ctx, MODBUS_RTU_RS485);
         modbus_rtu_set_rts(ctx, MODBUS_RTU_RTS_DOWN);
-        
+
         if  modbus_connect(ctx) == -1 {
             modbus_free(ctx);
             panic!("Connection failed!");
