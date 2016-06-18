@@ -222,6 +222,8 @@ fn main() {
         modbus_set_debug(ctx, TRUE);
 
         modbus_rtu_set_serial_mode(ctx, MODBUS_RTU_RS485);
+        modbus_rtu_set_rts(ctx, MODBUS_RTU_RTS_DOWN);
+        
         if  modbus_connect(ctx) == -1 {
             modbus_free(ctx);
             panic!("Connection failed!");
