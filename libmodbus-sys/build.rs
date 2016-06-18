@@ -9,6 +9,7 @@ use std::fs;
 use std::path::{Path};
 use std::process::{Command, Stdio};
 
+#[allow(unused_variables)]
 fn main() {
     let has_pkgconfig = Command::new("pkg-config").output().is_ok();
 

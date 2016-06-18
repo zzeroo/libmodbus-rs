@@ -1,6 +1,5 @@
 extern crate libc;
 use libc::{c_char, c_int, uint8_t, uint16_t, uint32_t, c_void, timeval, c_uint, ssize_t, fd_set};
-use std::ptr;
 
 pub const FALSE: c_int = 0;
 pub const TRUE: c_int = 1;
@@ -9,21 +8,26 @@ pub const ON: c_int = 1;
 
 macro_rules! modbus_enum {
     (pub enum $name:ident { $($variants:tt)* }) => {
+        #[allow(non_camel_case_types)]
         #[cfg(target_env = "msvc")]
         pub type $name = i32;
+        #[allow(non_camel_case_types)]
         #[cfg(not(target_env = "msvc"))]
         pub type $name = u32;
         modbus_enum!(gen, $name, 0, $($variants)*);
     };
     (pub enum $name:ident: $t:ty { $($variants:tt)* }) => {
+        #[allow(non_camel_case_types)]
         pub type $name = $t;
         modbus_enum!(gen, $name, 0, $($variants)*);
     };
     (gen, $name:ident, $val:expr, $variant:ident, $($rest:tt)*) => {
+        #[allow(non_camel_case_types)]
         pub const $variant: $name = $val;
         modbus_enum!(gen, $name, $val+1, $($rest)*);
     };
     (gen, $name:ident, $val:expr, $variant:ident = $e:expr, $($rest:tt)*) => {
+        #[allow(non_camel_case_types)]
         pub const $variant: $name = $e;
         modbus_enum!(gen, $name, $e+1, $($rest)*);
     };
@@ -52,6 +56,7 @@ modbus_enum! {
 }
 
 #[repr(C)]
+#[allow(non_camel_case_types)]
 pub struct modbus_backend_t {
     backend_type: c_uint,
     header_length: c_uint,
@@ -98,6 +103,7 @@ pub struct _modbus {
     backend_data: *mut c_void,
 }
 
+#[allow(non_camel_case_types)]
 pub type modbus_t = _modbus;
 
 #[repr(C)]
@@ -187,7 +193,7 @@ extern {
     pub fn modbus_reply_exception(ctx: *mut modbus_t, req: *const uint8_t, exception_code: c_uint) -> c_int;
 
 
-    pub fn modbus_new_rtu(device: *const c_char, baud: c_int, parity: char, data_bit: c_int, stop_bit: c_int) -> *mut modbus_t;
+    pub fn modbus_new_rtu(device: *const c_char, baud: c_int, parity: c_char, data_bit: c_int, stop_bit: c_int) -> *mut modbus_t;
 
     // modbus-rtu.h
     pub fn modbus_rtu_set_serial_mode(ctx: *mut modbus_t, mode: c_int) -> c_int;
@@ -211,8 +217,8 @@ fn main() {
     unsafe {
         let mut tab_reg = vec![0u16; 32];
 
-        let mut ctx = modbus_new_rtu(device, 9600, 'N', 8, 1);
-        modbus_set_slave(ctx, 46);
+        let ctx = modbus_new_rtu(device, 9600, 'N' as i8, 8, 1);
+        modbus_set_slave(ctx, slave_id);
         modbus_set_debug(ctx, TRUE);
 
         modbus_rtu_set_serial_mode(ctx, MODBUS_RTU_RS485);
