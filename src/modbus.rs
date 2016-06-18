@@ -1,6 +1,11 @@
 use raw::*;
 use libc::{c_char};
 
+#[derive(Debug, Eq, PartialEq)]
+pub enum ModbusError {
+    INVALID_SLAVE_ID,
+}
+
 pub struct Modbus { ctx: *mut modbus_t }
 
 impl Modbus {
@@ -30,7 +35,34 @@ impl Modbus {
         }
     }
 
-    
+    /// Define the slave ID of the remote device to talk in master mode or set the
+    /// internal slave ID in slave mode
+    ///
+    /// # Attributes
+    /// * `slave_id`    - New modbus slave id (valid range: `>= 0 && <= 247`)
+    ///
+    /// # Examples
+    /// A `Ok(0)` signals all right, on error a `ModbusError::INVALID_SLAVE_ID` is returned
+    ///
+    /// ```
+    /// use libmodbus_rs::modbus::{Modbus, ModbusError};
+    ///
+    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
+    /// assert_eq!(modbus.set_slave(10), Ok(0));
+    /// assert_eq!(modbus.set_slave(255), Err(ModbusError::INVALID_SLAVE_ID));
+    /// ```
+    pub fn set_slave(&mut self, slave_id: i32) -> Result<i32, ModbusError> {
+        unsafe {
+            let ret: i32 = ::raw::modbus_set_slave(self.ctx, slave_id);
+            if ret == -1 {
+                return Err(ModbusError::INVALID_SLAVE_ID);
+            } else {
+                return Ok(ret);
+            }
+        }
+    }
+
+
 }
 
 
