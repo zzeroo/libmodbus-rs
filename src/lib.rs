@@ -3,6 +3,11 @@
        html_root_url = "https://gaswarnanlagen.com/")]
 extern crate libc;
 extern crate libmodbus_sys as raw;
+use libc::{c_int};
 
 /// Modbus context
 pub mod modbus;
+
+// These republished constants are for the doc tests. Because there is no simple way to access raw:: values
+pub const MODBUS_RTU_RS485: c_int = raw::MODBUS_RTU_RS485;
+pub const MODBUS_RTU_RTS_DOWN: c_int = raw::MODBUS_RTU_RTS_DOWN;

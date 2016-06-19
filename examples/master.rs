@@ -237,8 +237,8 @@ fn main() {
             println!("Registers could not be read");
         }
 
-        for i in 0..rc {
-            println!("register[{}]=[{}] (0x{})", i, &tab_reg[i as usize], &tab_reg[i as usize]);
+        for i in 0..20 {
+            println!("register[{}]=[{}] (0x{:X})", i, &tab_reg[i as usize], &tab_reg[i as usize]);
         }
 
 

@@ -199,6 +199,7 @@ extern {
 }
 
 // modbus-rtu.h
+#[link(name = "modbus")]
 extern {
     pub fn modbus_new_rtu(device: *const c_char, baud: c_int, parity: c_char, data_bit: c_int, stop_bit: c_int) -> *mut modbus_t;
 
