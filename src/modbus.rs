@@ -8,16 +8,17 @@ pub type Result<T> = result::Result<T, ModbusError>;
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum ModbusError {
-    EINVAL,
-    INVALID_SLAVE_ID,
-    INVALID_RTU_SERIAL_MODE,
-    INVALID_RTU_RTS,
-    INVALID_DEBUG,
+    GenericError,
+    InvalidSlaveID,
+    InvalidRTUSerialMode,
+    InvalidRTURTS,
+    InvalidDebug,
 }
 
 /// This struct holds the current context `ctx`
 ///
 /// This logic is derived from that one libmodbus uses.
+#[derive(Debug, Eq, PartialEq)]
 pub struct Modbus { ctx: *mut modbus_t }
 
 impl Modbus {
@@ -51,22 +52,22 @@ impl Modbus {
     /// internal slave ID in slave mode
     ///
     /// # Attributes
-    /// * `slave_id`    - New modbus slave id (valid range: `>= 0 && <= 247`)
+    /// * `slave_id`    - New modbus slave id (valid range: `>= 0 && <= 247`), `0` is broadcast address
     ///
     /// # Examples
-    /// A `Ok(0)` signals all right, on error a `ModbusError::INVALID_SLAVE_ID` is returned
+    /// A `Ok(0)` signals all right, on error a `ModbusError::InvalidSlaveID` is returned
     ///
     /// ```
     /// use libmodbus_rs::modbus::{Modbus, ModbusError};
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// assert_eq!(modbus.set_slave(10), Ok(0));
-    /// assert_eq!(modbus.set_slave(255), Err(ModbusError::INVALID_SLAVE_ID));
+    /// assert_eq!(modbus.set_slave(255), Err(ModbusError::InvalidSlaveID));
     /// ```
     pub fn set_slave(&mut self, slave_id: i32) -> Result<i32> {
         unsafe {
             match ::raw::modbus_set_slave(self.ctx, slave_id) {
-                -1 => Err(ModbusError::INVALID_SLAVE_ID),
+                -1 => Err(ModbusError::InvalidSlaveID),
                 _ => Ok(0),
             }
         }
@@ -78,7 +79,7 @@ impl Modbus {
     /// * `flag`    - boolean `true` or `false`
     ///
     /// # Examples
-    /// A `Ok(0)` signals all right, on error a `ModbusError::EINVAL` is returned
+    /// A `Ok(0)` signals all right, on error a `ModbusError::GenericError` is returned
     ///
     /// ```
     /// use libmodbus_rs::modbus::{Modbus};
@@ -89,7 +90,7 @@ impl Modbus {
     pub fn set_debug(&mut self, flag: bool) -> Result<i32> {
         unsafe {
             match ::raw::modbus_set_debug(self.ctx, flag as c_int) {
-                -1 => Err(ModbusError::INVALID_DEBUG),
+                -1 => Err(ModbusError::InvalidDebug),
                 _ => Ok(0),
             }
         }
@@ -101,7 +102,7 @@ impl Modbus {
     /// * `mode`    - serial mode
     ///
     /// # Examples
-    /// A `Ok(0)` signals all right, on error a `ModbusError::EINVAL` is returned
+    /// A `Ok(0)` signals all right, on error a `ModbusError::GenericError` is returned
     ///
     /// ```
     /// use libmodbus_rs::modbus::{Modbus};
@@ -111,7 +112,7 @@ impl Modbus {
     pub fn rtu_set_serial_mode(&mut self, mode: i32) -> Result<i32> {
         unsafe {
             match ::raw::modbus_rtu_set_serial_mode(self.ctx, mode) {
-                -1 => Err(ModbusError::INVALID_RTU_SERIAL_MODE),
+                -1 => Err(ModbusError::InvalidRTUSerialMode),
                 _ => Ok(0),
             }
         }
@@ -123,7 +124,7 @@ impl Modbus {
     /// * `mode`    - serial mode
     ///
     /// # Examples
-    /// A `Ok(0)` signals all right, on error a `ModbusError::EINVAL` is returned
+    /// A `Ok(0)` signals all right, on error a `ModbusError::GenericError` is returned
     ///
     /// ```
     /// use libmodbus_rs::modbus::{Modbus};
@@ -135,7 +136,7 @@ impl Modbus {
     pub fn rtu_set_rts(&mut self, mode: i32) -> Result<i32> {
         unsafe {
             match ::raw::modbus_rtu_set_rts(self.ctx, mode) {
-                -1 => Err(ModbusError::INVALID_RTU_RTS),
+                -1 => Err(ModbusError::InvalidRTURTS),
                 _ => Ok(0),
             }
         }
@@ -143,13 +144,10 @@ impl Modbus {
 
     /// Establish a Modbus connection
     ///
-    /// # Attributes
-    /// * ``    -
-    ///
     /// # Examples
-    /// A `Ok(0)` signals all right, on error a `ModbusError::EINVAL` is returned
+    /// A `Ok(0)` signals all right, on error a `ModbusError::GenericError` is returned
     ///
-    /// ```
+    /// ```no_run
     /// use libmodbus_rs::modbus::{Modbus};
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
@@ -159,16 +157,13 @@ impl Modbus {
     pub fn connect(&self) -> Result<i32> {
         unsafe {
             match ::raw::modbus_connect(self.ctx) {
-                -1 => Err(ModbusError::EINVAL),
+                -1 => Err(ModbusError::GenericError),
                 _ => Ok(0),
             }
         }
     }
 
     /// Free a libmodbus context
-    ///
-    /// # Attributes
-    /// * ``    -
     ///
     /// # Examples
     ///
@@ -210,6 +205,31 @@ impl Modbus {
         tab_reg
     }
 
+    /// Read many registers
+    ///
+    /// # Attributes
+    /// * `address`    - Start address from which the read should start
+    /// * `num_reg`    - Number of holding registers to read from `address` of the remote device
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use libmodbus_rs::modbus::{Modbus};
+    ///
+    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
+    /// let _ = modbus.set_slave(46);
+    /// let _ = modbus.rtu_set_rts(libmodbus_rs::MODBUS_RTU_RTS_DOWN);
+    /// let mut tab_reg: Vec<u16> = modbus.read_input_registers(0, 19);
+    /// modbus.free();
+    /// ```
+    pub fn read_input_registers(&self, address: i32, num_reg: i32) -> Vec<u16> {
+        let mut tab_reg = vec![0u16; 32];
+        unsafe {
+            ::raw::modbus_read_input_registers(self.ctx, address, num_reg, tab_reg.as_mut_ptr());
+        }
+        tab_reg
+    }
+
 }
 
 
@@ -221,6 +241,7 @@ mod tests {
     #[test]
     fn crate_modbus() {
         let modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
+        assert_eq!(modbus, modbus);
     }
 
 }
