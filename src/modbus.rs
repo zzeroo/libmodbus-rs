@@ -1,6 +1,8 @@
 use raw::*;
 use libc::{c_char, c_int};
 use std::result;
+use std::error;
+use std::fmt;
 
 // https://doc.rust-lang.org/book/error-handling.html#the-result-type-alias-idiom
 pub type Result<T> = result::Result<T, ModbusError>;
@@ -8,11 +10,47 @@ pub type Result<T> = result::Result<T, ModbusError>;
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum ModbusError {
-    GenericError,
+    /// Could not connect
+    ConnectionError,
+    /// Invalid modbus slave id.
     InvalidSlaveID,
     InvalidRTUSerialMode,
     InvalidRTURTS,
     InvalidDebug,
+}
+
+impl fmt::Display for ModbusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModbusError::ConnectionError => write!(f, "Could not connect."),
+            ModbusError::InvalidSlaveID => write!(f, "Invalid modbus slave id."),
+            ModbusError::InvalidRTUSerialMode => write!(f, "Invalid RTU serial mode."),
+            ModbusError::InvalidRTURTS => write!(f, "Invalid RTU rts."),
+            ModbusError::InvalidDebug => write!(f, "Invalid debug mode, only `true` of `false` are allowed."),
+        }
+    }
+}
+
+impl error::Error for ModbusError {
+    fn description(&self) -> &str {
+        match *self {
+            ModbusError::ConnectionError => "Could not connect",
+            ModbusError::InvalidSlaveID => "Invalid modbus slave id",
+            ModbusError::InvalidRTUSerialMode => "Invalid RTU serial mode",
+            ModbusError::InvalidRTURTS => "Invalid RTU rts",
+            ModbusError::InvalidDebug => "Invalid debug mode",
+        }
+    }
+
+    fn cause(&self) -> Option<&error::Error> {
+        match *self {
+            ModbusError::ConnectionError => None,
+            ModbusError::InvalidSlaveID => None,
+            ModbusError::InvalidRTUSerialMode => None,
+            ModbusError::InvalidRTURTS => None,
+            ModbusError::InvalidDebug => None,
+        }
+    }
 }
 
 /// This struct holds the current context `ctx`
@@ -157,7 +195,7 @@ impl Modbus {
     pub fn connect(&self) -> Result<i32> {
         unsafe {
             match ::raw::modbus_connect(self.ctx) {
-                -1 => Err(ModbusError::GenericError),
+                -1 => Err(ModbusError::ConnectionError),
                 _ => Ok(0),
             }
         }
