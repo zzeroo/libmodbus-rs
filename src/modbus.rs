@@ -201,6 +201,32 @@ impl Modbus {
         }
     }
 
+    /// modbus_close - close a Modbus connection
+    ///
+    /// The `modbus_close()` function shall close the connection established with the backend set in the context.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::modbus::{Modbus};
+    ///
+    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
+    /// modbus.set_slave(1);
+    /// match modbus.connect() {
+    ///     Err(_) => { modbus.free(); }
+    ///     Ok(_) => {
+    ///         let _ = modbus.read_registers(0, 1);
+    ///     }
+    /// }
+    /// modbus.close();
+    /// modbus.free();
+    /// ```
+    pub fn close(&self) {
+        unsafe {
+            ::raw::modbus_close(self.ctx);
+        }
+    }
+
     /// Free a libmodbus context
     ///
     /// # Examples
