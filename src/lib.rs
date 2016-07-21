@@ -8,6 +8,10 @@ use libc::{c_int};
 /// Modbus context
 pub mod modbus;
 
+/// Error handling
+mod error;
+
+
 // These republished constants are for the doc tests. Because there is no simple way to access raw:: values
 pub const MODBUS_RTU_RS485: c_int = raw::MODBUS_RTU_RS485;
 pub const MODBUS_RTU_RTS_DOWN: c_int = raw::MODBUS_RTU_RTS_DOWN;
