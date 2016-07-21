@@ -1,15 +1,14 @@
 use raw::*;
 use libc::{c_char, c_int};
 use std::result;
-use std::error;
 use std::fmt;
 
 // https://doc.rust-lang.org/book/error-handling.html#the-result-type-alias-idiom
-pub type Result<T> = result::Result<T, ModbusError>;
+pub type Result<T> = result::Result<T, Error>;
 
 
 #[derive(Debug, Eq, PartialEq)]
-pub enum ModbusError {
+pub enum Error {
     /// Could not connect
     ConnectionError,
     /// Invalid modbus slave id.
@@ -19,36 +18,36 @@ pub enum ModbusError {
     InvalidDebug,
 }
 
-impl fmt::Display for ModbusError {
+impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            ModbusError::ConnectionError => write!(f, "Could not connect."),
-            ModbusError::InvalidSlaveID => write!(f, "Invalid modbus slave id."),
-            ModbusError::InvalidRTUSerialMode => write!(f, "Invalid RTU serial mode."),
-            ModbusError::InvalidRTURTS => write!(f, "Invalid RTU rts."),
-            ModbusError::InvalidDebug => write!(f, "Invalid debug mode, only `true` of `false` are allowed."),
+            Error::ConnectionError => write!(f, "Could not connect."),
+            Error::InvalidSlaveID => write!(f, "Invalid modbus slave id."),
+            Error::InvalidRTUSerialMode => write!(f, "Invalid RTU serial mode."),
+            Error::InvalidRTURTS => write!(f, "Invalid RTU rts."),
+            Error::InvalidDebug => write!(f, "Invalid debug mode, only `true` of `false` are allowed."),
         }
     }
 }
 
-impl error::Error for ModbusError {
+impl ::std::error::Error for Error {
     fn description(&self) -> &str {
         match *self {
-            ModbusError::ConnectionError => "Could not connect",
-            ModbusError::InvalidSlaveID => "Invalid modbus slave id",
-            ModbusError::InvalidRTUSerialMode => "Invalid RTU serial mode",
-            ModbusError::InvalidRTURTS => "Invalid RTU rts",
-            ModbusError::InvalidDebug => "Invalid debug mode",
+            Error::ConnectionError => "Could not connect",
+            Error::InvalidSlaveID => "Invalid modbus slave id",
+            Error::InvalidRTUSerialMode => "Invalid RTU serial mode",
+            Error::InvalidRTURTS => "Invalid RTU rts",
+            Error::InvalidDebug => "Invalid debug mode",
         }
     }
 
-    fn cause(&self) -> Option<&error::Error> {
+    fn cause(&self) -> Option<&::std::error::Error> {
         match *self {
-            ModbusError::ConnectionError => None,
-            ModbusError::InvalidSlaveID => None,
-            ModbusError::InvalidRTUSerialMode => None,
-            ModbusError::InvalidRTURTS => None,
-            ModbusError::InvalidDebug => None,
+            Error::ConnectionError => None,
+            Error::InvalidSlaveID => None,
+            Error::InvalidRTUSerialMode => None,
+            Error::InvalidRTURTS => None,
+            Error::InvalidDebug => None,
         }
     }
 }
@@ -93,19 +92,19 @@ impl Modbus {
     /// * `slave_id`    - New modbus slave id (valid range: `>= 0 && <= 247`), `0` is broadcast address
     ///
     /// # Examples
-    /// A `Ok(0)` signals all right, on error a `ModbusError::InvalidSlaveID` is returned
+    /// A `Ok(0)` signals all right, on error a `Error::InvalidSlaveID` is returned
     ///
     /// ```
-    /// use libmodbus_rs::modbus::{Modbus, ModbusError};
+    /// use libmodbus_rs::modbus::{Modbus, Error};
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// assert_eq!(modbus.set_slave(10), Ok(0));
-    /// assert_eq!(modbus.set_slave(255), Err(ModbusError::InvalidSlaveID));
+    /// assert_eq!(modbus.set_slave(255), Err(Error::InvalidSlaveID));
     /// ```
     pub fn set_slave(&mut self, slave_id: i32) -> Result<i32> {
         unsafe {
             match ::raw::modbus_set_slave(self.ctx, slave_id) {
-                -1 => Err(ModbusError::InvalidSlaveID),
+                -1 => Err(Error::InvalidSlaveID),
                 _ => Ok(0),
             }
         }
@@ -117,7 +116,7 @@ impl Modbus {
     /// * `flag`    - boolean `true` or `false`
     ///
     /// # Examples
-    /// A `Ok(0)` signals all right, on error a `ModbusError::GenericError` is returned
+    /// A `Ok(0)` signals all right, on error a `Error::GenericError` is returned
     ///
     /// ```
     /// use libmodbus_rs::modbus::{Modbus};
@@ -128,7 +127,7 @@ impl Modbus {
     pub fn set_debug(&mut self, flag: bool) -> Result<i32> {
         unsafe {
             match ::raw::modbus_set_debug(self.ctx, flag as c_int) {
-                -1 => Err(ModbusError::InvalidDebug),
+                -1 => Err(Error::InvalidDebug),
                 _ => Ok(0),
             }
         }
@@ -140,7 +139,7 @@ impl Modbus {
     /// * `mode`    - serial mode
     ///
     /// # Examples
-    /// A `Ok(0)` signals all right, on error a `ModbusError::GenericError` is returned
+    /// A `Ok(0)` signals all right, on error a `Error::GenericError` is returned
     ///
     /// ```
     /// use libmodbus_rs::modbus::{Modbus};
@@ -150,7 +149,7 @@ impl Modbus {
     pub fn rtu_set_serial_mode(&mut self, mode: i32) -> Result<i32> {
         unsafe {
             match ::raw::modbus_rtu_set_serial_mode(self.ctx, mode) {
-                -1 => Err(ModbusError::InvalidRTUSerialMode),
+                -1 => Err(Error::InvalidRTUSerialMode),
                 _ => Ok(0),
             }
         }
@@ -162,7 +161,7 @@ impl Modbus {
     /// * `mode`    - serial mode
     ///
     /// # Examples
-    /// A `Ok(0)` signals all right, on error a `ModbusError::GenericError` is returned
+    /// A `Ok(0)` signals all right, on error a `Error::GenericError` is returned
     ///
     /// ```
     /// use libmodbus_rs::modbus::{Modbus};
@@ -174,7 +173,7 @@ impl Modbus {
     pub fn rtu_set_rts(&mut self, mode: i32) -> Result<i32> {
         unsafe {
             match ::raw::modbus_rtu_set_rts(self.ctx, mode) {
-                -1 => Err(ModbusError::InvalidRTURTS),
+                -1 => Err(Error::InvalidRTURTS),
                 _ => Ok(0),
             }
         }
@@ -183,7 +182,7 @@ impl Modbus {
     /// Establish a Modbus connection
     ///
     /// # Examples
-    /// A `Ok(0)` signals all right, on error a `ModbusError::GenericError` is returned
+    /// A `Ok(0)` signals all right, on error a `Error::GenericError` is returned
     ///
     /// ```no_run
     /// use libmodbus_rs::modbus::{Modbus};
@@ -195,7 +194,7 @@ impl Modbus {
     pub fn connect(&self) -> Result<i32> {
         unsafe {
             match ::raw::modbus_connect(self.ctx) {
-                -1 => Err(ModbusError::ConnectionError),
+                -1 => Err(Error::ConnectionError),
                 _ => Ok(0),
             }
         }
