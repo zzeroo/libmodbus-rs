@@ -16,4 +16,7 @@ libmodbus is a free software library to send/receive data with a device which re
 [dependencies]
 bitflags = "0.1"
 libc = "0.2.0"
-libmodbus-sys = { path = "libmodbus-sys", version = "0.1.0" }
+libmodbus-sys = { path = "libmodbus-sys", version = "^0.2.0" }
+
+[workspace]
+members = ["systest"]
