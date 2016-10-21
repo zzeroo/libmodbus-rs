@@ -30,6 +30,9 @@ fn main() {
     let src = Path::new(&cargo_dir[..]);
     let dst = Path::new(&output_dir[..]);
     let target = env::var("TARGET").unwrap();
+    let host = env::var("HOST").unwrap();
+    let windows = target.contains("windows");
+    let msvc = target.contains("msvc");
 
     let root = src.join("libmodbus");
 
