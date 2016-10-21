@@ -1,13 +1,10 @@
 #![doc(html_logo_url = "https://raw.githubusercontent.com/Kliemann-Service-GmbH/xMZ-Mod-Touch-Server/master/share/xmz-logo.png",
        html_favicon_url = "https://raw.githubusercontent.com/Kliemann-Service-GmbH/xMZ-Mod-Touch-Server/master/share/favicon.ico",
        html_root_url = "https://gaswarnanlagen.com/")]
-extern crate libc;
-use libc::{c_char, c_int, uint8_t, uint16_t, uint32_t, c_void, timeval, c_uint, ssize_t, fd_set};
 
-pub const FALSE: c_int = 0;
-pub const TRUE: c_int = 1;
-pub const OFF: c_int = 0;
-pub const ON: c_int = 1;
+extern crate libc;
+
+use libc::{c_char, c_int, uint8_t, uint16_t, uint32_t, c_void, timeval, c_uint, ssize_t, fd_set};
 
 macro_rules! modbus_enum {
     (pub enum $name:ident { $($variants:tt)* }) => {
@@ -36,6 +33,7 @@ macro_rules! modbus_enum {
     };
     (gen, $name:ident, $val:expr, ) => {}
 }
+
 modbus_enum! {
     pub enum  modbus_backend_type_t {
         _MODBUS_BACKEND_TYPE_RTU=0,
