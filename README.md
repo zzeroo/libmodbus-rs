@@ -1,6 +1,6 @@
 # libmodbus-rs
 
-[![Build Status](https://travis-ci.org/zzeroo/libmodbus-rs.svg?branch=master)](https://github.com/zzeroo/libmodbus-rs)
+[![Build Status](https://travis-ci.org/zzeroo/libmodbus-rs.svg?branch=master)](https://travis-ci.org/zzeroo/libmodbus-rs)
 [![Build status](https://ci.appveyor.com/api/projects/status/2vhl3qpoetryhiyf?svg=true)](https://ci.appveyor.com/project/zzeroo/libmodbus-rs)
 
 [Documentation][dox]
