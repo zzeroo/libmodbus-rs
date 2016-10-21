@@ -2,5 +2,11 @@
 name = "systest"
 version = "0.1.0"
 authors = ["Stefan Müller <s.mueller@it.kls-glt.de>"]
+build = "build.rs"
 
 [dependencies]
+libmodbus-sys = { path = "../libmodbus-sys" }
+libc = "0.2"
+
+[build-dependencies]
+ctest = { git = "https://github.com/alexcrichton/ctest" }
