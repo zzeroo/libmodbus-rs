@@ -4,10 +4,11 @@
 extern crate libc;
 extern crate libmodbus_sys as raw;
 use libc::{c_int};
+// Public reexport
+pub use self::modbus::{Error, Modbus};
 
 /// Modbus context
 pub mod modbus;
-
 /// Error handling
 mod error;
 
