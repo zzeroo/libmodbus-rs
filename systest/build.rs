@@ -9,6 +9,7 @@ fn main() {
     let out_dir = PathBuf::from(env::var_os("OUT_DIR").unwrap());
     cfg.header("modbus.h")
     .header("modbus-tcp.h")
+    .header("modbus-private.h")
     .header("modbus-rtu.h");
 
     cfg.include(out_dir.join("include"));
