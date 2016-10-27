@@ -4,14 +4,14 @@
 extern crate libc;
 extern crate libmodbus_sys as raw;
 use libc::{c_int};
-// Public reexport
-pub use self::modbus::{Error, Modbus};
 
 /// Modbus context
 pub mod modbus;
 /// Error handling
 mod error;
 
+// Public reexport, http://rust-lang.github.io/book/chYY-YY-public-api.html
+pub use self::modbus::{Error, Modbus};
 
 // These republished constants are for the doc tests. Because there is no simple way to access raw:: values
 pub const MODBUS_RTU_RS485: c_int = raw::MODBUS_RTU_RS485;

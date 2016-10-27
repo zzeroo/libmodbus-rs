@@ -38,15 +38,19 @@ fn main() {
     match modbus.connect() {
         Err(_) => { modbus.free(); }
         Ok(_) => {
-            let tab_reg = modbus.read_registers(0, 30).unwrap();
-            println!("");
-            for i in 0..30 {
-                print!("register[{:02}]={1:06} (0x{1:04X})", i, &tab_reg[i as usize]);
-                if register_names.contains_key(&i) {
-                    println!("\t{}", register_names.get(&i).unwrap());
-                } else {
+            match modbus.read_registers(0, 30) {
+                Ok(tab_reg) => {
                     println!("");
+                    for i in 0..30 {
+                        print!("register[{:02}]={1:06} (0x{1:04X})", i, &tab_reg[i as usize]);
+                        if register_names.contains_key(&i) {
+                            println!("\t{}", register_names.get(&i).unwrap());
+                        } else {
+                            println!("");
+                        }
+                    }
                 }
+                Err(err) => println!("Error: {}", err),
             }
         }
     }

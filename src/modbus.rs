@@ -11,6 +11,13 @@ pub type Result<T> = ::std::result::Result<T, Error>;
 #[derive(Debug, Eq, PartialEq)]
 pub struct Modbus { ctx: *mut modbus_t }
 
+/// I love rust. It's so expressive.
+impl Drop for Modbus {
+    fn drop(&mut self) {
+        self.free();
+    }
+}
+
 impl Modbus {
     /// Creates a new modbus context with the RTU backend
     ///
