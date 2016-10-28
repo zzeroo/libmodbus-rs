@@ -1,6 +1,6 @@
 [package]
 name = "libmodbus-rs"
-version = "0.3.1"
+version = "0.3.2"
 authors = ["Stefan Müller <s.mueller@it.kls-glt.de>"]
 license = "LGPL-2.1"
 readme = "README.md"

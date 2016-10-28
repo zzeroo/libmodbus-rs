@@ -244,15 +244,17 @@ impl Modbus {
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
     /// let _ = modbus.rtu_set_rts(libmodbus_rs::MODBUS_RTU_RTS_DOWN);
-    /// let mut tab_reg: Vec<u16> = modbus.read_input_registers(0, 19);
+    /// let mut tab_reg: Vec<u16> = modbus.read_input_registers(0, 19).unwrap();
     /// modbus.free();
     /// ```
-    pub fn read_input_registers(&self, address: i32, num_reg: i32) -> Vec<u16> {
+    pub fn read_input_registers(&self, address: i32, num_reg: i32) -> Result<Vec<u16>> {
         let mut tab_reg = vec![0u16; num_reg as usize];
         unsafe {
-            ::raw::modbus_read_input_registers(self.ctx, address, num_reg, tab_reg.as_mut_ptr());
+            match ::raw::modbus_read_input_registers(self.ctx, address, num_reg, tab_reg.as_mut_ptr()) {
+                -1 => Err(Error::ReadFailure),
+                _ => Ok(tab_reg),
+            }
         }
-        tab_reg
     }
 
     ///  write a single coil
@@ -268,13 +270,16 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
-    /// modbus.write_bit(0, true);
+    /// let _ = modbus.write_bit(0, true).unwrap();
     ///
     /// modbus.free();
     /// ```
-    pub fn write_bit(&self, address: i32, status: bool) -> i32 {
+    pub fn write_bit(&self, address: i32, status: bool) -> Result<()> {
         unsafe {
-            ::raw::modbus_write_bit(self.ctx, address, status as i32)
+            match ::raw::modbus_write_bit(self.ctx, address, status as i32) {
+                -1 => Err(Error::WriteFailure),
+                _ => Ok(())
+            }
         }
     }
 
