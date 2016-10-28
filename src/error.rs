@@ -11,6 +11,7 @@ pub enum Error {
     InvalidRTURTS,
     InvalidDebug,
     // Could not write register or coil
+    ReadFailure,
     WriteFailure,
 }
 
@@ -22,6 +23,7 @@ impl fmt::Display for Error {
             Error::InvalidRTUSerialMode => write!(f, "Invalid RTU serial mode."),
             Error::InvalidRTURTS => write!(f, "Invalid RTU rts."),
             Error::InvalidDebug => write!(f, "Invalid debug mode, only `true` of `false` are allowed."),
+            Error::ReadFailure => write!(f, "Could not read."),
             Error::WriteFailure => write!(f, "Could not write."),
         }
     }
@@ -35,6 +37,7 @@ impl ::std::error::Error for Error {
             Error::InvalidRTUSerialMode => "Invalid RTU serial mode",
             Error::InvalidRTURTS => "Invalid RTU rts",
             Error::InvalidDebug => "Invalid debug mode",
+            Error::ReadFailure => "Could not read this value",
             Error::WriteFailure => "Could not write this value",
         }
     }
@@ -46,6 +49,7 @@ impl ::std::error::Error for Error {
             Error::InvalidRTUSerialMode => None,
             Error::InvalidRTURTS => None,
             Error::InvalidDebug => None,
+            Error::ReadFailure => None,
             Error::WriteFailure => None,
         }
     }
