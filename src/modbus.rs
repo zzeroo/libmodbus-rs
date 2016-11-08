@@ -172,13 +172,11 @@ impl Modbus {
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// modbus.set_slave(1);
     /// match modbus.connect() {
-    ///     Err(_) => { modbus.free(); }
+    ///     Err(_) => { modbus.close(); }
     ///     Ok(_) => {
     ///         let _ = modbus.read_registers(0, 1);
     ///     }
     /// }
-    /// modbus.close();
-    /// modbus.free();
     /// ```
     pub fn close(&self) {
         unsafe {
@@ -194,8 +192,9 @@ impl Modbus {
     /// use libmodbus_rs::modbus::{Modbus};
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// modbus.set_slave(1);
-    /// modbus.free();
+    /// modbus.set_slave(46);
+    /// let _ = modbus.connect(); 
+    /// modbus.free(); 
     /// ```
     pub fn free(&self) {
         unsafe {
@@ -217,8 +216,8 @@ impl Modbus {
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
     /// let _ = modbus.rtu_set_rts(libmodbus_rs::MODBUS_RTU_RTS_DOWN);
+    /// let _ = modbus.connect(); 
     /// let mut tab_reg: Vec<u16> = modbus.read_registers(0, 19).unwrap();
-    /// modbus.free();
     /// ```
     pub fn read_registers(&self, address: i32, num_reg: i32) -> Result<Vec<u16>> {
         let mut tab_reg = vec![0u16; num_reg as usize];
@@ -244,8 +243,8 @@ impl Modbus {
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
     /// let _ = modbus.rtu_set_rts(libmodbus_rs::MODBUS_RTU_RTS_DOWN);
+    /// let _ = modbus.connect(); 
     /// let mut tab_reg: Vec<u16> = modbus.read_input_registers(0, 19).unwrap();
-    /// modbus.free();
     /// ```
     pub fn read_input_registers(&self, address: i32, num_reg: i32) -> Result<Vec<u16>> {
         let mut tab_reg = vec![0u16; num_reg as usize];
@@ -257,11 +256,16 @@ impl Modbus {
         }
     }
 
-    ///  write a single coil
+    /// read many bits
+    ///
+    /// This function shall read the state of `num_bits` (coils) beginning from the `address` of
+    /// the remote device. The return value is an vector of u8's encapsuled in a Result.
+    ///
+    /// This funkciont uses the Modbus function **01 (0x01) Read Coils**
     ///
     /// # Attributes
-    /// * `address`     - Coil address
-    /// * `status`      - Coil status
+    /// * `address`     - Start Adresse from where the read should begin
+    /// * `num_bits`    - Number of bit to be read
     ///
     /// # Examples
     ///
@@ -270,13 +274,39 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.write_bit(0, true).unwrap();
-    ///
-    /// modbus.free();
+    /// let _ = modbus.connect(); 
+    /// let _ = modbus.read_bits(0, 1).unwrap();
     /// ```
-    pub fn write_bit(&self, address: i32, status: bool) -> Result<()> {
+    pub fn read_bits(&self, address: i32, num_bits: i32) -> Result<Vec<u8>> {
+        let mut coils = vec![0u8; num_bits as usize];
         unsafe {
-            match ::raw::modbus_write_bit(self.ctx, address, status as i32) {
+            match ::raw::modbus_read_bits(self.ctx, address, num_bits, coils.as_mut_ptr()) {
+                -1 => Err(Error::ReadFailure),
+                _ => Ok(coils),
+            }
+        }
+    }
+
+
+    /// write a single coil
+    ///
+    /// # Attributes
+    /// * `address`     - Coil address
+    /// * `state`      - Coil state
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use libmodbus_rs::modbus::{Modbus};
+    ///
+    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
+    /// let _ = modbus.set_slave(46);
+    /// let _ = modbus.connect(); 
+    /// let _ = modbus.write_bit(0, true).unwrap();
+    /// ```
+    pub fn write_bit(&self, address: i32, state: bool) -> Result<()> {
+        unsafe {
+            match ::raw::modbus_write_bit(self.ctx, address, state as i32) {
                 -1 => Err(Error::WriteFailure),
                 _ => Ok(())
             }
@@ -296,11 +326,10 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
+    /// let _ = modbus.connect(); 
     /// let _ = modbus.write_register(0, 0x1234);
     /// let tab_reg: Vec<u16> = modbus.read_registers(0, 1).unwrap();
     /// assert_eq!(tab_reg, &[0x1234]);
-    ///
-    /// modbus.free();
     /// ```
     pub fn write_register(&self, address: i32, value: i32) -> Result<()> {
         let result = unsafe {
@@ -311,6 +340,60 @@ impl Modbus {
             _ => Err(Error::WriteFailure),
         }
     }
+
+    /// write multiple registers
+    ///
+    /// # Attributes
+    /// * `address`     - Start address register
+    /// * `register`    - Vector of u16 values
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use libmodbus_rs::modbus::{Modbus};
+    ///
+    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
+    /// let _ = modbus.set_slave(46);
+    /// let _ = modbus.connect(); 
+    /// let register = [0x1111u16, 0x2222u16];
+    /// assert_eq!(modbus.write_registers(0, &register), Ok(2));
+    /// ```
+    pub fn write_registers(&self, address: i32, register: &[u16]) -> Result<i32> {
+        let result = unsafe {
+            ::raw::modbus_write_registers(self.ctx, address, register.len() as i32, register.as_ptr())
+        };
+        match result {
+            -1 => Err(Error::WriteFailure),
+            num => Ok(num),
+        }
+    }
+
+    /// send a raw request
+    ///
+    /// # Attributes
+    /// * `raw_request` - Vector of u8 values
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::modbus::{Modbus};
+    ///
+    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
+    /// let _ = modbus.set_slave(46);
+    /// let _ = modbus.connect(); 
+    /// let raw_request =  vec![0x2E, 0x08, 0x00, 0x01];
+    /// assert_eq!(modbus.send_raw_request(&raw_request), Ok(6));
+    /// ```
+    pub fn send_raw_request(&self, raw_request: &[u8]) -> Result<i32> {
+        let result = unsafe {
+            ::raw::modbus_send_raw_request(self.ctx, raw_request.as_ptr(), raw_request.len() as i32)
+        };
+        match result {
+            -1 => Err(Error::WriteFailure),
+            num => Ok(num),
+        }
+    }
+    
 
 }
 
