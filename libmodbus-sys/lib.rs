@@ -184,7 +184,7 @@ extern {
     pub fn modbus_mapping_new(nb_bits: c_int, nb_input_bits: c_int, nb_registers: c_int, nb_input_registers: c_int)  -> *mut modbus_mapping_t;
     pub fn modbus_mapping_free(mb_mapping: *mut modbus_mapping_t);
 
-    pub fn modbus_send_raw_request(ctx: *mut modbus_t, raw_req: *mut uint8_t, raw_req_length: c_int) -> c_int;
+    pub fn modbus_send_raw_request(ctx: *mut modbus_t, raw_req: *const uint8_t, raw_req_length: c_int) -> c_int;
 
     pub fn modbus_receive(ctx: *mut modbus_t, req: *mut uint8_t) -> c_int;
 
