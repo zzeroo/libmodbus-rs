@@ -14,6 +14,7 @@ pub struct Modbus { ctx: *mut modbus_t }
 /// I love rust. It's so expressive.
 impl Drop for Modbus {
     fn drop(&mut self) {
+        self.close();
         self.free();
     }
 }
