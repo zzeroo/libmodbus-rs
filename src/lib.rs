@@ -12,4 +12,5 @@ mod error;
 
 // Public reexport, http://rust-lang.github.io/book/chYY-YY-public-api.html
 pub use self::modbus::{Error, Modbus};
-pub use self::raw::{MODBUS_RTU_RTS_DOWN, MODBUS_RTU_RS485};
+pub use self::raw::MODBUS_RTU_RS485;
+pub use self::raw::{MODBUS_RTU_RTS_UP, MODBUS_RTU_RTS_DOWN, MODBUS_RTU_RTS_NONE};

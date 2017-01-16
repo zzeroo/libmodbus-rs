@@ -194,8 +194,8 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// modbus.set_slave(46);
-    /// let _ = modbus.connect(); 
-    /// modbus.free(); 
+    /// let _ = modbus.connect();
+    /// modbus.free();
     /// ```
     pub fn free(&self) {
         unsafe {
@@ -217,7 +217,7 @@ impl Modbus {
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
     /// let _ = modbus.rtu_set_rts(libmodbus_rs::MODBUS_RTU_RTS_DOWN);
-    /// let _ = modbus.connect(); 
+    /// let _ = modbus.connect();
     /// let mut tab_reg: Vec<u16> = modbus.read_registers(0, 19).unwrap();
     /// ```
     pub fn read_registers(&self, address: i32, num_reg: i32) -> Result<Vec<u16>> {
@@ -244,7 +244,7 @@ impl Modbus {
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
     /// let _ = modbus.rtu_set_rts(libmodbus_rs::MODBUS_RTU_RTS_DOWN);
-    /// let _ = modbus.connect(); 
+    /// let _ = modbus.connect();
     /// let mut tab_reg: Vec<u16> = modbus.read_input_registers(0, 19).unwrap();
     /// ```
     pub fn read_input_registers(&self, address: i32, num_reg: i32) -> Result<Vec<u16>> {
@@ -275,7 +275,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.connect(); 
+    /// let _ = modbus.connect();
     /// let _ = modbus.read_bits(0, 1).unwrap();
     /// ```
     pub fn read_bits(&self, address: i32, num_bits: i32) -> Result<Vec<u8>> {
@@ -302,7 +302,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.connect(); 
+    /// let _ = modbus.connect();
     /// let _ = modbus.write_bit(0, true).unwrap();
     /// ```
     pub fn write_bit(&self, address: i32, state: bool) -> Result<()> {
@@ -327,7 +327,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.connect(); 
+    /// let _ = modbus.connect();
     /// let _ = modbus.write_register(0, 0x1234);
     /// let tab_reg: Vec<u16> = modbus.read_registers(0, 1).unwrap();
     /// assert_eq!(tab_reg, &[0x1234]);
@@ -355,7 +355,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.connect(); 
+    /// let _ = modbus.connect();
     /// let register = [0x1111u16, 0x2222u16];
     /// assert_eq!(modbus.write_registers(0, &register), Ok(2));
     /// ```
@@ -381,7 +381,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
     /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.connect(); 
+    /// let _ = modbus.connect();
     /// let raw_request =  vec![0x2E, 0x08, 0x00, 0x01];
     /// assert_eq!(modbus.send_raw_request(&raw_request), Ok(6));
     /// ```
@@ -394,8 +394,6 @@ impl Modbus {
             num => Ok(num),
         }
     }
-    
-
 }
 
 
