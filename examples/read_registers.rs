@@ -11,7 +11,7 @@ fn main() {
     let mut modbus = Modbus::new_rtu(&device, 9600, 'N', 8, 1);
     let _ = modbus.set_slave(slave_id);
     let _ = modbus.set_debug(true);
-    // let _ = modbus.rtu_set_rts(raw::MODBUS_RTU_RTS_DOWN);
+    let _ = modbus.rtu_set_rts(raw::MODBUS_RTU_RTS_DOWN);
 
     // Hashmap die einige Bezeichnungen speichert
     let mut register_names = HashMap::new();

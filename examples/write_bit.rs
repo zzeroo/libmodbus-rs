@@ -2,7 +2,18 @@ extern crate libmodbus_sys as raw;
 extern crate libmodbus_rs;
 
 use libmodbus_rs::modbus::{Modbus};
+use std::error::Error;
 
+
+fn run_command(mut modbus: Modbus, slave_id: i32, address: i32, state: bool) -> Result<(), Box<Error>> {
+    try!(modbus.set_slave(slave_id));
+    try!(modbus.set_debug(true));
+
+    try!(modbus.connect());
+    try!(modbus.write_bit(address, state));
+
+    Ok(())
+}
 
 fn main() {
     // 1. Parameter Serial Interface `/dev/ttyUSB0`
@@ -16,13 +27,8 @@ fn main() {
     let _ = modbus.set_slave(slave_id);
     let _ = modbus.set_debug(true);
 
-    match modbus.connect() {
-        Err(_) => { modbus.free(); }
-        Ok(_) => {
-            match modbus.write_bit(address, state) {
-                Ok(_) => {},
-                Err(err) => println!("Error: {}", err),
-            }
-        }
+    match run_command(modbus, slave_id, address, state) {
+        Ok(_) => {}
+        Err(err) => println!("Error: {}", err),
     }
 }
