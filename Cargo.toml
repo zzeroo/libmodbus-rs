@@ -1,0 +1,27 @@
+[package]
+name = "modbus-rs"
+version = "0.1.0"
+authors = ["Stefan Müller <s.mueller@it.kls-glt.de>"]
+readme = "README.md"
+keywords = ["modbus"]
+documentation = "https://github.com/zzeroo/modbus-rs.git"
+repository = "https://github.com/zzeroo/modbus-rs.git"
+homepage = "https://github.com/zzeroo/modbus-rs.git"
+description = """
+Binding to libmodbus.
+Libmodbus is a free software library to send/receive data with a device which respects the Modbus protocol.
+This library can use a serial port or an Ethernet connection.
+http://libmodbus.org/
+"""
+license = "LGPL-2.1" # same as libmodbus
+categories = ["api-bindings"]
+
+[badges]
+travis-ci = { repository = "zzeroo/git2-rs" }
+appveyor = { repository = "zzeroo/git2-rs" }
+
+[dependencies]
+libmodbus-sys = { path = "libmodbus-sys", version = "0.1.0" }
+
+[build-dependencies]
+bindgen = "0.23"
