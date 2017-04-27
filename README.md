@@ -1,8 +1,7 @@
 # modbus-rs
 
 [![Build Status](https://travis-ci.org/zzeroo/modbus-rs.svg?branch=master)](https://travis-ci.org/zzeroo/modbus-rs)
-[![Build status](https://ci.appveyor.com/api/projects/status/2vhl3qpoetryhiyf?svg=true)](https://ci.appveyor.com/project/zzeroo/modbus-rs)
-
+[![Build status](https://ci.appveyor.com/api/projects/status/dfjyswsgj6menctw?svg=true)](https://ci.appveyor.com/project/zzeroo/modbus-rs)
 [Documentation](http://zzeroo.com)
 
 libmodbus bindings for Rust
