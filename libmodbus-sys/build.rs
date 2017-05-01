@@ -19,8 +19,8 @@ fn main() {
     // if `pkg-config` is present and the libmodbus headers are found
     // we use `pkg-config` to find the include_path and call bindgen with it.
     //
+
     if let Ok(library) = pkg_config::find_library("libmodbus") {
-        // println!("{:?}", library);
         if let Some(include) = library.include_paths.get(0) {
             run_bindgen(&include);
         }
@@ -46,7 +46,6 @@ fn main() {
         Command::new("./configure")
             .arg("--prefix")
             .arg(prefix)
-            .arg("--without-documentation")
             .current_dir(&build_dir));
 
 
@@ -57,7 +56,6 @@ fn main() {
 
     run_bindgen(&include);
 }
-
 
 
 fn run_bindgen(include: &PathBuf) {
@@ -82,7 +80,7 @@ fn run_bindgen(include: &PathBuf) {
 
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
-    let out_path = PathBuf::from(".");
+    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
