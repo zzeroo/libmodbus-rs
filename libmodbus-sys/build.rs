@@ -46,7 +46,6 @@ fn main() {
         Command::new("./configure")
             .arg("--prefix")
             .arg(prefix)
-            .arg("--without-documentation")
             .current_dir(&build_dir));
 
 
