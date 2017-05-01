@@ -22,6 +22,3 @@ appveyor = { repository = "zzeroo/git2-rs" }
 
 [dependencies]
 libmodbus-sys = { path = "libmodbus-sys", version = "0.1.0" }
-
-[build-dependencies]
-bindgen = "0.23"
