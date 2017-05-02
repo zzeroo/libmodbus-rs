@@ -1,5 +1,4 @@
 extern crate bindgen;
-extern crate make_cmd;
 extern crate pkg_config;
 
 use std::env;
