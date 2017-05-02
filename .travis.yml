@@ -5,3 +5,5 @@ rust:
   - nightly
 sudo: false
 cache: cargo
+before_install:
+  - export RUST_BACKTRACE=1
