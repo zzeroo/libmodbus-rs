@@ -7,4 +7,6 @@ extern crate libmodbus_sys;
 
 pub mod modbus;
 
-pub use self::modbus::Modbus;
+pub use self::modbus::{Modbus, SerialMode};
+
+pub use libmodbus_sys::MODBUS_TCP_DEFAULT_PORT;
