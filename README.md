@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.org/zzeroo/modbus-rs.svg?branch=master)](https://travis-ci.org/zzeroo/modbus-rs)
 [![Build status](https://ci.appveyor.com/api/projects/status/dfjyswsgj6menctw?svg=true)](https://ci.appveyor.com/project/zzeroo/modbus-rs)
-[Documentation](http://zzeroo.com)
+[Documentation](http://libmodbus.org/)
 
-libmodbus bindings for Rust
+[libmodbus](http://libmodbus.org/) bindings for Rust
 
 ```toml
 [dependencies]

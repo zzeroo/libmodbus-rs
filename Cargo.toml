@@ -21,4 +21,5 @@ travis-ci = { repository = "zzeroo/git2-rs" }
 appveyor = { repository = "zzeroo/git2-rs" }
 
 [dependencies]
+libc = "0.2"
 libmodbus-sys = { path = "libmodbus-sys", version = "0.1.0" }
