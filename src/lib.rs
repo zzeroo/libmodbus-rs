@@ -6,7 +6,8 @@ extern crate libc;
 extern crate libmodbus_sys;
 
 pub mod modbus;
+pub mod error;
 
-pub use self::modbus::{Modbus, SerialMode};
+pub use self::modbus::{Modbus, SerialMode, RTUMode};
 
 pub use libmodbus_sys::MODBUS_TCP_DEFAULT_PORT;
