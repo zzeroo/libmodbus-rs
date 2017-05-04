@@ -125,6 +125,22 @@ impl Modbus {
         }
     }
 
+    /// `get_byte_timeout` - get timeout between bytes
+    ///
+    /// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between two consecutive bytes of the same message `Result<(to_sec, to_usec), Error>`.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use modbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
+    /// ```
+    pub fn get_byte_timeout(&self) -> Result<(i32, i32), Error> {
+        unimplemented!()
+    }
+
     /// `close` - close a Modbus connection
     ///
     /// The [`close()`](#method.close) function shall close the connection established with the backend set in the context.
