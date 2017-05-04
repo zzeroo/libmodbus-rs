@@ -1,8 +1,20 @@
 language: rust
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-5
+os:
+  - linux
+  # - osx
 rust:
   - stable
   - beta
   - nightly
+env:
+  - LLVM_VERSION=3.5 CLANG_VERSION=clang_3_5
+  - LLVM_VERSION=4.0 CLANG_VERSION=clang_4_0
 sudo: false
 cache: cargo
 before_install:
