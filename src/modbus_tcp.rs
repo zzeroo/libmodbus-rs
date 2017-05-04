@@ -1,3 +1,11 @@
+//! # TCP (IPv4) Context
+//!
+//! The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks. It does not require a checksum calculation as lower layer takes care of the same.
+//!
+//! Create a Modbus TCP context
+//!
+//! [`new_tcp()`](trait.ModbusTCP.html#method.new_tcp)
+//!
 use libmodbus_sys;
 use modbus::Modbus;
 use libc::c_int;
@@ -47,5 +55,4 @@ impl ModbusTCP for Modbus {
             }
         }
     }
-
 }

@@ -1,3 +1,28 @@
+//! # RTU Context
+//!
+//! The RTU backend (Remote Terminal Unit) is used in serial communication and makes use of a compact, binary representation of the data for protocol communication.
+//! The RTU format follows the commands/data with a cyclic redundancy check checksum as an error check mechanism to ensure the reliability of data.
+//! Modbus RTU is the most common implementation available for Modbus. A Modbus RTU message must be transmitted continuously without inter-character hesitations
+//! (extract from Wikipedia, Modbus, http://en.wikipedia.org/wiki/Modbus (as of Mar. 13, 2011, 20:51 GMT).
+//!
+//! The Modbus RTU framing calls a slave, a device/service which handle Modbus requests, and a master, a client which send requests. The communication is always initiated by the master.
+//!
+//! Many Modbus devices can be connected together on the same physical link so before sending a message, you must set the slave (receiver) with modbus_set_slave(3).
+//! If you’re running a slave, its slave number will be used to filter received messages.
+//!
+//! The libmodbus implementation of RTU isn’t time based as stated in original Modbus specification,
+//! instead all bytes are sent as fast as possible and a response or an indication is considered complete when all expected characters have been received.
+//! This implementation offers very fast communication but you must take care to set a response timeout of slaves less than response timeout of master
+//! (ortherwise other slaves may ignore master requests when one of the slave is not responding).
+//!
+//! Create a Modbus RTU context
+//!
+//! [`new_rtu()`](trait.ModbusRTU.html#method.new_rtu)
+//!
+//! Set the serial mode
+//!
+//! modbus_rtu_get_serial_mode(3) modbus_rtu_set_serial_mode(3) modbus_rtu_get_rts(3) modbus_rtu_set_rts(3) modbus_rtu_set_custom_rts(3) modbus_rtu_get_rts_delay(3) modbus_rtu_set_rts_delay(3)
+//!
 use error::ModbusError;
 use libc::{c_char, c_int};
 use libmodbus_sys;
