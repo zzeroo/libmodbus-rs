@@ -15,7 +15,7 @@ rust:
 env:
   - LLVM_VERSION=3.9 CLANG_VERSION=clang_3_9
 sudo: false
-cache: cargo
+# cache: cargo
 before_install: . ./ci/before_install.sh
 script:
   - cargo build
