@@ -22,7 +22,7 @@
 //!
 use libmodbus_sys;
 use std::io::{Error, ErrorKind};
-use libc::c_int;
+use libc::{c_int, c_uint};
 
 
 pub struct Modbus {
@@ -50,6 +50,27 @@ impl Modbus {
     pub fn connect(&self) -> Result<i32, Error> {
         unsafe {
             match libmodbus_sys::modbus_connect(self.ctx) {
+                -1 => Err(Error::last_os_error()),
+                _ => Ok(0),
+            }
+        }
+    }
+
+    /// `flush` - flush non-transmitted data
+    /// The [`flush()`](#method.flush) function shall discard data received but not read to the socket or file descriptor associated to the context ctx.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use modbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// assert!(modbus.flush().is_ok());
+    /// ```
+    pub fn flush(&self) -> Result<i32, Error> {
+        unsafe {
+            match libmodbus_sys::modbus_flush(self.ctx) {
                 -1 => Err(Error::last_os_error()),
                 _ => Ok(0),
             }
@@ -161,7 +182,7 @@ impl Modbus {
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
     /// ```
-    pub fn set_byte_timeout(&mut self, to_sec: u32, to_usec: u32) -> Result<(i32, i32), Error> {
+    pub fn set_byte_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32), Error> {
         unimplemented!()
     }
 
@@ -176,7 +197,6 @@ impl Modbus {
     /// use modbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
     /// ```
     pub fn get_response_timeout(&self) -> Result<(i32, i32), Error> {
         unimplemented!()
@@ -201,9 +221,8 @@ impl Modbus {
     /// use modbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
     /// ```
-    pub fn set_response_timeout(&mut self, to_sec: u32, to_usec: u32) -> Result<(i32, i32), Error> {
+    pub fn set_response_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32), Error> {
         unimplemented!()
     }
 
@@ -235,9 +254,55 @@ impl Modbus {
     /// use modbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
     /// ```
-    pub fn set_error_recovery(&mut self, modbus_error_recovery_mode: libmodbus_sys::modbus_error_recovery_mode) -> Result<i32, Error> {
+    pub fn set_error_recovery(&mut self, _modbus_error_recovery_mode: libmodbus_sys::modbus_error_recovery_mode) -> Result<i32, Error> {
+        unimplemented!()
+    }
+
+    /// `set_socket` - set socket of the context
+    ///
+    /// The [`set_socket()`](#method.set_socket) function shall set the socket or file descriptor in the libmodbus context.
+    /// This function is useful for managing multiple client connections to the same server.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use modbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// ```
+    pub fn set_socket(&mut self, _socket: u32) -> Result<i32, Error> {
+        unimplemented!()
+    }
+
+    /// `get_socket` - set socket of the context
+    ///
+    /// The [`get_socket()`](#method.get_socket) function shall return the current socket or file descriptor of the libmodbus context.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use modbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// ```
+    pub fn get_socket(&self) -> Result<u32, Error> {
+        unimplemented!()
+    }
+
+    /// `get_header_length` - retrieve the current header length
+    ///
+    /// The [`get_header_length()`](#method.get_header_length) function shall retrieve the current header length from the backend.
+    /// This function is convenient to manipulate a message and so its limited to low-level operations.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use modbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// ```
+    pub fn get_header_length(&self) -> Result<u32, Error> {
         unimplemented!()
     }
 
@@ -290,6 +355,156 @@ impl Modbus {
             libmodbus_sys::modbus_free(self.ctx);
         }
     }
+}
+
+
+/// `set_bits_from_byte` - set many bits from a single byte value
+///
+/// The [`set_bits_from_byte()`](#method.set_bits_from_byte) function shall set many bits from a single byte.
+/// All 8 bits from the byte value will be written to dest array starting at index position.
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use modbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_bits_from_byte(_dest: u8, index: c_int, value: u8) {
+    unimplemented!()
+}
+
+/// `set_bits_from_bytes` -  set many bits from an array of bytes
+///
+/// The [`set_bits_from_bytes()`](#method.set_bits_from_bytes) function shall set many bits from a single byte.
+/// All 8 bits from the byte value will be written to dest array starting at index position.
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use modbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_bits_from_bytes(_dest: u8, _index: c_uint, _num_bits: c_uint, _tab_bytes: Vec<u8>) {
+    unimplemented!()
+}
+
+/// `get_byte_from_bits` - get the value from many bit
+///
+/// The [`get_byte_from_bits()`](#method.get_byte_from_bits) function shall extract a value from many bits.
+/// All nb_bits bits from src at position index will be read as a single value. To obtain a full byte, set nb_bits to 8.
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use modbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn get_byte_from_bits(_src: u8, index: c_int, _num_bits: c_uint) {
+    unimplemented!()
+}
+
+/// `get_float_abcd` - get a float value from 2 registers in ABCD byte order
+///
+/// The [`get_float_abcd()`](#method.get_float_abcd) function shall get a float from 4 bytes in usual Modbus format.
+/// The src array must be a pointer on two 16 bits values, for example, if the first word is set to 0x0020 and the second to 0xF147,
+/// the float value will be read as 123456.0.
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use modbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn get_float_abcd(_src: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use modbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_float_abcd(_dest: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use modbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn get_float_badc(_src: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use modbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_float_badc(_dest: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use modbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn get_float_cdab(_src: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use modbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_float_cdab(_dest: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use modbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn get_float_dcba(_src: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use modbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_float_dcba(_dest: u16) {
+    unimplemented!()
 }
 
 

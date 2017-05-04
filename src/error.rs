@@ -1,3 +1,5 @@
+// TODO: convert to error_chain
+
 use std::error::Error;
 use std::fmt;
 use std::io;
@@ -6,6 +8,7 @@ use std::io;
 #[derive(Debug)]
 pub enum ModbusError {
     InvalArg,
+    ToManyBits,
     Io(io::Error),
     NotRTU,
 }
@@ -14,6 +17,7 @@ impl fmt::Display for ModbusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ModbusError::InvalArg => write!(f, "an invalid argument was given"),
+            ModbusError::ToManyBits => write!(f, "Too many bits requested "),
             ModbusError::Io(ref err) => err.fmt(f),
             ModbusError::NotRTU => write!(f, "the libmodbus backend is not RTU"),
         }
@@ -24,6 +28,7 @@ impl Error for ModbusError {
     fn description(&self) -> &str {
         match *self {
             ModbusError::InvalArg => "an invalid argument was given",
+            ModbusError::ToManyBits => "Too many bits requested ",
             ModbusError::Io(ref err) => err.description(),
             ModbusError::NotRTU => "the libmodbus backend is not RTU",
         }
@@ -32,6 +37,7 @@ impl Error for ModbusError {
     fn cause(&self) -> Option<&Error> {
         match *self {
             ModbusError::InvalArg => None,
+            ModbusError::ToManyBits => None,
             ModbusError::Io(ref err) => Some(err),
             ModbusError::NotRTU => None,
         }
