@@ -141,6 +141,106 @@ impl Modbus {
         unimplemented!()
     }
 
+    /// `set_byte_timeout` - set timeout between bytes
+    ///
+    /// The [`set_byte_timeout()`](#method.set_byte_timeout) function shall set the timeout interval between two consecutive bytes of the same message.
+    /// The timeout is an upper bound on the amount of time elapsed before select() returns, if the time elapsed is longer than the defined timeout,
+    /// an ETIMEDOUT error will be raised by the function waiting for a response.
+    ///
+    /// The value of **to_usec** argument must be in the range 0 to 999999.
+    ///
+    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case, [`set_byte_timeout()`](#method.set_byte_timeout)
+    /// governs the entire handling of the response, the full confirmation response must be received before expiration of the response timeout.
+    /// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use modbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
+    /// ```
+    pub fn set_byte_timeout(&mut self, to_sec: u32, to_usec: u32) -> Result<(i32, i32), Error> {
+        unimplemented!()
+    }
+
+    /// `get_response_timeout` - get timeout for response
+    ///
+    /// The [`get_response_timeout()`](#method.get_response_timeout) function shall return the timeout interval used to wait for a response
+    /// in the **to_sec** and **to_usec** arguments.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use modbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
+    /// ```
+    pub fn get_response_timeout(&self) -> Result<(i32, i32), Error> {
+        unimplemented!()
+    }
+
+    /// `set_response_timeout` - set timeout for response
+    ///
+    /// The [`set_response_timeout()`](#method.set_response_timeout) function shall set the timeout interval used to wait for a response.
+    /// When a byte timeout is set, if elapsed time for the first byte of response is longer than the given timeout,
+    /// an ETIMEDOUT error will be raised by the function waiting for a response. When byte timeout is disabled,
+    /// the full confirmation response must be received before expiration of the response timeout.
+    ///
+    /// The value of **to_usec** argument must be in the range 0 to 999999.
+    ///
+    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case, [`set_response_timeout()`](#method.set_response_timeout)
+    /// governs the entire handling of the response, the full confirmation response must be received before expiration of the response timeout.
+    /// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use modbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
+    /// ```
+    pub fn set_response_timeout(&mut self, to_sec: u32, to_usec: u32) -> Result<(i32, i32), Error> {
+        unimplemented!()
+    }
+
+    /// `set_error_recovery` - set the error recovery mode
+    ///
+    /// The [`set_error_recovery()`](#method.set_error_recovery) function shall set the error recovery mode to apply when the connection fails or
+    /// the byte received is not expected. The argument error_recovery may be bitwise-or’ed with zero or more of the following constants.
+    ///
+    /// By default there is no error recovery (MODBUS_ERROR_RECOVERY_NONE) so the application is responsible for controlling the error values
+    /// returned by libmodbus functions and for handling them if necessary.
+    ///
+    /// When MODBUS_ERROR_RECOVERY_LINK is set, the library will attempt an reconnection after a delay defined by response timeout of the libmodbus context.
+    /// This mode will try an infinite close/connect loop until success on send call and will just try one time to re-establish the connection on
+    /// select/read calls (if the connection was down, the values to read are certainly not available any more after reconnection, except for slave/server).
+    /// This mode will also run flush requests after a delay based on  the current response timeout in some situations (eg. timeout of select call).
+    /// The reconnection attempt can hang for several seconds if the network to the remote target unit is down.
+    ///
+    /// When MODBUS_ERROR_RECOVERY_PROTOCOL is set, a sleep and flush sequence will be used to clean up the ongoing communication, this can
+    /// occurs when the message length is invalid, the TID is wrong or the received function code is not the expected one.
+    /// The response timeout delay will be used to sleep.
+    ///
+    /// The modes are mask values and so they are complementary.
+    ///
+    /// It’s not recommended to enable error recovery for slave/server.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use modbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
+    /// ```
+    pub fn set_error_recovery(&mut self, modbus_error_recovery_mode: libmodbus_sys::modbus_error_recovery_mode) -> Result<i32, Error> {
+        unimplemented!()
+    }
+
     /// `close` - close a Modbus connection
     ///
     /// The [`close()`](#method.close) function shall close the connection established with the backend set in the context.

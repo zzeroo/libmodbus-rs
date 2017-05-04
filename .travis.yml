@@ -17,3 +17,6 @@ env:
 sudo: false
 cache: cargo
 before_install: . ./ci/before_install.sh
+script:
+  - cargo build
+  - cargo test
