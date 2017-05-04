@@ -1,6 +1,7 @@
 extern crate modbus_rs;
 
-use modbus_rs::Modbus;
+use modbus_rs::{Modbus, ModbusRTU};
+
 
 #[test]
 fn create_modbus_context() {
