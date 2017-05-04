@@ -95,6 +95,36 @@ impl Modbus {
             }
         }
     }
+
+    /// `set_debug` - set debug flag of the context
+    ///
+    /// The [`set_debug()`](#method.set_debug) function shall set the debug flag of the modbus_t context by using the argument flag.
+    /// By default, the boolean flag is set to FALSE. When the flag value is set to TRUE, many verbose messages are displayed on stdout and stderr.
+    /// For example, this flag is useful to display the bytes of the Modbus messages.
+    ///
+    /// ```bash
+    /// [00][14][00][00][00][06][12][03][00][6B][00][03]
+    /// Waiting for a confirmation…
+    /// <00><14><00><00><00><09><12><03><06><02><2B><00><00><00><00>
+    /// ```
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use modbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// modbus.set_debug(true);
+    /// ```
+    pub fn set_debug(&mut self, flag: bool) -> Result<i32, Error> {
+        unsafe {
+            match libmodbus_sys::modbus_set_debug(self.ctx, flag as c_int) {
+                -1 => Err(Error::new(ErrorKind::Other, "Invalid flag")),
+                _ => Ok(0),
+            }
+        }
+    }
+
     /// `close` - close a Modbus connection
     ///
     /// The [`close()`](#method.close) function shall close the connection established with the backend set in the context.

@@ -1,5 +1,3 @@
-//! # RTU Context
-//!
 //! The RTU backend (Remote Terminal Unit) is used in serial communication and makes use of a compact, binary representation of the data for protocol communication.
 //! The RTU format follows the commands/data with a cyclic redundancy check checksum as an error check mechanism to ensure the reliability of data.
 //! Modbus RTU is the most common implementation available for Modbus. A Modbus RTU message must be transmitted continuously without inter-character hesitations

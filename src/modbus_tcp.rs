@@ -1,6 +1,5 @@
-//! # TCP (IPv4) Context
-//!
-//! The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks. It does not require a checksum calculation as lower layer takes care of the same.
+//! The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
+//! It does not require a checksum calculation as lower layer takes care of the same.
 //!
 //! Create a Modbus TCP context
 //!
