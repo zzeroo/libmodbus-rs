@@ -4,7 +4,7 @@ set -e
 # https://github.com/KyleMayes/clang-sys/blob/87b674e9274c50995a6a4601e1160165490cb0e7/ci/before_install.sh
 
 export LLVM_VERSION_TRIPLE="3.9.0"
-export LLVM=clang+llvm-${LLVM_VERSION_TRIPLE}-x86_64-$1
+export LLVM=clang+llvm-${LLVM_VERSION_TRIPLE}-x86_64-3.9
 
 wget http://llvm.org/releases/${LLVM_VERSION_TRIPLE}/${LLVM}.tar.xz
 mkdir llvm
