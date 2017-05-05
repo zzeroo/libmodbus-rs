@@ -5,6 +5,7 @@
 //!
 //! [`new_tcp()`](trait.ModbusTCP.html#method.new_tcp)
 //!
+// use errors::*;
 use libmodbus_sys;
 use modbus::Modbus;
 use libc::c_int;

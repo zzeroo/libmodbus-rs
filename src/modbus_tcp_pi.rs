@@ -7,6 +7,7 @@
 //!
 //! modbus_new_tcp_pi(3)
 //!
+// use errors::*;
 use libmodbus_sys;
 use modbus::Modbus;
 use std::ffi::CString;

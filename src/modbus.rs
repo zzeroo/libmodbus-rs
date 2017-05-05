@@ -20,6 +20,7 @@
 //! * [TCP (IPv4) Context]
 //! * [TCP PI (IPv4 and IPv6) Context]
 //!
+// use errors::*;
 use libmodbus_sys;
 use std::io::{Error, ErrorKind};
 use libc::{c_int, c_uint};

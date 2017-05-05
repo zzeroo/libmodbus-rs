@@ -22,6 +22,7 @@
 //! modbus_rtu_get_serial_mode(3) modbus_rtu_set_serial_mode(3) modbus_rtu_get_rts(3) modbus_rtu_set_rts(3) modbus_rtu_set_custom_rts(3) modbus_rtu_get_rts_delay(3) modbus_rtu_set_rts_delay(3)
 //!
 use error::ModbusError;
+// use errors::*;
 use libc::{c_char, c_int};
 use libmodbus_sys;
 use modbus::Modbus;
