@@ -1,31 +1,13 @@
-//! libmodbus is a library to send/receive data with a device which respects the Modbus protocol.
-//! This library contains various backends to communicate over different networks (eg. serial in RTU mode or Ethernet in TCP/IPv6).
-//! The http://www.modbus.org site provides documentation about the protocol at http://www.modbus.org/specs.php.
-//!
-//! libmodbus provides an abstraction of the lower communication layers and offers the same API on all supported platforms.
-//!
-//! This documentation presents an overview of libmodbus concepts, describes how libmodbus abstracts Modbus communication with
-//! different hardware and platforms and provides a reference manual for the functions provided by the libmodbus library.
-//!
-//! ## Contexts
-//!
-//! The Modbus protocol contains many variants (eg. serial RTU or Ehternet TCP), to ease the implementation of a variant,
-//! the library was designed to use a backend for each variant.
-//! The backends are also a convenient way to fulfill other requirements (eg. real-time operations). Each backend offers a specific function to create a new modbus_t context.
-//! The modbus_t context is an opaque structure containing all necessary information to establish a connection with others Modbus devices according to the selected variant.
-//!
-//! You can choose the best context for your needs among:
-//!
-//! * [RTU Context](modbus_rtu)
-//! * [TCP (IPv4) Context]
-//! * [TCP PI (IPv4 and IPv6) Context]
-//!
 // use errors::*;
 use libmodbus_sys;
 use std::io::{Error, ErrorKind};
 use libc::{c_int, c_uint};
 
-
+/// Safe interface for [libmodbus](http://libmodbus.org)
+///
+/// The different parts of libmodbus are implemented as traits. The modules of this crate contains these
+/// traits and a implementation with a, hopefully safe, interface.
+///   
 pub struct Modbus {
     pub ctx: *mut libmodbus_sys::modbus_t,
 }

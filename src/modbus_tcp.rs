@@ -1,10 +1,3 @@
-//! The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
-//! It does not require a checksum calculation as lower layer takes care of the same.
-//!
-//! Create a Modbus TCP context
-//!
-//! [`new_tcp()`](trait.ModbusTCP.html#method.new_tcp)
-//!
 // use errors::*;
 use libmodbus_sys;
 use modbus::Modbus;
@@ -13,6 +6,12 @@ use std::ffi::CString;
 use std::io::Error;
 
 
+/// The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
+/// It does not require a checksum calculation as lower layer takes care of the same.
+///
+/// Create a Modbus TCP context
+///
+/// [`new_tcp()`](trait.ModbusTCP.html#method.new_tcp)
 pub trait ModbusTCP {
     fn new_tcp(ip: &str, port: u32) -> Result<Modbus, Error>;
 }
