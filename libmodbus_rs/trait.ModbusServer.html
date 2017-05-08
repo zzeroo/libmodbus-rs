@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../libmodbus_rs/index.html'><img src='https://zzeroo.github.io/share/zzeroo-logo.png' alt='logo' width='100'></a>
-        <p class='location'>Trait ModbusServer</p><div class="block items"><ul><li><a href="#implementors">Implementors</a></li></ul></div><p class='location'><a href='index.html'>libmodbus_rs</a></p><script>window.sidebarCurrent = {name: 'ModbusServer', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait ModbusServer</p><div class="block items"><ul><li><a href="#required-methods">Required Methods</a></li><li><a href="#implementors">Implementors</a></li></ul></div><p class='location'><a href='index.html'>libmodbus_rs</a></p><script>window.sidebarCurrent = {name: 'ModbusServer', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -48,10 +48,27 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/modbus_server.rs.html#10-11' title='goto source code'>[src]</a></span></h1>
-<pre class='rust trait'>pub trait ModbusServer { }</pre><div class='docblock'><p>The server is waiting for request from clients and must answer when it is concerned by the request.
-The libmodbus offers the following functions to handle requests:</p>
+               </span><a class='srclink' href='../src/libmodbus_rs/modbus_server.rs.html#15-17' title='goto source code'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait ModbusServer {
+    fn <a href='#tymethod.receive' class='fnname'>receive</a>(&amp;self, request: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, Error&gt;;
+}</pre><div class='docblock'><p>The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus offers the following functions to handle requests:</p>
+
+<ul>
+<li>Receive
+
+<ul>
+<li><a href="struct.Modbus.html#method.receive"><code>receive()</code></a></li>
+</ul></li>
+<li>Reply
+
+<ul>
+<li><a href="struct.Modbus.html#method.reply"><code>reply()</code></a>, <a href="struct.Modbus.html#method.reply_exception"><code>reply_exception()</code></a></li>
+</ul></li>
+</ul>
 </div>
+            <h2 id='required-methods'>Required Methods</h2>
+            <div class='methods'>
+        <h3 id='tymethod.receive' class='method'><span id='receive.v' class='invisible'><code>fn <a href='#tymethod.receive' class='fnname'>receive</a>(&amp;self, request: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, Error&gt;</code></span></h3></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
     <li><code>impl ModbusServer for <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></li>

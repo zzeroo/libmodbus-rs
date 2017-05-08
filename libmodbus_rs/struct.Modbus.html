@@ -519,7 +519,7 @@ On many Unix systems, it’s convenient to use a port number greater than or equ
 </div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#495-500' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.drop' class="method"><span id='drop.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#tymethod.drop' class='fnname'>drop</a>(&amp;mut self)</code></span></h4>
 <div class='docblock'><p>A method called when the value goes out of scope. <a href="https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#tymethod.drop">Read more</a></p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="../libmodbus_rs/trait.ModbusClient.html" title="trait libmodbus_rs::ModbusClient">ModbusClient</a> for <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_client.rs.html#51-435' title='goto source code'>[src]</a></span></h3>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="../libmodbus_rs/trait.ModbusClient.html" title="trait libmodbus_rs::ModbusClient">ModbusClient</a> for <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_client.rs.html#51-436' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.read_bits' class="method"><span id='read_bits.v' class='invisible'><code>fn <a href='../libmodbus_rs/trait.ModbusClient.html#tymethod.read_bits' class='fnname'>read_bits</a>(&amp;self, address: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>, num_bit: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html" title="struct collections::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>&gt;, Error&gt;</code></span></h4>
 <div class='docblock'><p><code>read_bits</code> - read many bits</p>
 
@@ -748,18 +748,20 @@ if the indication request is ignored (eg. a query for another slave in RTU mode)
 
 <p>The modbus_reply_exception() function shall send an exception response based on the exception_code in argument.</p>
 
-<p>The libmodbus provides the following exception codes:
-    * MODBUS_EXCEPTION_ILLEGAL_FUNCTION (1)
-    * MODBUS_EXCEPTION_ILLEGAL_DATA_ADDRESS (2)
-    * MODBUS_EXCEPTION_ILLEGAL_DATA_VALUE (3)
-    * MODBUS_EXCEPTION_SLAVE_OR_SERVER_FAILURE (4)
-    * MODBUS_EXCEPTION_ACKNOWLEDGE (5)
-    * MODBUS_EXCEPTION_SLAVE_OR_SERVER_BUSY (6)
-    * MODBUS_EXCEPTION_NEGATIVE_ACKNOWLEDGE (7)
-    * MODBUS_EXCEPTION_MEMORY_PARITY (8)
-    * MODBUS_EXCEPTION_NOT_DEFINED (9)
-    * MODBUS_EXCEPTION_GATEWAY_PATH (10)
-    * MODBUS_EXCEPTION_GATEWAY_TARGET (11)</p>
+<p>The libmodbus provides the following exception codes:</p>
+
+<pre class="rust rust-example-rendered">
+<span class="op">*</span> <span class="ident">MODBUS_EXCEPTION_ILLEGAL_FUNCTION</span> (<span class="number">1</span>)
+<span class="op">*</span> <span class="ident">MODBUS_EXCEPTION_ILLEGAL_DATA_ADDRESS</span> (<span class="number">2</span>)
+<span class="op">*</span> <span class="ident">MODBUS_EXCEPTION_ILLEGAL_DATA_VALUE</span> (<span class="number">3</span>)
+<span class="op">*</span> <span class="ident">MODBUS_EXCEPTION_SLAVE_OR_SERVER_FAILURE</span> (<span class="number">4</span>)
+<span class="op">*</span> <span class="ident">MODBUS_EXCEPTION_ACKNOWLEDGE</span> (<span class="number">5</span>)
+<span class="op">*</span> <span class="ident">MODBUS_EXCEPTION_SLAVE_OR_SERVER_BUSY</span> (<span class="number">6</span>)
+<span class="op">*</span> <span class="ident">MODBUS_EXCEPTION_NEGATIVE_ACKNOWLEDGE</span> (<span class="number">7</span>)
+<span class="op">*</span> <span class="ident">MODBUS_EXCEPTION_MEMORY_PARITY</span> (<span class="number">8</span>)
+<span class="op">*</span> <span class="ident">MODBUS_EXCEPTION_NOT_DEFINED</span> (<span class="number">9</span>)
+<span class="op">*</span> <span class="ident">MODBUS_EXCEPTION_GATEWAY_PATH</span> (<span class="number">10</span>)
+<span class="op">*</span> <span class="ident">MODBUS_EXCEPTION_GATEWAY_TARGET</span> (<span class="number">11</span>)</pre>
 
 <p>The initial request req is required to build a valid response.</p>
 
@@ -773,8 +775,24 @@ if the indication request is ignored (eg. a query for another slave in RTU mode)
     <span class="prelude-val">Ok</span>(_) <span class="op">=&gt;</span> {}
     <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Error: {}&quot;</span>, <span class="ident">e</span>),
 }</pre>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="../libmodbus_rs/trait.ModbusServer.html" title="trait libmodbus_rs::ModbusServer">ModbusServer</a> for <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_server.rs.html#13-14' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'></div></section>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="../libmodbus_rs/trait.ModbusServer.html" title="trait libmodbus_rs::ModbusServer">ModbusServer</a> for <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_server.rs.html#19-46' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.receive' class="method"><span id='receive.v' class='invisible'><code>fn <a href='../libmodbus_rs/trait.ModbusServer.html#tymethod.receive' class='fnname'>receive</a>(&amp;self, request: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, Error&gt;</code></span></h4>
+<div class='docblock'><p><code>receive</code> - receive an indication request</p>
+
+<p>The <a href="#method.receive"><code>receive()</code></a> function shall receive an indication request from the socket of the context ctx.
+This function is used by Modbus slave/server to receive and analyze indication request sent by the masters/clients.</p>
+
+<p>If you need to use another socket or file descriptor than the one defined in the context ctx, see the function <a href="struct.Modbus.html#method.set_socket"><code>set_socket()</code></a>.</p>
+
+<h1 id='examples-36' class='section-header'><a href='#examples-36'>Examples</a></h1>
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusServer</span>, <span class="ident">ModbusTCP</span>, <span class="ident">MODBUS_MAX_ADU_LENGTH</span>};
+
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">query</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">MODBUS_MAX_ADU_LENGTH</span> <span class="kw">as</span> <span class="ident">usize</span>];
+
+<span class="macro">assert</span><span class="macro">!</span>(<span class="ident">modbus</span>.<span class="ident">receive</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">query</span>).<span class="ident">is_ok</span>());</pre>
+</div></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
