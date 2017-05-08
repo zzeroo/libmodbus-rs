@@ -1,39 +1,22 @@
 language: rust
-rust:
-  # - stable
-  # - beta
-  - nightly
-sudo: false
-before_script:
-  - pip install 'travis-cargo<0.2' --user && export PATH=$HOME/.local/bin:$PATH
-script:
-  - cargo test --no-default-features
-  - cargo test
-  - cargo run --manifest-path systest/Cargo.toml --release
-  - if [ "$TRAVIS_RUST_VERSION" = "nightly" ]; then
-      cargo test --features unstable;
-    fi
-  - cargo doc --no-deps
-  - cargo doc --manifest-path=libmodbus-sys/Cargo.toml --no-deps
-after_success:
-  - travis-cargo --only nightly doc-upload
-  - travis-cargo coveralls --no-sudo
-notifications:
-  email:
-    # on_success: never
-matrix:
-  # include:
-  #   - os: osx
-  #     rust: stable
-  #     before_install:
-  #       - export OPENSSL_INCLUDE_DIR=`brew --prefix openssl`/include
-  #       - export OPENSSL_LIB_DIR=`brew --prefix openssl`/lib
 addons:
-  # apt:
-  #   sources:
-  #     - kalakris-cmake
-  #   packages:
-  #     - cmake
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-5
+os:
+  - linux
+  # - osx
+rust:
+  - stable
+  - beta
+  - nightly
 env:
-global:
-  secure: hBzhz+me/s/LBO0PIQ53+zejETFmKPccFZEw2ZG12EXZAR2kCAznVh2swC4cLoxLIyysZplqZJ9BWraWUkprpDsXyiA8pG4EmRSTFWE+tgVmQtSB4MHDM5SdHl+rQEF+Elz8vLLq5MOaej0+xCw32dRPfW+loROMqYGttzj0CWulchAGm2Qx2LRKccAZ4jplZ9VHNc7lvHkQe3uY/PmCTXOFipP+AsQI9zAC68hcSibmRB/9IufsIMleLyXbclMrYG9u4KgEF3eaNvpUVjoMaU+DaHnGBvy2HJZVoFGz2ibZFt9Yksr1TMZUdimd5muTpTh4hYWsNC4lGeEKNSVt9IWfsX12WOtsB6FkCGYAdCkeX1GBjbtSEWgHABlPJCudJZSN/WC1FNhNL0vnUflyrJI8fxTsdIAJWymZO4NPS6Ajp51ezD4f+joObNNht3jmHHZYVhsus7thJk7Zm/+dn2hOADrue1+0O4RXibb/VOXmWQIZPzCEmyuPRnKqZPC6R57aFRQhObVDbWfndVwpa9NunvL4I9c6QS50OoRM1hyFJQbQ7tDqZ/akrBhuCsKumb/Vi5yzrJI4IIKHCe/FPxBLhs2DiIKQxho61d/kYy9gJSShOITLSbylELVHb//WXv7XiiMfYA2VwMmXO+/B8php8jbQS5MYuISmRa3KMdc=
+  - LLVM_VERSION=3.9 CLANG_VERSION=clang_3_9
+sudo: false
+# cache: cargo
+before_install: . ./ci/before_install.sh
+script:
+  - cargo build
+  - cargo test

@@ -1,10 +1,11 @@
 [package]
+
 name = "libmodbus-sys"
-version = "0.2.1"
+version = "0.1.0"
 authors = ["Stefan Müller <s.mueller@it.kls-glt.de>"]
-links = "libmodbus"
+links = "modbus"
 build = "build.rs"
-repository = "https://github.com/zzeroo/libmodbus-rs.git"
+repository = "https://github.com/zzeroo/modbus-rs"
 license = "LGPL-2.1"
 description = "Native bindings to the libmodbus library"
 
@@ -16,5 +17,6 @@ path = "lib.rs"
 libc = "0.2"
 
 [build-dependencies]
-pkg-config = "0.3"
-gcc = "0.3"
+bindgen = "^0.23"
+gcc = "^0.3"
+pkg-config = "^0.3"

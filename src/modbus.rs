@@ -1,411 +1,500 @@
-use raw::*;
-use libc::{c_char, c_int};
-pub use error::Error;
+// use errors::*;
+use libmodbus_sys;
+use std::io::{Error, ErrorKind};
+use libc::{c_int, c_uint};
 
-// https://doc.rust-lang.org/book/error-handling.html#the-result-type-alias-idiom
-pub type Result<T> = ::std::result::Result<T, Error>;
 
-/// This struct holds the current context `ctx`
+/// Safe interface for [libmodbus](http://libmodbus.org)
 ///
-/// This logic is derived from that one libmodbus uses.
-#[derive(Debug, Eq, PartialEq)]
-pub struct Modbus { ctx: *mut modbus_t }
+/// The different parts of libmodbus are implemented as traits. The modules of this crate contains these
+/// traits and a implementation with a, hopefully safe, interface.
+///
+pub struct Modbus {
+    pub ctx: *mut libmodbus_sys::modbus_t,
+}
 
-/// I love rust. It's so expressive.
+impl Modbus {
+    /// `connect` - establish a Modbus connection
+    ///
+    /// The [`connect()`](#method.connect) function shall establish a connection to a Modbus server,
+    /// a network or a bus.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// match modbus.connect() {
+    ///     Ok(_) => {}
+    ///     Err(e) => println!("Error: {}", e),
+    /// }
+    /// ```
+    pub fn connect(&self) -> Result<i32, Error> {
+        unsafe {
+            match libmodbus_sys::modbus_connect(self.ctx) {
+                -1 => Err(Error::last_os_error()),
+                _ => Ok(0),
+            }
+        }
+    }
+
+    /// `flush` - flush non-transmitted data
+    /// The [`flush()`](#method.flush) function shall discard data received but not read to the socket or file descriptor associated to the context ctx.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// assert!(modbus.flush().is_ok());
+    /// ```
+    pub fn flush(&self) -> Result<i32, Error> {
+        unsafe {
+            match libmodbus_sys::modbus_flush(self.ctx) {
+                -1 => Err(Error::last_os_error()),
+                _ => Ok(0),
+            }
+        }
+    }
+
+    /// `set_slave` - set slave number in the context
+    ///
+    /// The [`set_slave()`](#method.set_slave) function shall set the slave number in the libmodbus context.
+    /// The behavior depends of network and the role of the device:
+    ///
+    /// RTU
+    ///     Define the slave ID of the remote device to talk in master mode or set the internal slave ID in slave mode.
+    ///     According to the protocol, a Modbus device must only accept message holding its slave number or the special broadcast number.
+    /// TCP
+    ///     The slave number is only required in TCP if the message must reach a device on a serial network.
+    ///     Some not compliant devices or software (such as modpoll) uses the slave ID as unit identifier,
+    ///     that’s incorrect (cf page 23 of Modbus Messaging Implementation Guide v1.0b) but without the slave value,
+    ///     the faulty remote device or software drops the requests!
+    ///     The special value MODBUS_TCP_SLAVE (0xFF) can be used in TCP mode to restore the default value.
+    ///     The broadcast address is MODBUS_BROADCAST_ADDRESS.
+    ///     This special value must be use when you want all Modbus devices of the network receive the request.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusRTU};
+    ///
+    /// const YOUR_DEVICE_ID: i32 = 1;
+    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
+    /// modbus.set_slave(YOUR_DEVICE_ID);
+    ///
+    /// match modbus.connect() {
+    ///     Ok(_) => {}
+    ///     Err(e) => println!("Error: {}", e),
+    /// }
+    /// ```
+    pub fn set_slave(&mut self, slave: i32) -> Result<i32, Error> {
+        unsafe {
+            match libmodbus_sys::modbus_set_slave(self.ctx, slave as c_int) {
+                -1 => Err(Error::new(ErrorKind::Other, "The slave number is invalid.")),
+                _ => Ok(0),
+            }
+        }
+    }
+
+    /// `set_debug` - set debug flag of the context
+    ///
+    /// The [`set_debug()`](#method.set_debug) function shall set the debug flag of the modbus_t context by using the argument flag.
+    /// By default, the boolean flag is set to FALSE. When the flag value is set to TRUE, many verbose messages are displayed on stdout and stderr.
+    /// For example, this flag is useful to display the bytes of the Modbus messages.
+    ///
+    /// ```bash
+    /// [00][14][00][00][00][06][12][03][00][6B][00][03]
+    /// Waiting for a confirmation…
+    /// <00><14><00><00><00><09><12><03><06><02><2B><00><00><00><00>
+    /// ```
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// modbus.set_debug(true);
+    /// ```
+    pub fn set_debug(&mut self, flag: bool) -> Result<i32, Error> {
+        unsafe {
+            match libmodbus_sys::modbus_set_debug(self.ctx, flag as c_int) {
+                -1 => Err(Error::new(ErrorKind::Other, "Invalid flag")),
+                _ => Ok(0),
+            }
+        }
+    }
+
+    /// `get_byte_timeout` - get timeout between bytes
+    ///
+    /// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between two consecutive bytes of the same message `Result<(to_sec, to_usec), Error>`.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
+    /// ```
+    pub fn get_byte_timeout(&self) -> Result<(i32, i32), Error> {
+        unimplemented!()
+    }
+
+    /// `set_byte_timeout` - set timeout between bytes
+    ///
+    /// The [`set_byte_timeout()`](#method.set_byte_timeout) function shall set the timeout interval between two consecutive bytes of the same message.
+    /// The timeout is an upper bound on the amount of time elapsed before select() returns, if the time elapsed is longer than the defined timeout,
+    /// an ETIMEDOUT error will be raised by the function waiting for a response.
+    ///
+    /// The value of **to_usec** argument must be in the range 0 to 999999.
+    ///
+    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case, [`set_byte_timeout()`](#method.set_byte_timeout)
+    /// governs the entire handling of the response, the full confirmation response must be received before expiration of the response timeout.
+    /// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
+    /// ```
+    pub fn set_byte_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32), Error> {
+        unimplemented!()
+    }
+
+    /// `get_response_timeout` - get timeout for response
+    ///
+    /// The [`get_response_timeout()`](#method.get_response_timeout) function shall return the timeout interval used to wait for a response
+    /// in the **to_sec** and **to_usec** arguments.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// ```
+    pub fn get_response_timeout(&self) -> Result<(i32, i32), Error> {
+        unimplemented!()
+    }
+
+    /// `set_response_timeout` - set timeout for response
+    ///
+    /// The [`set_response_timeout()`](#method.set_response_timeout) function shall set the timeout interval used to wait for a response.
+    /// When a byte timeout is set, if elapsed time for the first byte of response is longer than the given timeout,
+    /// an ETIMEDOUT error will be raised by the function waiting for a response. When byte timeout is disabled,
+    /// the full confirmation response must be received before expiration of the response timeout.
+    ///
+    /// The value of **to_usec** argument must be in the range 0 to 999999.
+    ///
+    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case, [`set_response_timeout()`](#method.set_response_timeout)
+    /// governs the entire handling of the response, the full confirmation response must be received before expiration of the response timeout.
+    /// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// ```
+    pub fn set_response_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32), Error> {
+        unimplemented!()
+    }
+
+    /// `set_error_recovery` - set the error recovery mode
+    ///
+    /// The [`set_error_recovery()`](#method.set_error_recovery) function shall set the error recovery mode to apply when the connection fails or
+    /// the byte received is not expected. The argument error_recovery may be bitwise-or’ed with zero or more of the following constants.
+    ///
+    /// By default there is no error recovery (MODBUS_ERROR_RECOVERY_NONE) so the application is responsible for controlling the error values
+    /// returned by libmodbus functions and for handling them if necessary.
+    ///
+    /// When MODBUS_ERROR_RECOVERY_LINK is set, the library will attempt an reconnection after a delay defined by response timeout of the libmodbus context.
+    /// This mode will try an infinite close/connect loop until success on send call and will just try one time to re-establish the connection on
+    /// select/read calls (if the connection was down, the values to read are certainly not available any more after reconnection, except for slave/server).
+    /// This mode will also run flush requests after a delay based on  the current response timeout in some situations (eg. timeout of select call).
+    /// The reconnection attempt can hang for several seconds if the network to the remote target unit is down.
+    ///
+    /// When MODBUS_ERROR_RECOVERY_PROTOCOL is set, a sleep and flush sequence will be used to clean up the ongoing communication, this can
+    /// occurs when the message length is invalid, the TID is wrong or the received function code is not the expected one.
+    /// The response timeout delay will be used to sleep.
+    ///
+    /// The modes are mask values and so they are complementary.
+    ///
+    /// It’s not recommended to enable error recovery for slave/server.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// ```
+    pub fn set_error_recovery(&mut self, _modbus_error_recovery_mode: libmodbus_sys::modbus_error_recovery_mode) -> Result<i32, Error> {
+        unimplemented!()
+    }
+
+    /// `set_socket` - set socket of the context
+    ///
+    /// The [`set_socket()`](#method.set_socket) function shall set the socket or file descriptor in the libmodbus context.
+    /// This function is useful for managing multiple client connections to the same server.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// ```
+    pub fn set_socket(&mut self, _socket: u32) -> Result<i32, Error> {
+        unimplemented!()
+    }
+
+    /// `get_socket` - set socket of the context
+    ///
+    /// The [`get_socket()`](#method.get_socket) function shall return the current socket or file descriptor of the libmodbus context.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// ```
+    pub fn get_socket(&self) -> Result<u32, Error> {
+        unimplemented!()
+    }
+
+    /// `get_header_length` - retrieve the current header length
+    ///
+    /// The [`get_header_length()`](#method.get_header_length) function shall retrieve the current header length from the backend.
+    /// This function is convenient to manipulate a message and so its limited to low-level operations.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// ```
+    pub fn get_header_length(&self) -> Result<u32, Error> {
+        unimplemented!()
+    }
+
+    /// `close` - close a Modbus connection
+    ///
+    /// The [`close()`](#method.close) function shall close the connection established with the backend set in the context.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// match modbus.connect() {
+    ///     Ok(_) => {  }
+    ///     Err(e) => println!("Error: {}", e),
+    /// }
+    ///
+    /// modbus.close();
+    /// modbus.free();
+    /// ```
+    pub fn close(&self) {
+        unsafe {
+            libmodbus_sys::modbus_close(self.ctx);
+        }
+    }
+
+    /// `free` - free a libmodbus context
+    ///
+    /// The [`free()`](#method.free) function shall free an allocated modbus_t structure.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// match modbus.connect() {
+    ///     Ok(_) => {  }
+    ///     Err(e) => println!("Error: {}", e),
+    /// }
+    ///
+    /// modbus.close();
+    /// modbus.free();
+    /// ```
+    pub fn free(&mut self) {
+        unsafe {
+            libmodbus_sys::modbus_free(self.ctx);
+        }
+    }
+}
+
+
+/// `set_bits_from_byte` - set many bits from a single byte value
+///
+/// The [`set_bits_from_byte()`](#method.set_bits_from_byte) function shall set many bits from a single byte.
+/// All 8 bits from the byte value will be written to dest array starting at index position.
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use libmodbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_bits_from_byte(_dest: u8, index: c_int, value: u8) {
+    unimplemented!()
+}
+
+/// `set_bits_from_bytes` -  set many bits from an array of bytes
+///
+/// The [`set_bits_from_bytes()`](#method.set_bits_from_bytes) function shall set many bits from a single byte.
+/// All 8 bits from the byte value will be written to dest array starting at index position.
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use libmodbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_bits_from_bytes(_dest: u8, _index: c_uint, _num_bits: c_uint, _tab_bytes: Vec<u8>) {
+    unimplemented!()
+}
+
+/// `get_byte_from_bits` - get the value from many bit
+///
+/// The [`get_byte_from_bits()`](#method.get_byte_from_bits) function shall extract a value from many bits.
+/// All nb_bits bits from src at position index will be read as a single value. To obtain a full byte, set nb_bits to 8.
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use libmodbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn get_byte_from_bits(_src: u8, index: c_int, _num_bits: c_uint) {
+    unimplemented!()
+}
+
+/// `get_float_abcd` - get a float value from 2 registers in ABCD byte order
+///
+/// The [`get_float_abcd()`](#method.get_float_abcd) function shall get a float from 4 bytes in usual Modbus format.
+/// The src array must be a pointer on two 16 bits values, for example, if the first word is set to 0x0020 and the second to 0xF147,
+/// the float value will be read as 123456.0.
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use libmodbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn get_float_abcd(_src: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use libmodbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_float_abcd(_dest: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use libmodbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn get_float_badc(_src: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use libmodbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_float_badc(_dest: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use libmodbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn get_float_cdab(_src: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use libmodbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_float_cdab(_dest: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use libmodbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn get_float_dcba(_src: u16) {
+    unimplemented!()
+}
+
+///
+/// # Examples
+///
+/// ```rust,no_run
+/// use libmodbus_rs::{Modbus, ModbusTCP};
+///
+/// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+/// ```
+pub fn set_float_dcba(_dest: u16) {
+    unimplemented!()
+}
+
+
 impl Drop for Modbus {
     fn drop(&mut self) {
         self.close();
         self.free();
     }
-}
-
-impl Modbus {
-    /// Creates a new modbus context with the RTU backend
-    ///
-    /// # Attributes
-    /// * `device`         - Device string e.g. "/dev/ttyUSB0"
-    /// * `baud`           - Baud rate
-    /// * `parity`         - Parity
-    /// * `data_bit`       - Number of data bits
-    /// * `stop_bit`       - Number of stop bits
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use libmodbus_rs::modbus::Modbus;
-    ///
-    /// let modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// ```
-    pub fn new_rtu(device: &str, baud: i32, parity: char, data_bit: i32, stop_bit: i32) -> Self {
-        Modbus {
-            ctx: {
-                unsafe {
-                    ::raw::modbus_new_rtu(::std::ffi::CString::new(device).unwrap().as_ptr(), baud, parity as c_char, data_bit, stop_bit)
-                }
-            }
-        }
-    }
-
-    /// Define the slave ID of the remote device to talk in master mode or set the
-    /// internal slave ID in slave mode
-    ///
-    /// # Attributes
-    /// * `slave_id`    - New modbus slave id (valid range: `>= 0 && <= 247`), `0` is broadcast address
-    ///
-    /// # Examples
-    /// A `Ok(0)` signals all right, on error a `Error::InvalidSlaveID` is returned
-    ///
-    /// ```
-    /// use libmodbus_rs::modbus::{Modbus, Error};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// assert_eq!(modbus.set_slave(10), Ok(0));
-    /// assert_eq!(modbus.set_slave(255), Err(Error::InvalidSlaveID));
-    /// ```
-    pub fn set_slave(&mut self, slave_id: i32) -> Result<i32> {
-        unsafe {
-            match ::raw::modbus_set_slave(self.ctx, slave_id) {
-                -1 => Err(Error::InvalidSlaveID),
-                _ => Ok(0),
-            }
-        }
-    }
-
-    /// Set debug flag of the context
-    ///
-    /// # Attributes
-    /// * `flag`    - boolean `true` or `false`
-    ///
-    /// # Examples
-    /// A `Ok(0)` signals all right, on error a `Error::GenericError` is returned
-    ///
-    /// ```
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// assert_eq!(modbus.set_debug(true), Ok(0));
-    /// ```
-    pub fn set_debug(&mut self, flag: bool) -> Result<i32> {
-        unsafe {
-            match ::raw::modbus_set_debug(self.ctx, flag as c_int) {
-                -1 => Err(Error::InvalidDebug),
-                _ => Ok(0),
-            }
-        }
-    }
-
-    /// Set the serial mode
-    ///
-    /// # Attributes
-    /// * `mode`    - serial mode
-    ///
-    /// # Examples
-    /// A `Ok(0)` signals all right, on error a `Error::GenericError` is returned
-    ///
-    /// ```
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// ```
-    pub fn rtu_set_serial_mode(&mut self, mode: i32) -> Result<i32> {
-        unsafe {
-            match ::raw::modbus_rtu_set_serial_mode(self.ctx, mode) {
-                -1 => Err(Error::InvalidRTUSerialMode),
-                _ => Ok(0),
-            }
-        }
-    }
-
-    /// Set the RTS mode in RTU
-    ///
-    /// # Attributes
-    /// * `mode`    - serial mode
-    ///
-    /// # Examples
-    /// A `Ok(0)` signals all right, on error a `Error::GenericError` is returned
-    ///
-    /// ```
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// modbus.set_slave(1);
-    /// assert_eq!(modbus.rtu_set_rts(libmodbus_rs::MODBUS_RTU_RTS_DOWN), Ok(0));
-    /// ```
-    pub fn rtu_set_rts(&mut self, mode: i32) -> Result<i32> {
-        unsafe {
-            match ::raw::modbus_rtu_set_rts(self.ctx, mode) {
-                -1 => Err(Error::InvalidRTURTS),
-                _ => Ok(0),
-            }
-        }
-    }
-
-    /// Establish a Modbus connection
-    ///
-    /// # Examples
-    /// A `Ok(0)` signals all right, on error a `Error::GenericError` is returned
-    ///
-    /// ```no_run
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// modbus.set_slave(1);
-    /// assert_eq!(modbus.connect(), Ok(0));
-    /// ```
-    pub fn connect(&self) -> Result<i32> {
-        unsafe {
-            match ::raw::modbus_connect(self.ctx) {
-                -1 => Err(Error::ConnectionError),
-                _ => Ok(0),
-            }
-        }
-    }
-
-    /// modbus_close - close a Modbus connection
-    ///
-    /// The `modbus_close()` function shall close the connection established with the backend set in the context.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// modbus.set_slave(1);
-    /// match modbus.connect() {
-    ///     Err(_) => { modbus.close(); }
-    ///     Ok(_) => {
-    ///         let _ = modbus.read_registers(0, 1);
-    ///     }
-    /// }
-    /// ```
-    pub fn close(&self) {
-        unsafe {
-            ::raw::modbus_close(self.ctx);
-        }
-    }
-
-    /// Free a libmodbus context
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// modbus.set_slave(46);
-    /// let _ = modbus.connect();
-    /// modbus.free();
-    /// ```
-    pub fn free(&self) {
-        unsafe {
-            ::raw::modbus_free(self.ctx);
-        }
-    }
-
-    /// Read many registers
-    ///
-    /// # Attributes
-    /// * `address`    - Start address from which the read should start
-    /// * `num_reg`    - Number of holding registers to read from `address` of the remote device
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.rtu_set_rts(libmodbus_rs::MODBUS_RTU_RTS_DOWN);
-    /// let _ = modbus.connect();
-    /// let mut tab_reg: Vec<u16> = modbus.read_registers(0, 19).unwrap();
-    /// ```
-    pub fn read_registers(&self, address: i32, num_reg: i32) -> Result<Vec<u16>> {
-        let mut tab_reg = vec![0u16; num_reg as usize];
-        unsafe {
-            match ::raw::modbus_read_registers(self.ctx, address, num_reg, tab_reg.as_mut_ptr()) {
-                -1 => { Err(Error::ConnectionError)}
-                _ => { Ok(tab_reg) }
-            }
-        }
-    }
-
-    /// Read many registers
-    ///
-    /// # Attributes
-    /// * `address`    - Start address from which the read should start
-    /// * `num_reg`    - Number of holding registers to read from `address` of the remote device
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.rtu_set_rts(libmodbus_rs::MODBUS_RTU_RTS_DOWN);
-    /// let _ = modbus.connect();
-    /// let mut tab_reg: Vec<u16> = modbus.read_input_registers(0, 19).unwrap();
-    /// ```
-    pub fn read_input_registers(&self, address: i32, num_reg: i32) -> Result<Vec<u16>> {
-        let mut tab_reg = vec![0u16; num_reg as usize];
-        unsafe {
-            match ::raw::modbus_read_input_registers(self.ctx, address, num_reg, tab_reg.as_mut_ptr()) {
-                -1 => Err(Error::ReadFailure),
-                _ => Ok(tab_reg),
-            }
-        }
-    }
-
-    /// read many bits
-    ///
-    /// This function shall read the state of `num_bits` (coils) beginning from the `address` of
-    /// the remote device. The return value is an vector of u8's encapsuled in a Result.
-    ///
-    /// This funkciont uses the Modbus function **01 (0x01) Read Coils**
-    ///
-    /// # Attributes
-    /// * `address`     - Start Adresse from where the read should begin
-    /// * `num_bits`    - Number of bit to be read
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.connect();
-    /// let _ = modbus.read_bits(0, 1).unwrap();
-    /// ```
-    pub fn read_bits(&self, address: i32, num_bits: i32) -> Result<Vec<u8>> {
-        let mut coils = vec![0u8; num_bits as usize];
-        unsafe {
-            match ::raw::modbus_read_bits(self.ctx, address, num_bits, coils.as_mut_ptr()) {
-                -1 => Err(Error::ReadFailure),
-                _ => Ok(coils),
-            }
-        }
-    }
-
-
-    /// write a single coil
-    ///
-    /// # Attributes
-    /// * `address`     - Coil address
-    /// * `state`      - Coil state
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.connect();
-    /// let _ = modbus.write_bit(0, true).unwrap();
-    /// ```
-    pub fn write_bit(&self, address: i32, state: bool) -> Result<()> {
-        unsafe {
-            match ::raw::modbus_write_bit(self.ctx, address, state as i32) {
-                -1 => Err(Error::WriteFailure),
-                _ => Ok(())
-            }
-        }
-    }
-
-    /// write a single register
-    ///
-    /// # Attributes
-    /// * `address`     - Register address
-    /// * `value`       - New register value
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.connect();
-    /// let _ = modbus.write_register(0, 0x1234);
-    /// let tab_reg: Vec<u16> = modbus.read_registers(0, 1).unwrap();
-    /// assert_eq!(tab_reg, &[0x1234]);
-    /// ```
-    pub fn write_register(&self, address: i32, value: i32) -> Result<()> {
-        let result = unsafe {
-            ::raw::modbus_write_register(self.ctx, address, value)
-        };
-        match result {
-            1 => Ok(()),
-            _ => Err(Error::WriteFailure),
-        }
-    }
-
-    /// write multiple registers
-    ///
-    /// # Attributes
-    /// * `address`     - Start address register
-    /// * `register`    - Vector of u16 values
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.connect();
-    /// let register = [0x1111u16, 0x2222u16];
-    /// assert_eq!(modbus.write_registers(0, &register), Ok(2));
-    /// ```
-    pub fn write_registers(&self, address: i32, register: &[u16]) -> Result<i32> {
-        let result = unsafe {
-            ::raw::modbus_write_registers(self.ctx, address, register.len() as i32, register.as_ptr())
-        };
-        match result {
-            -1 => Err(Error::WriteFailure),
-            num => Ok(num),
-        }
-    }
-
-    /// send a raw request
-    ///
-    /// # Attributes
-    /// * `raw_request` - Vector of u8 values
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use libmodbus_rs::modbus::{Modbus};
-    ///
-    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-    /// let _ = modbus.set_slave(46);
-    /// let _ = modbus.connect();
-    /// let raw_request =  vec![0x2E, 0x08, 0x00, 0x01];
-    /// assert_eq!(modbus.send_raw_request(&raw_request), Ok(6));
-    /// ```
-    pub fn send_raw_request(&self, raw_request: &[u8]) -> Result<i32> {
-        let result = unsafe {
-            ::raw::modbus_send_raw_request(self.ctx, raw_request.as_ptr(), raw_request.len() as i32)
-        };
-        match result {
-            -1 => Err(Error::WriteFailure),
-            num => Ok(num),
-        }
-    }
-}
-
-
-
-#[cfg(test)]
-mod tests {
-    use super::Modbus;
-
-    #[test]
-    fn crate_modbus() {
-        let modbus = Modbus::new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
-        assert_eq!(modbus, modbus);
-    }
-
 }

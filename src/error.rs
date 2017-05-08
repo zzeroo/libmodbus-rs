@@ -1,56 +1,51 @@
+// TODO: convert to error_chain
+
+use std::error::Error;
 use std::fmt;
+use std::io;
 
 
-#[derive(Debug, Eq, PartialEq)]
-pub enum Error {
-    /// Could not connect
-    ConnectionError,
-    /// Invalid modbus slave id.
-    InvalidSlaveID,
-    InvalidRTUSerialMode,
-    InvalidRTURTS,
-    InvalidDebug,
-    // Could not write register or coil
-    ReadFailure,
-    WriteFailure,
+#[derive(Debug)]
+pub enum ModbusError {
+    InvalArg,
+    ToManyBits,
+    Io(io::Error),
+    NotRTU,
 }
 
-impl fmt::Display for Error {
+impl fmt::Display for ModbusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Error::ConnectionError => write!(f, "Could not connect."),
-            Error::InvalidSlaveID => write!(f, "Invalid modbus slave id."),
-            Error::InvalidRTUSerialMode => write!(f, "Invalid RTU serial mode."),
-            Error::InvalidRTURTS => write!(f, "Invalid RTU rts."),
-            Error::InvalidDebug => write!(f, "Invalid debug mode, only `true` of `false` are allowed."),
-            Error::ReadFailure => write!(f, "Could not read."),
-            Error::WriteFailure => write!(f, "Could not write."),
+            ModbusError::InvalArg => write!(f, "an invalid argument was given"),
+            ModbusError::ToManyBits => write!(f, "Too many bits requested "),
+            ModbusError::Io(ref err) => err.fmt(f),
+            ModbusError::NotRTU => write!(f, "the libmodbus backend is not RTU"),
         }
     }
 }
 
-impl ::std::error::Error for Error {
+impl Error for ModbusError {
     fn description(&self) -> &str {
         match *self {
-            Error::ConnectionError => "Could not connect",
-            Error::InvalidSlaveID => "Invalid modbus slave id",
-            Error::InvalidRTUSerialMode => "Invalid RTU serial mode",
-            Error::InvalidRTURTS => "Invalid RTU rts",
-            Error::InvalidDebug => "Invalid debug mode",
-            Error::ReadFailure => "Could not read this value",
-            Error::WriteFailure => "Could not write this value",
+            ModbusError::InvalArg => "an invalid argument was given",
+            ModbusError::ToManyBits => "Too many bits requested ",
+            ModbusError::Io(ref err) => err.description(),
+            ModbusError::NotRTU => "the libmodbus backend is not RTU",
         }
     }
 
-    fn cause(&self) -> Option<&::std::error::Error> {
+    fn cause(&self) -> Option<&Error> {
         match *self {
-            Error::ConnectionError => None,
-            Error::InvalidSlaveID => None,
-            Error::InvalidRTUSerialMode => None,
-            Error::InvalidRTURTS => None,
-            Error::InvalidDebug => None,
-            Error::ReadFailure => None,
-            Error::WriteFailure => None,
+            ModbusError::InvalArg => None,
+            ModbusError::ToManyBits => None,
+            ModbusError::Io(ref err) => Some(err),
+            ModbusError::NotRTU => None,
         }
+    }
+}
+
+impl From<io::Error> for ModbusError {
+    fn from(err: io::Error) -> ModbusError {
+        ModbusError::Io(err)
     }
 }

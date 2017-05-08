@@ -1,83 +1,92 @@
-// Parts stolen here: https://github.com/zonyitoo/libsodium-sys/blob/master/build.rs
-// here: https://github.com/alexcrichton/git2-rs/blob/master/libgit2-sys/build.rs
-// Manual here: http://doc.crates.io/build-script.html
-extern crate gcc;
+extern crate bindgen;
 extern crate pkg_config;
 
 use std::env;
-use std::fs;
-use std::path::{Path};
-use std::process::{Command, Stdio};
+use std::path::{Path, PathBuf};
+use std::process::Command;
 
-#[allow(unused_variables)]
+const LIBMODBUS_DIR: &'static str = "libmodbus";
+
 fn main() {
-    let has_pkgconfig = Command::new("pkg-config").output().is_ok();
+    let out_dir = env::var("OUT_DIR").unwrap();
 
-    //if env::var("LIBMODBUS_SYS_USE_PKG_CONFIG").is_ok() {
-        if pkg_config::find_library("libmodbus").is_ok() {
-            return
+    let build_dir = Path::new(LIBMODBUS_DIR);
+    let prefix    = Path::new(&out_dir).join("libmodbus-root");
+    let include   = Path::new(&prefix).join("include")
+                                      .join("modbus");
+
+    // if `pkg-config` is present and the libmodbus headers are found
+    // we use `pkg-config` to find the include_path and call bindgen with it.
+    //
+
+    if let Ok(library) = pkg_config::find_library("libmodbus") {
+        if let Some(include) = library.include_paths.get(0) {
+            run_bindgen(&include);
         }
-    //}
 
-    if !Path::new("libmodbus/.git").exists() {
-        let _ = Command::new("git").args(&["submodule", "update", "--init"])
-                                    .status();
+        return
     }
 
-    let cargo_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-    let output_dir = env::var("OUT_DIR").unwrap();
+    // pkg-config is not found. We build libmodbus (source is in git submodule) from source
+    // and run bindgen with that folder as include path.
+    //
 
-    let src = Path::new(&cargo_dir[..]);
-    let dst = Path::new(&output_dir[..]);
-    let target = env::var("TARGET").unwrap();
-    let host = env::var("HOST").unwrap();
-    let windows = target.contains("windows");
-    let msvc = target.contains("msvc");
+    // If autogen.sh is not present, initalize git submodules
+    if !Path::new("libmodbus/autogen.sh").exists() {
+        run_command("", Command::new("git").args(&["submodule", "update", "--init"]));
+    }
 
-    let root = src.join("libmodbus");
+    // Generate configure, run configure, make, make install
+    run_command("Generating configure",
+        Command::new("./autogen.sh")
+            .current_dir(&build_dir));
 
-    run(Command::new("sh")
-            .arg("-c")
-            .arg(&root.join("autogen.sh"))
-            .current_dir(&root));
+    run_command("Configuring libmodbus",
+        Command::new("./configure")
+            .arg("--prefix")
+            .arg(prefix)
+            .arg("--without-documentation")
+            .current_dir(&build_dir));
 
-    let _ = fs::remove_dir_all(&dst.join("include"));
-    let _ = fs::remove_dir_all(&dst.join("lib"));
-    let _ = fs::remove_dir_all(&dst.join("build"));
-    fs::create_dir(&dst.join("build")).unwrap();
 
-    let mut config_opts = Vec::new();
-    config_opts.push(format!("{:?}", root.join("configure")));
-    config_opts.push(format!("--prefix={:?}", dst));
-
-    run(Command::new("sh")
-            .arg("-c")
-            .arg(&config_opts.join(" "))
-            .current_dir(&dst.join("build")));
-
-    run(Command::new(make())
-            .arg(&format!("-j{}", env::var("NUM_JOBS").unwrap()))
-            .current_dir(&dst.join("build")));
-
-    run(Command::new(make())
-            .arg(&format!("-j{}", env::var("NUM_JOBS").unwrap()))
+    run_command("Building libmodbus",
+        Command::new("make")
             .arg("install")
-            .current_dir(&dst.join("build")));
+            .current_dir(&build_dir));
 
-    println!("cargo:rustc-flags=-L {}/lib -l modbus", dst.display());
-    println!("cargo:root={}", dst.display());
-    println!("cargo:include={}/include", dst.display());
+    run_bindgen(&include);
 }
 
-fn make() -> &'static str {
-    if cfg!(target_os = "freebsd") {"gmake"} else {"make"}
+
+fn run_bindgen(include: &PathBuf) {
+    let include_path = format!("-I{}", include.display());
+
+    // The bindgen::Builder is the main entry point
+    // to bindgen, and lets you build up options for
+    // the resulting bindings.
+    let bindings = bindgen::Builder::default()
+        // Do not generate unstable Rust code that
+        // requires a nightly rustc and enabling
+        // unstable features.
+        .no_unstable_rust()
+        // The input header we would like to generate
+        // bindings for.
+        .header("wrapper.h")
+        .clang_arg(include_path)
+        // Finish the builder and generate the bindings.
+        .generate()
+        // Unwrap the Result and panic on failure.
+        .expect("Unable to generate bindings");
+
+
+    // Write the bindings to the $OUT_DIR/bindings.rs file.
+    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+    bindings
+        .write_to_file(out_path.join("bindings.rs"))
+        .expect("Couldn't write bindings!");
 }
 
-fn run(cmd: &mut Command) {
-    println!("running: {:?}", cmd);
-    assert!(cmd.stdout(Stdio::inherit())
-                .stderr(Stdio::inherit())
-                .status()
-                .unwrap()
-                .success());
+// Helper which run a given command, and check it's success
+fn run_command(which: &'static str, cmd: &mut Command) {
+    assert!(cmd.status().expect(which).success(), which);
 }
