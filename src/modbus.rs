@@ -22,7 +22,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -46,7 +46,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -81,7 +81,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusRTU};
+    /// use libmodbus_rs::{Modbus, ModbusRTU};
     ///
     /// const YOUR_DEVICE_ID: i32 = 1;
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
@@ -116,7 +116,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// modbus.set_debug(true);
@@ -137,7 +137,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
@@ -161,7 +161,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
@@ -178,7 +178,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
@@ -202,7 +202,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
@@ -235,7 +235,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
@@ -251,7 +251,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
@@ -266,7 +266,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
@@ -282,7 +282,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
@@ -297,7 +297,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -322,7 +322,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -350,7 +350,7 @@ impl Modbus {
 /// # Examples
 ///
 /// ```rust,no_run
-/// use modbus_rs::{Modbus, ModbusTCP};
+/// use libmodbus_rs::{Modbus, ModbusTCP};
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
@@ -366,7 +366,7 @@ pub fn set_bits_from_byte(_dest: u8, index: c_int, value: u8) {
 /// # Examples
 ///
 /// ```rust,no_run
-/// use modbus_rs::{Modbus, ModbusTCP};
+/// use libmodbus_rs::{Modbus, ModbusTCP};
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
@@ -382,7 +382,7 @@ pub fn set_bits_from_bytes(_dest: u8, _index: c_uint, _num_bits: c_uint, _tab_by
 /// # Examples
 ///
 /// ```rust,no_run
-/// use modbus_rs::{Modbus, ModbusTCP};
+/// use libmodbus_rs::{Modbus, ModbusTCP};
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
@@ -399,7 +399,7 @@ pub fn get_byte_from_bits(_src: u8, index: c_int, _num_bits: c_uint) {
 /// # Examples
 ///
 /// ```rust,no_run
-/// use modbus_rs::{Modbus, ModbusTCP};
+/// use libmodbus_rs::{Modbus, ModbusTCP};
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
@@ -411,7 +411,7 @@ pub fn get_float_abcd(_src: u16) {
 /// # Examples
 ///
 /// ```rust,no_run
-/// use modbus_rs::{Modbus, ModbusTCP};
+/// use libmodbus_rs::{Modbus, ModbusTCP};
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
@@ -423,7 +423,7 @@ pub fn set_float_abcd(_dest: u16) {
 /// # Examples
 ///
 /// ```rust,no_run
-/// use modbus_rs::{Modbus, ModbusTCP};
+/// use libmodbus_rs::{Modbus, ModbusTCP};
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
@@ -435,7 +435,7 @@ pub fn get_float_badc(_src: u16) {
 /// # Examples
 ///
 /// ```rust,no_run
-/// use modbus_rs::{Modbus, ModbusTCP};
+/// use libmodbus_rs::{Modbus, ModbusTCP};
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
@@ -447,7 +447,7 @@ pub fn set_float_badc(_dest: u16) {
 /// # Examples
 ///
 /// ```rust,no_run
-/// use modbus_rs::{Modbus, ModbusTCP};
+/// use libmodbus_rs::{Modbus, ModbusTCP};
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
@@ -459,7 +459,7 @@ pub fn get_float_cdab(_src: u16) {
 /// # Examples
 ///
 /// ```rust,no_run
-/// use modbus_rs::{Modbus, ModbusTCP};
+/// use libmodbus_rs::{Modbus, ModbusTCP};
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
@@ -471,7 +471,7 @@ pub fn set_float_cdab(_dest: u16) {
 /// # Examples
 ///
 /// ```rust,no_run
-/// use modbus_rs::{Modbus, ModbusTCP};
+/// use libmodbus_rs::{Modbus, ModbusTCP};
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
@@ -483,7 +483,7 @@ pub fn get_float_dcba(_src: u16) {
 /// # Examples
 ///
 /// ```rust,no_run
-/// use modbus_rs::{Modbus, ModbusTCP};
+/// use libmodbus_rs::{Modbus, ModbusTCP};
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```

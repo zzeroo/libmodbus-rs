@@ -1,6 +1,6 @@
-extern crate modbus_rs;
+extern crate libmodbus_rs;
 
-use modbus_rs::{Modbus, ModbusRTU};
+use libmodbus_rs::{Modbus, ModbusRTU};
 
 
 #[test]

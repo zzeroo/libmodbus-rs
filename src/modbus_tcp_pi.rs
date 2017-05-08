@@ -32,7 +32,7 @@ impl ModbusTCPPI for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCPPI};
+    /// use libmodbus_rs::{Modbus, ModbusTCPPI};
     ///
     /// let modbus = Modbus::new_tcp_pi("::1", "1502").unwrap();
     ///

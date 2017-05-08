@@ -80,7 +80,7 @@ impl ModbusRTU for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusRTU};
+    /// use libmodbus_rs::{Modbus, ModbusRTU};
     ///
     /// const YOUR_DEVICE_ID: i32 = 1;
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
@@ -136,7 +136,7 @@ impl ModbusRTU for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusRTU, serial_mode};
+    /// use libmodbus_rs::{Modbus, ModbusRTU, serial_mode};
     ///
     /// let modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
@@ -176,7 +176,7 @@ impl ModbusRTU for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusRTU, serial_mode};
+    /// use libmodbus_rs::{Modbus, ModbusRTU, serial_mode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
     /// assert!(modbus.rtu_set_serial_mode(serial_mode::MODBUS_RTU_RS232).is_ok());
@@ -208,7 +208,7 @@ impl ModbusRTU for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusRTU, serial_mode, request_to_send_mode};
+    /// use libmodbus_rs::{Modbus, ModbusRTU, serial_mode, request_to_send_mode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
     /// let serial_mode = modbus.rtu_set_serial_mode(serial_mode::MODBUS_RTU_RS485);
@@ -239,7 +239,7 @@ impl ModbusRTU for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusRTU, serial_mode, request_to_send_mode};
+    /// use libmodbus_rs::{Modbus, ModbusRTU, serial_mode, request_to_send_mode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
     /// match modbus.rtu_set_serial_mode(serial_mode::MODBUS_RTU_RS485) {
@@ -292,7 +292,7 @@ impl ModbusRTU for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusRTU};
+    /// use libmodbus_rs::{Modbus, ModbusRTU};
     /// let modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
     /// modbus.rtu_get_rts_delay();
@@ -320,7 +320,7 @@ impl ModbusRTU for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusRTU};
+    /// use libmodbus_rs::{Modbus, ModbusRTU};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
     /// modbus.rtu_set_rts_delay(100);

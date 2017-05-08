@@ -30,7 +30,7 @@ impl ModbusTCP for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP, MODBUS_TCP_DEFAULT_PORT};
+    /// use libmodbus_rs::{Modbus, ModbusTCP, MODBUS_TCP_DEFAULT_PORT};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus = Modbus::new_tcp("127.0.0.1", MODBUS_TCP_DEFAULT_PORT).unwrap();

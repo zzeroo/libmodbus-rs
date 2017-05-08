@@ -59,7 +59,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -88,7 +88,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -116,7 +116,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -145,7 +145,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -177,7 +177,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -206,7 +206,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -232,7 +232,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -259,7 +259,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -286,7 +286,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -313,7 +313,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -346,7 +346,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -382,7 +382,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use modbus_rs::{Modbus, ModbusClient, ModbusTCP, MODBUS_MAX_ADU_LENGTH};
+    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, MODBUS_MAX_ADU_LENGTH};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut response: Vec<u8> = vec![0; MODBUS_MAX_ADU_LENGTH as usize];
@@ -415,7 +415,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
