@@ -398,6 +398,7 @@ impl ModbusClient for Modbus {
     /// The modbus_reply_exception() function shall send an exception response based on the exception_code in argument.
     ///
     /// The libmodbus provides the following exception codes:
+    /// 
     ///     * MODBUS_EXCEPTION_ILLEGAL_FUNCTION (1)
     ///     * MODBUS_EXCEPTION_ILLEGAL_DATA_ADDRESS (2)
     ///     * MODBUS_EXCEPTION_ILLEGAL_DATA_VALUE (3)
