@@ -11,11 +11,11 @@ cd libmodbus
 make -j3 && make install
 ```
 
-## modbus-rs
+## libmodbus-rs
 
 ```bash
 cd
-git clone https://github.com/zzeroo/modbus-rs.git
-cd modbus-rs
+git clone https://github.com/zzeroo/libmodbus-rs.git
+cd libmodbus-rs
 cargo run --example master -- /dev/ttyUSB0 1
 ```

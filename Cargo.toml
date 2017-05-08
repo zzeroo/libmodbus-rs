@@ -1,12 +1,12 @@
 [package]
 name = "libmodbus-rs"
 version = "0.4.0"
-authors = ["Stefan Müller <s.mueller@it.kls-glt.de>"]
+authors = ["Stefan Müller <co@zzeroo.com>"]
 readme = "README.md"
 keywords = ["modbus"]
-documentation = "https://github.com/zzeroo/modbus-rs.git"
-repository = "https://github.com/zzeroo/modbus-rs.git"
-homepage = "https://github.com/zzeroo/modbus-rs.git"
+documentation = "https://github.com/zzeroo/libmodbus-rs.git"
+repository = "https://github.com/zzeroo/libmodbus-rs.git"
+homepage = "https://github.com/zzeroo/libmodbus-rs.git"
 description = """
 Binding to libmodbus.
 Libmodbus is a free software library to send/receive data with a device which respects the Modbus protocol.
