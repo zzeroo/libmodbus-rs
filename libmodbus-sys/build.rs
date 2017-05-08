@@ -18,7 +18,6 @@ fn main() {
     // if `pkg-config` is present and the libmodbus headers are found
     // we use `pkg-config` to find the include_path and call bindgen with it.
     //
-
     if let Ok(library) = pkg_config::find_library("libmodbus") {
         if let Some(include) = library.include_paths.get(0) {
             run_bindgen(&include);
@@ -27,8 +26,8 @@ fn main() {
         return
     }
 
-    // pkg-config is not found. We build libmodbus (source is in git submodule) from source
-    // and run bindgen with that folder as include path.
+    // pkg-config is not found. We build libmodbus from source (source are in a git submodule)
+    // and run bindgen with that folder as include path set.
     //
 
     // If autogen.sh is not present, initalize git submodules
@@ -47,7 +46,6 @@ fn main() {
             .arg(prefix)
             .arg("--without-documentation")
             .current_dir(&build_dir));
-
 
     run_command("Building libmodbus",
         Command::new("make")
