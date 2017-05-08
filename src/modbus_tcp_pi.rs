@@ -11,9 +11,9 @@ use std::io::Error;
 ///
 /// Contrary to the TCP IPv4 only backend, the TCP PI backend offers hostname resolution but it consumes about 1Kb of additional memory.
 ///
-/// Create a Modbus TCP context
+/// * Create a Modbus TCP context
+///     - [`new_tcp_pi()`](struct.Modbus.html#method.new_tcp_pi)
 ///
-/// modbus_new_tcp_pi(3)
 pub trait ModbusTCPPI {
     fn new_tcp_pi(node: &str, service: &str) -> Result<Modbus, Error>;
 }

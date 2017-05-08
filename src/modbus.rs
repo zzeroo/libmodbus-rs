@@ -3,11 +3,12 @@ use libmodbus_sys;
 use std::io::{Error, ErrorKind};
 use libc::{c_int, c_uint};
 
+
 /// Safe interface for [libmodbus](http://libmodbus.org)
 ///
 /// The different parts of libmodbus are implemented as traits. The modules of this crate contains these
 /// traits and a implementation with a, hopefully safe, interface.
-///   
+///
 pub struct Modbus {
     pub ctx: *mut libmodbus_sys::modbus_t,
 }

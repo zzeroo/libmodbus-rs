@@ -1,23 +1,19 @@
-use error::ModbusError;
-// use errors::*;
+use errors::*;
 use libc::{c_char, c_int};
 use libmodbus_sys;
 use modbus::Modbus;
 use std::ffi::CString;
-use std::io::Error;
 use std::str;
 
 
-#[allow(non_camel_case_types)]
 #[derive(Debug, PartialEq)]
-pub enum SerialMode {
+pub enum serial_mode {
     MODBUS_RTU_RS232 = libmodbus_sys::MODBUS_RTU_RS232 as isize,
     MODBUS_RTU_RS485 = libmodbus_sys::MODBUS_RTU_RS485 as isize,
 }
 
-#[allow(non_camel_case_types)]
 #[derive(Debug, PartialEq)]
-pub enum RTUMode {
+pub enum request_to_send_mode {
     MODBUS_RTU_RTS_NONE = libmodbus_sys::MODBUS_RTU_RTS_NONE as isize,
     MODBUS_RTU_RTS_UP = libmodbus_sys::MODBUS_RTU_RTS_UP as isize,
     MODBUS_RTU_RTS_DOWN = libmodbus_sys::MODBUS_RTU_RTS_DOWN as isize,
@@ -38,26 +34,26 @@ pub enum RTUMode {
 /// This implementation offers very fast communication but you must take care to set a response timeout of slaves less than response timeout of master
 /// (ortherwise other slaves may ignore master requests when one of the slave is not responding).
 ///
-/// Create a Modbus RTU context
+/// * Create a Modbus RTU context
+///     - [`new_rtu()`](struct.Modbus.html#method.new_rtu)
 ///
-/// [`new_rtu()`](trait.ModbusRTU.html#method.new_rtu)
+/// * Set the serial mode
+///     - [`rtu_get_serial_mode()`](struct.Modbus.html#method.rtu_get_serial_mode), [`rtu_set_serial_mode()`](struct.Modbus.html#method.rtu_set_serial_mode), [`rtu_get_rts()`](struct.Modbus.html#method.rtu_get_rts), [`rtu_set_rts()`](struct.Modbus.html#method.rtu_set_rts), [`rtu_set_custom_rts()`](struct.Modbus.html#method.rtu_set_custom_rts), [`rtu_get_rts_delay()`](struct.Modbus.html#method.rtu_get_rts_delay), [`rtu_set_rts_delay()`](struct.Modbus.html#method.rtu_set_rts_delay)
 ///
-/// Set the serial mode
-///
-/// modbus_rtu_get_serial_mode(3) modbus_rtu_set_serial_mode(3) modbus_rtu_get_rts(3) modbus_rtu_set_rts(3) modbus_rtu_set_custom_rts(3) modbus_rtu_get_rts_delay(3) modbus_rtu_set_rts_delay(3)
 pub trait ModbusRTU {
     fn new_rtu(device: &str,
                    baud: i32,
                    parity: char,
                    data_bit: i32,
-                   stop_bit: i32) -> Result<Modbus, ModbusError>;
+                   stop_bit: i32) -> Result<Modbus>;
 
-   fn rtu_get_serial_mode(&self) -> Result<SerialMode, ModbusError>;
-   fn rtu_set_serial_mode(&mut self, mode: SerialMode) -> Result<i32, ModbusError>;
-   fn rtu_set_rts(&mut self, mode: RTUMode) -> Result<i32, Error>;
-   fn rtu_set_custom_rts(&mut self, _mode: RTUMode) -> Result<i32, Error>;
-   fn rtu_get_rts_delay(&self) -> Result<i32, ModbusError>;
-   fn rtu_set_rts_delay(&mut self, us: i32) -> Result<i32, ModbusError>;
+   fn rtu_get_serial_mode(&self) -> Result<serial_mode>;
+   fn rtu_set_serial_mode(&mut self, mode: serial_mode) -> Result<serial_mode>;
+   fn rtu_get_rts(&self) -> Result<request_to_send_mode>;
+   fn rtu_set_rts(&mut self, mode: request_to_send_mode) -> Result<request_to_send_mode>;
+   fn rtu_set_custom_rts(&mut self, _mode: request_to_send_mode) -> Result<i32>;
+   fn rtu_get_rts_delay(&self) -> Result<i32>;
+   fn rtu_set_rts_delay(&mut self, us: i32) -> Result<i32>;
 }
 
 impl ModbusRTU for Modbus {
@@ -71,7 +67,7 @@ impl ModbusRTU for Modbus {
     /// eg. "\\\\.\\COM10". See http://msdn.microsoft.com/en-us/library/aa365247(v=vs.85).aspx for details
     /// The **baud** argument specifies the baud rate of the communication, eg. 9600, 19200, 57600, 115200, etc.
     ///
-    /// The **parity** argument can have one of the following values
+    /// The **parity** argument can have one of the following values:
     ///     * N for none
     ///     * E for even
     ///     * O for odd
@@ -99,7 +95,7 @@ impl ModbusRTU for Modbus {
                    baud: i32,
                    parity: char,
                    data_bit: i32,
-                   stop_bit: i32) -> Result<Modbus, ModbusError> {
+                   stop_bit: i32) -> Result<Modbus> {
         unsafe {
             let device = CString::new(device).unwrap();
             let ctx = libmodbus_sys::modbus_new_rtu(device.as_ptr(),
@@ -109,7 +105,7 @@ impl ModbusRTU for Modbus {
                 stop_bit as c_int);
 
             if ctx.is_null() {
-                Err(ModbusError::InvalArg)
+                Err("Could not create new RTU context".into())
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -121,13 +117,13 @@ impl ModbusRTU for Modbus {
     /// The [`rtu_get_serial_mode()`](#method.rtu_get_serial_mode) function shall return the serial mode currently
     /// used by the libmodbus context:
     ///
-    /// `SerialMode::MODBUS_RTU_RS232`
+    /// `serial_mode::MODBUS_RTU_RS232`
     ///     the serial line is set for RS232 communication. RS-232 (Recommended Standard 232)
     ///     is the traditional name for a series of standards for serial binary single-ended
     ///     data and control signals connecting between a DTE (Data Terminal Equipment) and a
     ///     DCE (Data Circuit-terminating Equipment). It is commonly used in computer serial ports
     ///
-    /// `SerialMode::MODBUS_RTU_RS485`
+    /// `serial_mode::MODBUS_RTU_RS485`
     ///     the serial line is set for RS485 communication.
     ///     EIA-485, also known as TIA/EIA-485 or RS-485, is a standard defining the electrical
     ///     characteristics of drivers and receivers for use in balanced digital multipoint systems.
@@ -140,19 +136,19 @@ impl ModbusRTU for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusRTU, SerialMode};
+    /// use modbus_rs::{Modbus, ModbusRTU, serial_mode};
     ///
     /// let modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
-    /// assert_eq!(modbus.rtu_get_serial_mode().unwrap(), SerialMode::MODBUS_RTU_RS232);
+    /// assert_eq!(modbus.rtu_get_serial_mode().unwrap(), serial_mode::MODBUS_RTU_RS232);
     /// ```
-    fn rtu_get_serial_mode(&self) -> Result<SerialMode, ModbusError> {
+    fn rtu_get_serial_mode(&self) -> Result<serial_mode> {
         unsafe {
             let mode = libmodbus_sys::modbus_rtu_get_serial_mode(self.ctx);
             match mode {
-                mode if mode == SerialMode::MODBUS_RTU_RS232 as i32 => Ok(SerialMode::MODBUS_RTU_RS232),
-                mode if mode == SerialMode::MODBUS_RTU_RS485 as i32 => Ok(SerialMode::MODBUS_RTU_RS485),
-                _ => Err(ModbusError::InvalArg),
+                mode if mode == serial_mode::MODBUS_RTU_RS232 as i32 => Ok(serial_mode::MODBUS_RTU_RS232),
+                mode if mode == serial_mode::MODBUS_RTU_RS485 as i32 => Ok(serial_mode::MODBUS_RTU_RS485),
+                _ => Err("Could not get RTU serial mode".into()),
             }
         }
     }
@@ -161,14 +157,14 @@ impl ModbusRTU for Modbus {
     ///
     /// The [`rtu_set_serial_mode()`](#method.rtu_set_serial_mode) function shall set the selected serial mode:
     ///
-    /// MODBUS_RTU_RS232
+    /// `MODBUS_RTU_RS232`
     ///     the serial line is set for RS232 communication.
     ///     RS-232 (Recommended Standard 232) is the traditional name for a series of
     ///     standards for serial binary single-ended data and control signals connecting
     ///     between a DTE (Data Terminal Equipment) and a DCE (Data Circuit-terminating Equipment).
     ///     It is commonly used in computer serial ports
     ///
-    /// MODBUS_RTU_RS485
+    /// `MODBUS_RTU_RS485`
     ///     the serial line is set for RS485 communication.
     ///     EIA-485, also known as TIA/EIA-485 or RS-485, is a standard defining the
     ///     electrical characteristics of drivers and receivers for use in balanced digital multipoint systems.
@@ -180,16 +176,18 @@ impl ModbusRTU for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusRTU, SerialMode};
+    /// use modbus_rs::{Modbus, ModbusRTU, serial_mode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
-    /// assert!(modbus.rtu_set_serial_mode(SerialMode::MODBUS_RTU_RS232).is_ok());
+    /// assert!(modbus.rtu_set_serial_mode(serial_mode::MODBUS_RTU_RS232).is_ok());
     /// ```
-    fn rtu_set_serial_mode(&mut self, mode: SerialMode) -> Result<i32, ModbusError> {
+    fn rtu_set_serial_mode(&mut self, mode: serial_mode) -> Result<serial_mode> {
         unsafe {
-            match libmodbus_sys::modbus_rtu_set_serial_mode(self.ctx, mode as c_int) {
-                -1 => Err(ModbusError::NotRTU),
-                _ => Ok(0),
+            let mode = libmodbus_sys::modbus_rtu_set_serial_mode(self.ctx, mode as c_int) as u32;
+            match mode {
+                libmodbus_sys::MODBUS_RTU_RS232 => Ok(serial_mode::MODBUS_RTU_RS232),
+                libmodbus_sys::MODBUS_RTU_RS485 => Ok(serial_mode::MODBUS_RTU_RS485),
+                _ => Err("Could not set RTU serial mode".into()),
             }
         }
     }
@@ -197,32 +195,69 @@ impl ModbusRTU for Modbus {
     /// `rtu_set_rts` - set the RTS mode in RTU
     ///
     /// The [`rtu_set_rts()`](#method.rtu_set_rts) function shall set the Request To Send mode to communicate on a RS485 serial bus.
-    /// By default, the mode is set to `RTUMode::MODBUS_RTU_RTS_NONE` and no signal is issued before writing data on the wire.
+    /// By default, the mode is set to `request_to_send_mode::MODBUS_RTU_RTS_NONE` and no signal is issued before writing data on the wire.
     ///
-    /// To enable the RTS mode, the values `RTUMode::MODBUS_RTU_RTS_UP` or `RTUMode::MODBUS_RTU_RTS_DOWN` must be used,
-    /// these modes enable the RTS mode and set the polarity at the same time. When `RTUMode::MODBUS_RTU_RTS_UP` is used,
+    /// To enable the RTS mode, the values `request_to_send_mode::MODBUS_RTU_RTS_UP` or `request_to_send_mode::MODBUS_RTU_RTS_DOWN` must be used,
+    /// these modes enable the RTS mode and set the polarity at the same time. When `request_to_send_mode::MODBUS_RTU_RTS_UP` is used,
     /// an ioctl call is made with RTS flag enabled then data is written on the bus after a delay of 1 ms,
     /// then another ioctl call is made with the RTS flag disabled and again a delay of 1 ms occurs.
-    /// The `RTUMode::MODBUS_RTU_RTS_DOWN` mode applies the same procedure but with an inverted RTS flag.
+    /// The `request_to_send_mode::MODBUS_RTU_RTS_DOWN` mode applies the same procedure but with an inverted RTS flag.
     ///
     /// This function can only be used with a context using a RTU backend.
     ///
     /// # Examples
     ///
     /// ```
-    /// use modbus_rs::{Modbus, ModbusRTU, SerialMode, RTUMode};
+    /// use modbus_rs::{Modbus, ModbusRTU, serial_mode, request_to_send_mode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
-    /// match modbus.rtu_set_serial_mode(SerialMode::MODBUS_RTU_RS485) {
-    ///     Ok(_) => assert!(modbus.rtu_set_rts(RTUMode::MODBUS_RTU_RTS_UP).is_ok()),
+    /// let serial_mode = modbus.rtu_set_serial_mode(serial_mode::MODBUS_RTU_RS485);
+    ///
+    /// assert!(modbus.rtu_set_rts(request_to_send_mode::MODBUS_RTU_RTS_UP).is_ok());
+    /// ```
+    fn rtu_set_rts(&mut self, mode: request_to_send_mode) -> Result<request_to_send_mode> {
+        unsafe {
+            let mode = libmodbus_sys::modbus_rtu_set_rts(self.ctx, mode as c_int) as u32;
+            match mode {
+                libmodbus_sys::MODBUS_RTU_RTS_NONE => Ok(request_to_send_mode::MODBUS_RTU_RTS_NONE),
+                libmodbus_sys::MODBUS_RTU_RTS_UP => Ok(request_to_send_mode::MODBUS_RTU_RTS_UP),
+                libmodbus_sys::MODBUS_RTU_RTS_DOWN => Ok(request_to_send_mode::MODBUS_RTU_RTS_DOWN),
+                _ => Err("Could not set RTS mode".into()),
+            }
+        }
+    }
+
+    /// `rtu_get_rts` -  get the current RTS mode in RTU
+    ///
+    /// The [`rtu_get_rts()`](#method.rtu_get_rts) function shall get the current Request To Send mode of the libmodbus context ctx. The possible returned values are:
+    ///     * MODBUS_RTU_RTS_NONE
+    ///     * MODBUS_RTU_RTS_UP
+    ///     * MODBUS_RTU_RTS_DOWN
+    ///
+    /// This function can only be used with a context using a RTU backend.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use modbus_rs::{Modbus, ModbusRTU, serial_mode, request_to_send_mode};
+    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
+    ///
+    /// match modbus.rtu_set_serial_mode(serial_mode::MODBUS_RTU_RS485) {
+    ///     Ok(mode) => {
+    ///         assert_eq!(mode, serial_mode::MODBUS_RTU_RS485);
+    ///         assert!(modbus.rtu_get_rts().is_ok())
+    ///     },
     ///     Err(_) => {}
     /// };
     /// ```
-    fn rtu_set_rts(&mut self, mode: RTUMode) -> Result<i32, Error> {
+    fn rtu_get_rts(&self) -> Result<request_to_send_mode> {
         unsafe {
-            match libmodbus_sys::modbus_rtu_set_rts(self.ctx, mode as c_int) {
-                -1 => Err(Error::last_os_error()),
-                _ => Ok(0),
+            let mode = libmodbus_sys::modbus_rtu_get_rts(self.ctx) as u32;
+            match mode {
+                libmodbus_sys::MODBUS_RTU_RTS_NONE => Ok(request_to_send_mode::MODBUS_RTU_RTS_NONE),
+                libmodbus_sys::MODBUS_RTU_RTS_UP => Ok(request_to_send_mode::MODBUS_RTU_RTS_UP),
+                libmodbus_sys::MODBUS_RTU_RTS_DOWN => Ok(request_to_send_mode::MODBUS_RTU_RTS_DOWN),
+                _ => Err("Could not get RTS mode".into()),
             }
         }
     }
@@ -238,7 +273,7 @@ impl ModbusRTU for Modbus {
     /// This function can only be used with a context using a RTU backend.
     ///
     /// TODO: implement rtu_set_custom_rts()!
-    fn rtu_set_custom_rts(&mut self, _mode: RTUMode) -> Result<i32, Error> {
+    fn rtu_set_custom_rts(&mut self, _mode: request_to_send_mode) -> Result<i32> {
         unimplemented!()
     }
 
@@ -262,10 +297,10 @@ impl ModbusRTU for Modbus {
     ///
     /// modbus.rtu_get_rts_delay();
     /// ```
-    fn rtu_get_rts_delay(&self) -> Result<i32, ModbusError> {
+    fn rtu_get_rts_delay(&self) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_rtu_get_rts_delay(self.ctx) {
-                -1 => Err(ModbusError::NotRTU),
+                -1 => Err("Could not set RTS delay".into()),
                 delay => Ok(delay),
             }
         }
@@ -290,10 +325,10 @@ impl ModbusRTU for Modbus {
     ///
     /// modbus.rtu_set_rts_delay(100);
     /// ```
-    fn rtu_set_rts_delay(&mut self, us: i32) -> Result<i32, ModbusError> {
+    fn rtu_set_rts_delay(&mut self, us: i32) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_rtu_set_rts_delay(self.ctx, us as c_int) {
-                -1 => Err(ModbusError::NotRTU),
+                -1 => Err("Could not set RTS delay".into()),
                 _ => Ok(0),
             }
         }

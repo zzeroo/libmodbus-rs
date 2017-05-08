@@ -1,24 +1,24 @@
 use errors::*;
-use libc::{c_char, c_int};
+use libc::c_int;
 use libmodbus_sys;
 use modbus::Modbus;
-use std::ffi::CString;
-use std::io::Error;
 use std::str;
+
 
 /// The Modbus protocol defines different data types and functions to read and write them from/to remote devices.
 /// The following functions are used by the clients to send Modbus requests:
 ///
 /// * Read data
-///     - [`read_bits(3)`](#method.read_bits) [`read_input_bits(3)`](#method.read_input_bits) [`read_registers(3)`](#method.read_registers) [`read_input_registers(3)`](#method.read_input_registers) [`report_slave_id(3)`](#method.report_slave_id)
+///     - [`read_bits()`](struct.Modbus.html#method.read_bitsmode), [`read_input_bits()`](struct.Modbus.html#method.read_input_bits), [`read_registers()`](struct.Modbus.html#method.read_registers), [`read_input_registers()`](struct.Modbus.html#method.read_input_registers), [`report_slave_id()`](struct.Modbus.html#method.report_slave_id)
 /// * Write data
-///     - [`write_bit(3)`](#method.write_bit) [`write_register(3)`](#method.write_register) [`write_bits(3)`](#method.write_bits) [`write_registers(3)`](#method.write_registers)
+///     - [`write_bit()`](struct.Modbus.html#method.write_bit), [`write_register()`](struct.Modbus.html#method.write_register), [`write_bits()`](struct.Modbus.html#method.write_bits), [`write_registers()`](struct.Modbus.html#method.write_registers)
 /// * Write and read data
-///     - [`write_and_read_registers(3)`](#method.write_and_read_registers)
+///     - [`write_and_read_registers()`](struct.Modbus.html#method.write_and_read_registers)
 /// * Raw requests
-///     - [`send_raw_request(3)`](#method.send_raw_request) [`receive_confirmation(3)`](#method.receive_confirmation)
+///     - [`send_raw_request()`](struct.Modbus.html#method.send_raw_request), [`receive_confirmation()`](struct.Modbus.html#method.receive_confirmation)
 /// * Reply an exception
-///     - [`reply_exception(3)`](#method.reply_exception)
+///     - [`reply_exception()`](struct.Modbus.html#method.reply_exception)
+///
 pub trait ModbusClient {
     fn read_bits(&self, address: u8, num_bit: i32) -> Result<Vec<u8>>;
 
@@ -42,7 +42,7 @@ pub trait ModbusClient {
                                        read_address: u8, read_num_bit: i32, mut dest: Vec<u16>) -> Result<()>;
     fn send_raw_request(&self, raw_request: Vec<u8>) -> Result<i32>;
 
-    fn receive_confirmation(&self) -> Result<Vec<u8>>;
+    fn receive_confirmation(&self, response: &mut[u8]) -> Result<i32>;
 
     fn reply_exception(&self, request: Vec<u8>, exception_code: u32) -> Result<i32>;
 }
@@ -51,8 +51,8 @@ pub trait ModbusClient {
 impl ModbusClient for Modbus {
     /// `read_bits` - read many bits
     ///
-    /// The [`read_bits()`]() function shall read the status of the nb bits (coils) to the address addr of the remote device.
-    /// The result of reading is stored in dest array as unsigned bytes (8 bits) set to TRUE or FALSE.
+    /// The [`read_bits()`](#method.read_bits) function shall read the status of the nb bits (coils) to the address of the remote device.
+    /// The result of reading is stored in `Result<Vec<u8>>`.
     ///
     /// The function uses the Modbus function code 0x01 (read coil status).
     ///
@@ -365,7 +365,8 @@ impl ModbusClient for Modbus {
     }
 
     /// `receive_confirmation` - receive a confirmation request
-    /// The [`receive_confirmation()`](#method.receive_confirmation) function shall receive a request via the socket of the context ctx.
+    ///
+    /// The [`receive_confirmation()`](#method.receive_confirmation) function shall receive a request via the socket of the context ctx Member of the [Modbus struct](struct.Modbus.html).
     /// This function must be used for debugging purposes because the received response isn’t checked against the initial request.
     /// This function can be used to receive request not handled by the library.
     ///
@@ -374,19 +375,21 @@ impl ModbusClient for Modbus {
     /// If you want to write code compatible with both, you can use the constant MODBUS_MAX_ADU_LENGTH (maximum value of all libmodbus backends).
     /// Take care to allocate enough memory to store responses to avoid crashes of your server.
     ///
+    /// # Return value
+    /// This function returns a Result<i32> where the i32 is response len. The returned request length can be zero
+    /// if the indication request is ignored (eg. a query for another slave in RTU mode). Otherwise it shall return an Error.
+    ///
     /// # Examples
     ///
-    /// ```
-    /// use modbus_rs::{Modbus, ModbusTCP};
+    /// ```rust,no_run
+    /// use modbus_rs::{Modbus, ModbusClient, ModbusTCP, MODBUS_MAX_ADU_LENGTH};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let mut response: Vec<u8> = vec![0; MODBUS_MAX_ADU_LENGTH as usize];
     ///
-    /// match modbus.connect() {
-    ///     Ok(_) => {}
-    ///     Err(e) => println!("Error: {}", e),
-    /// }
+    /// assert!(modbus.receive_confirmation(&mut response).is_ok());
     /// ```
-    fn receive_confirmation(&self) -> Result<Vec<u8>> {
+    fn receive_confirmation(&self, response: &mut[u8]) -> Result<i32> {
         unimplemented!()
     }
 

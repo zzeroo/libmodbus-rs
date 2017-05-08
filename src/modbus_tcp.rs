@@ -9,9 +9,9 @@ use std::io::Error;
 /// The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
 /// It does not require a checksum calculation as lower layer takes care of the same.
 ///
-/// Create a Modbus TCP context
+/// * Create a Modbus TCP context
+///     - [`new_tcp()`](struct.Modbus.html#method.new_tcp)
 ///
-/// [`new_tcp()`](trait.ModbusTCP.html#method.new_tcp)
 pub trait ModbusTCP {
     fn new_tcp(ip: &str, port: u32) -> Result<Modbus, Error>;
 }
