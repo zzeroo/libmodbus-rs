@@ -35,8 +35,9 @@ impl ModbusServer for Modbus {
     /// assert!(modbus.receive(&mut query).is_ok());
     /// ```
     fn receive(&self, request: &mut [u8]) -> Result<i32> {
+        assert!(request.len() <= libmodbus_sys::MODBUS_TCP_MAX_ADU_LENGTH as usize);
         unsafe {
-            let len = libmodbus_sys::modbus_receive(self.ctx, request.as_mut_ptr());
+            let len = libmodbus_sys::modbus_receive(self.ctx, request.as_mut_ptr() );
             match len {
                 -1 => Err("Could not receive an idication request".into()),
                 len => Ok(len),
