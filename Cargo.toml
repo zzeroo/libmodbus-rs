@@ -1,6 +1,6 @@
 [package]
-name = "modbus-rs"
-version = "0.1.0"
+name = "libmodbus-rs"
+version = "0.4.0"
 authors = ["Stefan Müller <s.mueller@it.kls-glt.de>"]
 readme = "README.md"
 keywords = ["modbus"]
@@ -21,5 +21,6 @@ travis-ci = { repository = "zzeroo/git2-rs" }
 appveyor = { repository = "zzeroo/git2-rs" }
 
 [dependencies]
+error-chain = "0.10"
 libc = "0.2"
 libmodbus-sys = { path = "libmodbus-sys", version = "0.1.0" }
