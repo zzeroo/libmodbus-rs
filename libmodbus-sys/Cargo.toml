@@ -2,10 +2,10 @@
 
 name = "libmodbus-sys"
 version = "0.1.0"
-authors = ["Stefan Müller <s.mueller@it.kls-glt.de>"]
+authors = ["Stefan Müller <co@zzeroo.com>"]
 links = "modbus"
 build = "build.rs"
-repository = "https://github.com/zzeroo/modbus-rs"
+repository = "https://github.com/zzeroo/libmodbus-rs"
 license = "LGPL-2.1"
 description = "Native bindings to the libmodbus library"
 
