@@ -34,5 +34,5 @@ which is the same license, [libmodbus](http://libmodbus.org/) is using.
 
 [homepage]: http://zzeroo.github.io/libmodbus-rs
 [repo]: https://github.com/zzeroo/libmodbus-rs
-[doku]: http://zzeroo.github.io/libmodbus-rs/modbus_rs/index.html
+[doku]: http://zzeroo.github.io/libmodbus-rs/libmodbus_rs/index.html
 [libmodbus]: http://libmodbus.org
