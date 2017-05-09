@@ -6,12 +6,23 @@
 
 ```toml
 [dependencies]
-modbus = "0.1"
+libmodbus = "0.4"
 ```
 
 ## Building libmodbus-rs
 
-First, you'll need to install _clang_. Afterwards, just run:
+For building libmodbus-rs you need a build environment with autoconf, libtool and clang.
+
+Under debian/ ubuntu you can use this command to install this dependencies:
+
+```sh
+apt-get update
+apt-get upgrade -yq
+# Build tools
+apt-get install -yyq build-essential autoconf libtool libclang-dev
+# Additional tools
+apt-get install -yyq curl git
+```
 
 ```sh
 $ git clone https://github.com/zzeroo/libmodbus-rs
@@ -22,7 +33,6 @@ $ cargo build
 # License
 `libmodbus-rs` is distributed under the terms of the LGPL-2.1 license,
 which is the same license, [libmodbus](http://libmodbus.org/) is using.
-
 
 
 # Links

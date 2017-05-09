@@ -26,7 +26,7 @@ impl ModbusServer for Modbus {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP, MODBUS_MAX_ADU_LENGTH};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
