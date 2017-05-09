@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -e
 
 # https://github.com/KyleMayes/clang-sys/blob/87b674e9274c50995a6a4601e1160165490cb0e7/ci/before_install.sh
