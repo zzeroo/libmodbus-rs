@@ -2,8 +2,16 @@ extern crate bindgen;
 extern crate pkg_config;
 
 use std::env;
+use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
+
+macro_rules! t {
+    ($e:expr) => (match $e{
+        Ok(e) => e,
+        Err(e) => panic!("{} failed with {}", stringify!($e), e),
+    })
+}
 
 const LIBMODBUS_DIR: &'static str = "libmodbus";
 
@@ -35,16 +43,21 @@ fn main() {
         run_command("", Command::new("git").args(&["submodule", "update", "--init"]));
     }
 
+    let _ = fs::remove_dir_all(env::var("OUT_DIR").unwrap());
+    t!(fs::create_dir_all(env::var("OUT_DIR").unwrap()));
+
     // Generate configure, run configure, make, make install
     run_command("Generating configure",
-        Command::new("./autogen.sh")
+        Command::new("autoreconf")
+            .arg("--install")
+            .arg("--symlink")
+            .arg("--force")
             .current_dir(&build_dir));
 
     run_command("Configuring libmodbus",
         Command::new("./configure")
             .arg("--prefix")
             .arg(prefix)
-            .arg("--without-documentation")
             .current_dir(&build_dir));
 
     run_command("Building libmodbus",
@@ -52,13 +65,16 @@ fn main() {
             .arg("install")
             .current_dir(&build_dir));
 
+    println!("cargo:rustc-link-lib=modbus");
+    println!("cargo:rustc-link-search=native={}/libmodbus-root/lib", out_dir);
+
     run_bindgen(&include);
 }
 
 
 fn run_bindgen(include: &PathBuf) {
     let include_path = format!("-I{}", include.display());
-    
+
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
