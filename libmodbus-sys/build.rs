@@ -105,9 +105,7 @@ fn main() {
             .env("CC", compiler.path())
             .env("CFLAGS", flags)
             .arg("--with-pic")
-            .arg("--disable-multilib")
             .arg("--disable-shared")
-            .arg("--disable-host-shared")
             .arg(format!("--target={}", target))
             .arg(format!("--host={}", host))
             .current_dir(&build_dir));
@@ -117,7 +115,7 @@ fn main() {
             .arg("install")
             .current_dir(&build_dir));
 
-    println!("cargo:rustc-link-lib=modbus");
+    println!("cargo:rustc-link-lib=static=modbus");
     println!("cargo:rustc-link-search=native={}/libmodbus-root/lib", dst);
 
     run_bindgen(&include);
