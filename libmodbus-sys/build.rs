@@ -16,10 +16,12 @@ macro_rules! t {
 const LIBMODBUS_DIR: &'static str = "libmodbus";
 
 fn main() {
-    let out_dir = env::var("OUT_DIR").unwrap();
+    let dst = env::var("OUT_DIR").unwrap();
+    let target = env::var("TARGET").unwrap();
+    let host = env::var("HOST").unwrap();
 
     let build_dir = Path::new(LIBMODBUS_DIR);
-    let prefix    = Path::new(&out_dir).join("libmodbus-root");
+    let prefix    = Path::new(&dst).join("libmodbus-root");
     let include   = Path::new(&prefix).join("include")
                                       .join("modbus");
 
@@ -58,6 +60,8 @@ fn main() {
         Command::new("./configure")
             .arg("--prefix")
             .arg(prefix)
+            .arg(format!("--target={}", target))
+            .arg(format!("--host={}", host))
             .current_dir(&build_dir));
 
     run_command("Building libmodbus",
@@ -66,7 +70,7 @@ fn main() {
             .current_dir(&build_dir));
 
     println!("cargo:rustc-link-lib=modbus");
-    println!("cargo:rustc-link-search=native={}/libmodbus-root/lib", out_dir);
+    println!("cargo:rustc-link-search=native={}/libmodbus-root/lib", dst);
 
     run_bindgen(&include);
 }
