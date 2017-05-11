@@ -42,7 +42,10 @@ which is the same license, [libmodbus](http://libmodbus.org/) is using.
 * http://blog.rust-lang.org/2015/04/24/Rust-Once-Run-Everywhere.html
 * http://siciarz.net/ffi-rust-writing-bindings-libcpuid
 
+This project hosts the original libmodbus documentation, used here, as well. Please have a look at http://zzeroo.github.io/libmodbus-rs/libmodbus/libmodbus.html.
+
 [homepage]: http://zzeroo.github.io/libmodbus-rs
 [repo]: https://github.com/zzeroo/libmodbus-rs
 [doku]: http://zzeroo.github.io/libmodbus-rs/libmodbus_rs/index.html
+[doku-libmodbus]: http://zzeroo.github.io/libmodbus-rs/libmodbus/libmodbus.html
 [libmodbus]: http://libmodbus.org

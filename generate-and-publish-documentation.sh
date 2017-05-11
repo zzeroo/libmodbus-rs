@@ -38,16 +38,16 @@ cargo doc
 if "$BUILD_LIBMODBUS_DOC"; then
   msg "Create libmodbus documentation from libmodbus C library"
   pushd libmodbus-sys/libmodbus/doc
-    make htmldoc 2>/dev/null
+    make --quiet htmldoc 2>/dev/null
   popd
 fi
 
 # Switch to pages
 msg "Replacing documentation..."
 # Only if $DOC_BRANCH not exists
-if ! git checkout -q "$DOC_BRANCH" 2>/dev/null; then
-    git checkout -q --orphan "$DOC_BRANCH"
-    git rm -q --ignore-unmatch -rf .
+if ! git checkout --quiet "$DOC_BRANCH" 2>/dev/null; then
+    git checkout --quiet --orphan "$DOC_BRANCH"
+    git rm --quiet --ignore-unmatch -rf .
     cat > .gitignore <<EOF
 target
 Cargo.lock
@@ -58,7 +58,7 @@ fi
 
 
 # Clean
-git rm -q --ignore-unmatch -rf .
+git rm --quiet --ignore-unmatch -rf .
 
 
 # index.html patch.
@@ -74,8 +74,8 @@ if "$CREATE_UPDATE_README"; then
 fi
 
 # Restore gitignore
-git reset -q -- .gitignore
-git checkout -q -- .gitignore
+git reset --quiet -- .gitignore
+git checkout --quiet -- .gitignore
 
 # Copy documentation into root
 cp -a target/doc/* .
@@ -94,8 +94,8 @@ rm target
 # Add all (new) files to git and commit them.
 git add .
 git commit -m "Update docs for $last_rev" -m "$last_msg"
-git push --set-upstream origin "$DOC_BRANCH"
 cd $dir
 
+git push --set-upstream origin "$DOC_BRANCH"
 
 msg "Done."
