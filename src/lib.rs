@@ -12,6 +12,9 @@ html_root_url = "https://zzeroo.com/")]
 //! This documentation presents an overview of libmodbus concepts, describes how libmodbus abstracts Modbus communication with
 //! different hardware and platforms and provides a reference manual for the functions provided by the libmodbus library.
 //!
+//! **This project hosts the original libmodbus documentation, used here, as well.**<br />
+//! Please have a look at: http://zzeroo.github.io/libmodbus-rs/libmodbus/libmodbus.html
+//!
 //! ## Contexts
 //!
 //! The Modbus protocol contains many variants (eg. serial RTU or Ehternet TCP), to ease the implementation of a variant,
