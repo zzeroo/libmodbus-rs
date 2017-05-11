@@ -34,14 +34,16 @@ ln -s "$dir/target" "$tmp/target"
 msg "Generating documentation..."
 cargo doc
 
+# If $BUILD_LIBMODBUS_DOC is set, build origin libmodbus documentation
 if "$BUILD_LIBMODBUS_DOC"; then
-  cd libmodbus-sys/libmodbus/doc
-  make htmldoc
+  msg "Create libmodbus documentation from libmodbus C library"
+  pushd libmodbus-sys/libmodbus/doc
+    make htmldoc 2>/dev/null
+  popd
 fi
 
 # Switch to pages
 msg "Replacing documentation..."
-
 # Only if $DOC_BRANCH not exists
 if ! git checkout -q "$DOC_BRANCH" 2>/dev/null; then
     git checkout -q --orphan "$DOC_BRANCH"
@@ -78,9 +80,12 @@ git checkout -q -- .gitignore
 # Copy documentation into root
 cp -a target/doc/* .
 
+# If $BUILD_LIBMODBUS_DOC is true, copy origin libmodbus documentation in and clean up dir after that
 if $BUILD_LIBMODBUS_DOC; then
   mkdir libmodbus
   cp libmodbus-sys/libmodbus/doc/*.html libmodbus/
+  # Cleanup
+  rm libmodbus-sys/libmodbus -rf
 fi
 
 # Remove unneeded files
@@ -89,12 +94,8 @@ rm target
 # Add all (new) files to git and commit them.
 git add .
 git commit -m "Update docs for $last_rev" -m "$last_msg"
-#git push -qu origin "$DOC_BRANCH"
-#git push --set-upstream origin gh-pages
-
+git push --set-upstream origin "$DOC_BRANCH"
 cd $dir
-git push --set-upstream origin gh-pages
 
 
 msg "Done."
-
