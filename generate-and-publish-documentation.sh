@@ -80,6 +80,7 @@ git checkout -q -- .gitignore
 # Copy documentation into root
 cp -a target/doc/* .
 
+# If $BUILD_LIBMODBUS_DOC is true, copy origin libmodbus documentation in and clean up dir after that
 if $BUILD_LIBMODBUS_DOC; then
   mkdir libmodbus
   cp libmodbus-sys/libmodbus/doc/*.html libmodbus/
@@ -93,11 +94,8 @@ rm target
 # Add all (new) files to git and commit them.
 git add .
 git commit -m "Update docs for $last_rev" -m "$last_msg"
-#git push -qu origin "$DOC_BRANCH"
-#git push --set-upstream origin gh-pages
-
+git push --set-upstream origin "$DOC_BRANCH"
 cd $dir
-git push --set-upstream origin gh-pages
 
 
 msg "Done."
