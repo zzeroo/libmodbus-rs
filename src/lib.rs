@@ -101,7 +101,7 @@ extern crate libc;
 extern crate libmodbus_sys;
 #[macro_use] extern crate error_chain;
 
-mod errors;
+pub mod errors;
 mod modbus_client;
 mod modbus_rtu;
 mod modbus_server;
