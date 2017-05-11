@@ -17,8 +17,10 @@ html_root_url = "https://zzeroo.com/")]
 //!
 //! ## Contexts
 //!
-//! The Modbus protocol contains many variants (eg. serial RTU or Ehternet TCP), to ease the implementation of a variant,
-//! the library was designed to use a backend for each variant.
+//! The Modbus protocol contains many variants (eg. serial RTU or Ehternet TCP), to ease the implementation of a variant, the library was designed to use a backend for each variant.
+//!
+//! **libmodbus-rs provides traits and matching implementations for these variants.** See [ModbusRTU](trait.ModbusRTU.html) (trait), [Modbus::new_rtu()](struct.Modbus.html#method.new_rtu) (implementation) or [ModbusTCP](trait.ModbusTCP.html) (trait).
+//!
 //! The backends are also a convenient way to fulfill other requirements (eg. real-time operations). Each backend offers a specific function to create a new modbus_t context.
 //! The modbus_t context is an opaque structure containing all necessary information to establish a connection with others Modbus devices according to the selected variant.
 //!
@@ -89,12 +91,21 @@ html_root_url = "https://zzeroo.com/")]
 //!
 //! ### [`Server`](trait.ModbusServer.html)
 //!
-//! The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus offers the following functions to handle requests:
+//! The server is waiting for request from clients and must answer when it is concerned by the request.
 //!
-//! * Receive
-//!     - [`receive()`](struct.Modbus.html#method.receive)
-//! * Reply
-//!     - [`reply()`](struct.Modbus.html#method.reply), [`reply_exception()`](struct.Modbus.html#method.reply_exception)
+//! In TCP mode, you must not use the usual [`connect()`](struct.Modbus.html#method.connect) to establish the connection but a pair of accept/listen calls
+//!
+//! * [`tcp_listen()`](#method.tcp_listen), [`tcp_accept()`](#method.tcp_accept), [`tcp_pi_listen`()](#method.tcp_pi_listen), [`tcp_pi_accept`()](#method.tcp_pi_accept)
+//!
+//! then the data can be received with
+//!
+//! * [`receive()`](struct.Modbus.html#method.receive)
+//!
+//! and a response can be send with
+//!
+//! * [`reply()`](struct.Modbus.html#method.reply), [`reply_exception()`](struct.Modbus.html#method.reply_exception)
+//!
+//! To handle the mapping of your Modbus data, you must use a [`ModbusMapping`](struct.ModbusMapping.html) struct: [`ModbusMapping::new()`](struct.ModbusMapping.html#method.new)
 //!
 
 // `error_chain!` can recurse deeply(3)
@@ -106,6 +117,7 @@ extern crate libmodbus_sys;
 
 pub mod errors;
 mod modbus_client;
+mod modbus_mapping;
 mod modbus_rtu;
 mod modbus_server;
 mod modbus_tcp_pi;
@@ -113,12 +125,13 @@ mod modbus_tcp;
 mod modbus;
 
 pub use self::modbus_client::ModbusClient;
+pub use self::modbus_mapping::ModbusMapping;
 pub use self::modbus_rtu::{ModbusRTU, request_to_send_mode, serial_mode};
 pub use self::modbus_server::ModbusServer;
 pub use self::modbus_tcp_pi::ModbusTCPPI;
 pub use self::modbus_tcp::ModbusTCP;
 pub use self::modbus::Modbus;
 
-
 pub use libmodbus_sys::MODBUS_TCP_DEFAULT_PORT;
+pub use libmodbus_sys::MODBUS_TCP_MAX_ADU_LENGTH;
 pub use libmodbus_sys::MODBUS_MAX_ADU_LENGTH;
