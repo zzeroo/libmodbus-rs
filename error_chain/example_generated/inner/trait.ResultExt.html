@@ -17,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc trait">
+<body class="rustdoc">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'>Trait ResultExt</p><div class="block items"><ul><li><a href="#required-methods">Required Methods</a></li><li><a href="#implementors">Implementors</a></li></ul></div><p class='location'><a href='../../index.html'>error_chain</a>::<wbr><a href='../index.html'>example_generated</a>::<wbr><a href='index.html'>inner</a></p><script>window.sidebarCurrent = {name: 'ResultExt', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='../../index.html'>error_chain</a>::<wbr><a href='../index.html'>example_generated</a>::<wbr><a href='index.html'>inner</a></p><script>window.sidebarCurrent = {name: 'ResultExt', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -43,26 +43,26 @@
         </form>
     </nav>
 
-    <section id='main' class="content">
-<h1 class='fqn'><span class='in-band'>Trait <a href='../../index.html'>error_chain</a>::<wbr><a href='../index.html'>example_generated</a>::<wbr><a href='index.html'>inner</a>::<wbr><a class="trait" href=''>ResultExt</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content trait">
+<h1 class='fqn'><span class='in-band'>Trait <a href='../../index.html'>error_chain</a>::<wbr><a href='../index.html'>example_generated</a>::<wbr><a href='index.html'>inner</a>::<wbr><a class='trait' href=''>ResultExt</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
                </span><a class='srclink' href='../../../src/error_chain/error_chain.rs.html#293-301' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait ResultExt&lt;T, E&gt; {
-    fn <a href='#tymethod.chain_err' class='fnname'>chain_err</a>&lt;F, EK&gt;(self, callback: F) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, <a class="struct" href="../../../error_chain/example_generated/inner/struct.Error.html" title="struct error_chain::example_generated::inner::Error">Error</a>&gt;<br>&nbsp;&nbsp;&nbsp; <span class="where">where<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html" title="trait core::ops::FnOnce">FnOnce</a>() -&gt; EK,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EK: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="../../../error_chain/example_generated/inner/enum.ErrorKind.html" title="enum error_chain::example_generated::inner::ErrorKind">ErrorKind</a>&gt;</span>;
+    fn <a href='#tymethod.chain_err' class='fnname'>chain_err</a>&lt;F, EK&gt;(self, callback: F) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;T, <a class='struct' href='../../../error_chain/example_generated/inner/struct.Error.html' title='error_chain::example_generated::inner::Error'>Error</a>&gt; <span class='where fmt-newline'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>() -&gt; EK, EK: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.Into.html' title='core::convert::Into'>Into</a>&lt;<a class='enum' href='../../../error_chain/example_generated/inner/enum.ErrorKind.html' title='error_chain::example_generated::inner::ErrorKind'>ErrorKind</a>&gt;</span>;
 }</pre><div class='docblock'><p>Additional methods for <code>Result</code>, for easy interaction with this crate.</p>
 </div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
-        <h3 id='tymethod.chain_err' class='method'><span id='chain_err.v' class='invisible'><code>fn <a href='#tymethod.chain_err' class='fnname'>chain_err</a>&lt;F, EK&gt;(self, callback: F) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, <a class="struct" href="../../../error_chain/example_generated/inner/struct.Error.html" title="struct error_chain::example_generated::inner::Error">Error</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html" title="trait core::ops::FnOnce">FnOnce</a>() -&gt; EK,<br>&nbsp;&nbsp;&nbsp;&nbsp;EK: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="../../../error_chain/example_generated/inner/enum.ErrorKind.html" title="enum error_chain::example_generated::inner::ErrorKind">ErrorKind</a>&gt;,&nbsp;</span></code></span></h3><div class='docblock'><p>If the <code>Result</code> is an <code>Err</code> then <code>chain_err</code> evaluates the closure,
+        <h3 id='tymethod.chain_err' class='method'><span id='chain_err.v' class='invisible'><code>fn <a href='#tymethod.chain_err' class='fnname'>chain_err</a>&lt;F, EK&gt;(self, callback: F) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;T, <a class='struct' href='../../../error_chain/example_generated/inner/struct.Error.html' title='error_chain::example_generated::inner::Error'>Error</a>&gt; <span class='where fmt-newline'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>() -&gt; EK, EK: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.Into.html' title='core::convert::Into'>Into</a>&lt;<a class='enum' href='../../../error_chain/example_generated/inner/enum.ErrorKind.html' title='error_chain::example_generated::inner::ErrorKind'>ErrorKind</a>&gt;</span></code></span></h3><div class='docblock'><p>If the <code>Result</code> is an <code>Err</code> then <code>chain_err</code> evaluates the closure,
 which returns <em>some type that can be converted to <code>ErrorKind</code></em>, boxes
 the original error to store as the cause, then returns a new error
 containing the original error.</p>
 </div></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;T, E&gt; ResultExt&lt;T, E&gt; for <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, E&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;E: <a class="trait" href="https://doc.rust-lang.org/nightly/std/error/trait.Error.html" title="trait std::error::Error">Error</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'static,&nbsp;</span></code></li>
+    <li><code>impl&lt;T, E&gt; ResultExt&lt;T, E&gt; for <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;T, E&gt; <span class='where fmt-newline'>where E: <a class='trait' href='https://doc.rust-lang.org/nightly/std/error/trait.Error.html' title='std::error::Error'>Error</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Send.html' title='core::marker::Send'>Send</a> + 'static</span></code></li>
 </ul><script type="text/javascript" async
                          src="../../../implementors/error_chain/example_generated/inner/trait.ResultExt.js">
                  </script></section>

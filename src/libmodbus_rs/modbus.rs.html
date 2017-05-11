@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="https://zzeroo.github.io/share/favicon.ico">
     
 </head>
-<body class="rustdoc source">
+<body class="rustdoc">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -43,7 +43,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -542,506 +542,504 @@
 <span id="497">497</span>
 <span id="498">498</span>
 <span id="499">499</span>
-<span id="500">500</span>
-</pre><pre class="rust ">
-<span class="comment">// use errors::*;</span>
-<span class="kw">use</span> <span class="ident">libmodbus_sys</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::{<span class="ident">Error</span>, <span class="ident">ErrorKind</span>};
-<span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_int</span>, <span class="ident">c_uint</span>};
+</pre><pre class='rust '>
+<span class='kw'>use</span> <span class='ident'>errors</span>::<span class='kw-2'>*</span>;
+<span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_uint</span>};
+<span class='kw'>use</span> <span class='ident'>libmodbus_sys</span>;
 
 
-<span class="doccomment">/// Safe interface for [libmodbus](http://libmodbus.org)</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The different parts of libmodbus are implemented as traits. The modules of this crate contains these</span>
-<span class="doccomment">/// traits and a implementation with a, hopefully safe, interface.</span>
-<span class="doccomment">///</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Modbus</span> {
-    <span class="kw">pub</span> <span class="ident">ctx</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_t</span>,
+<span class='doccomment'>/// Safe interface for [libmodbus](http://libmodbus.org)</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// The different parts of libmodbus are implemented as traits. The modules of this crate contains these</span>
+<span class='doccomment'>/// traits and a implementation with a, hopefully safe, interface.</span>
+<span class='doccomment'>///</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Modbus</span> {
+    <span class='kw'>pub</span> <span class='ident'>ctx</span>: <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_t</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">Modbus</span> {
-    <span class="doccomment">/// `connect` - establish a Modbus connection</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`connect()`](#method.connect) function shall establish a connection to a Modbus server,</span>
-    <span class="doccomment">/// a network or a bus.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// match modbus.connect() {</span>
-    <span class="doccomment">///     Ok(_) =&gt; {}</span>
-    <span class="doccomment">///     Err(e) =&gt; println!(&quot;Error: {}&quot;, e),</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_connect</span>(<span class="self">self</span>.<span class="ident">ctx</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
-                _ <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
+<span class='kw'>impl</span> <span class='ident'>Modbus</span> {
+    <span class='doccomment'>/// `connect` - establish a Modbus connection</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`connect()`](#method.connect) function shall establish a connection to a Modbus server,</span>
+    <span class='doccomment'>/// a network or a bus.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// match modbus.connect() {</span>
+    <span class='doccomment'>///     Ok(_) =&gt; {}</span>
+    <span class='doccomment'>///     Err(e) =&gt; println!(&quot;Error: {}&quot;, e),</span>
+    <span class='doccomment'>/// }</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>connect</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
+        <span class='kw'>unsafe</span> {
+            <span class='kw'>match</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_connect</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>) {
+                <span class='op'>-</span><span class='number'>1</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not create new Modbus context&quot;</span>.<span class='ident'>into</span>()),
+                _ <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='number'>0</span>),
             }
         }
     }
 
-    <span class="doccomment">/// `flush` - flush non-transmitted data</span>
-    <span class="doccomment">/// The [`flush()`](#method.flush) function shall discard data received but not read to the socket or file descriptor associated to the context ctx.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// assert!(modbus.flush().is_ok());</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_flush</span>(<span class="self">self</span>.<span class="ident">ctx</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
-                _ <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
+    <span class='doccomment'>/// `flush` - flush non-transmitted data</span>
+    <span class='doccomment'>/// The [`flush()`](#method.flush) function shall discard data received but not read to the socket or file descriptor associated to the context ctx.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// assert!(modbus.flush().is_ok());</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>flush</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
+        <span class='kw'>unsafe</span> {
+            <span class='kw'>match</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_flush</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>) {
+                <span class='op'>-</span><span class='number'>1</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not flush&quot;</span>.<span class='ident'>into</span>()),
+                _ <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='number'>0</span>),
             }
         }
     }
 
-    <span class="doccomment">/// `set_slave` - set slave number in the context</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`set_slave()`](#method.set_slave) function shall set the slave number in the libmodbus context.</span>
-    <span class="doccomment">/// The behavior depends of network and the role of the device:</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// RTU</span>
-    <span class="doccomment">///     Define the slave ID of the remote device to talk in master mode or set the internal slave ID in slave mode.</span>
-    <span class="doccomment">///     According to the protocol, a Modbus device must only accept message holding its slave number or the special broadcast number.</span>
-    <span class="doccomment">/// TCP</span>
-    <span class="doccomment">///     The slave number is only required in TCP if the message must reach a device on a serial network.</span>
-    <span class="doccomment">///     Some not compliant devices or software (such as modpoll) uses the slave ID as unit identifier,</span>
-    <span class="doccomment">///     that’s incorrect (cf page 23 of Modbus Messaging Implementation Guide v1.0b) but without the slave value,</span>
-    <span class="doccomment">///     the faulty remote device or software drops the requests!</span>
-    <span class="doccomment">///     The special value MODBUS_TCP_SLAVE (0xFF) can be used in TCP mode to restore the default value.</span>
-    <span class="doccomment">///     The broadcast address is MODBUS_BROADCAST_ADDRESS.</span>
-    <span class="doccomment">///     This special value must be use when you want all Modbus devices of the network receive the request.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusRTU};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// const YOUR_DEVICE_ID: i32 = 1;</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_rtu(&quot;/dev/ttyUSB0&quot;, 115200, &#39;N&#39;, 8, 1).unwrap();</span>
-    <span class="doccomment">/// modbus.set_slave(YOUR_DEVICE_ID);</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// match modbus.connect() {</span>
-    <span class="doccomment">///     Ok(_) =&gt; {}</span>
-    <span class="doccomment">///     Err(e) =&gt; println!(&quot;Error: {}&quot;, e),</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_slave</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">slave</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_slave</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">slave</span> <span class="kw">as</span> <span class="ident">c_int</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">new</span>(<span class="ident">ErrorKind</span>::<span class="ident">Other</span>, <span class="string">&quot;The slave number is invalid.&quot;</span>)),
-                _ <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
+    <span class='doccomment'>/// `set_slave` - set slave number in the context</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`set_slave()`](#method.set_slave) function shall set the slave number in the libmodbus context.</span>
+    <span class='doccomment'>/// The behavior depends of network and the role of the device:</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// RTU</span>
+    <span class='doccomment'>///     Define the slave ID of the remote device to talk in master mode or set the internal slave ID in slave mode.</span>
+    <span class='doccomment'>///     According to the protocol, a Modbus device must only accept message holding its slave number or the special broadcast number.</span>
+    <span class='doccomment'>/// TCP</span>
+    <span class='doccomment'>///     The slave number is only required in TCP if the message must reach a device on a serial network.</span>
+    <span class='doccomment'>///     Some not compliant devices or software (such as modpoll) uses the slave ID as unit identifier,</span>
+    <span class='doccomment'>///     that’s incorrect (cf page 23 of Modbus Messaging Implementation Guide v1.0b) but without the slave value,</span>
+    <span class='doccomment'>///     the faulty remote device or software drops the requests!</span>
+    <span class='doccomment'>///     The special value MODBUS_TCP_SLAVE (0xFF) can be used in TCP mode to restore the default value.</span>
+    <span class='doccomment'>///     The broadcast address is MODBUS_BROADCAST_ADDRESS.</span>
+    <span class='doccomment'>///     This special value must be use when you want all Modbus devices of the network receive the request.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusRTU};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// const YOUR_DEVICE_ID: i32 = 1;</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_rtu(&quot;/dev/ttyUSB0&quot;, 115200, &#39;N&#39;, 8, 1).unwrap();</span>
+    <span class='doccomment'>/// modbus.set_slave(YOUR_DEVICE_ID);</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// match modbus.connect() {</span>
+    <span class='doccomment'>///     Ok(_) =&gt; {}</span>
+    <span class='doccomment'>///     Err(e) =&gt; println!(&quot;Error: {}&quot;, e),</span>
+    <span class='doccomment'>/// }</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_slave</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>slave</span>: <span class='ident'>i32</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
+        <span class='kw'>unsafe</span> {
+            <span class='kw'>match</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_set_slave</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>slave</span> <span class='kw'>as</span> <span class='ident'>c_int</span>) {
+                <span class='op'>-</span><span class='number'>1</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not set slave address&quot;</span>.<span class='ident'>into</span>()),
+                _ <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='number'>0</span>),
             }
         }
     }
 
-    <span class="doccomment">/// `set_debug` - set debug flag of the context</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`set_debug()`](#method.set_debug) function shall set the debug flag of the modbus_t context by using the argument flag.</span>
-    <span class="doccomment">/// By default, the boolean flag is set to FALSE. When the flag value is set to TRUE, many verbose messages are displayed on stdout and stderr.</span>
-    <span class="doccomment">/// For example, this flag is useful to display the bytes of the Modbus messages.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```bash</span>
-    <span class="doccomment">/// [00][14][00][00][00][06][12][03][00][6B][00][03]</span>
-    <span class="doccomment">/// Waiting for a confirmation…</span>
-    <span class="doccomment">/// &lt;00&gt;&lt;14&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;09&gt;&lt;12&gt;&lt;03&gt;&lt;06&gt;&lt;02&gt;&lt;2B&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// modbus.set_debug(true);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_debug</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">flag</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_debug</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">flag</span> <span class="kw">as</span> <span class="ident">c_int</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span>::<span class="ident">new</span>(<span class="ident">ErrorKind</span>::<span class="ident">Other</span>, <span class="string">&quot;Invalid flag&quot;</span>)),
-                _ <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
+    <span class='doccomment'>/// `set_debug` - set debug flag of the context</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`set_debug()`](#method.set_debug) function shall set the debug flag of the modbus_t context by using the argument flag.</span>
+    <span class='doccomment'>/// By default, the boolean flag is set to FALSE. When the flag value is set to TRUE, many verbose messages are displayed on stdout and stderr.</span>
+    <span class='doccomment'>/// For example, this flag is useful to display the bytes of the Modbus messages.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```bash</span>
+    <span class='doccomment'>/// [00][14][00][00][00][06][12][03][00][6B][00][03]</span>
+    <span class='doccomment'>/// Waiting for a confirmation…</span>
+    <span class='doccomment'>/// &lt;00&gt;&lt;14&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;09&gt;&lt;12&gt;&lt;03&gt;&lt;06&gt;&lt;02&gt;&lt;2B&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>/// modbus.set_debug(true);</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_debug</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>flag</span>: <span class='ident'>bool</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
+        <span class='kw'>unsafe</span> {
+            <span class='kw'>match</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_set_debug</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>flag</span> <span class='kw'>as</span> <span class='ident'>c_int</span>) {
+                <span class='op'>-</span><span class='number'>1</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not set debug&quot;</span>.<span class='ident'>into</span>()),
+                _ <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='number'>0</span>),
             }
         }
     }
 
-    <span class="doccomment">/// `get_byte_timeout` - get timeout between bytes</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between two consecutive bytes of the same message `Result&lt;(to_sec, to_usec), Error&gt;`.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_byte_timeout</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">i32</span>, <span class="ident">i32</span>), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class='doccomment'>/// `get_byte_timeout` - get timeout between bytes</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between two consecutive bytes of the same message `Result&lt;(to_sec, to_usec)&gt;`.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```rust,no_run</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>/// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_byte_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(<span class='ident'>i32</span>, <span class='ident'>i32</span>)<span class='op'>&gt;</span> {
+        <span class='macro'>unimplemented</span><span class='macro'>!</span>()
     }
 
-    <span class="doccomment">/// `set_byte_timeout` - set timeout between bytes</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`set_byte_timeout()`](#method.set_byte_timeout) function shall set the timeout interval between two consecutive bytes of the same message.</span>
-    <span class="doccomment">/// The timeout is an upper bound on the amount of time elapsed before select() returns, if the time elapsed is longer than the defined timeout,</span>
-    <span class="doccomment">/// an ETIMEDOUT error will be raised by the function waiting for a response.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The value of **to_usec** argument must be in the range 0 to 999999.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case, [`set_byte_timeout()`](#method.set_byte_timeout)</span>
-    <span class="doccomment">/// governs the entire handling of the response, the full confirmation response must be received before expiration of the response timeout.</span>
-    <span class="doccomment">/// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_byte_timeout</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_to_sec</span>: <span class="ident">u32</span>, <span class="ident">_to_usec</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">i32</span>, <span class="ident">i32</span>), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class='doccomment'>/// `set_byte_timeout` - set timeout between bytes</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`set_byte_timeout()`](#method.set_byte_timeout) function shall set the timeout interval between two consecutive bytes of the same message.</span>
+    <span class='doccomment'>/// The timeout is an upper bound on the amount of time elapsed before select() returns, if the time elapsed is longer than the defined timeout,</span>
+    <span class='doccomment'>/// an ETIMEDOUT error will be raised by the function waiting for a response.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The value of **to_usec** argument must be in the range 0 to 999999.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case, [`set_byte_timeout()`](#method.set_byte_timeout)</span>
+    <span class='doccomment'>/// governs the entire handling of the response, the full confirmation response must be received before expiration of the response timeout.</span>
+    <span class='doccomment'>/// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```rust,no_run</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>/// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_byte_timeout</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>_to_sec</span>: <span class='ident'>u32</span>, <span class='ident'>_to_usec</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(<span class='ident'>i32</span>, <span class='ident'>i32</span>)<span class='op'>&gt;</span> {
+        <span class='macro'>unimplemented</span><span class='macro'>!</span>()
     }
 
-    <span class="doccomment">/// `get_response_timeout` - get timeout for response</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`get_response_timeout()`](#method.get_response_timeout) function shall return the timeout interval used to wait for a response</span>
-    <span class="doccomment">/// in the **to_sec** and **to_usec** arguments.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_response_timeout</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">i32</span>, <span class="ident">i32</span>), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class='doccomment'>/// `get_response_timeout` - get timeout for response</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`get_response_timeout()`](#method.get_response_timeout) function shall return the timeout interval used to wait for a response</span>
+    <span class='doccomment'>/// in the **to_sec** and **to_usec** arguments.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```rust,no_run</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_response_timeout</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(<span class='ident'>i32</span>, <span class='ident'>i32</span>)<span class='op'>&gt;</span> {
+        <span class='macro'>unimplemented</span><span class='macro'>!</span>()
     }
 
-    <span class="doccomment">/// `set_response_timeout` - set timeout for response</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`set_response_timeout()`](#method.set_response_timeout) function shall set the timeout interval used to wait for a response.</span>
-    <span class="doccomment">/// When a byte timeout is set, if elapsed time for the first byte of response is longer than the given timeout,</span>
-    <span class="doccomment">/// an ETIMEDOUT error will be raised by the function waiting for a response. When byte timeout is disabled,</span>
-    <span class="doccomment">/// the full confirmation response must be received before expiration of the response timeout.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The value of **to_usec** argument must be in the range 0 to 999999.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case, [`set_response_timeout()`](#method.set_response_timeout)</span>
-    <span class="doccomment">/// governs the entire handling of the response, the full confirmation response must be received before expiration of the response timeout.</span>
-    <span class="doccomment">/// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_response_timeout</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_to_sec</span>: <span class="ident">u32</span>, <span class="ident">_to_usec</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">i32</span>, <span class="ident">i32</span>), <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class='doccomment'>/// `set_response_timeout` - set timeout for response</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`set_response_timeout()`](#method.set_response_timeout) function shall set the timeout interval used to wait for a response.</span>
+    <span class='doccomment'>/// When a byte timeout is set, if elapsed time for the first byte of response is longer than the given timeout,</span>
+    <span class='doccomment'>/// an ETIMEDOUT error will be raised by the function waiting for a response. When byte timeout is disabled,</span>
+    <span class='doccomment'>/// the full confirmation response must be received before expiration of the response timeout.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The value of **to_usec** argument must be in the range 0 to 999999.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case, [`set_response_timeout()`](#method.set_response_timeout)</span>
+    <span class='doccomment'>/// governs the entire handling of the response, the full confirmation response must be received before expiration of the response timeout.</span>
+    <span class='doccomment'>/// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```rust,no_run</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_response_timeout</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>_to_sec</span>: <span class='ident'>u32</span>, <span class='ident'>_to_usec</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(<span class='ident'>i32</span>, <span class='ident'>i32</span>)<span class='op'>&gt;</span> {
+        <span class='macro'>unimplemented</span><span class='macro'>!</span>()
     }
 
-    <span class="doccomment">/// `set_error_recovery` - set the error recovery mode</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`set_error_recovery()`](#method.set_error_recovery) function shall set the error recovery mode to apply when the connection fails or</span>
-    <span class="doccomment">/// the byte received is not expected. The argument error_recovery may be bitwise-or’ed with zero or more of the following constants.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// By default there is no error recovery (MODBUS_ERROR_RECOVERY_NONE) so the application is responsible for controlling the error values</span>
-    <span class="doccomment">/// returned by libmodbus functions and for handling them if necessary.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// When MODBUS_ERROR_RECOVERY_LINK is set, the library will attempt an reconnection after a delay defined by response timeout of the libmodbus context.</span>
-    <span class="doccomment">/// This mode will try an infinite close/connect loop until success on send call and will just try one time to re-establish the connection on</span>
-    <span class="doccomment">/// select/read calls (if the connection was down, the values to read are certainly not available any more after reconnection, except for slave/server).</span>
-    <span class="doccomment">/// This mode will also run flush requests after a delay based on  the current response timeout in some situations (eg. timeout of select call).</span>
-    <span class="doccomment">/// The reconnection attempt can hang for several seconds if the network to the remote target unit is down.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// When MODBUS_ERROR_RECOVERY_PROTOCOL is set, a sleep and flush sequence will be used to clean up the ongoing communication, this can</span>
-    <span class="doccomment">/// occurs when the message length is invalid, the TID is wrong or the received function code is not the expected one.</span>
-    <span class="doccomment">/// The response timeout delay will be used to sleep.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The modes are mask values and so they are complementary.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// It’s not recommended to enable error recovery for slave/server.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_error_recovery</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_modbus_error_recovery_mode</span>: <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_error_recovery_mode</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class='doccomment'>/// `set_error_recovery` - set the error recovery mode</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`set_error_recovery()`](#method.set_error_recovery) function shall set the error recovery mode to apply when the connection fails or</span>
+    <span class='doccomment'>/// the byte received is not expected. The argument error_recovery may be bitwise-or’ed with zero or more of the following constants.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// By default there is no error recovery (MODBUS_ERROR_RECOVERY_NONE) so the application is responsible for controlling the error values</span>
+    <span class='doccomment'>/// returned by libmodbus functions and for handling them if necessary.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// When MODBUS_ERROR_RECOVERY_LINK is set, the library will attempt an reconnection after a delay defined by response timeout of the libmodbus context.</span>
+    <span class='doccomment'>/// This mode will try an infinite close/connect loop until success on send call and will just try one time to re-establish the connection on</span>
+    <span class='doccomment'>/// select/read calls (if the connection was down, the values to read are certainly not available any more after reconnection, except for slave/server).</span>
+    <span class='doccomment'>/// This mode will also run flush requests after a delay based on  the current response timeout in some situations (eg. timeout of select call).</span>
+    <span class='doccomment'>/// The reconnection attempt can hang for several seconds if the network to the remote target unit is down.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// When MODBUS_ERROR_RECOVERY_PROTOCOL is set, a sleep and flush sequence will be used to clean up the ongoing communication, this can</span>
+    <span class='doccomment'>/// occurs when the message length is invalid, the TID is wrong or the received function code is not the expected one.</span>
+    <span class='doccomment'>/// The response timeout delay will be used to sleep.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The modes are mask values and so they are complementary.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// It’s not recommended to enable error recovery for slave/server.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```rust,no_run</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_error_recovery</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>_modbus_error_recovery_mode</span>: <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_error_recovery_mode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
+        <span class='macro'>unimplemented</span><span class='macro'>!</span>()
     }
 
-    <span class="doccomment">/// `set_socket` - set socket of the context</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`set_socket()`](#method.set_socket) function shall set the socket or file descriptor in the libmodbus context.</span>
-    <span class="doccomment">/// This function is useful for managing multiple client connections to the same server.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_socket</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_socket</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class='doccomment'>/// `set_socket` - set socket of the context</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`set_socket()`](#method.set_socket) function shall set the socket or file descriptor in the libmodbus context.</span>
+    <span class='doccomment'>/// This function is useful for managing multiple client connections to the same server.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```rust,no_run</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_socket</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>_socket</span>: <span class='ident'>u32</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
+        <span class='macro'>unimplemented</span><span class='macro'>!</span>()
     }
 
-    <span class="doccomment">/// `get_socket` - set socket of the context</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`get_socket()`](#method.get_socket) function shall return the current socket or file descriptor of the libmodbus context.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_socket</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class='doccomment'>/// `get_socket` - set socket of the context</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`get_socket()`](#method.get_socket) function shall return the current socket or file descriptor of the libmodbus context.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```rust,no_run</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_socket</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>u32</span><span class='op'>&gt;</span> {
+        <span class='macro'>unimplemented</span><span class='macro'>!</span>()
     }
 
-    <span class="doccomment">/// `get_header_length` - retrieve the current header length</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`get_header_length()`](#method.get_header_length) function shall retrieve the current header length from the backend.</span>
-    <span class="doccomment">/// This function is convenient to manipulate a message and so its limited to low-level operations.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_header_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class='doccomment'>/// `get_header_length` - retrieve the current header length</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`get_header_length()`](#method.get_header_length) function shall retrieve the current header length from the backend.</span>
+    <span class='doccomment'>/// This function is convenient to manipulate a message and so its limited to low-level operations.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```rust,no_run</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_header_length</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>u32</span><span class='op'>&gt;</span> {
+        <span class='macro'>unimplemented</span><span class='macro'>!</span>()
     }
 
-    <span class="doccomment">/// `close` - close a Modbus connection</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`close()`](#method.close) function shall close the connection established with the backend set in the context.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// match modbus.connect() {</span>
-    <span class="doccomment">///     Ok(_) =&gt; {  }</span>
-    <span class="doccomment">///     Err(e) =&gt; println!(&quot;Error: {}&quot;, e),</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// modbus.close();</span>
-    <span class="doccomment">/// modbus.free();</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">close</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="kw">unsafe</span> {
-            <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_close</span>(<span class="self">self</span>.<span class="ident">ctx</span>);
+    <span class='doccomment'>/// `close` - close a Modbus connection</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`close()`](#method.close) function shall close the connection established with the backend set in the context.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// match modbus.connect() {</span>
+    <span class='doccomment'>///     Ok(_) =&gt; {  }</span>
+    <span class='doccomment'>///     Err(e) =&gt; println!(&quot;Error: {}&quot;, e),</span>
+    <span class='doccomment'>/// }</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// modbus.close();</span>
+    <span class='doccomment'>/// modbus.free();</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>close</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) {
+        <span class='kw'>unsafe</span> {
+            <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_close</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>);
         }
     }
 
-    <span class="doccomment">/// `free` - free a libmodbus context</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`free()`](#method.free) function shall free an allocated modbus_t structure.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// match modbus.connect() {</span>
-    <span class="doccomment">///     Ok(_) =&gt; {  }</span>
-    <span class="doccomment">///     Err(e) =&gt; println!(&quot;Error: {}&quot;, e),</span>
-    <span class="doccomment">/// }</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// modbus.close();</span>
-    <span class="doccomment">/// modbus.free();</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">free</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-        <span class="kw">unsafe</span> {
-            <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_free</span>(<span class="self">self</span>.<span class="ident">ctx</span>);
+    <span class='doccomment'>/// `free` - free a libmodbus context</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`free()`](#method.free) function shall free an allocated modbus_t structure.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Examples</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// match modbus.connect() {</span>
+    <span class='doccomment'>///     Ok(_) =&gt; {  }</span>
+    <span class='doccomment'>///     Err(e) =&gt; println!(&quot;Error: {}&quot;, e),</span>
+    <span class='doccomment'>/// }</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// modbus.close();</span>
+    <span class='doccomment'>/// modbus.free();</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>free</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
+        <span class='kw'>unsafe</span> {
+            <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_free</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>);
         }
     }
 }
 
 
-<span class="doccomment">/// `set_bits_from_byte` - set many bits from a single byte value</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The [`set_bits_from_byte()`](#method.set_bits_from_byte) function shall set many bits from a single byte.</span>
-<span class="doccomment">/// All 8 bits from the byte value will be written to dest array starting at index position.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_bits_from_byte</span>(<span class="ident">_dest</span>: <span class="ident">u8</span>, <span class="ident">index</span>: <span class="ident">c_int</span>, <span class="ident">value</span>: <span class="ident">u8</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class='doccomment'>/// `set_bits_from_byte` - set many bits from a single byte value</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// The [`set_bits_from_byte()`](#method.set_bits_from_byte) function shall set many bits from a single byte.</span>
+<span class='doccomment'>/// All 8 bits from the byte value will be written to dest array starting at index position.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```rust,no_run</span>
+<span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_bits_from_byte</span>(<span class='ident'>_dest</span>: <span class='ident'>u8</span>, <span class='ident'>index</span>: <span class='ident'>c_int</span>, <span class='ident'>value</span>: <span class='ident'>u8</span>) {
+    <span class='macro'>unimplemented</span><span class='macro'>!</span>()
 }
 
-<span class="doccomment">/// `set_bits_from_bytes` -  set many bits from an array of bytes</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The [`set_bits_from_bytes()`](#method.set_bits_from_bytes) function shall set many bits from a single byte.</span>
-<span class="doccomment">/// All 8 bits from the byte value will be written to dest array starting at index position.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_bits_from_bytes</span>(<span class="ident">_dest</span>: <span class="ident">u8</span>, <span class="ident">_index</span>: <span class="ident">c_uint</span>, <span class="ident">_num_bits</span>: <span class="ident">c_uint</span>, <span class="ident">_tab_bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class='doccomment'>/// `set_bits_from_bytes` -  set many bits from an array of bytes</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// The [`set_bits_from_bytes()`](#method.set_bits_from_bytes) function shall set many bits from a single byte.</span>
+<span class='doccomment'>/// All 8 bits from the byte value will be written to dest array starting at index position.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```rust,no_run</span>
+<span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_bits_from_bytes</span>(<span class='ident'>_dest</span>: <span class='ident'>u8</span>, <span class='ident'>_index</span>: <span class='ident'>c_uint</span>, <span class='ident'>_num_bits</span>: <span class='ident'>c_uint</span>, <span class='ident'>_tab_bytes</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span>) {
+    <span class='macro'>unimplemented</span><span class='macro'>!</span>()
 }
 
-<span class="doccomment">/// `get_byte_from_bits` - get the value from many bit</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The [`get_byte_from_bits()`](#method.get_byte_from_bits) function shall extract a value from many bits.</span>
-<span class="doccomment">/// All nb_bits bits from src at position index will be read as a single value. To obtain a full byte, set nb_bits to 8.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_byte_from_bits</span>(<span class="ident">_src</span>: <span class="ident">u8</span>, <span class="ident">index</span>: <span class="ident">c_int</span>, <span class="ident">_num_bits</span>: <span class="ident">c_uint</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class='doccomment'>/// `get_byte_from_bits` - get the value from many bit</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// The [`get_byte_from_bits()`](#method.get_byte_from_bits) function shall extract a value from many bits.</span>
+<span class='doccomment'>/// All nb_bits bits from src at position index will be read as a single value. To obtain a full byte, set nb_bits to 8.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```rust,no_run</span>
+<span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_byte_from_bits</span>(<span class='ident'>_src</span>: <span class='ident'>u8</span>, <span class='ident'>index</span>: <span class='ident'>c_int</span>, <span class='ident'>_num_bits</span>: <span class='ident'>c_uint</span>) {
+    <span class='macro'>unimplemented</span><span class='macro'>!</span>()
 }
 
-<span class="doccomment">/// `get_float_abcd` - get a float value from 2 registers in ABCD byte order</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// The [`get_float_abcd()`](#method.get_float_abcd) function shall get a float from 4 bytes in usual Modbus format.</span>
-<span class="doccomment">/// The src array must be a pointer on two 16 bits values, for example, if the first word is set to 0x0020 and the second to 0xF147,</span>
-<span class="doccomment">/// the float value will be read as 123456.0.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_abcd</span>(<span class="ident">_src</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class='doccomment'>/// `get_float_abcd` - get a float value from 2 registers in ABCD byte order</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// The [`get_float_abcd()`](#method.get_float_abcd) function shall get a float from 4 bytes in usual Modbus format.</span>
+<span class='doccomment'>/// The src array must be a pointer on two 16 bits values, for example, if the first word is set to 0x0020 and the second to 0xF147,</span>
+<span class='doccomment'>/// the float value will be read as 123456.0.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```rust,no_run</span>
+<span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_float_abcd</span>(<span class='ident'>_src</span>: <span class='ident'>u16</span>) {
+    <span class='macro'>unimplemented</span><span class='macro'>!</span>()
 }
 
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_abcd</span>(<span class="ident">_dest</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```rust,no_run</span>
+<span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_float_abcd</span>(<span class='ident'>_dest</span>: <span class='ident'>u16</span>) {
+    <span class='macro'>unimplemented</span><span class='macro'>!</span>()
 }
 
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_badc</span>(<span class="ident">_src</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```rust,no_run</span>
+<span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_float_badc</span>(<span class='ident'>_src</span>: <span class='ident'>u16</span>) {
+    <span class='macro'>unimplemented</span><span class='macro'>!</span>()
 }
 
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_badc</span>(<span class="ident">_dest</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```rust,no_run</span>
+<span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_float_badc</span>(<span class='ident'>_dest</span>: <span class='ident'>u16</span>) {
+    <span class='macro'>unimplemented</span><span class='macro'>!</span>()
 }
 
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_cdab</span>(<span class="ident">_src</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```rust,no_run</span>
+<span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_float_cdab</span>(<span class='ident'>_src</span>: <span class='ident'>u16</span>) {
+    <span class='macro'>unimplemented</span><span class='macro'>!</span>()
 }
 
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_cdab</span>(<span class="ident">_dest</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```rust,no_run</span>
+<span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_float_cdab</span>(<span class='ident'>_dest</span>: <span class='ident'>u16</span>) {
+    <span class='macro'>unimplemented</span><span class='macro'>!</span>()
 }
 
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_dcba</span>(<span class="ident">_src</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```rust,no_run</span>
+<span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_float_dcba</span>(<span class='ident'>_src</span>: <span class='ident'>u16</span>) {
+    <span class='macro'>unimplemented</span><span class='macro'>!</span>()
 }
 
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_dcba</span>(<span class="ident">_dest</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// # Examples</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// ```rust,no_run</span>
+<span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class='doccomment'>/// ```</span>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_float_dcba</span>(<span class='ident'>_dest</span>: <span class='ident'>u16</span>) {
+    <span class='macro'>unimplemented</span><span class='macro'>!</span>()
 }
 
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Modbus</span> {
-    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-        <span class="self">self</span>.<span class="ident">close</span>();
-        <span class="self">self</span>.<span class="ident">free</span>();
+<span class='kw'>impl</span> <span class='ident'>Drop</span> <span class='kw'>for</span> <span class='ident'>Modbus</span> {
+    <span class='kw'>fn</span> <span class='ident'>drop</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
+        <span class='self'>self</span>.<span class='ident'>close</span>();
+        <span class='self'>self</span>.<span class='ident'>free</span>();
     }
 }
 </pre>

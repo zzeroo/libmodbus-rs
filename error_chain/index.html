@@ -17,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc mod">
+<body class="rustdoc">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'>Crate error_chain</p><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'error_chain', ty: 'mod', relpath: '../'};</script>
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'error_chain', ty: 'mod', relpath: '../'};</script>
     </nav>
 
     <nav class="sub">
@@ -43,8 +43,8 @@
         </form>
     </nav>
 
-    <section id='main' class="content">
-<h1 class='fqn'><span class='in-band'>Crate <a class="mod" href=''>error_chain</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>error_chain</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
@@ -146,61 +146,61 @@ basis, such as per module.</p>
 <p>Assuming you are using crate-level error types, typically you will
 define an <code>errors</code> module and inside it call <code>error_chain!</code>:</p>
 
-<pre class="rust rust-example-rendered">
-<span class="kw">mod</span> <span class="ident">other_error</span> {
-    <span class="macro">error_chain</span><span class="macro">!</span> {}
+<pre class='rust rust-example-rendered'>
+<span class='kw'>mod</span> <span class='ident'>other_error</span> {
+    <span class='macro'>error_chain</span><span class='macro'>!</span> {}
 }
 
-<span class="macro">error_chain</span><span class="macro">!</span> {
-    <span class="comment">// The type defined for this error. These are the conventional</span>
-    <span class="comment">// and recommended names, but they can be arbitrarily chosen.</span>
-    <span class="comment">//</span>
-    <span class="comment">// It is also possible to leave this section out entirely, or</span>
-    <span class="comment">// leave it empty, and these names will be used automatically.</span>
-    <span class="ident">types</span> {
-        <span class="ident">Error</span>, <span class="ident">ErrorKind</span>, <span class="ident">ResultExt</span>, <span class="prelude-ty">Result</span>;
+<span class='macro'>error_chain</span><span class='macro'>!</span> {
+    <span class='comment'>// The type defined for this error. These are the conventional</span>
+    <span class='comment'>// and recommended names, but they can be arbitrarily chosen.</span>
+    <span class='comment'>//</span>
+    <span class='comment'>// It is also possible to leave this section out entirely, or</span>
+    <span class='comment'>// leave it empty, and these names will be used automatically.</span>
+    <span class='ident'>types</span> {
+        <span class='ident'>Error</span>, <span class='ident'>ErrorKind</span>, <span class='ident'>ResultExt</span>, <span class='prelude-ty'>Result</span>;
     }
 
-    <span class="comment">// Without the `Result` wrapper:</span>
-    <span class="comment">//</span>
-    <span class="comment">// types {</span>
-    <span class="comment">//     Error, ErrorKind, ResultExt;</span>
-    <span class="comment">// }</span>
+    <span class='comment'>// Without the `Result` wrapper:</span>
+    <span class='comment'>//</span>
+    <span class='comment'>// types {</span>
+    <span class='comment'>//     Error, ErrorKind, ResultExt;</span>
+    <span class='comment'>// }</span>
 
-    <span class="comment">// Automatic conversions between this error chain and other</span>
-    <span class="comment">// error chains. In this case, it will e.g. generate an</span>
-    <span class="comment">// `ErrorKind` variant called `Another` which in turn contains</span>
-    <span class="comment">// the `other_error::ErrorKind`, with conversions from</span>
-    <span class="comment">// `other_error::Error`.</span>
-    <span class="comment">//</span>
-    <span class="comment">// Optionally, some attributes can be added to a variant.</span>
-    <span class="comment">//</span>
-    <span class="comment">// This section can be empty.</span>
-    <span class="ident">links</span> {
-        <span class="ident">Another</span>(<span class="ident">other_error</span>::<span class="ident">Error</span>, <span class="ident">other_error</span>::<span class="ident">ErrorKind</span>) <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>;
+    <span class='comment'>// Automatic conversions between this error chain and other</span>
+    <span class='comment'>// error chains. In this case, it will e.g. generate an</span>
+    <span class='comment'>// `ErrorKind` variant called `Another` which in turn contains</span>
+    <span class='comment'>// the `other_error::ErrorKind`, with conversions from</span>
+    <span class='comment'>// `other_error::Error`.</span>
+    <span class='comment'>//</span>
+    <span class='comment'>// Optionally, some attributes can be added to a variant.</span>
+    <span class='comment'>//</span>
+    <span class='comment'>// This section can be empty.</span>
+    <span class='ident'>links</span> {
+        <span class='ident'>Another</span>(<span class='ident'>other_error</span>::<span class='ident'>Error</span>, <span class='ident'>other_error</span>::<span class='ident'>ErrorKind</span>) <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>unix</span>)]</span>;
     }
 
-    <span class="comment">// Automatic conversions between this error chain and other</span>
-    <span class="comment">// error types not defined by the `error_chain!`. These will be</span>
-    <span class="comment">// wrapped in a new error with, in the first case, the</span>
-    <span class="comment">// `ErrorKind::Fmt` variant. The description and cause will</span>
-    <span class="comment">// forward to the description and cause of the original error.</span>
-    <span class="comment">//</span>
-    <span class="comment">// Optionally, some attributes can be added to a variant.</span>
-    <span class="comment">//</span>
-    <span class="comment">// This section can be empty.</span>
-    <span class="ident">foreign_links</span> {
-        <span class="ident">Fmt</span>(::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Error</span>);
-        <span class="ident">Io</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>) <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">unix</span>)]</span>;
+    <span class='comment'>// Automatic conversions between this error chain and other</span>
+    <span class='comment'>// error types not defined by the `error_chain!`. These will be</span>
+    <span class='comment'>// wrapped in a new error with, in the first case, the</span>
+    <span class='comment'>// `ErrorKind::Fmt` variant. The description and cause will</span>
+    <span class='comment'>// forward to the description and cause of the original error.</span>
+    <span class='comment'>//</span>
+    <span class='comment'>// Optionally, some attributes can be added to a variant.</span>
+    <span class='comment'>//</span>
+    <span class='comment'>// This section can be empty.</span>
+    <span class='ident'>foreign_links</span> {
+        <span class='ident'>Fmt</span>(::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Error</span>);
+        <span class='ident'>Io</span>(::<span class='ident'>std</span>::<span class='ident'>io</span>::<span class='ident'>Error</span>) <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>unix</span>)]</span>;
     }
 
-    <span class="comment">// Define additional `ErrorKind` variants. The syntax here is</span>
-    <span class="comment">// the same as `quick_error!`, but the `from()` and `cause()`</span>
-    <span class="comment">// syntax is not supported.</span>
-    <span class="ident">errors</span> {
-        <span class="ident">InvalidToolchainName</span>(<span class="ident">t</span>: <span class="ident">String</span>) {
-            <span class="ident">description</span>(<span class="string">&quot;invalid toolchain name&quot;</span>)
-            <span class="ident">display</span>(<span class="string">&quot;invalid toolchain name: &#39;{}&#39;&quot;</span>, <span class="ident">t</span>)
+    <span class='comment'>// Define additional `ErrorKind` variants. The syntax here is</span>
+    <span class='comment'>// the same as `quick_error!`, but the `from()` and `cause()`</span>
+    <span class='comment'>// syntax is not supported.</span>
+    <span class='ident'>errors</span> {
+        <span class='ident'>InvalidToolchainName</span>(<span class='ident'>t</span>: <span class='ident'>String</span>) {
+            <span class='ident'>description</span>(<span class='string'>&quot;invalid toolchain name&quot;</span>)
+            <span class='ident'>display</span>(<span class='string'>&quot;invalid toolchain name: &#39;{}&#39;&quot;</span>, <span class='ident'>t</span>)
         }
     }
 }
@@ -217,20 +217,20 @@ and the <code>ErrorKind</code> type. An example of generated code can be found i
 <h2 id='returning-new-errors' class='section-header'><a href='#returning-new-errors'>Returning new errors</a></h2>
 <p>Introducing new error chains, with a string message:</p>
 
-<pre class="rust rust-example-rendered">
-<span class="kw">fn</span> <span class="ident">foo</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="prelude-val">Err</span>(<span class="string">&quot;foo error!&quot;</span>.<span class="ident">into</span>())
+<pre class='rust rust-example-rendered'>
+<span class='kw'>fn</span> <span class='ident'>foo</span>() <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+    <span class='prelude-val'>Err</span>(<span class='string'>&quot;foo error!&quot;</span>.<span class='ident'>into</span>())
 }</pre>
 
 <p>Introducing new error chains, with an <code>ErrorKind</code>:</p>
 
-<pre class="rust rust-example-rendered">
-<span class="macro">error_chain</span><span class="macro">!</span> {
-    <span class="ident">errors</span> { <span class="ident">FooError</span> }
+<pre class='rust rust-example-rendered'>
+<span class='macro'>error_chain</span><span class='macro'>!</span> {
+    <span class='ident'>errors</span> { <span class='ident'>FooError</span> }
 }
 
-<span class="kw">fn</span> <span class="ident">foo</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">FooError</span>.<span class="ident">into</span>())
+<span class='kw'>fn</span> <span class='ident'>foo</span>() <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+    <span class='prelude-val'>Err</span>(<span class='ident'>ErrorKind</span>::<span class='ident'>FooError</span>.<span class='ident'>into</span>())
 }</pre>
 
 <p>Note that the return type is the typedef <code>Result</code>, which is
@@ -244,13 +244,13 @@ strings and <code>ErrorKind</code> have <code>From</code> conversions to turn th
 automatically convert <code>Err(ErrorKind)</code> to <code>Err(Error)</code>. So the
 below is equivalent to the previous:</p>
 
-<pre class="rust rust-example-rendered">
-<span class="kw">fn</span> <span class="ident">foo</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="prelude-val">Ok</span>(<span class="macro">try</span><span class="macro">!</span>(<span class="prelude-val">Err</span>(<span class="ident">ErrorKind</span>::<span class="ident">FooError</span>)))
+<pre class='rust rust-example-rendered'>
+<span class='kw'>fn</span> <span class='ident'>foo</span>() <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+    <span class='prelude-val'>Ok</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='prelude-val'>Err</span>(<span class='ident'>ErrorKind</span>::<span class='ident'>FooError</span>)))
 }
 
-<span class="kw">fn</span> <span class="ident">bar</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="prelude-val">Ok</span>(<span class="macro">try</span><span class="macro">!</span>(<span class="prelude-val">Err</span>(<span class="string">&quot;bogus!&quot;</span>)))
+<span class='kw'>fn</span> <span class='ident'>bar</span>() <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+    <span class='prelude-val'>Ok</span>(<span class='macro'>try</span><span class='macro'>!</span>(<span class='prelude-val'>Err</span>(<span class='string'>&quot;bogus!&quot;</span>)))
 }</pre>
 
 <h2 id='the-bail-macro' class='section-header'><a href='#the-bail-macro'>The <code>bail!</code> macro</a></h2>
@@ -259,28 +259,28 @@ verbose. Instead we can use the <code>bail!</code> macro, which, much like <code
 and <code>?</code>, performs an early return with conversions. With <code>bail!</code> the
 previous examples look like:</p>
 
-<pre class="rust rust-example-rendered">
-<span class="kw">fn</span> <span class="ident">foo</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="bool-val">true</span> {
-        <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">ErrorKind</span>::<span class="ident">FooError</span>);
-    } <span class="kw">else</span> {
-        <span class="prelude-val">Ok</span>(())
+<pre class='rust rust-example-rendered'>
+<span class='kw'>fn</span> <span class='ident'>foo</span>() <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+    <span class='kw'>if</span> <span class='bool-val'>true</span> {
+        <span class='macro'>bail</span><span class='macro'>!</span>(<span class='ident'>ErrorKind</span>::<span class='ident'>FooError</span>);
+    } <span class='kw'>else</span> {
+        <span class='prelude-val'>Ok</span>(())
     }
 }
 
-<span class="kw">fn</span> <span class="ident">bar</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="bool-val">true</span> {
-        <span class="macro">bail</span><span class="macro">!</span>(<span class="string">&quot;bogus!&quot;</span>);
-    } <span class="kw">else</span> {
-        <span class="prelude-val">Ok</span>(())
+<span class='kw'>fn</span> <span class='ident'>bar</span>() <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
+    <span class='kw'>if</span> <span class='bool-val'>true</span> {
+        <span class='macro'>bail</span><span class='macro'>!</span>(<span class='string'>&quot;bogus!&quot;</span>);
+    } <span class='kw'>else</span> {
+        <span class='prelude-val'>Ok</span>(())
     }
 }</pre>
 
 <h2 id='chaining-errors' class='section-header'><a href='#chaining-errors'>Chaining errors</a></h2>
 <p>To extend the error chain:</p>
 
-<pre class="rust rust-example-rendered">
-<span class="kw">let</span> <span class="ident">res</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="op">=</span> <span class="ident">do_something</span>().<span class="ident">chain_err</span>(<span class="op">||</span> <span class="string">&quot;something went wrong&quot;</span>);</pre>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>let</span> <span class='ident'>res</span>: <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> <span class='op'>=</span> <span class='ident'>do_something</span>().<span class='ident'>chain_err</span>(<span class='op'>||</span> <span class='string'>&quot;something went wrong&quot;</span>);</pre>
 
 <p><code>chain_err</code> can be called on any <code>Result</code> type where the contained
 error type implements <code>std::error::Error + Send + &#39;static</code>.  If
@@ -294,46 +294,46 @@ error containing the original error.</p>
 <code>Error</code> is a tuple struct and its first field is the <code>ErrorKind</code>,
 making dispatching on error kinds relatively compact:</p>
 
-<pre class="rust rust-example-rendered">
-<span class="macro">error_chain</span><span class="macro">!</span> {
-    <span class="ident">errors</span> {
-        <span class="ident">InvalidToolchainName</span>(<span class="ident">t</span>: <span class="ident">String</span>) {
-            <span class="ident">description</span>(<span class="string">&quot;invalid toolchain name&quot;</span>)
-            <span class="ident">display</span>(<span class="string">&quot;invalid toolchain name: &#39;{}&#39;&quot;</span>, <span class="ident">t</span>)
+<pre class='rust rust-example-rendered'>
+<span class='macro'>error_chain</span><span class='macro'>!</span> {
+    <span class='ident'>errors</span> {
+        <span class='ident'>InvalidToolchainName</span>(<span class='ident'>t</span>: <span class='ident'>String</span>) {
+            <span class='ident'>description</span>(<span class='string'>&quot;invalid toolchain name&quot;</span>)
+            <span class='ident'>display</span>(<span class='string'>&quot;invalid toolchain name: &#39;{}&#39;&quot;</span>, <span class='ident'>t</span>)
         }
     }
 }
 
-<span class="kw">match</span> <span class="ident">Error</span>::<span class="ident">from</span>(<span class="string">&quot;error!&quot;</span>) {
-    <span class="ident">Error</span>(<span class="ident">ErrorKind</span>::<span class="ident">InvalidToolchainName</span>(_), _) <span class="op">=&gt;</span> { }
-    <span class="ident">Error</span>(<span class="ident">ErrorKind</span>::<span class="ident">Msg</span>(_), _) <span class="op">=&gt;</span> { }
+<span class='kw'>match</span> <span class='ident'>Error</span>::<span class='ident'>from</span>(<span class='string'>&quot;error!&quot;</span>) {
+    <span class='ident'>Error</span>(<span class='ident'>ErrorKind</span>::<span class='ident'>InvalidToolchainName</span>(_), _) <span class='op'>=&gt;</span> { }
+    <span class='ident'>Error</span>(<span class='ident'>ErrorKind</span>::<span class='ident'>Msg</span>(_), _) <span class='op'>=&gt;</span> { }
 }</pre>
 
 <p>Chained errors are also matched with (relatively) compact syntax</p>
 
-<pre class="rust rust-example-rendered">
-<span class="kw">mod</span> <span class="ident">utils</span> {
-    <span class="macro">error_chain</span><span class="macro">!</span> {
-        <span class="ident">errors</span> {
-            <span class="ident">BadStuff</span> {
-                <span class="ident">description</span>(<span class="string">&quot;bad stuff&quot;</span>)
+<pre class='rust rust-example-rendered'>
+<span class='kw'>mod</span> <span class='ident'>utils</span> {
+    <span class='macro'>error_chain</span><span class='macro'>!</span> {
+        <span class='ident'>errors</span> {
+            <span class='ident'>BadStuff</span> {
+                <span class='ident'>description</span>(<span class='string'>&quot;bad stuff&quot;</span>)
             }
         }
     }
 }
 
-<span class="kw">mod</span> <span class="ident">app</span> {
-    <span class="macro">error_chain</span><span class="macro">!</span> {
-        <span class="ident">links</span> {
-            <span class="ident">Utils</span>(::<span class="ident">utils</span>::<span class="ident">Error</span>, ::<span class="ident">utils</span>::<span class="ident">ErrorKind</span>);
+<span class='kw'>mod</span> <span class='ident'>app</span> {
+    <span class='macro'>error_chain</span><span class='macro'>!</span> {
+        <span class='ident'>links</span> {
+            <span class='ident'>Utils</span>(::<span class='ident'>utils</span>::<span class='ident'>Error</span>, ::<span class='ident'>utils</span>::<span class='ident'>ErrorKind</span>);
         }
     }
 }
 
 
-<span class="kw">match</span> <span class="ident">app</span>::<span class="ident">Error</span>::<span class="ident">from</span>(<span class="string">&quot;error!&quot;</span>) {
-    <span class="ident">app</span>::<span class="ident">Error</span>(<span class="ident">app</span>::<span class="ident">ErrorKind</span>::<span class="ident">Utils</span>(<span class="ident">utils</span>::<span class="ident">ErrorKind</span>::<span class="ident">BadStuff</span>), _) <span class="op">=&gt;</span> { }
-    _ <span class="op">=&gt;</span> { }
+<span class='kw'>match</span> <span class='ident'>app</span>::<span class='ident'>Error</span>::<span class='ident'>from</span>(<span class='string'>&quot;error!&quot;</span>) {
+    <span class='ident'>app</span>::<span class='ident'>Error</span>(<span class='ident'>app</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>Utils</span>(<span class='ident'>utils</span>::<span class='ident'>ErrorKind</span>::<span class='ident'>BadStuff</span>), _) <span class='op'>=&gt;</span> { }
+    _ <span class='op'>=&gt;</span> { }
 }</pre>
 
 <h2 id='foreign-links' class='section-header'><a href='#foreign-links'>Foreign links</a></h2>
@@ -369,8 +369,8 @@ backtrace just call the <code>backtrace()</code> method.</p>
 </div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class="mod" href="example_generated/index.html"
-                                  title='mod error_chain::example_generated'>example_generated</a></td>
+                           <td><a class='mod' href='example_generated/index.html'
+                                  title='error_chain::example_generated'>example_generated</a></td>
                            <td class='docblock-short'>
                                 <p>These modules show an example of code generated by the macro. <strong>IT MUST NOT BE
 USED OUTSIDE THIS CRATE</strong>.</p>
@@ -378,44 +378,44 @@ USED OUTSIDE THIS CRATE</strong>.</p>
                        </tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class="macro" href="macro.bail.html"
-                                  title='macro error_chain::bail'>bail</a></td>
+                           <td><a class='macro' href='macro.bail.html'
+                                  title='error_chain::bail'>bail</a></td>
                            <td class='docblock-short'>
                                 <p>Exits a function early with an error</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class="macro" href="macro.ensure.html"
-                                  title='macro error_chain::ensure'>ensure</a></td>
+                           <td><a class='macro' href='macro.ensure.html'
+                                  title='error_chain::ensure'>ensure</a></td>
                            <td class='docblock-short'>
                                 <p>Exits a function early with an error if the condition is not satisfied</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class="macro" href="macro.error_chain.html"
-                                  title='macro error_chain::error_chain'>error_chain</a></td>
+                           <td><a class='macro' href='macro.error_chain.html'
+                                  title='error_chain::error_chain'>error_chain</a></td>
                            <td class='docblock-short'>
                                 <p>This macro is used for handling of duplicated and out-of-order fields. For
 the exact rules, see <code>error_chain_processed</code>.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class="macro" href="macro.error_chain_processed.html"
-                                  title='macro error_chain::error_chain_processed'>error_chain_processed</a></td>
+                           <td><a class='macro' href='macro.error_chain_processed.html'
+                                  title='error_chain::error_chain_processed'>error_chain_processed</a></td>
                            <td class='docblock-short'>
                                 <p>Prefer to use <code>error_chain</code> instead of this macro.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class="macro" href="macro.quick_error.html"
-                                  title='macro error_chain::quick_error'>quick_error</a></td>
+                           <td><a class='macro' href='macro.quick_error.html'
+                                  title='error_chain::quick_error'>quick_error</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class="macro" href="macro.quick_main.html"
-                                  title='macro error_chain::quick_main'>quick_main</a></td>
+                           <td><a class='macro' href='macro.quick_main.html'
+                                  title='error_chain::quick_main'>quick_main</a></td>
                            <td class='docblock-short'>
                                 <p>Convenient wrapper to be able to use <code>try!</code> and such in the main. You can
 use it with a separated function:</p>
@@ -423,38 +423,38 @@ use it with a separated function:</p>
                        </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class="struct" href="struct.Backtrace.html"
-                                  title='struct error_chain::Backtrace'>Backtrace</a></td>
+                           <td><a class='struct' href='struct.Backtrace.html'
+                                  title='error_chain::Backtrace'>Backtrace</a></td>
                            <td class='docblock-short'>
                                 <p>Representation of an owned and self-contained backtrace.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class="struct" href="struct.Display.html"
-                                  title='struct error_chain::Display'>Display</a></td>
+                           <td><a class='struct' href='struct.Display.html'
+                                  title='error_chain::Display'>Display</a></td>
                            <td class='docblock-short'>
                                 <p>A struct which formats an error for output.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class="struct" href="struct.ErrorChainIter.html"
-                                  title='struct error_chain::ErrorChainIter'>ErrorChainIter</a></td>
+                           <td><a class='struct' href='struct.ErrorChainIter.html'
+                                  title='error_chain::ErrorChainIter'>ErrorChainIter</a></td>
                            <td class='docblock-short'>
                                 <p>Iterator over the error chain using the <code>Error::cause()</code> method.</p>
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class="trait" href="trait.ChainedError.html"
-                                  title='trait error_chain::ChainedError'>ChainedError</a></td>
+                           <td><a class='trait' href='trait.ChainedError.html'
+                                  title='error_chain::ChainedError'>ChainedError</a></td>
                            <td class='docblock-short'>
                                 <p>This trait is implemented on all the errors generated by the <code>error_chain</code>
 macro.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class="trait" href="trait.ExitCode.html"
-                                  title='trait error_chain::ExitCode'>ExitCode</a></td>
+                           <td><a class='trait' href='trait.ExitCode.html'
+                                  title='error_chain::ExitCode'>ExitCode</a></td>
                            <td class='docblock-short'>
                                 <p>Represents a value that can be used as the exit status of the process.
 See <a href="macro.quick_main.html"><code>quick_main!</code></a>.</p>

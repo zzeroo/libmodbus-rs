@@ -17,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc source">
+<body class="rustdoc">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -43,7 +43,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -469,316 +469,316 @@
 <span id="424">424</span>
 <span id="425">425</span>
 <span id="426">426</span>
-</pre><pre class="rust ">
-<span class="doccomment">/// Prefer to use `error_chain` instead of this macro.</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">error_chain_processed</span> {
-    <span class="comment">// Default values for `types`.</span>
+</pre><pre class='rust '>
+<span class='doccomment'>/// Prefer to use `error_chain` instead of this macro.</span>
+<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>error_chain_processed</span> {
+    <span class='comment'>// Default values for `types`.</span>
     (
-        <span class="ident">types</span> {}
-        $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>: <span class="ident">tt</span> )<span class="op">*</span>
-    ) <span class="op">=&gt;</span> {
-        <span class="macro">error_chain_processed</span><span class="macro">!</span> {
-            <span class="ident">types</span> {
-                <span class="ident">Error</span>, <span class="ident">ErrorKind</span>, <span class="ident">ResultExt</span>, <span class="prelude-ty">Result</span>;
+        <span class='ident'>types</span> {}
+        $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>rest</span>: <span class='ident'>tt</span> )<span class='op'>*</span>
+    ) <span class='op'>=&gt;</span> {
+        <span class='macro'>error_chain_processed</span><span class='macro'>!</span> {
+            <span class='ident'>types</span> {
+                <span class='ident'>Error</span>, <span class='ident'>ErrorKind</span>, <span class='ident'>ResultExt</span>, <span class='prelude-ty'>Result</span>;
             }
-            $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span> )<span class="op">*</span>
+            $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>rest</span> )<span class='op'>*</span>
         }
     };
-    <span class="comment">// With `Result` wrapper.</span>
+    <span class='comment'>// With `Result` wrapper.</span>
     (
-        <span class="ident">types</span> {
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>:<span class="ident">ident</span>,
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result_ext_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result_name</span>:<span class="ident">ident</span>;
+        <span class='ident'>types</span> {
+            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>:<span class='ident'>ident</span>,
+            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>result_ext_name</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>result_name</span>:<span class='ident'>ident</span>;
         }
-        $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span>: <span class="ident">tt</span> )<span class="op">*</span>
-    ) <span class="op">=&gt;</span> {
-        <span class="macro">error_chain_processed</span><span class="macro">!</span> {
-            <span class="ident">types</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>,
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result_ext_name</span>;
+        $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>rest</span>: <span class='ident'>tt</span> )<span class='op'>*</span>
+    ) <span class='op'>=&gt;</span> {
+        <span class='macro'>error_chain_processed</span><span class='macro'>!</span> {
+            <span class='ident'>types</span> {
+                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>,
+                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>result_ext_name</span>;
             }
-            $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rest</span> )<span class="op">*</span>
+            $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>rest</span> )<span class='op'>*</span>
         }
-        <span class="doccomment">/// Convenient wrapper around `std::Result`.</span>
-        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span>
-        <span class="kw">pub</span> <span class="kw">type</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result_name</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="op">=</span> ::<span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span><span class="op">&gt;</span>;
+        <span class='doccomment'>/// Convenient wrapper around `std::Result`.</span>
+        <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>unused</span>)]</span>
+        <span class='kw'>pub</span> <span class='kw'>type</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>result_name</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='op'>=</span> ::<span class='ident'>std</span>::<span class='ident'>result</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span><span class='op'>&gt;</span>;
     };
-    <span class="comment">// Without `Result` wrapper.</span>
+    <span class='comment'>// Without `Result` wrapper.</span>
     (
-        <span class="ident">types</span> {
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>:<span class="ident">ident</span>,
-            <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result_ext_name</span>:<span class="ident">ident</span>;
+        <span class='ident'>types</span> {
+            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>:<span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>:<span class='ident'>ident</span>,
+            <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>result_ext_name</span>:<span class='ident'>ident</span>;
         }
 
-        <span class="ident">links</span> {
-            $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_variant</span>:<span class="ident">ident</span> ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_error_path</span>:<span class="ident">path</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_kind_path</span>:<span class="ident">path</span> )
-               $( <span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_links</span>:<span class="ident">meta</span>]</span> )<span class="kw-2">*</span>; ) <span class="op">*</span>
+        <span class='ident'>links</span> {
+            $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_variant</span>:<span class='ident'>ident</span> ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_error_path</span>:<span class='ident'>path</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_kind_path</span>:<span class='ident'>path</span> )
+               $( <span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_links</span>:<span class='ident'>meta</span>]</span> )<span class='kw-2'>*</span>; ) <span class='op'>*</span>
         }
 
-        <span class="ident">foreign_links</span> {
-            $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">foreign_link_variant</span>:<span class="ident">ident</span> ( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">foreign_link_error_path</span>:<span class="ident">path</span> )
-               $( <span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_foreign_links</span>:<span class="ident">meta</span>]</span> )<span class="kw-2">*</span>; )<span class="op">*</span>
+        <span class='ident'>foreign_links</span> {
+            $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>foreign_link_variant</span>:<span class='ident'>ident</span> ( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>foreign_link_error_path</span>:<span class='ident'>path</span> )
+               $( <span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_foreign_links</span>:<span class='ident'>meta</span>]</span> )<span class='kw-2'>*</span>; )<span class='op'>*</span>
         }
 
-        <span class="ident">errors</span> {
-            $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_chunks</span>:<span class="ident">tt</span> ) <span class="op">*</span>
+        <span class='ident'>errors</span> {
+            $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_chunks</span>:<span class='ident'>tt</span> ) <span class='op'>*</span>
         }
 
-    ) <span class="op">=&gt;</span> {
-        <span class="doccomment">/// The Error type.</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// This tuple struct is made of two elements:</span>
-        <span class="doccomment">///</span>
-        <span class="doccomment">/// - an `ErrorKind` which is used to determine the type of the error.</span>
-        <span class="doccomment">/// - An internal `State`, not meant for direct use outside of `error_chain`</span>
-        <span class="doccomment">///   internals, containing:</span>
-        <span class="doccomment">///   - a backtrace, generated when the error is created.</span>
-        <span class="doccomment">///   - an error chain, used for the implementation of `Error::cause()`.</span>
-        <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-        <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>(
-            <span class="comment">// The members must be `pub` for `links`.</span>
-            <span class="doccomment">/// The kind of the error.</span>
-            <span class="kw">pub</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>,
-            <span class="doccomment">/// Contains the error chain and the backtrace.</span>
-            <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-            <span class="kw">pub</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">State</span>,
+    ) <span class='op'>=&gt;</span> {
+        <span class='doccomment'>/// The Error type.</span>
+        <span class='doccomment'>///</span>
+        <span class='doccomment'>/// This tuple struct is made of two elements:</span>
+        <span class='doccomment'>///</span>
+        <span class='doccomment'>/// - an `ErrorKind` which is used to determine the type of the error.</span>
+        <span class='doccomment'>/// - An internal `State`, not meant for direct use outside of `error_chain`</span>
+        <span class='doccomment'>///   internals, containing:</span>
+        <span class='doccomment'>///   - a backtrace, generated when the error is created.</span>
+        <span class='doccomment'>///   - an error chain, used for the implementation of `Error::cause()`.</span>
+        <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
+        <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>(
+            <span class='comment'>// The members must be `pub` for `links`.</span>
+            <span class='doccomment'>/// The kind of the error.</span>
+            <span class='kw'>pub</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>,
+            <span class='doccomment'>/// Contains the error chain and the backtrace.</span>
+            <span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
+            <span class='kw'>pub</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>State</span>,
         );
 
-        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">ChainedError</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-            <span class="kw">type</span> <span class="ident">ErrorKind</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>;
+        <span class='kw'>impl</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>ChainedError</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+            <span class='kw'>type</span> <span class='ident'>ErrorKind</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>;
 
-            <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">kind</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>, <span class="ident">state</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">State</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>(<span class="ident">kind</span>, <span class="ident">state</span>)
+            <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>kind</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>, <span class='ident'>state</span>: <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>State</span>) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>(<span class='ident'>kind</span>, <span class='ident'>state</span>)
             }
 
-            <span class="kw">fn</span> <span class="ident">from_kind</span>(<span class="ident">kind</span>: <span class="self">Self</span>::<span class="ident">ErrorKind</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-                <span class="self">Self</span>::<span class="ident">from_kind</span>(<span class="ident">kind</span>)
+            <span class='kw'>fn</span> <span class='ident'>from_kind</span>(<span class='ident'>kind</span>: <span class='self'>Self</span>::<span class='ident'>ErrorKind</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+                <span class='self'>Self</span>::<span class='ident'>from_kind</span>(<span class='ident'>kind</span>)
             }
 
-            <span class="kw">fn</span> <span class="ident">with_chain</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">K</span><span class="op">&gt;</span>(<span class="ident">error</span>: <span class="ident">E</span>, <span class="ident">kind</span>: <span class="ident">K</span>)
-                <span class="op">-&gt;</span> <span class="self">Self</span>
-                <span class="kw">where</span> <span class="ident">E</span>: ::<span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-                      <span class="ident">K</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">ErrorKind</span><span class="op">&gt;</span>
+            <span class='kw'>fn</span> <span class='ident'>with_chain</span><span class='op'>&lt;</span><span class='ident'>E</span>, <span class='ident'>K</span><span class='op'>&gt;</span>(<span class='ident'>error</span>: <span class='ident'>E</span>, <span class='ident'>kind</span>: <span class='ident'>K</span>)
+                <span class='op'>-&gt;</span> <span class='self'>Self</span>
+                <span class='kw'>where</span> <span class='ident'>E</span>: ::<span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span> <span class='op'>+</span> <span class='ident'>Send</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span>,
+                      <span class='ident'>K</span>: <span class='ident'>Into</span><span class='op'>&lt;</span><span class='self'>Self</span>::<span class='ident'>ErrorKind</span><span class='op'>&gt;</span>
             {
-                <span class="self">Self</span>::<span class="ident">with_chain</span>(<span class="ident">error</span>, <span class="ident">kind</span>)
+                <span class='self'>Self</span>::<span class='ident'>with_chain</span>(<span class='ident'>error</span>, <span class='ident'>kind</span>)
             }
 
-            <span class="kw">fn</span> <span class="ident">kind</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="self">Self</span>::<span class="ident">ErrorKind</span> {
-                <span class="self">self</span>.<span class="ident">kind</span>()
+            <span class='kw'>fn</span> <span class='ident'>kind</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='self'>Self</span>::<span class='ident'>ErrorKind</span> {
+                <span class='self'>self</span>.<span class='ident'>kind</span>()
             }
 
-            <span class="kw">fn</span> <span class="ident">iter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">ErrorChainIter</span> {
-                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">ErrorChainIter</span>(<span class="prelude-val">Some</span>(<span class="self">self</span>))
+            <span class='kw'>fn</span> <span class='ident'>iter</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>ErrorChainIter</span> {
+                <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>ErrorChainIter</span>(<span class='prelude-val'>Some</span>(<span class='self'>self</span>))
             }
 
-            <span class="kw">fn</span> <span class="ident">backtrace</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Backtrace</span><span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="ident">backtrace</span>()
+            <span class='kw'>fn</span> <span class='ident'>backtrace</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>Backtrace</span><span class='op'>&gt;</span> {
+                <span class='self'>self</span>.<span class='ident'>backtrace</span>()
             }
 
-            <span class="macro">impl_extract_backtrace</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>
-                                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>
-                                    $([<span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_error_path</span>, $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_links</span>]</span>)<span class="kw-2">*</span>])<span class="kw-2">*</span>);
+            <span class='macro'>impl_extract_backtrace</span><span class='macro'>!</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>
+                                    <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>
+                                    $([<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_error_path</span>, $(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_links</span>]</span>)<span class='kw-2'>*</span>])<span class='kw-2'>*</span>);
         }
 
-        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">dead_code</span>)]</span>
-        <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-            <span class="doccomment">/// Constructs an error from a kind, and generates a backtrace.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_kind</span>(<span class="ident">kind</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>(
-                    <span class="ident">kind</span>,
-                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">State</span>::<span class="ident">default</span>(),
+        <span class='attribute'>#[<span class='ident'>allow</span>(<span class='ident'>dead_code</span>)]</span>
+        <span class='kw'>impl</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+            <span class='doccomment'>/// Constructs an error from a kind, and generates a backtrace.</span>
+            <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>from_kind</span>(<span class='ident'>kind</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>(
+                    <span class='ident'>kind</span>,
+                    <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>State</span>::<span class='ident'>default</span>(),
                 )
             }
 
-            <span class="doccomment">/// Constructs a chained error from another error and a kind, and generates a backtrace.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_chain</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">K</span><span class="op">&gt;</span>(<span class="ident">error</span>: <span class="ident">E</span>, <span class="ident">kind</span>: <span class="ident">K</span>)
-                <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>
-                <span class="kw">where</span> <span class="ident">E</span>: ::<span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-                      <span class="ident">K</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span><span class="op">&gt;</span>
+            <span class='doccomment'>/// Constructs a chained error from another error and a kind, and generates a backtrace.</span>
+            <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>with_chain</span><span class='op'>&lt;</span><span class='ident'>E</span>, <span class='ident'>K</span><span class='op'>&gt;</span>(<span class='ident'>error</span>: <span class='ident'>E</span>, <span class='ident'>kind</span>: <span class='ident'>K</span>)
+                <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>
+                <span class='kw'>where</span> <span class='ident'>E</span>: ::<span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span> <span class='op'>+</span> <span class='ident'>Send</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span>,
+                      <span class='ident'>K</span>: <span class='ident'>Into</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span><span class='op'>&gt;</span>
             {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>(
-                    <span class="ident">kind</span>.<span class="ident">into</span>(),
-                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">State</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span><span class="op">&gt;</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">error</span>), ),
+                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>(
+                    <span class='ident'>kind</span>.<span class='ident'>into</span>(),
+                    <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>State</span>::<span class='ident'>new</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span><span class='op'>&gt;</span>(<span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>error</span>), ),
                 )
             }
 
-            <span class="doccomment">/// Returns the kind of the error.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">kind</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span> {
-                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
+            <span class='doccomment'>/// Returns the kind of the error.</span>
+            <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>kind</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span> {
+                <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='number'>0</span>
             }
 
-            <span class="doccomment">/// Iterates over the error chain.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">iter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">ErrorChainIter</span> {
-                <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">ChainedError</span>::<span class="ident">iter</span>(<span class="self">self</span>)
+            <span class='doccomment'>/// Iterates over the error chain.</span>
+            <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>iter</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>ErrorChainIter</span> {
+                <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>ChainedError</span>::<span class='ident'>iter</span>(<span class='self'>self</span>)
             }
 
-            <span class="doccomment">/// Returns the backtrace associated with this error.</span>
-            <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">backtrace</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Backtrace</span><span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="number">1</span>.<span class="ident">backtrace</span>()
+            <span class='doccomment'>/// Returns the backtrace associated with this error.</span>
+            <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>backtrace</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>Backtrace</span><span class='op'>&gt;</span> {
+                <span class='self'>self</span>.<span class='number'>1</span>.<span class='ident'>backtrace</span>()
             }
         }
 
-        <span class="kw">impl</span> ::<span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-            <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
-                <span class="self">self</span>.<span class="number">0</span>.<span class="ident">description</span>()
+        <span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+            <span class='kw'>fn</span> <span class='ident'>description</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>str</span> {
+                <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>description</span>()
             }
 
-            <span class="kw">fn</span> <span class="ident">cause</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>::<span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-                <span class="kw">match</span> <span class="self">self</span>.<span class="number">1</span>.<span class="ident">next_error</span> {
-                    <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">c</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">c</span>),
-                    <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
-                        <span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
+            <span class='kw'>fn</span> <span class='ident'>cause</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span>::<span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span><span class='op'>&gt;</span> {
+                <span class='kw'>match</span> <span class='self'>self</span>.<span class='number'>1</span>.<span class='ident'>next_error</span> {
+                    <span class='prelude-val'>Some</span>(<span class='kw-2'>ref</span> <span class='ident'>c</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>*</span><span class='kw-2'>*</span><span class='ident'>c</span>),
+                    <span class='prelude-val'>None</span> <span class='op'>=&gt;</span> {
+                        <span class='kw'>match</span> <span class='self'>self</span>.<span class='number'>0</span> {
                             $(
-                                $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_foreign_links</span>]</span>)<span class="op">*</span>
-                                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">foreign_link_variant</span>(<span class="kw-2">ref</span> <span class="ident">foreign_err</span>) <span class="op">=&gt;</span> {
-                                    <span class="ident">foreign_err</span>.<span class="ident">cause</span>()
+                                $(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_foreign_links</span>]</span>)<span class='op'>*</span>
+                                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>::<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>foreign_link_variant</span>(<span class='kw-2'>ref</span> <span class='ident'>foreign_err</span>) <span class='op'>=&gt;</span> {
+                                    <span class='ident'>foreign_err</span>.<span class='ident'>cause</span>()
                                 }
-                            ) <span class="op">*</span>
-                            _ <span class="op">=&gt;</span> <span class="prelude-val">None</span>
+                            ) <span class='op'>*</span>
+                            _ <span class='op'>=&gt;</span> <span class='prelude-val'>None</span>
                         }
                     }
                 }
             }
         }
 
-        <span class="kw">impl</span> ::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-            <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> ::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
-                ::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Display</span>::<span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, <span class="ident">f</span>)
+        <span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Display</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+            <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
+                ::<span class='ident'>std</span>::<span class='ident'>fmt</span>::<span class='ident'>Display</span>::<span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='number'>0</span>, <span class='ident'>f</span>)
             }
         }
 
         $(
-            $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_links</span>]</span>)<span class="op">*</span>
-            <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_error_path</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-                <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_error_path</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>(
-                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_variant</span>(<span class="ident">e</span>.<span class="number">0</span>),
-                        <span class="ident">e</span>.<span class="number">1</span>,
+            $(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_links</span>]</span>)<span class='op'>*</span>
+            <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_error_path</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+                <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>e</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_error_path</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+                    <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>(
+                        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>::<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_variant</span>(<span class='ident'>e</span>.<span class='number'>0</span>),
+                        <span class='ident'>e</span>.<span class='number'>1</span>,
                     )
                 }
             }
-        ) <span class="op">*</span>
+        ) <span class='op'>*</span>
 
         $(
-            $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_foreign_links</span>]</span>)<span class="op">*</span>
-            <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">foreign_link_error_path</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-                <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">foreign_link_error_path</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>::<span class="ident">from_kind</span>(
-                        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">foreign_link_variant</span>(<span class="ident">e</span>)
+            $(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_foreign_links</span>]</span>)<span class='op'>*</span>
+            <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>foreign_link_error_path</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+                <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>e</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>foreign_link_error_path</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+                    <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>::<span class='ident'>from_kind</span>(
+                        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>::<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>foreign_link_variant</span>(<span class='ident'>e</span>)
                     )
                 }
             }
-        ) <span class="op">*</span>
+        ) <span class='op'>*</span>
 
-        <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>::<span class="ident">from_kind</span>(<span class="ident">e</span>)
+        <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+            <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>e</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>::<span class='ident'>from_kind</span>(<span class='ident'>e</span>)
             }
         }
 
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>::<span class="ident">from_kind</span>(<span class="ident">s</span>.<span class="ident">into</span>())
+        <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>str</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+            <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>s</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>::<span class='ident'>from_kind</span>(<span class='ident'>s</span>.<span class='ident'>into</span>())
             }
         }
 
-        <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">s</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>::<span class="ident">from_kind</span>(<span class="ident">s</span>.<span class="ident">into</span>())
+        <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+            <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>s</span>: <span class='ident'>String</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>::<span class='ident'>from_kind</span>(<span class='ident'>s</span>.<span class='ident'>into</span>())
             }
         }
 
-        <span class="kw">impl</span> ::<span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">Deref</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span> {
-            <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>;
+        <span class='kw'>impl</span> ::<span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>Deref</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span> {
+            <span class='kw'>type</span> <span class='ident'>Target</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>;
 
-            <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="self">Self</span>::<span class="ident">Target</span> {
-                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>
+            <span class='kw'>fn</span> <span class='ident'>deref</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='self'>Self</span>::<span class='ident'>Target</span> {
+                <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='number'>0</span>
             }
         }
 
 
-        <span class="comment">// The ErrorKind type</span>
-        <span class="comment">// --------------</span>
+        <span class='comment'>// The ErrorKind type</span>
+        <span class='comment'>// --------------</span>
 
-        <span class="macro">quick_error</span><span class="macro">!</span> {
-            <span class="doccomment">/// The kind of an error.</span>
-            <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-            <span class="kw">pub</span> <span class="kw">enum</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span> {
+        <span class='macro'>quick_error</span><span class='macro'>!</span> {
+            <span class='doccomment'>/// The kind of an error.</span>
+            <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>)]</span>
+            <span class='kw'>pub</span> <span class='kw'>enum</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span> {
 
-                <span class="doccomment">/// A convenient variant for String.</span>
-                <span class="ident">Msg</span>(<span class="ident">s</span>: <span class="ident">String</span>) {
-                    <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>)
-                    <span class="ident">display</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">s</span>)
+                <span class='doccomment'>/// A convenient variant for String.</span>
+                <span class='ident'>Msg</span>(<span class='ident'>s</span>: <span class='ident'>String</span>) {
+                    <span class='ident'>description</span>(<span class='kw-2'>&amp;</span><span class='ident'>s</span>)
+                    <span class='ident'>display</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>s</span>)
                 }
 
                 $(
-                    $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_links</span>]</span>)<span class="op">*</span>
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_variant</span>(<span class="ident">e</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_kind_path</span>) {
-                        <span class="ident">description</span>(<span class="ident">e</span>.<span class="ident">description</span>())
-                        <span class="ident">display</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>)
+                    $(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_links</span>]</span>)<span class='op'>*</span>
+                    <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_variant</span>(<span class='ident'>e</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_kind_path</span>) {
+                        <span class='ident'>description</span>(<span class='ident'>e</span>.<span class='ident'>description</span>())
+                        <span class='ident'>display</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>e</span>)
                     }
-                ) <span class="op">*</span>
+                ) <span class='op'>*</span>
 
                 $(
-                    $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_foreign_links</span>]</span>)<span class="op">*</span>
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">foreign_link_variant</span>(<span class="ident">err</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">foreign_link_error_path</span>) {
-                        <span class="ident">description</span>(::<span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span>::<span class="ident">description</span>(<span class="ident">err</span>))
-                        <span class="ident">display</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">err</span>)
+                    $(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_foreign_links</span>]</span>)<span class='op'>*</span>
+                    <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>foreign_link_variant</span>(<span class='ident'>err</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>foreign_link_error_path</span>) {
+                        <span class='ident'>description</span>(::<span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span>::<span class='ident'>description</span>(<span class='ident'>err</span>))
+                        <span class='ident'>display</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>err</span>)
                     }
-                ) <span class="op">*</span>
+                ) <span class='op'>*</span>
 
-                $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_chunks</span>)<span class="op">*</span>
+                $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_chunks</span>)<span class='op'>*</span>
             }
         }
 
         $(
-            $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_links</span>]</span>)<span class="op">*</span>
-            <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_kind_path</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span> {
-                <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_kind_path</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>::<span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_variant</span>(<span class="ident">e</span>)
+            $(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_links</span>]</span>)<span class='op'>*</span>
+            <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_kind_path</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span> {
+                <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>e</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_kind_path</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+                    <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>::<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_variant</span>(<span class='ident'>e</span>)
                 }
             }
-        ) <span class="op">*</span>
+        ) <span class='op'>*</span>
 
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span> {
-            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>::<span class="ident">Msg</span>(<span class="ident">s</span>.<span class="ident">to_string</span>())
+        <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>str</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span> {
+            <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>s</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>::<span class='ident'>Msg</span>(<span class='ident'>s</span>.<span class='ident'>to_string</span>())
             }
         }
 
-        <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span> {
-            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">s</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>::<span class="ident">Msg</span>(<span class="ident">s</span>)
+        <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span> {
+            <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>s</span>: <span class='ident'>String</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+                <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>::<span class='ident'>Msg</span>(<span class='ident'>s</span>)
             }
         }
 
-        <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span> {
-            <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">e</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-                <span class="ident">e</span>.<span class="number">0</span>
+        <span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span> {
+            <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>e</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+                <span class='ident'>e</span>.<span class='number'>0</span>
             }
         }
 
-        <span class="comment">// The ResultExt trait defines the `chain_err` method.</span>
+        <span class='comment'>// The ResultExt trait defines the `chain_err` method.</span>
 
-        <span class="doccomment">/// Additional methods for `Result`, for easy interaction with this crate.</span>
-        <span class="kw">pub</span> <span class="kw">trait</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result_ext_name</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span> {
-            <span class="doccomment">/// If the `Result` is an `Err` then `chain_err` evaluates the closure,</span>
-            <span class="doccomment">/// which returns *some type that can be converted to `ErrorKind`*, boxes</span>
-            <span class="doccomment">/// the original error to store as the cause, then returns a new error</span>
-            <span class="doccomment">/// containing the original error.</span>
-            <span class="kw">fn</span> <span class="ident">chain_err</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">EK</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> ::<span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span><span class="op">&gt;</span>
-                <span class="kw">where</span> <span class="ident">F</span>: <span class="ident">FnOnce</span>() <span class="op">-&gt;</span> <span class="ident">EK</span>,
-                      <span class="ident">EK</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span><span class="op">&gt;</span>;
+        <span class='doccomment'>/// Additional methods for `Result`, for easy interaction with this crate.</span>
+        <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>result_ext_name</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='ident'>E</span><span class='op'>&gt;</span> {
+            <span class='doccomment'>/// If the `Result` is an `Err` then `chain_err` evaluates the closure,</span>
+            <span class='doccomment'>/// which returns *some type that can be converted to `ErrorKind`*, boxes</span>
+            <span class='doccomment'>/// the original error to store as the cause, then returns a new error</span>
+            <span class='doccomment'>/// containing the original error.</span>
+            <span class='kw'>fn</span> <span class='ident'>chain_err</span><span class='op'>&lt;</span><span class='ident'>F</span>, <span class='ident'>EK</span><span class='op'>&gt;</span>(<span class='self'>self</span>, <span class='ident'>callback</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> ::<span class='ident'>std</span>::<span class='ident'>result</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span><span class='op'>&gt;</span>
+                <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnOnce</span>() <span class='op'>-&gt;</span> <span class='ident'>EK</span>,
+                      <span class='ident'>EK</span>: <span class='ident'>Into</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span><span class='op'>&gt;</span>;
         }
 
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">result_ext_name</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span> <span class="kw">for</span> ::<span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span> <span class="kw">where</span> <span class="ident">E</span>: ::<span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
-            <span class="kw">fn</span> <span class="ident">chain_err</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">EK</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">callback</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> ::<span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span><span class="op">&gt;</span>
-                <span class="kw">where</span> <span class="ident">F</span>: <span class="ident">FnOnce</span>() <span class="op">-&gt;</span> <span class="ident">EK</span>,
-                      <span class="ident">EK</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span><span class="op">&gt;</span> {
-                <span class="self">self</span>.<span class="ident">map_err</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-                    <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">State</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span><span class="op">&gt;</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">e</span>), );
-                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">ChainedError</span>::<span class="ident">new</span>(<span class="ident">callback</span>().<span class="ident">into</span>(), <span class="ident">state</span>)
+        <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='ident'>E</span><span class='op'>&gt;</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>result_ext_name</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='ident'>E</span><span class='op'>&gt;</span> <span class='kw'>for</span> ::<span class='ident'>std</span>::<span class='ident'>result</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='ident'>E</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>E</span>: ::<span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span> <span class='op'>+</span> <span class='ident'>Send</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span> {
+            <span class='kw'>fn</span> <span class='ident'>chain_err</span><span class='op'>&lt;</span><span class='ident'>F</span>, <span class='ident'>EK</span><span class='op'>&gt;</span>(<span class='self'>self</span>, <span class='ident'>callback</span>: <span class='ident'>F</span>) <span class='op'>-&gt;</span> ::<span class='ident'>std</span>::<span class='ident'>result</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>T</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span><span class='op'>&gt;</span>
+                <span class='kw'>where</span> <span class='ident'>F</span>: <span class='ident'>FnOnce</span>() <span class='op'>-&gt;</span> <span class='ident'>EK</span>,
+                      <span class='ident'>EK</span>: <span class='ident'>Into</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span><span class='op'>&gt;</span> {
+                <span class='self'>self</span>.<span class='ident'>map_err</span>(<span class='kw'>move</span> <span class='op'>|</span><span class='ident'>e</span><span class='op'>|</span> {
+                    <span class='kw'>let</span> <span class='ident'>state</span> <span class='op'>=</span> <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>State</span>::<span class='ident'>new</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span><span class='op'>&gt;</span>(<span class='ident'>Box</span>::<span class='ident'>new</span>(<span class='ident'>e</span>), );
+                    <span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>ChainedError</span>::<span class='ident'>new</span>(<span class='ident'>callback</span>().<span class='ident'>into</span>(), <span class='ident'>state</span>)
                 })
             }
         }
@@ -787,114 +787,114 @@
     };
 }
 
-<span class="doccomment">/// Internal macro used for reordering of the fields.</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">error_chain_processing</span> {
+<span class='doccomment'>/// Internal macro used for reordering of the fields.</span>
+<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
+<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>error_chain_processing</span> {
     (
-        ({}, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">c</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">d</span>:<span class="ident">tt</span>)
-        <span class="ident">types</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">content</span>:<span class="ident">tt</span>
-        $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span> )<span class="op">*</span>
-    ) <span class="op">=&gt;</span> {
-        <span class="macro">error_chain_processing</span><span class="macro">!</span> {
-            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">content</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">c</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">d</span>)
-            $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="op">*</span>
+        ({}, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>b</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>c</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>d</span>:<span class='ident'>tt</span>)
+        <span class='ident'>types</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>content</span>:<span class='ident'>tt</span>
+        $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span> )<span class='op'>*</span>
+    ) <span class='op'>=&gt;</span> {
+        <span class='macro'>error_chain_processing</span><span class='macro'>!</span> {
+            (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>content</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>b</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>c</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>d</span>)
+            $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>
         }
     };
     (
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>:<span class="ident">tt</span>, {}, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">c</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">d</span>:<span class="ident">tt</span>)
-        <span class="ident">links</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">content</span>:<span class="ident">tt</span>
-        $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span> )<span class="op">*</span>
-    ) <span class="op">=&gt;</span> {
-        <span class="macro">error_chain_processing</span><span class="macro">!</span> {
-            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">content</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">c</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">d</span>)
-            $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="op">*</span>
+        (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>:<span class='ident'>tt</span>, {}, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>c</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>d</span>:<span class='ident'>tt</span>)
+        <span class='ident'>links</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>content</span>:<span class='ident'>tt</span>
+        $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span> )<span class='op'>*</span>
+    ) <span class='op'>=&gt;</span> {
+        <span class='macro'>error_chain_processing</span><span class='macro'>!</span> {
+            (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>content</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>c</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>d</span>)
+            $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>
         }
     };
     (
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>:<span class="ident">tt</span>, {}, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">d</span>:<span class="ident">tt</span>)
-        <span class="ident">foreign_links</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">content</span>:<span class="ident">tt</span>
-        $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span> )<span class="op">*</span>
-    ) <span class="op">=&gt;</span> {
-        <span class="macro">error_chain_processing</span><span class="macro">!</span> {
-            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">content</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">d</span>)
-            $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="op">*</span>
+        (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>b</span>:<span class='ident'>tt</span>, {}, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>d</span>:<span class='ident'>tt</span>)
+        <span class='ident'>foreign_links</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>content</span>:<span class='ident'>tt</span>
+        $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span> )<span class='op'>*</span>
+    ) <span class='op'>=&gt;</span> {
+        <span class='macro'>error_chain_processing</span><span class='macro'>!</span> {
+            (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>b</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>content</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>d</span>)
+            $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>
         }
     };
     (
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">c</span>:<span class="ident">tt</span>, {})
-        <span class="ident">errors</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">content</span>:<span class="ident">tt</span>
-        $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>:<span class="ident">tt</span> )<span class="op">*</span>
-    ) <span class="op">=&gt;</span> {
-        <span class="macro">error_chain_processing</span><span class="macro">!</span> {
-            (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">c</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">content</span>)
-            $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="op">*</span>
+        (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>b</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>c</span>:<span class='ident'>tt</span>, {})
+        <span class='ident'>errors</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>content</span>:<span class='ident'>tt</span>
+        $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>:<span class='ident'>tt</span> )<span class='op'>*</span>
+    ) <span class='op'>=&gt;</span> {
+        <span class='macro'>error_chain_processing</span><span class='macro'>!</span> {
+            (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>b</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>c</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>content</span>)
+            $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>)<span class='op'>*</span>
         }
     };
-    ( (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">c</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">d</span>:<span class="ident">tt</span>) ) <span class="op">=&gt;</span> {
-        <span class="macro">error_chain_processed</span><span class="macro">!</span> {
-            <span class="ident">types</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">a</span>
-            <span class="ident">links</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">b</span>
-            <span class="ident">foreign_links</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">c</span>
-            <span class="ident">errors</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">d</span>
+    ( (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>b</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>c</span>:<span class='ident'>tt</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>d</span>:<span class='ident'>tt</span>) ) <span class='op'>=&gt;</span> {
+        <span class='macro'>error_chain_processed</span><span class='macro'>!</span> {
+            <span class='ident'>types</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>a</span>
+            <span class='ident'>links</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>b</span>
+            <span class='ident'>foreign_links</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>c</span>
+            <span class='ident'>errors</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>d</span>
         }
     };
 }
 
-<span class="doccomment">/// This macro is used for handling of duplicated and out-of-order fields. For</span>
-<span class="doccomment">/// the exact rules, see `error_chain_processed`.</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">error_chain</span> {
-    ( $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">block_name</span>:<span class="ident">ident</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">block_content</span>:<span class="ident">tt</span> )<span class="op">*</span> } )<span class="op">*</span> ) <span class="op">=&gt;</span> {
-        <span class="macro">error_chain_processing</span><span class="macro">!</span> {
+<span class='doccomment'>/// This macro is used for handling of duplicated and out-of-order fields. For</span>
+<span class='doccomment'>/// the exact rules, see `error_chain_processed`.</span>
+<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>error_chain</span> {
+    ( $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>block_name</span>:<span class='ident'>ident</span> { $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>block_content</span>:<span class='ident'>tt</span> )<span class='op'>*</span> } )<span class='op'>*</span> ) <span class='op'>=&gt;</span> {
+        <span class='macro'>error_chain_processing</span><span class='macro'>!</span> {
             ({}, {}, {}, {})
-            $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">block_name</span> { $( <span class="macro-nonterminal">$</span><span class="macro-nonterminal">block_content</span> )<span class="op">*</span> })<span class="op">*</span>
+            $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>block_name</span> { $( <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>block_content</span> )<span class='op'>*</span> })<span class='op'>*</span>
         }
     };
 }
 
-<span class="doccomment">/// Macro used to manage the `backtrace` feature.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See</span>
-<span class="doccomment">/// https://www.reddit.com/r/rust/comments/57virt/hey_rustaceans_got_an_easy_question_ask_here/da5r4ti/?context=3</span>
-<span class="doccomment">/// for more details.</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;backtrace&quot;</span>)]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_extract_backtrace</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>: <span class="ident">ident</span>
-     <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>: <span class="ident">ident</span>
-     $([<span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_error_path</span>: <span class="ident">path</span>, $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_links</span>: <span class="ident">meta</span>]</span>)<span class="kw-2">*</span>])<span class="kw-2">*</span>) <span class="op">=&gt;</span> {
-        <span class="kw">fn</span> <span class="ident">extract_backtrace</span>(<span class="ident">e</span>: <span class="kw-2">&amp;</span>(::<span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>))
-            <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>::<span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Arc</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Backtrace</span><span class="op">&gt;&gt;</span> {
-            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">e</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span><span class="op">&gt;</span>() {
-                <span class="kw">return</span> <span class="ident">e</span>.<span class="number">1</span>.<span class="ident">backtrace</span>.<span class="ident">clone</span>();
+<span class='doccomment'>/// Macro used to manage the `backtrace` feature.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// See</span>
+<span class='doccomment'>/// https://www.reddit.com/r/rust/comments/57virt/hey_rustaceans_got_an_easy_question_ask_here/da5r4ti/?context=3</span>
+<span class='doccomment'>/// for more details.</span>
+<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
+<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;backtrace&quot;</span>)]</span>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>impl_extract_backtrace</span> {
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>: <span class='ident'>ident</span>
+     <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>: <span class='ident'>ident</span>
+     $([<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_error_path</span>: <span class='ident'>path</span>, $(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_links</span>: <span class='ident'>meta</span>]</span>)<span class='kw-2'>*</span>])<span class='kw-2'>*</span>) <span class='op'>=&gt;</span> {
+        <span class='kw'>fn</span> <span class='ident'>extract_backtrace</span>(<span class='ident'>e</span>: <span class='kw-2'>&amp;</span>(::<span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span> <span class='op'>+</span> <span class='ident'>Send</span> <span class='op'>+</span> <span class='lifetime'>&#39;static</span>))
+            <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span>::<span class='ident'>std</span>::<span class='ident'>sync</span>::<span class='ident'>Arc</span><span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='kw'>crate</span>::<span class='macro-nonterminal'>Backtrace</span><span class='op'>&gt;&gt;</span> {
+            <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='ident'>e</span>) <span class='op'>=</span> <span class='ident'>e</span>.<span class='ident'>downcast_ref</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span><span class='op'>&gt;</span>() {
+                <span class='kw'>return</span> <span class='ident'>e</span>.<span class='number'>1</span>.<span class='ident'>backtrace</span>.<span class='ident'>clone</span>();
             }
             $(
-                $( <span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_links</span>]</span> )<span class="op">*</span>
+                $( <span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_links</span>]</span> )<span class='op'>*</span>
                 {
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">e</span>.<span class="ident">downcast_ref</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_error_path</span><span class="op">&gt;</span>() {
-                        <span class="kw">return</span> <span class="ident">e</span>.<span class="number">1</span>.<span class="ident">backtrace</span>.<span class="ident">clone</span>();
+                    <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Some</span>(<span class='ident'>e</span>) <span class='op'>=</span> <span class='ident'>e</span>.<span class='ident'>downcast_ref</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_error_path</span><span class='op'>&gt;</span>() {
+                        <span class='kw'>return</span> <span class='ident'>e</span>.<span class='number'>1</span>.<span class='ident'>backtrace</span>.<span class='ident'>clone</span>();
                     }
                 }
-            ) <span class="op">*</span>
-            <span class="prelude-val">None</span>
+            ) <span class='op'>*</span>
+            <span class='prelude-val'>None</span>
         }
     }
 }
 
-<span class="doccomment">/// Macro used to manage the `backtrace` feature.</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// See</span>
-<span class="doccomment">/// https://www.reddit.com/r/rust/comments/57virt/hey_rustaceans_got_an_easy_question_ask_here/da5r4ti/?context=3</span>
-<span class="doccomment">/// for more details.</span>
-<span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;backtrace&quot;</span>))]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_extract_backtrace</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_name</span>: <span class="ident">ident</span>
-     <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error_kind_name</span>: <span class="ident">ident</span>
-     $([<span class="macro-nonterminal">$</span><span class="macro-nonterminal">link_error_path</span>: <span class="ident">path</span>, $(<span class="attribute">#[<span class="macro-nonterminal">$</span><span class="macro-nonterminal">meta_links</span>: <span class="ident">meta</span>]</span>)<span class="kw-2">*</span>])<span class="kw-2">*</span>) <span class="op">=&gt;</span> {}
+<span class='doccomment'>/// Macro used to manage the `backtrace` feature.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// See</span>
+<span class='doccomment'>/// https://www.reddit.com/r/rust/comments/57virt/hey_rustaceans_got_an_easy_question_ask_here/da5r4ti/?context=3</span>
+<span class='doccomment'>/// for more details.</span>
+<span class='attribute'>#[<span class='ident'>macro_export</span>]</span>
+<span class='attribute'>#[<span class='ident'>doc</span>(<span class='ident'>hidden</span>)]</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>not</span>(<span class='ident'>feature</span> <span class='op'>=</span> <span class='string'>&quot;backtrace&quot;</span>))]</span>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>impl_extract_backtrace</span> {
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_name</span>: <span class='ident'>ident</span>
+     <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>error_kind_name</span>: <span class='ident'>ident</span>
+     $([<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>link_error_path</span>: <span class='ident'>path</span>, $(<span class='attribute'>#[<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>meta_links</span>: <span class='ident'>meta</span>]</span>)<span class='kw-2'>*</span>])<span class='kw-2'>*</span>) <span class='op'>=&gt;</span> {}
 }
 </pre>
 </section>
