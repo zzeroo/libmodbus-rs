@@ -1,4 +1,3 @@
-
 use errors::*;
 use libc::{c_char, c_int};
 use libmodbus_sys;
