@@ -13,7 +13,8 @@ use std::ffi::CString;
 ///
 pub trait ModbusTCP {
     fn new_tcp(ip: &str, port: u32) -> Result<Modbus>;
-    fn tcp_listen(&self, num_connection: i32) -> Result<i32>;
+    fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32>;
+    fn tcp_listen(&mut self, num_connection: i32) -> Result<i32>;
 }
 
 impl ModbusTCP for Modbus {
@@ -55,6 +56,35 @@ impl ModbusTCP for Modbus {
         }
     }
 
+    /// `tcp_accept` - accept a new connection on a TCP Modbus socket (IPv4)
+    ///
+    /// # Parameters
+    ///
+    /// * `socket`  - Socket
+    ///
+    /// The [`tcp_accept()`](#method.tcp_accept) function shall extract the first connection on the
+    /// queue of pending connections and create a new socket given as argument.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusTCP, MODBUS_TCP_DEFAULT_PORT};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let mut socket = modbus.tcp_listen(1).unwrap();
+    ///
+    /// modbus.tcp_accept(&mut socket);
+    /// ```
+    fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_tcp_accept(self.ctx, socket) {
+                -1 => Err("Could not accept on TCP".into()),
+                socket => Ok(socket),
+            }
+        }
+    }
+
+
     /// `tcp_listen` - create and listen a TCP Modbus socket (IPv4)
     ///
     /// # Parameters
@@ -70,11 +100,11 @@ impl ModbusTCP for Modbus {
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusTCP, MODBUS_TCP_DEFAULT_PORT};
     ///
-    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// let socket = modbus.tcp_listen(1);
     /// ```
-    fn tcp_listen(&self, num_connection: i32) -> Result<i32> {
+    fn tcp_listen(&mut self, num_connection: i32) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_tcp_listen(self.ctx, num_connection) {
                 -1 => Err("Could not listen on tcp port".into()),
