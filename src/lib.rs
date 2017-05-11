@@ -101,21 +101,20 @@ extern crate libc;
 extern crate libmodbus_sys;
 #[macro_use] extern crate error_chain;
 
-mod error;
-mod modbus_rtu;
-mod modbus_tcp;
-mod modbus_tcp_pi;
-mod modbus;
+pub mod errors;
 mod modbus_client;
+mod modbus_rtu;
 mod modbus_server;
-mod errors;
+mod modbus_tcp_pi;
+mod modbus_tcp;
+mod modbus;
 
-pub use self::modbus_rtu::{ModbusRTU, request_to_send_mode, serial_mode};
-pub use self::modbus_tcp::ModbusTCP;
-pub use self::modbus_tcp_pi::ModbusTCPPI;
-pub use self::modbus::Modbus;
 pub use self::modbus_client::ModbusClient;
+pub use self::modbus_rtu::{ModbusRTU, request_to_send_mode, serial_mode};
 pub use self::modbus_server::ModbusServer;
+pub use self::modbus_tcp_pi::ModbusTCPPI;
+pub use self::modbus_tcp::ModbusTCP;
+pub use self::modbus::Modbus;
 
 
 pub use libmodbus_sys::MODBUS_TCP_DEFAULT_PORT;

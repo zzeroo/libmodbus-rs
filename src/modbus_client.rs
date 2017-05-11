@@ -21,29 +21,18 @@ use std::str;
 ///
 pub trait ModbusClient {
     fn read_bits(&self, address: u8, num_bit: i32) -> Result<Vec<u8>>;
-
     fn read_input_bits(&self, address: u8, num_bit: i32) -> Result<Vec<u8>>;
-
     fn read_registers(&self, address: u8, num_bit: i32) -> Result<Vec<u16>>;
-
     fn read_input_registers(&self, address: u8, num_bit: i32) -> Result<Vec<u16>>;
-
     fn report_slave_id(&self, max_dest: i32) -> Result<Vec<u8>>;
-
     fn write_bit(&self, address: u8, status: bool) -> Result<()>;
-
     fn write_bits(&self, address: u8, num_bit: i32, src: Vec<u8>) -> Result<()>;
-
     fn write_register(&self, address: u8, value: c_int) -> Result<()>;
-
     fn write_registers(&self, address: u8, num_bit: i32, src: Vec<u16>) -> Result<()>;
-
     fn write_and_read_registers(&self, write_address: u8, write_num_bit: i32, src: Vec<u16>,
                                        read_address: u8, read_num_bit: i32, mut dest: Vec<u16>) -> Result<()>;
     fn send_raw_request(&self, raw_request: Vec<u8>) -> Result<i32>;
-
     fn receive_confirmation(&self, response: &mut[u8]) -> Result<i32>;
-
     fn reply_exception(&self, request: Vec<u8>, exception_code: u32) -> Result<i32>;
 }
 

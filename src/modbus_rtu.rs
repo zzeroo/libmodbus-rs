@@ -46,7 +46,6 @@ pub trait ModbusRTU {
                    parity: char,
                    data_bit: i32,
                    stop_bit: i32) -> Result<Modbus>;
-
    fn rtu_get_serial_mode(&self) -> Result<serial_mode>;
    fn rtu_set_serial_mode(&mut self, mode: serial_mode) -> Result<serial_mode>;
    fn rtu_get_rts(&self) -> Result<request_to_send_mode>;

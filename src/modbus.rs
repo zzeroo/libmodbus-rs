@@ -1,7 +1,6 @@
-// use errors::*;
-use libmodbus_sys;
-use std::io::{Error, ErrorKind};
+use errors::*;
 use libc::{c_int, c_uint};
+use libmodbus_sys;
 
 
 /// Safe interface for [libmodbus](http://libmodbus.org)
@@ -31,10 +30,10 @@ impl Modbus {
     ///     Err(e) => println!("Error: {}", e),
     /// }
     /// ```
-    pub fn connect(&self) -> Result<i32, Error> {
+    pub fn connect(&self) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_connect(self.ctx) {
-                -1 => Err(Error::last_os_error()),
+                -1 => Err("Could not create new Modbus context".into()),
                 _ => Ok(0),
             }
         }
@@ -52,10 +51,10 @@ impl Modbus {
     ///
     /// assert!(modbus.flush().is_ok());
     /// ```
-    pub fn flush(&self) -> Result<i32, Error> {
+    pub fn flush(&self) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_flush(self.ctx) {
-                -1 => Err(Error::last_os_error()),
+                -1 => Err("Could not flush".into()),
                 _ => Ok(0),
             }
         }
@@ -92,10 +91,10 @@ impl Modbus {
     ///     Err(e) => println!("Error: {}", e),
     /// }
     /// ```
-    pub fn set_slave(&mut self, slave: i32) -> Result<i32, Error> {
+    pub fn set_slave(&mut self, slave: i32) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_set_slave(self.ctx, slave as c_int) {
-                -1 => Err(Error::new(ErrorKind::Other, "The slave number is invalid.")),
+                -1 => Err("Could not set slave address".into()),
                 _ => Ok(0),
             }
         }
@@ -121,10 +120,10 @@ impl Modbus {
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// modbus.set_debug(true);
     /// ```
-    pub fn set_debug(&mut self, flag: bool) -> Result<i32, Error> {
+    pub fn set_debug(&mut self, flag: bool) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_set_debug(self.ctx, flag as c_int) {
-                -1 => Err(Error::new(ErrorKind::Other, "Invalid flag")),
+                -1 => Err("Could not set debug".into()),
                 _ => Ok(0),
             }
         }
@@ -132,7 +131,7 @@ impl Modbus {
 
     /// `get_byte_timeout` - get timeout between bytes
     ///
-    /// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between two consecutive bytes of the same message `Result<(to_sec, to_usec), Error>`.
+    /// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between two consecutive bytes of the same message `Result<(to_sec, to_usec)>`.
     ///
     /// # Examples
     ///
@@ -142,7 +141,7 @@ impl Modbus {
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
     /// ```
-    pub fn get_byte_timeout(&self) -> Result<(i32, i32), Error> {
+    pub fn get_byte_timeout(&self) -> Result<(i32, i32)> {
         unimplemented!()
     }
 
@@ -166,7 +165,7 @@ impl Modbus {
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
     /// ```
-    pub fn set_byte_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32), Error> {
+    pub fn set_byte_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32)> {
         unimplemented!()
     }
 
@@ -182,7 +181,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
-    pub fn get_response_timeout(&self) -> Result<(i32, i32), Error> {
+    pub fn get_response_timeout(&self) -> Result<(i32, i32)> {
         unimplemented!()
     }
 
@@ -206,7 +205,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
-    pub fn set_response_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32), Error> {
+    pub fn set_response_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32)> {
         unimplemented!()
     }
 
@@ -239,7 +238,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
-    pub fn set_error_recovery(&mut self, _modbus_error_recovery_mode: libmodbus_sys::modbus_error_recovery_mode) -> Result<i32, Error> {
+    pub fn set_error_recovery(&mut self, _modbus_error_recovery_mode: libmodbus_sys::modbus_error_recovery_mode) -> Result<i32> {
         unimplemented!()
     }
 
@@ -255,7 +254,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
-    pub fn set_socket(&mut self, _socket: u32) -> Result<i32, Error> {
+    pub fn set_socket(&mut self, _socket: u32) -> Result<i32> {
         unimplemented!()
     }
 
@@ -270,7 +269,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
-    pub fn get_socket(&self) -> Result<u32, Error> {
+    pub fn get_socket(&self) -> Result<u32> {
         unimplemented!()
     }
 
@@ -286,7 +285,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
-    pub fn get_header_length(&self) -> Result<u32, Error> {
+    pub fn get_header_length(&self) -> Result<u32> {
         unimplemented!()
     }
 

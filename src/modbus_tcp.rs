@@ -1,9 +1,8 @@
-// use errors::*;
+use errors::*;
+use libc::c_int;
 use libmodbus_sys;
 use modbus::Modbus;
-use libc::c_int;
 use std::ffi::CString;
-use std::io::Error;
 
 
 /// The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
@@ -13,7 +12,9 @@ use std::io::Error;
 ///     - [`new_tcp()`](struct.Modbus.html#method.new_tcp)
 ///
 pub trait ModbusTCP {
-    fn new_tcp(ip: &str, port: u32) -> Result<Modbus, Error>;
+    fn new_tcp(ip: &str, port: u32) -> Result<Modbus>;
+    fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32>;
+    fn tcp_listen(&mut self, num_connection: i32) -> Result<i32>;
 }
 
 impl ModbusTCP for Modbus {
@@ -41,16 +42,73 @@ impl ModbusTCP for Modbus {
     /// }
     /// ```
     fn new_tcp(ip: &str,
-                    port: u32) -> Result<Modbus, Error> {
+                    port: u32) -> Result<Modbus> {
         unsafe {
             let ip = CString::new(ip).unwrap();
             let ctx = libmodbus_sys::modbus_new_tcp(ip.as_ptr(),
                 port as c_int);
 
             if ctx.is_null() {
-                Err(Error::last_os_error())
+                Err("Could not create new TCP Modbus contrext".into())
             } else {
                 Ok(Modbus { ctx: ctx })
+            }
+        }
+    }
+
+    /// `tcp_accept` - accept a new connection on a TCP Modbus socket (IPv4)
+    ///
+    /// # Parameters
+    ///
+    /// * `socket`  - Socket
+    ///
+    /// The [`tcp_accept()`](#method.tcp_accept) function shall extract the first connection on the
+    /// queue of pending connections and create a new socket given as argument.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusTCP, MODBUS_TCP_DEFAULT_PORT};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let mut socket = modbus.tcp_listen(1).unwrap();
+    ///
+    /// modbus.tcp_accept(&mut socket);
+    /// ```
+    fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_tcp_accept(self.ctx, socket) {
+                -1 => Err("Could not accept on TCP".into()),
+                socket => Ok(socket),
+            }
+        }
+    }
+
+
+    /// `tcp_listen` - create and listen a TCP Modbus socket (IPv4)
+    ///
+    /// # Parameters
+    ///
+    /// * `num_connection`  - maximum number of incoming connections on the specified IP address
+    ///
+    /// The [`tcp_listen()`](#method.tcp_listen) function shall create a socket and listen to maximum
+    /// `num_connection` incoming connections on the specified IP address.
+    /// If IP address is set to NULL or '0.0.0.0', any addresses will be listen.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusTCP, MODBUS_TCP_DEFAULT_PORT};
+    ///
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// let socket = modbus.tcp_listen(1);
+    /// ```
+    fn tcp_listen(&mut self, num_connection: i32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_tcp_listen(self.ctx, num_connection) {
+                -1 => Err("Could not listen on tcp port".into()),
+                socket => Ok(socket),
             }
         }
     }
