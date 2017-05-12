@@ -219,12 +219,12 @@
 
     <span class='doccomment'>/// `tcp_accept` - accept a new connection on a TCP Modbus socket (IPv4)</span>
     <span class='doccomment'>///</span>
+    <span class='doccomment'>/// The [`tcp_accept()`](#method.tcp_accept) function shall extract the first connection on the</span>
+    <span class='doccomment'>/// queue of pending connections and create a new socket given as argument.</span>
+    <span class='doccomment'>///</span>
     <span class='doccomment'>/// # Parameters</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// * `socket`  - Socket</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// The [`tcp_accept()`](#method.tcp_accept) function shall extract the first connection on the</span>
-    <span class='doccomment'>/// queue of pending connections and create a new socket given as argument.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// # Examples</span>
     <span class='doccomment'>///</span>
@@ -248,13 +248,13 @@
 
     <span class='doccomment'>/// `tcp_listen` - create and listen a TCP Modbus socket (IPv4)</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// # Parameters</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// * `num_connection`  - maximum number of incoming connections on the specified IP address</span>
-    <span class='doccomment'>///</span>
     <span class='doccomment'>/// The [`tcp_listen()`](#method.tcp_listen) function shall create a socket and listen to maximum</span>
     <span class='doccomment'>/// `num_connection` incoming connections on the specified IP address.</span>
     <span class='doccomment'>/// If IP address is set to NULL or &#39;0.0.0.0&#39;, any addresses will be listen.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Parameters</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// * `num_connection`  - maximum number of incoming connections on the specified IP address</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// # Examples</span>
     <span class='doccomment'>///</span>

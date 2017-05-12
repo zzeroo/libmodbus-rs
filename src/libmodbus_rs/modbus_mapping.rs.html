@@ -144,7 +144,7 @@
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();</span>
     <span class='doccomment'>/// ```</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>number_bits</span>: <span class='ident'>c_int</span>, <span class='ident'>number_input_bits</span> : <span class='ident'>c_int</span>, <span class='ident'>number_registers</span>: <span class='ident'>c_int</span>, <span class='ident'>number_input_registers</span>: <span class='ident'>c_int</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>ModbusMapping</span><span class='op'>&gt;</span> {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>number_bits</span>: <span class='ident'>i32</span>, <span class='ident'>number_input_bits</span> : <span class='ident'>i32</span>, <span class='ident'>number_registers</span>: <span class='ident'>i32</span>, <span class='ident'>number_input_registers</span>: <span class='ident'>i32</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>ModbusMapping</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ptr</span>;
 

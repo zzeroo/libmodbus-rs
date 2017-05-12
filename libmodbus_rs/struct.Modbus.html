@@ -766,7 +766,7 @@ If an error occurs, an exception response will be sent.</p>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>query</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>0</span>; <span class='ident'>MODBUS_MAX_ADU_LENGTH</span> <span class='kw'>as</span> <span class='ident'>usize</span>];
 
 <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>modbus</span>.<span class='ident'>receive</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>query</span>).<span class='ident'>is_ok</span>());</pre>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../libmodbus_rs/trait.ModbusTCPPI.html' title='libmodbus_rs::ModbusTCPPI'>ModbusTCPPI</a> for <a class='struct' href='../libmodbus_rs/struct.Modbus.html' title='libmodbus_rs::Modbus'>Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_tcp_pi.rs.html#19-56' title='goto source code'>[src]</a></span></h3>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../libmodbus_rs/trait.ModbusTCPPI.html' title='libmodbus_rs::ModbusTCPPI'>ModbusTCPPI</a> for <a class='struct' href='../libmodbus_rs/struct.Modbus.html' title='libmodbus_rs::Modbus'>Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_tcp_pi.rs.html#21-128' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.new_tcp_pi' class='method'><span id='new_tcp_pi.v' class='invisible'><code>fn <a href='../libmodbus_rs/trait.ModbusTCPPI.html#tymethod.new_tcp_pi' class='fnname'>new_tcp_pi</a>(node: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, service: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='type' href='../libmodbus_rs/errors/type.Result.html' title='libmodbus_rs::errors::Result'>Result</a>&lt;<a class='struct' href='../libmodbus_rs/struct.Modbus.html' title='libmodbus_rs::Modbus'>Modbus</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>new_tcp_pi</code> - create a libmodbus context for TCP Protocol Independent</p>
 
@@ -788,6 +788,60 @@ On many Unix systems, it’s convenient to use a port number greater than or equ
     <span class='prelude-val'>Ok</span>(_) <span class='op'>=&gt;</span> {}
     <span class='prelude-val'>Err</span>(<span class='ident'>e</span>) <span class='op'>=&gt;</span> <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Error: {}&quot;</span>, <span class='ident'>e</span>),
 }</pre>
+</div><h4 id='method.tcp_pi_accept' class='method'><span id='tcp_pi_accept.v' class='invisible'><code>fn <a href='../libmodbus_rs/trait.ModbusTCPPI.html#tymethod.tcp_pi_accept' class='fnname'>tcp_pi_accept</a>(&amp;mut self, socket: &amp;mut <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='type' href='../libmodbus_rs/errors/type.Result.html' title='libmodbus_rs::errors::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;</code></span></h4>
+<div class='docblock'><p><code>tcp_pi_accept</code> - accept a new connection on a TCP PI Modbus socket (IPv6)</p>
+
+<p>The <a href="#method.tcp_pi_accept"><code>tcp_pi_accept()</code></a> function shall extract the first connection on the
+queue of pending connections and create a new socket given as argument.</p>
+
+<h1 id='parameters' class='section-header'><a href='#parameters'>Parameters</a></h1>
+<ul>
+<li><code>socket</code>  - Socket</li>
+</ul>
+
+<h1 id='examples-37' class='section-header'><a href='#examples-37'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>libmodbus_rs</span>::{<span class='ident'>Modbus</span>, <span class='ident'>ModbusMapping</span>, <span class='ident'>ModbusServer</span>, <span class='ident'>ModbusTCPPI</span>, <span class='ident'>MODBUS_MAX_ADU_LENGTH</span>};
+
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>modbus</span> <span class='op'>=</span> <span class='ident'>Modbus</span>::<span class='ident'>new_tcp_pi</span>(<span class='string'>&quot;::0&quot;</span>, <span class='string'>&quot;1502&quot;</span>).<span class='ident'>unwrap</span>();
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>socket</span> <span class='op'>=</span> <span class='ident'>modbus</span>.<span class='ident'>tcp_pi_listen</span>(<span class='number'>1</span>).<span class='ident'>unwrap</span>();
+<span class='ident'>modbus</span>.<span class='ident'>tcp_pi_accept</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>socket</span>).<span class='ident'>unwrap</span>();</pre>
+</div><h4 id='method.tcp_pi_listen' class='method'><span id='tcp_pi_listen.v' class='invisible'><code>fn <a href='../libmodbus_rs/trait.ModbusTCPPI.html#tymethod.tcp_pi_listen' class='fnname'>tcp_pi_listen</a>(&amp;mut self, num_connection: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='type' href='../libmodbus_rs/errors/type.Result.html' title='libmodbus_rs::errors::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;</code></span></h4>
+<div class='docblock'><p><code>tcp_pi_listen</code> - create and listen a TCP PI Modbus socket (IPv6)</p>
+
+<p>The <a href="#method.tcp_pi_listen"><code>tcp_pi_listen()</code></a> function shall create a socket and listen to maximum
+<code>num_connection</code> incoming connections on the specifieded node.</p>
+
+<h1 id='parameters-1' class='section-header'><a href='#parameters-1'>Parameters</a></h1>
+<ul>
+<li><code>num_connection</code>  - maximum number of incoming connections on the specified IP address</li>
+</ul>
+
+<p>If node is set to <code>&quot;&quot;</code> or <code>0.0.0.0</code>, any addresses will be listen.</p>
+
+<h1 id='examples-38' class='section-header'><a href='#examples-38'>Examples</a></h1>
+<p>For detailed examples, look at the examples directory of this crate.</p>
+
+<ul>
+<li>unit-test-server.rs   - simple but handle only one connection</li>
+<li>bandwidth-server-many-up.rs   - handles several connection at once</li>
+</ul>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>libmodbus_rs</span>::{<span class='ident'>Modbus</span>, <span class='ident'>ModbusMapping</span>, <span class='ident'>ModbusServer</span>, <span class='ident'>ModbusTCPPI</span>, <span class='ident'>MODBUS_MAX_ADU_LENGTH</span>};
+
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>modbus</span> <span class='op'>=</span> <span class='ident'>Modbus</span>::<span class='ident'>new_tcp_pi</span>(<span class='string'>&quot;::0&quot;</span>, <span class='string'>&quot;1502&quot;</span>).<span class='ident'>unwrap</span>();
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>socket</span> <span class='op'>=</span> <span class='ident'>modbus</span>.<span class='ident'>tcp_pi_listen</span>(<span class='number'>1</span>).<span class='ident'>unwrap</span>();
+
+<span class='ident'>modbus</span>.<span class='ident'>tcp_pi_accept</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>socket</span>);
+
+<span class='kw'>let</span> <span class='ident'>modbus_mapping</span> <span class='op'>=</span> <span class='ident'>ModbusMapping</span>::<span class='ident'>new</span>(<span class='number'>500</span>, <span class='number'>500</span>, <span class='number'>500</span>, <span class='number'>500</span>).<span class='ident'>unwrap</span>();
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>query</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='number'>0u8</span>; <span class='ident'>MODBUS_MAX_ADU_LENGTH</span> <span class='kw'>as</span> <span class='ident'>usize</span>];
+
+<span class='kw'>loop</span> {
+    <span class='kw'>let</span> <span class='ident'>request_len</span> <span class='op'>=</span> <span class='ident'>modbus</span>.<span class='ident'>receive</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>query</span>).<span class='ident'>unwrap</span>();
+    <span class='ident'>modbus</span>.<span class='ident'>reply</span>(<span class='kw-2'>&amp;</span><span class='ident'>query</span>, <span class='ident'>request_len</span>, <span class='kw-2'>&amp;</span><span class='ident'>modbus_mapping</span>);
+}</pre>
 </div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../libmodbus_rs/trait.ModbusTCP.html' title='libmodbus_rs::ModbusTCP'>ModbusTCP</a> for <a class='struct' href='../libmodbus_rs/struct.Modbus.html' title='libmodbus_rs::Modbus'>Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_tcp.rs.html#20-115' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.new_tcp' class='method'><span id='new_tcp.v' class='invisible'><code>fn <a href='../libmodbus_rs/trait.ModbusTCP.html#tymethod.new_tcp' class='fnname'>new_tcp</a>(ip: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, port: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>) -&gt; <a class='type' href='../libmodbus_rs/errors/type.Result.html' title='libmodbus_rs::errors::Result'>Result</a>&lt;<a class='struct' href='../libmodbus_rs/struct.Modbus.html' title='libmodbus_rs::Modbus'>Modbus</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>new_tcp</code> - create a libmodbus context for TCP/IPv4</p>
@@ -800,7 +854,7 @@ The <strong>port</strong> argument is the TCP port to use. Set the port to <code
 to use the default one (502). It’s convenient to use a port number greater than or
 equal to 1024 because it’s not necessary to have administrator privileges.</p>
 
-<h1 id='examples-37' class='section-header'><a href='#examples-37'>Examples</a></h1>
+<h1 id='examples-39' class='section-header'><a href='#examples-39'>Examples</a></h1>
 <pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>libmodbus_rs</span>::{<span class='ident'>Modbus</span>, <span class='ident'>ModbusTCP</span>, <span class='ident'>MODBUS_TCP_DEFAULT_PORT</span>};
 
@@ -814,15 +868,15 @@ equal to 1024 because it’s not necessary to have administrator privileges.</p>
 </div><h4 id='method.tcp_accept' class='method'><span id='tcp_accept.v' class='invisible'><code>fn <a href='../libmodbus_rs/trait.ModbusTCP.html#tymethod.tcp_accept' class='fnname'>tcp_accept</a>(&amp;mut self, socket: &amp;mut <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='type' href='../libmodbus_rs/errors/type.Result.html' title='libmodbus_rs::errors::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>tcp_accept</code> - accept a new connection on a TCP Modbus socket (IPv4)</p>
 
-<h1 id='parameters' class='section-header'><a href='#parameters'>Parameters</a></h1>
+<p>The <a href="#method.tcp_accept"><code>tcp_accept()</code></a> function shall extract the first connection on the
+queue of pending connections and create a new socket given as argument.</p>
+
+<h1 id='parameters-2' class='section-header'><a href='#parameters-2'>Parameters</a></h1>
 <ul>
 <li><code>socket</code>  - Socket</li>
 </ul>
 
-<p>The <a href="#method.tcp_accept"><code>tcp_accept()</code></a> function shall extract the first connection on the
-queue of pending connections and create a new socket given as argument.</p>
-
-<h1 id='examples-38' class='section-header'><a href='#examples-38'>Examples</a></h1>
+<h1 id='examples-40' class='section-header'><a href='#examples-40'>Examples</a></h1>
 <pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>libmodbus_rs</span>::{<span class='ident'>Modbus</span>, <span class='ident'>ModbusTCP</span>, <span class='ident'>MODBUS_TCP_DEFAULT_PORT</span>};
 
@@ -833,16 +887,16 @@ queue of pending connections and create a new socket given as argument.</p>
 </div><h4 id='method.tcp_listen' class='method'><span id='tcp_listen.v' class='invisible'><code>fn <a href='../libmodbus_rs/trait.ModbusTCP.html#tymethod.tcp_listen' class='fnname'>tcp_listen</a>(&amp;mut self, num_connection: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>) -&gt; <a class='type' href='../libmodbus_rs/errors/type.Result.html' title='libmodbus_rs::errors::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>tcp_listen</code> - create and listen a TCP Modbus socket (IPv4)</p>
 
-<h1 id='parameters-1' class='section-header'><a href='#parameters-1'>Parameters</a></h1>
-<ul>
-<li><code>num_connection</code>  - maximum number of incoming connections on the specified IP address</li>
-</ul>
-
 <p>The <a href="#method.tcp_listen"><code>tcp_listen()</code></a> function shall create a socket and listen to maximum
 <code>num_connection</code> incoming connections on the specified IP address.
 If IP address is set to NULL or &#39;0.0.0.0&#39;, any addresses will be listen.</p>
 
-<h1 id='examples-39' class='section-header'><a href='#examples-39'>Examples</a></h1>
+<h1 id='parameters-3' class='section-header'><a href='#parameters-3'>Parameters</a></h1>
+<ul>
+<li><code>num_connection</code>  - maximum number of incoming connections on the specified IP address</li>
+</ul>
+
+<h1 id='examples-41' class='section-header'><a href='#examples-41'>Examples</a></h1>
 <pre class='rust rust-example-rendered'>
 <span class='kw'>use</span> <span class='ident'>libmodbus_rs</span>::{<span class='ident'>Modbus</span>, <span class='ident'>ModbusTCP</span>, <span class='ident'>MODBUS_TCP_DEFAULT_PORT</span>};
 
