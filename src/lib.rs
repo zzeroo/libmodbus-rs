@@ -13,7 +13,7 @@ html_root_url = "https://zzeroo.com/")]
 //! different hardware and platforms and provides a reference manual for the functions provided by the libmodbus library.
 //!
 //! **This project hosts the original libmodbus documentation, used here, as well.**<br />
-//! Please have a look at: http://zzeroo.github.io/libmodbus-rs/libmodbus/libmodbus.html
+//! Please have a look at: [libmodbus/libmodbus.html](../libmodbus/libmodbus.html)
 //!
 //! ## Contexts
 //!
