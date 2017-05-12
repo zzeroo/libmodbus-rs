@@ -79,7 +79,7 @@ html_root_url = "https://zzeroo.com/")]
 //! The following functions are used by the clients to send Modbus requests:
 //!
 //! * Read data
-//!     - [`read_bits()`](struct.Modbus.html#method.read_bitsmode), [`read_input_bits()`](struct.Modbus.html#method.read_input_bits), [`read_registers()`](struct.Modbus.html#method.read_registers), [`read_input_registers()`](struct.Modbus.html#method.read_input_registers), [`report_slave_id()`](struct.Modbus.html#method.report_slave_id)
+//!     - [`read_bits()`](struct.Modbus.html#method.read_bits), [`read_input_bits()`](struct.Modbus.html#method.read_input_bits), [`read_registers()`](struct.Modbus.html#method.read_registers), [`read_input_registers()`](struct.Modbus.html#method.read_input_registers), [`report_slave_id()`](struct.Modbus.html#method.report_slave_id)
 //! * Write data
 //!     - [`write_bit()`](struct.Modbus.html#method.write_bit), [`write_register()`](struct.Modbus.html#method.write_register), [`write_bits()`](struct.Modbus.html#method.write_bits), [`write_registers()`](struct.Modbus.html#method.write_registers)
 //! * Write and read data
@@ -93,7 +93,7 @@ html_root_url = "https://zzeroo.com/")]
 //!
 //! The server is waiting for request from clients and must answer when it is concerned by the request.
 //!
-//! In TCP mode, you must not use the usual [`connect()`](struct.Modbus.html#method.connect) to establish the connection but a pair of accept/listen calls
+//! In TCP , you must not use the usual [`connect()`](struct.Modbus.html#method.connect) to establish the connection but a pair of accept/listen calls
 //!
 //! * [`tcp_listen()`](struct.Modbus.html#method.tcp_listen), [`tcp_accept()`](struct.Modbus.html#method.tcp_accept), [`tcp_pi_listen`()](struct.Modbus.html#method.tcp_pi_listen), [`tcp_pi_accept`()](struct.Modbus.html#method.tcp_pi_accept)
 //!
@@ -126,7 +126,7 @@ mod modbus;
 
 pub use self::modbus_client::ModbusClient;
 pub use self::modbus_mapping::ModbusMapping;
-pub use self::modbus_rtu::{ModbusRTU, request_to_send_mode, serial_mode};
+pub use self::modbus_rtu::{ModbusRTU, RequestToSendMode, SerialMode};
 pub use self::modbus_server::ModbusServer;
 pub use self::modbus_tcp_pi::ModbusTCPPI;
 pub use self::modbus_tcp::ModbusTCP;
