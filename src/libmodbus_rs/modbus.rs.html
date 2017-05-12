@@ -542,6 +542,10 @@
 <span id="497">497</span>
 <span id="498">498</span>
 <span id="499">499</span>
+<span id="500">500</span>
+<span id="501">501</span>
+<span id="502">502</span>
+<span id="503">503</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>errors</span>::<span class='kw-2'>*</span>;
 <span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_uint</span>};
@@ -838,6 +842,8 @@
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// The [`close()`](#method.close) function shall close the connection established with the backend set in the context.</span>
     <span class='doccomment'>///</span>
+    <span class='doccomment'>/// **It should not nessesary to call these function. Because rusts drop trait handles that for you!**</span>
+    <span class='doccomment'>///</span>
     <span class='doccomment'>/// # Examples</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```</span>
@@ -862,6 +868,8 @@
     <span class='doccomment'>/// `free` - free a libmodbus context</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// The [`free()`](#method.free) function shall free an allocated modbus_t structure.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// **It should not nessesary to call these function. Because rusts drop trait handles that for you!**</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// # Examples</span>
     <span class='doccomment'>///</span>

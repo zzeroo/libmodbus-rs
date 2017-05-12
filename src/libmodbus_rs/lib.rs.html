@@ -164,6 +164,22 @@
 <span id="119">119</span>
 <span id="120">120</span>
 <span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
 </pre><pre class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>doc</span>(<span class='ident'>html_logo_url</span> <span class='op'>=</span> <span class='string'>&quot;https://zzeroo.github.io/share/zzeroo-logo.png&quot;</span>,
        <span class='ident'>html_favicon_url</span> <span class='op'>=</span> <span class='string'>&quot;https://zzeroo.github.io/share/favicon.ico&quot;</span>,
@@ -179,10 +195,15 @@
 <span class='doccomment'>//! This documentation presents an overview of libmodbus concepts, describes how libmodbus abstracts Modbus communication with</span>
 <span class='doccomment'>//! different hardware and platforms and provides a reference manual for the functions provided by the libmodbus library.</span>
 <span class='doccomment'>//!</span>
+<span class='doccomment'>//! **This project hosts the original libmodbus documentation, used here, as well.**&lt;br /&gt;</span>
+<span class='doccomment'>//! Please have a look at: http://zzeroo.github.io/libmodbus-rs/libmodbus/libmodbus.html</span>
+<span class='doccomment'>//!</span>
 <span class='doccomment'>//! ## Contexts</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! The Modbus protocol contains many variants (eg. serial RTU or Ehternet TCP), to ease the implementation of a variant,</span>
-<span class='doccomment'>//! the library was designed to use a backend for each variant.</span>
+<span class='doccomment'>//! The Modbus protocol contains many variants (eg. serial RTU or Ehternet TCP), to ease the implementation of a variant, the library was designed to use a backend for each variant.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! **libmodbus-rs provides traits and matching implementations for these variants.** See [ModbusRTU](trait.ModbusRTU.html) (trait), [Modbus::new_rtu()](struct.Modbus.html#method.new_rtu) (implementation) or [ModbusTCP](trait.ModbusTCP.html) (trait).</span>
+<span class='doccomment'>//!</span>
 <span class='doccomment'>//! The backends are also a convenient way to fulfill other requirements (eg. real-time operations). Each backend offers a specific function to create a new modbus_t context.</span>
 <span class='doccomment'>//! The modbus_t context is an opaque structure containing all necessary information to establish a connection with others Modbus devices according to the selected variant.</span>
 <span class='doccomment'>//!</span>
@@ -253,12 +274,21 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! ### [`Server`](trait.ModbusServer.html)</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus offers the following functions to handle requests:</span>
+<span class='doccomment'>//! The server is waiting for request from clients and must answer when it is concerned by the request.</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! * Receive</span>
-<span class='doccomment'>//!     - [`receive()`](struct.Modbus.html#method.receive)</span>
-<span class='doccomment'>//! * Reply</span>
-<span class='doccomment'>//!     - [`reply()`](struct.Modbus.html#method.reply), [`reply_exception()`](struct.Modbus.html#method.reply_exception)</span>
+<span class='doccomment'>//! In TCP mode, you must not use the usual [`connect()`](struct.Modbus.html#method.connect) to establish the connection but a pair of accept/listen calls</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! * [`tcp_listen()`](#method.tcp_listen), [`tcp_accept()`](#method.tcp_accept), [`tcp_pi_listen`()](#method.tcp_pi_listen), [`tcp_pi_accept`()](#method.tcp_pi_accept)</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! then the data can be received with</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! * [`receive()`](struct.Modbus.html#method.receive)</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! and a response can be send with</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! * [`reply()`](struct.Modbus.html#method.reply), [`reply_exception()`](struct.Modbus.html#method.reply_exception)</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! To handle the mapping of your Modbus data, you must use a [`ModbusMapping`](struct.ModbusMapping.html) struct: [`ModbusMapping::new()`](struct.ModbusMapping.html#method.new)</span>
 <span class='doccomment'>//!</span>
 
 <span class='comment'>// `error_chain!` can recurse deeply(3)</span>
@@ -270,6 +300,7 @@
 
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>errors</span>;
 <span class='kw'>mod</span> <span class='ident'>modbus_client</span>;
+<span class='kw'>mod</span> <span class='ident'>modbus_mapping</span>;
 <span class='kw'>mod</span> <span class='ident'>modbus_rtu</span>;
 <span class='kw'>mod</span> <span class='ident'>modbus_server</span>;
 <span class='kw'>mod</span> <span class='ident'>modbus_tcp_pi</span>;
@@ -277,14 +308,15 @@
 <span class='kw'>mod</span> <span class='ident'>modbus</span>;
 
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_client</span>::<span class='ident'>ModbusClient</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_mapping</span>::<span class='ident'>ModbusMapping</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_rtu</span>::{<span class='ident'>ModbusRTU</span>, <span class='ident'>request_to_send_mode</span>, <span class='ident'>serial_mode</span>};
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_server</span>::<span class='ident'>ModbusServer</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_tcp_pi</span>::<span class='ident'>ModbusTCPPI</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_tcp</span>::<span class='ident'>ModbusTCP</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus</span>::<span class='ident'>Modbus</span>;
 
-
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_TCP_DEFAULT_PORT</span>;
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_TCP_MAX_ADU_LENGTH</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_MAX_ADU_LENGTH</span>;
 </pre>
 </section>
