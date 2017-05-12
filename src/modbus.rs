@@ -293,6 +293,8 @@ impl Modbus {
     ///
     /// The [`close()`](#method.close) function shall close the connection established with the backend set in the context.
     ///
+    /// **It should not nessesary to call these function. Because rusts drop trait handles that for you!**
+    ///
     /// # Examples
     ///
     /// ```
@@ -317,6 +319,8 @@ impl Modbus {
     /// `free` - free a libmodbus context
     ///
     /// The [`free()`](#method.free) function shall free an allocated modbus_t structure.
+    ///
+    /// **It should not nessesary to call these function. Because rusts drop trait handles that for you!**
     ///
     /// # Examples
     ///
