@@ -82,7 +82,7 @@ cp -a target/doc/* .
 
 # If $BUILD_LIBMODBUS_DOC is true, copy origin libmodbus documentation in and clean up dir after that
 if $BUILD_LIBMODBUS_DOC; then
-  mkdir libmodbus
+  if [ ! -d libmodbus ]; then mkdir libmodbus; fi
   cp libmodbus-sys/libmodbus/doc/*.html libmodbus/
   # Cleanup
   rm libmodbus-sys/libmodbus -rf
