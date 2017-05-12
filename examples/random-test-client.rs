@@ -40,13 +40,13 @@ fn run() -> Result<()> {
     // modbus.tcp_accept(&mut socket)?;
     modbus.connect()?;
 
-    let mut nb = ADDRESS_END - ADDRESS_START;
+    let mut num_bit = ADDRESS_END - ADDRESS_START;
 
-    let mut request_bits = vec![0u8; nb];
-    let response_bits = vec![0u8; nb];
-    let mut request_registers = vec![0u16; nb];
-    let response_registers = vec![0u16; nb];
-    let mut rw_request_registers = vec![0u16; nb];
+    let mut request_bits = vec![0u8; num_bit];
+    let response_bits = vec![0u8; num_bit];
+    let mut request_registers = vec![0u16; num_bit];
+    let response_registers = vec![0u16; num_bit];
+    let mut rw_request_registers = vec![0u16; num_bit];
 
     let mut num_failures = 0;
 
@@ -55,7 +55,7 @@ fn run() -> Result<()> {
 
         for address in ADDRESS_START..ADDRESS_END {
             // generate random numbers
-            for i in 0..nb {
+            for i in 0..num_bit {
                 // Random values for the request registers
                 request_registers[i] = rng.gen::<u16>();
                 // The rw_request_registers contain the bitwise not value of the corosponding request_registers
@@ -64,16 +64,16 @@ fn run() -> Result<()> {
                 request_bits[i] = (request_registers[i] % 2) as u8;
             }
 
-            nb = ADDRESS_END - address;
+            num_bit = ADDRESS_END - address;
 
             // WRITE BIT
-            match modbus.write_bit(address as u8, match request_bits[0] { 0 => true, _ => false } ) {
+            match modbus.write_bit(address as i32, match request_bits[0] { 0 => true, _ => false } ) {
                 Err(_) => {
                     println!("Error, could not write_bit()");
                     num_failures += 1;
                 }
                 Ok(_) => {
-                    match modbus.read_bits(address as u8, 1, &mut request_bits) {
+                    match modbus.read_bits(address as i32, 1, &mut request_bits) {
                         Err(_) => {
                             println!("Error, cound not read_bits() single");
                             num_failures += 1;
@@ -81,6 +81,12 @@ fn run() -> Result<()> {
                         Ok(_) => {}
                     }
                 }
+            }
+
+            // MULTIPLE BITS
+            match modbus.write_bits(address as i32, num_bit as i32, &mut request_bits) {
+                Ok(_) => {}
+                Err(_) => {}
             }
         }
     }
