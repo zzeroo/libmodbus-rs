@@ -768,7 +768,25 @@ connections to the same server.</p></div>
 <h2 id="_example">EXAMPLE</h2>
 <div class="sectionbody">
 <div class="listingblock">
-<div class="content"></div></div>
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt>ctx <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_new_tcp</span></span><span style="color: #990000">(</span><span style="color: #FF0000">"127.0.0.1"</span><span style="color: #990000">,</span> <span style="color: #993399">1502</span><span style="color: #990000">);</span>
+server_socket <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_tcp_listen</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> NB_CONNECTION<span style="color: #990000">);</span>
+
+<span style="font-weight: bold"><span style="color: #000000">FD_ZERO</span></span><span style="color: #990000">(&amp;</span>rdset<span style="color: #990000">);</span>
+<span style="font-weight: bold"><span style="color: #000000">FD_SET</span></span><span style="color: #990000">(</span>server_socket<span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>rdset<span style="color: #990000">);</span>
+
+<span style="font-style: italic"><span style="color: #9A1900">/* .... */</span></span>
+
+<span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #000000">FD_ISSET</span></span><span style="color: #990000">(</span>master_socket<span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>rdset<span style="color: #990000">))</span> <span style="color: #FF0000">{</span>
+    <span style="font-weight: bold"><span style="color: #000000">modbus_set_socket</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> master_socket<span style="color: #990000">);</span>
+    rc <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_receive</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> query<span style="color: #990000">);</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span>rc <span style="color: #990000">!=</span> <span style="color: #990000">-</span><span style="color: #993399">1</span><span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
+        <span style="font-weight: bold"><span style="color: #000000">modbus_reply</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> query<span style="color: #990000">,</span> rc<span style="color: #990000">,</span> mb_mapping<span style="color: #990000">);</span>
+    <span style="color: #FF0000">}</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
 </div>
 </div>
 <div class="sect1">
@@ -789,7 +807,7 @@ connections to the same server.</p></div>
 <div id="footer">
 <div id="footer-text">
 libmodbus 3.1.4<br />
-Last updated 2017-05-12 12:12:30 CEST
+Last updated 2017-05-12 12:35:08 CEST
 </div>
 </div>
 </body>

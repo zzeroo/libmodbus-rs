@@ -770,7 +770,18 @@ platform.</p></div>
 <h2 id="_example">EXAMPLE</h2>
 <div class="sectionbody">
 <div class="listingblock">
-<div class="content"></div></div>
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #008080">modbus_t</span> <span style="color: #990000">*</span>ctx<span style="color: #990000">;</span>
+
+ctx <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_new_tcp</span></span><span style="color: #990000">(</span><span style="color: #FF0000">"127.0.0.1"</span><span style="color: #990000">,</span> <span style="color: #993399">502</span><span style="color: #990000">);</span>
+<span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #000000">modbus_connect</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">)</span> <span style="color: #990000">==</span> <span style="color: #990000">-</span><span style="color: #993399">1</span><span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
+    <span style="font-weight: bold"><span style="color: #000000">fprintf</span></span><span style="color: #990000">(</span>stderr<span style="color: #990000">,</span> <span style="color: #FF0000">"Connection failed: %s</span><span style="color: #CC33CC">\n</span><span style="color: #FF0000">"</span><span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #000000">modbus_strerror</span></span><span style="color: #990000">(</span>errno<span style="color: #990000">));</span>
+    <span style="font-weight: bold"><span style="color: #000000">modbus_free</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">);</span>
+    <span style="font-weight: bold"><span style="color: #0000FF">return</span></span> <span style="color: #990000">-</span><span style="color: #993399">1</span><span style="color: #990000">;</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
 </div>
 </div>
 <div class="sect1">
@@ -791,7 +802,7 @@ platform.</p></div>
 <div id="footer">
 <div id="footer-text">
 libmodbus 3.1.4<br />
-Last updated 2017-05-12 12:12:30 CEST
+Last updated 2017-05-12 12:35:08 CEST
 </div>
 </div>
 </body>

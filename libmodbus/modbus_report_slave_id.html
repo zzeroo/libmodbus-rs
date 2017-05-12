@@ -795,7 +795,18 @@ response data was truncated.</p></div>
 <h2 id="_example">EXAMPLE</h2>
 <div class="sectionbody">
 <div class="listingblock">
-<div class="content"></div></div>
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #008080">uint8_t</span> tab_bytes<span style="color: #990000">[</span>MODBUS_MAX_PDU_LENGTH<span style="color: #990000">];</span>
+
+<span style="color: #990000">...</span>
+
+rc <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_report_slave_id</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> MODBUS_MAX_PDU_LENGTH<span style="color: #990000">,</span> tab_bytes<span style="color: #990000">);</span>
+<span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span>rc <span style="color: #990000">&gt;</span> <span style="color: #993399">1</span><span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
+    <span style="font-weight: bold"><span style="color: #000000">printf</span></span><span style="color: #990000">(</span><span style="color: #FF0000">"Run Status Indicator: %s</span><span style="color: #CC33CC">\n</span><span style="color: #FF0000">"</span><span style="color: #990000">,</span> tab_bytes<span style="color: #990000">[</span><span style="color: #993399">1</span><span style="color: #990000">]</span> <span style="color: #990000">?</span> <span style="color: #FF0000">"ON"</span> <span style="color: #990000">:</span> <span style="color: #FF0000">"OFF"</span><span style="color: #990000">);</span>
+<span style="color: #FF0000">}</span></tt></pre></div></div>
 </div>
 </div>
 <div class="sect1">
@@ -810,7 +821,7 @@ response data was truncated.</p></div>
 <div id="footer">
 <div id="footer-text">
 libmodbus 3.1.4<br />
-Last updated 2017-05-12 12:12:30 CEST
+Last updated 2017-05-12 12:35:08 CEST
 </div>
 </div>
 </body>

@@ -784,7 +784,31 @@ bandwidth-server-many-up.c, handles several connections at once
 </li>
 </ul></div>
 <div class="listingblock">
-<div class="content"></div></div>
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #990000">...</span>
+
+<span style="font-style: italic"><span style="color: #9A1900">/* To listen any addresses on port 502 */</span></span>
+ctx <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_new_tcp</span></span><span style="color: #990000">(</span>NULL<span style="color: #990000">,</span> <span style="color: #993399">502</span><span style="color: #990000">);</span>
+
+<span style="font-style: italic"><span style="color: #9A1900">/* Handle until 10 established connections */</span></span>
+server_socket <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_tcp_listen</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> <span style="color: #993399">10</span><span style="color: #990000">);</span>
+
+<span style="font-style: italic"><span style="color: #9A1900">/* Clear the reference set of socket */</span></span>
+<span style="font-weight: bold"><span style="color: #000000">FD_ZERO</span></span><span style="color: #990000">(&amp;</span>refset<span style="color: #990000">);</span>
+
+<span style="font-style: italic"><span style="color: #9A1900">/* Add the server socket */</span></span>
+<span style="font-weight: bold"><span style="color: #000000">FD_SET</span></span><span style="color: #990000">(</span>server_socket<span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>refset<span style="color: #990000">);</span>
+
+<span style="font-weight: bold"><span style="color: #0000FF">if</span></span> <span style="color: #990000">(</span><span style="font-weight: bold"><span style="color: #000000">select</span></span><span style="color: #990000">(</span>server_socket <span style="color: #990000">+</span> <span style="color: #993399">1</span><span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>refset<span style="color: #990000">,</span> NULL<span style="color: #990000">,</span> NULL<span style="color: #990000">,</span> NULL<span style="color: #990000">)</span> <span style="color: #990000">==</span> <span style="color: #990000">-</span><span style="color: #993399">1</span><span style="color: #990000">)</span> <span style="color: #FF0000">{</span>
+<span style="color: #FF0000">}</span>
+
+<span style="color: #990000">...</span>
+
+<span style="font-weight: bold"><span style="color: #000000">close</span></span><span style="color: #990000">(</span>server_socket<span style="color: #990000">);</span>
+<span style="font-weight: bold"><span style="color: #000000">modbus_free</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">);</span></tt></pre></div></div>
 </div>
 </div>
 <div class="sect1">
@@ -807,7 +831,7 @@ bandwidth-server-many-up.c, handles several connections at once
 <div id="footer">
 <div id="footer-text">
 libmodbus 3.1.4<br />
-Last updated 2017-05-12 12:12:30 CEST
+Last updated 2017-05-12 12:35:08 CEST
 </div>
 </div>
 </body>

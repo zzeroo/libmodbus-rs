@@ -771,7 +771,20 @@ Otherwise it shall return -1 and set errno.</p></div>
 <div class="sectionbody">
 <div class="paragraph"><p>For detailed example, see unit-test-server.c source file in tests directory.</p></div>
 <div class="listingblock">
-<div class="content"></div></div>
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #990000">...</span>
+
+ctx <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_new_tcp_pi</span></span><span style="color: #990000">(</span><span style="color: #FF0000">"::0"</span><span style="color: #990000">,</span> <span style="color: #993399">502</span><span style="color: #990000">);</span>
+s <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_tcp_pi_listen</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> <span style="color: #993399">1</span><span style="color: #990000">);</span>
+<span style="font-weight: bold"><span style="color: #000000">modbus_tcp_pi_accept</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>s<span style="color: #990000">);</span>
+
+<span style="color: #990000">...</span>
+
+<span style="font-weight: bold"><span style="color: #000000">close</span></span><span style="color: #990000">(</span>s<span style="color: #990000">)</span>
+<span style="font-weight: bold"><span style="color: #000000">modbus_free</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">);</span></tt></pre></div></div>
 </div>
 </div>
 <div class="sect1">
@@ -794,7 +807,7 @@ Otherwise it shall return -1 and set errno.</p></div>
 <div id="footer">
 <div id="footer-text">
 libmodbus 3.1.4<br />
-Last updated 2017-05-12 12:12:30 CEST
+Last updated 2017-05-12 12:35:08 CEST
 </div>
 </div>
 </body>

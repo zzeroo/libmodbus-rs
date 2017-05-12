@@ -768,7 +768,18 @@ errno.</p></div>
 <h2 id="_example">EXAMPLE</h2>
 <div class="sectionbody">
 <div class="listingblock">
-<div class="content"></div></div>
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #008080">uint32_t</span> old_response_to_sec<span style="color: #990000">;</span>
+<span style="color: #008080">uint32_t</span> old_response_to_usec<span style="color: #990000">;</span>
+
+<span style="font-style: italic"><span style="color: #9A1900">/* Save original timeout */</span></span>
+<span style="font-weight: bold"><span style="color: #000000">modbus_get_response_timeout</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>old_response_to_sec<span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>old_response_to_usec<span style="color: #990000">);</span>
+
+<span style="font-style: italic"><span style="color: #9A1900">/* Define a new and too short timeout! */</span></span>
+<span style="font-weight: bold"><span style="color: #000000">modbus_set_response_timeout</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">);</span></tt></pre></div></div>
 </div>
 </div>
 <div class="sect1">
@@ -791,7 +802,7 @@ errno.</p></div>
 <div id="footer">
 <div id="footer-text">
 libmodbus 3.1.4<br />
-Last updated 2017-05-12 12:12:30 CEST
+Last updated 2017-05-12 12:35:08 CEST
 </div>
 </div>
 </body>

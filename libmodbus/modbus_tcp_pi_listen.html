@@ -779,7 +779,24 @@ unit-test-server.c, simple but handle only one connection
 </li>
 </ul></div>
 <div class="listingblock">
-<div class="content"></div></div>
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span style="color: #990000">...</span>
+
+ctx <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_new_tcp_pi</span></span><span style="color: #990000">(</span><span style="color: #FF0000">"::0"</span><span style="color: #990000">,</span> <span style="color: #FF0000">"502"</span><span style="color: #990000">);</span>
+s <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_tcp_pi_listen</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> <span style="color: #993399">1</span><span style="color: #990000">);</span>
+<span style="font-weight: bold"><span style="color: #000000">modbus_tcp_pi_accept</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> <span style="color: #990000">&amp;</span>s<span style="color: #990000">);</span>
+
+<span style="font-weight: bold"><span style="color: #0000FF">for</span></span> <span style="color: #990000">(;;)</span> <span style="color: #FF0000">{</span>
+    rc <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_receive</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> query<span style="color: #990000">);</span>
+    <span style="font-weight: bold"><span style="color: #000000">modbus_replay</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">,</span> query<span style="color: #990000">,</span> rc<span style="color: #990000">,</span> mb_mapping<span style="color: #990000">);</span>
+<span style="color: #FF0000">}</span>
+<span style="color: #990000">...</span>
+
+<span style="font-weight: bold"><span style="color: #000000">mclose</span></span><span style="color: #990000">(</span>s<span style="color: #990000">);</span>
+<span style="font-weight: bold"><span style="color: #000000">modbus_free</span></span><span style="color: #990000">(</span>ctx<span style="color: #990000">);</span></tt></pre></div></div>
 <div class="ulist"><ul>
 <li>
 <p>
@@ -809,7 +826,7 @@ bandwidth-server-many-up.c, handles several connections at once
 <div id="footer">
 <div id="footer-text">
 libmodbus 3.1.4<br />
-Last updated 2017-05-12 12:12:30 CEST
+Last updated 2017-05-12 12:35:08 CEST
 </div>
 </div>
 </body>
