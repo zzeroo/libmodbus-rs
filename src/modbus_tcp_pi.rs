@@ -14,6 +14,8 @@ use std::ffi::CString;
 ///
 pub trait ModbusTCPPI {
     fn new_tcp_pi(node: &str, service: &str) -> Result<Modbus>;
+    fn tcp_pi_accept(&mut self, socket: &mut i32) -> Result<i32>;
+    fn tcp_pi_listen(&mut self, num_connection: i32) -> Result<i32>;
 }
 
 impl ModbusTCPPI for Modbus {
@@ -50,6 +52,76 @@ impl ModbusTCPPI for Modbus {
                 Err("Could not create new TCPPI Modbus context".into())
             } else {
                 Ok(Modbus { ctx: ctx })
+            }
+        }
+    }
+
+    /// `tcp_pi_accept` - accept a new connection on a TCP PI Modbus socket (IPv6)
+    ///
+    /// The [`tcp_pi_accept()`](#method.tcp_pi_accept) function shall extract the first connection on the
+    /// queue of pending connections and create a new socket given as argument.
+    ///
+    /// # Parameters
+    ///
+    /// * `socket`  - Socket
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI, MODBUS_MAX_ADU_LENGTH};
+    ///
+    /// let mut modbus = Modbus::new_tcp_pi("::0", "1502").unwrap();
+    /// let mut socket = modbus.tcp_pi_listen(1).unwrap();
+    /// modbus.tcp_pi_accept(&mut socket).unwrap();
+    /// ```
+    fn tcp_pi_accept(&mut self, socket: &mut i32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_tcp_pi_accept(self.ctx, socket) {
+                -1 => Err("Could not accept on TCP".into()),
+                socket => Ok(socket),
+            }
+        }
+    }
+
+    /// `tcp_pi_listen` - create and listen a TCP PI Modbus socket (IPv6)
+    ///
+    /// The [`tcp_pi_listen()`](#method.tcp_pi_listen) function shall create a socket and listen to maximum
+    /// `num_connection` incoming connections on the specifieded node.
+    ///
+    /// # Parameters
+    ///
+    /// * `num_connection`  - maximum number of incoming connections on the specified IP address
+    ///
+    /// If node is set to `""` or `0.0.0.0`, any addresses will be listen.
+    ///
+    /// # Examples
+    ///
+    /// For detailed examples, look at the examples directory of this crate.
+    ///
+    /// * unit-test-server.rs   - simple but handle only one connection
+    /// * bandwidth-server-many-up.rs   - handles several connection at once
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI, MODBUS_MAX_ADU_LENGTH};
+    ///
+    /// let mut modbus = Modbus::new_tcp_pi("::0", "1502").unwrap();
+    /// let mut socket = modbus.tcp_pi_listen(1).unwrap();
+    ///
+    /// modbus.tcp_pi_accept(&mut socket);
+    ///
+    /// let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
+    /// let mut query = vec![0u8; MODBUS_MAX_ADU_LENGTH as usize];
+    ///
+    /// loop {
+    ///     let request_len = modbus.receive(&mut query).unwrap();
+    ///     modbus.reply(&query, request_len, &modbus_mapping);
+    /// }
+    /// ```
+    fn tcp_pi_listen(&mut self, num_connection: i32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_tcp_pi_listen(self.ctx, num_connection) {
+                -1 => Err("Could not listen on tcp port".into()),
+                socket => Ok(socket),
             }
         }
     }
