@@ -6,7 +6,7 @@ use libmodbus_sys;
 /// To handle the mapping of your Modbus data, you must use this struct
 ///
 pub struct ModbusMapping {
-    modbus_mapping: *mut libmodbus_sys::modbus_mapping_t,
+    pub modbus_mapping: *mut libmodbus_sys::modbus_mapping_t,
 }
 
 impl ModbusMapping {
