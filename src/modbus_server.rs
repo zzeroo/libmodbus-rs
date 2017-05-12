@@ -1,6 +1,7 @@
 use errors::*;
 use libc::{c_char, c_int};
 use libmodbus_sys;
+use modbus_mapping::ModbusMapping;
 use modbus::Modbus;
 
 
@@ -13,6 +14,7 @@ use modbus::Modbus;
 ///
 pub trait ModbusServer {
     fn receive(&self, request: &mut [u8]) -> Result<i32>;
+    fn reply(&self, request: &[u8], request_len: i32, modbus_mapping: &ModbusMapping) -> Result<i32>;
 }
 
 impl ModbusServer for Modbus {
@@ -34,11 +36,40 @@ impl ModbusServer for Modbus {
     /// assert!(modbus.receive(&mut query).is_ok());
     /// ```
     fn receive(&self, request: &mut [u8]) -> Result<i32> {
-        assert!(request.len() <= libmodbus_sys::MODBUS_TCP_MAX_ADU_LENGTH as usize);
+        assert!(request.len() <= libmodbus_sys::MODBUS_MAX_ADU_LENGTH as usize);
+
         unsafe {
             let len = libmodbus_sys::modbus_receive(self.ctx, request.as_mut_ptr() );
             match len {
                 -1 => Err("Could not receive an idication request".into()),
+                len => Ok(len),
+            }
+        }
+    }
+
+    /// `modbus_reply` - send a reponse to the received request
+    ///
+    /// The [`reply()`](#method.reply) function shall send a response to received request. The request req given in argument is analyzed, a response is then built and sent by using the information of the modbus context ctx.
+    /// If the request indicates to read or write a value the operation will done in the modbus mapping mb_mapping according to the type of the manipulated data.
+    /// If an error occurs, an exception response will be sent.
+    ///
+    /// This function is designed for Modbus server.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP, MODBUS_MAX_ADU_LENGTH};
+    ///
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let mut query = vec![0; MODBUS_MAX_ADU_LENGTH as usize];
+    ///
+    /// assert!(modbus.receive(&mut query).is_ok());
+    /// ```
+    fn reply(&self, request: &[u8], request_len: i32, modbus_mapping: &ModbusMapping) -> Result<i32> {
+        unsafe {
+            let len = libmodbus_sys::modbus_reply(self.ctx, request.as_ptr(), request_len, modbus_mapping.modbus_mapping);
+            match len {
+                -1 => Err("Could not reply".into()),
                 len => Ok(len),
             }
         }

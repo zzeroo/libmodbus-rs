@@ -94,8 +94,8 @@ rm target
 # Add all (new) files to git and commit them.
 git add .
 git commit -m "Update docs for $last_rev" -m "$last_msg"
-cd $dir
 
 git push --set-upstream origin "$DOC_BRANCH"
+cd $dir
 
 msg "Done."
