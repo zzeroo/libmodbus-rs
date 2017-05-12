@@ -262,7 +262,7 @@
 <span class='doccomment'>//! The following functions are used by the clients to send Modbus requests:</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * Read data</span>
-<span class='doccomment'>//!     - [`read_bits()`](struct.Modbus.html#method.read_bitsmode), [`read_input_bits()`](struct.Modbus.html#method.read_input_bits), [`read_registers()`](struct.Modbus.html#method.read_registers), [`read_input_registers()`](struct.Modbus.html#method.read_input_registers), [`report_slave_id()`](struct.Modbus.html#method.report_slave_id)</span>
+<span class='doccomment'>//!     - [`read_bits()`](struct.Modbus.html#method.read_bits), [`read_input_bits()`](struct.Modbus.html#method.read_input_bits), [`read_registers()`](struct.Modbus.html#method.read_registers), [`read_input_registers()`](struct.Modbus.html#method.read_input_registers), [`report_slave_id()`](struct.Modbus.html#method.report_slave_id)</span>
 <span class='doccomment'>//! * Write data</span>
 <span class='doccomment'>//!     - [`write_bit()`](struct.Modbus.html#method.write_bit), [`write_register()`](struct.Modbus.html#method.write_register), [`write_bits()`](struct.Modbus.html#method.write_bits), [`write_registers()`](struct.Modbus.html#method.write_registers)</span>
 <span class='doccomment'>//! * Write and read data</span>
@@ -276,7 +276,7 @@
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! The server is waiting for request from clients and must answer when it is concerned by the request.</span>
 <span class='doccomment'>//!</span>
-<span class='doccomment'>//! In TCP mode, you must not use the usual [`connect()`](struct.Modbus.html#method.connect) to establish the connection but a pair of accept/listen calls</span>
+<span class='doccomment'>//! In TCP , you must not use the usual [`connect()`](struct.Modbus.html#method.connect) to establish the connection but a pair of accept/listen calls</span>
 <span class='doccomment'>//!</span>
 <span class='doccomment'>//! * [`tcp_listen()`](struct.Modbus.html#method.tcp_listen), [`tcp_accept()`](struct.Modbus.html#method.tcp_accept), [`tcp_pi_listen`()](struct.Modbus.html#method.tcp_pi_listen), [`tcp_pi_accept`()](struct.Modbus.html#method.tcp_pi_accept)</span>
 <span class='doccomment'>//!</span>
@@ -309,7 +309,7 @@
 
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_client</span>::<span class='ident'>ModbusClient</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_mapping</span>::<span class='ident'>ModbusMapping</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_rtu</span>::{<span class='ident'>ModbusRTU</span>, <span class='ident'>request_to_send_mode</span>, <span class='ident'>serial_mode</span>};
+<span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_rtu</span>::{<span class='ident'>ModbusRTU</span>, <span class='ident'>RequestToSendMode</span>, <span class='ident'>SerialMode</span>};
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_server</span>::<span class='ident'>ModbusServer</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_tcp_pi</span>::<span class='ident'>ModbusTCPPI</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>modbus_tcp</span>::<span class='ident'>ModbusTCP</span>;

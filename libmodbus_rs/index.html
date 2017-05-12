@@ -144,7 +144,7 @@ The following functions are used by the clients to send Modbus requests:</p>
 <li>Read data
 
 <ul>
-<li><a href="struct.Modbus.html#method.read_bitsmode"><code>read_bits()</code></a>, <a href="struct.Modbus.html#method.read_input_bits"><code>read_input_bits()</code></a>, <a href="struct.Modbus.html#method.read_registers"><code>read_registers()</code></a>, <a href="struct.Modbus.html#method.read_input_registers"><code>read_input_registers()</code></a>, <a href="struct.Modbus.html#method.report_slave_id"><code>report_slave_id()</code></a></li>
+<li><a href="struct.Modbus.html#method.read_bits"><code>read_bits()</code></a>, <a href="struct.Modbus.html#method.read_input_bits"><code>read_input_bits()</code></a>, <a href="struct.Modbus.html#method.read_registers"><code>read_registers()</code></a>, <a href="struct.Modbus.html#method.read_input_registers"><code>read_input_registers()</code></a>, <a href="struct.Modbus.html#method.report_slave_id"><code>report_slave_id()</code></a></li>
 </ul></li>
 <li>Write data
 
@@ -171,7 +171,7 @@ The following functions are used by the clients to send Modbus requests:</p>
 <h3 id='a-hreftraitmodbusserverhtmlservera' class='section-header'><a href='#a-hreftraitmodbusserverhtmlservera'><a href="trait.ModbusServer.html"><code>Server</code></a></a></h3>
 <p>The server is waiting for request from clients and must answer when it is concerned by the request.</p>
 
-<p>In TCP mode, you must not use the usual <a href="struct.Modbus.html#method.connect"><code>connect()</code></a> to establish the connection but a pair of accept/listen calls</p>
+<p>In TCP , you must not use the usual <a href="struct.Modbus.html#method.connect"><code>connect()</code></a> to establish the connection but a pair of accept/listen calls</p>
 
 <ul>
 <li><a href="struct.Modbus.html#method.tcp_listen"><code>tcp_listen()</code></a>, <a href="struct.Modbus.html#method.tcp_accept"><code>tcp_accept()</code></a>, <a href="struct.Modbus.html#method.tcp_pi_listen"><code>tcp_pi_listen</code>()</a>, <a href="struct.Modbus.html#method.tcp_pi_accept"><code>tcp_pi_accept</code>()</a></li>
@@ -216,15 +216,15 @@ The following functions are used by the clients to send Modbus requests:</p>
                        </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='enum' href='enum.request_to_send_mode.html'
-                                  title='libmodbus_rs::request_to_send_mode'>request_to_send_mode</a></td>
+                           <td><a class='enum' href='enum.RequestToSendMode.html'
+                                  title='libmodbus_rs::RequestToSendMode'>RequestToSendMode</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='enum' href='enum.serial_mode.html'
-                                  title='libmodbus_rs::serial_mode'>serial_mode</a></td>
+                           <td><a class='enum' href='enum.SerialMode.html'
+                                  title='libmodbus_rs::SerialMode'>SerialMode</a></td>
                            <td class='docblock-short'>
                                 
                            </td>

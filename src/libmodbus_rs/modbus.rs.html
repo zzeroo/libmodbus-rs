@@ -569,20 +569,16 @@
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// # Examples</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// ```rust,no_run</span>
     <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class='doccomment'>///</span>
     <span class='doccomment'>/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// match modbus.connect() {</span>
-    <span class='doccomment'>///     Ok(_) =&gt; {}</span>
-    <span class='doccomment'>///     Err(e) =&gt; println!(&quot;Error: {}&quot;, e),</span>
-    <span class='doccomment'>/// }</span>
+    <span class='doccomment'>/// assert!(modbus.connect().is_ok())</span>
     <span class='doccomment'>/// ```</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>connect</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='kw'>match</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_connect</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>) {
-                <span class='op'>-</span><span class='number'>1</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not create new Modbus context&quot;</span>.<span class='ident'>into</span>()),
+                <span class='op'>-</span><span class='number'>1</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not connect&quot;</span>.<span class='ident'>into</span>()),
                 _ <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='number'>0</span>),
             }
         }
@@ -595,7 +591,6 @@
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```</span>
     <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class='doccomment'>///</span>
     <span class='doccomment'>/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// assert!(modbus.flush().is_ok());</span>
@@ -626,6 +621,10 @@
     <span class='doccomment'>///     The broadcast address is MODBUS_BROADCAST_ADDRESS.</span>
     <span class='doccomment'>///     This special value must be use when you want all Modbus devices of the network receive the request.</span>
     <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Parameters</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// * `slave`   - new slave ID</span>
+    <span class='doccomment'>///</span>
     <span class='doccomment'>/// # Examples</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```</span>
@@ -633,12 +632,8 @@
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// const YOUR_DEVICE_ID: i32 = 1;</span>
     <span class='doccomment'>/// let mut modbus = Modbus::new_rtu(&quot;/dev/ttyUSB0&quot;, 115200, &#39;N&#39;, 8, 1).unwrap();</span>
-    <span class='doccomment'>/// modbus.set_slave(YOUR_DEVICE_ID);</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// match modbus.connect() {</span>
-    <span class='doccomment'>///     Ok(_) =&gt; {}</span>
-    <span class='doccomment'>///     Err(e) =&gt; println!(&quot;Error: {}&quot;, e),</span>
-    <span class='doccomment'>/// }</span>
+    <span class='doccomment'>/// assert!(modbus.set_slave(YOUR_DEVICE_ID).is_ok());</span>
     <span class='doccomment'>/// ```</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_slave</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>slave</span>: <span class='ident'>i32</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
@@ -661,13 +656,18 @@
     <span class='doccomment'>/// &lt;00&gt;&lt;14&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;09&gt;&lt;12&gt;&lt;03&gt;&lt;06&gt;&lt;02&gt;&lt;2B&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;</span>
     <span class='doccomment'>/// ```</span>
     <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # Parameters</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// * `flag`    - `true` of `false`, enables or disables debug mode</span>
+    <span class='doccomment'>///</span>
     <span class='doccomment'>/// # Examples</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```</span>
     <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class='doccomment'>/// modbus.set_debug(true);</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// assert!(modbus.set_debug(true).is_ok());</span>
     <span class='doccomment'>/// ```</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_debug</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>flag</span>: <span class='ident'>bool</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {

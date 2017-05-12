@@ -388,13 +388,13 @@
 
 
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>PartialEq</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>serial_mode</span> {
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>SerialMode</span> {
     <span class='ident'>MODBUS_RTU_RS232</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RS232</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
     <span class='ident'>MODBUS_RTU_RS485</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RS485</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
 }
 
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Debug</span>, <span class='ident'>PartialEq</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>request_to_send_mode</span> {
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>RequestToSendMode</span> {
     <span class='ident'>MODBUS_RTU_RTS_NONE</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_NONE</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
     <span class='ident'>MODBUS_RTU_RTS_UP</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_UP</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
     <span class='ident'>MODBUS_RTU_RTS_DOWN</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_DOWN</span> <span class='kw'>as</span> <span class='ident'>isize</span>,
@@ -427,11 +427,11 @@
                    <span class='ident'>parity</span>: <span class='ident'>char</span>,
                    <span class='ident'>data_bit</span>: <span class='ident'>i32</span>,
                    <span class='ident'>stop_bit</span>: <span class='ident'>i32</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Modbus</span><span class='op'>&gt;</span>;
-   <span class='kw'>fn</span> <span class='ident'>rtu_get_serial_mode</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>serial_mode</span><span class='op'>&gt;</span>;
-   <span class='kw'>fn</span> <span class='ident'>rtu_set_serial_mode</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>mode</span>: <span class='ident'>serial_mode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>serial_mode</span><span class='op'>&gt;</span>;
-   <span class='kw'>fn</span> <span class='ident'>rtu_get_rts</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>request_to_send_mode</span><span class='op'>&gt;</span>;
-   <span class='kw'>fn</span> <span class='ident'>rtu_set_rts</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>mode</span>: <span class='ident'>request_to_send_mode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>request_to_send_mode</span><span class='op'>&gt;</span>;
-   <span class='kw'>fn</span> <span class='ident'>rtu_set_custom_rts</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>_mode</span>: <span class='ident'>request_to_send_mode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>;
+   <span class='kw'>fn</span> <span class='ident'>rtu_get_serial_mode</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>SerialMode</span><span class='op'>&gt;</span>;
+   <span class='kw'>fn</span> <span class='ident'>rtu_set_serial_mode</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>mode</span>: <span class='ident'>SerialMode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>SerialMode</span><span class='op'>&gt;</span>;
+   <span class='kw'>fn</span> <span class='ident'>rtu_get_rts</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>RequestToSendMode</span><span class='op'>&gt;</span>;
+   <span class='kw'>fn</span> <span class='ident'>rtu_set_rts</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>mode</span>: <span class='ident'>RequestToSendMode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>RequestToSendMode</span><span class='op'>&gt;</span>;
+   <span class='kw'>fn</span> <span class='ident'>rtu_set_custom_rts</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>_mode</span>: <span class='ident'>RequestToSendMode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>;
    <span class='kw'>fn</span> <span class='ident'>rtu_get_rts_delay</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>;
    <span class='kw'>fn</span> <span class='ident'>rtu_set_rts_delay</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>us</span>: <span class='ident'>i32</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>;
 }
@@ -497,13 +497,13 @@
     <span class='doccomment'>/// The [`rtu_get_serial_mode()`](#method.rtu_get_serial_mode) function shall return the serial mode currently</span>
     <span class='doccomment'>/// used by the libmodbus context:</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// `serial_mode::MODBUS_RTU_RS232`</span>
+    <span class='doccomment'>/// `SerialMode::MODBUS_RTU_RS232`</span>
     <span class='doccomment'>///     the serial line is set for RS232 communication. RS-232 (Recommended Standard 232)</span>
     <span class='doccomment'>///     is the traditional name for a series of standards for serial binary single-ended</span>
     <span class='doccomment'>///     data and control signals connecting between a DTE (Data Terminal Equipment) and a</span>
     <span class='doccomment'>///     DCE (Data Circuit-terminating Equipment). It is commonly used in computer serial ports</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// `serial_mode::MODBUS_RTU_RS485`</span>
+    <span class='doccomment'>/// `SerialMode::MODBUS_RTU_RS485`</span>
     <span class='doccomment'>///     the serial line is set for RS485 communication.</span>
     <span class='doccomment'>///     EIA-485, also known as TIA/EIA-485 or RS-485, is a standard defining the electrical</span>
     <span class='doccomment'>///     characteristics of drivers and receivers for use in balanced digital multipoint systems.</span>
@@ -516,18 +516,18 @@
     <span class='doccomment'>/// # Examples</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```</span>
-    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusRTU, serial_mode};</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusRTU, SerialMode};</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// let modbus = Modbus::new_rtu(&quot;/dev/ttyUSB0&quot;, 115200, &#39;N&#39;, 8, 1).unwrap();</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// assert_eq!(modbus.rtu_get_serial_mode().unwrap(), serial_mode::MODBUS_RTU_RS232);</span>
+    <span class='doccomment'>/// assert_eq!(modbus.rtu_get_serial_mode().unwrap(), SerialMode::MODBUS_RTU_RS232);</span>
     <span class='doccomment'>/// ```</span>
-    <span class='kw'>fn</span> <span class='ident'>rtu_get_serial_mode</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>serial_mode</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>rtu_get_serial_mode</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>SerialMode</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='kw'>let</span> <span class='ident'>mode</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_rtu_get_serial_mode</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>);
             <span class='kw'>match</span> <span class='ident'>mode</span> {
-                <span class='ident'>mode</span> <span class='kw'>if</span> <span class='ident'>mode</span> <span class='op'>==</span> <span class='ident'>serial_mode</span>::<span class='ident'>MODBUS_RTU_RS232</span> <span class='kw'>as</span> <span class='ident'>i32</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>serial_mode</span>::<span class='ident'>MODBUS_RTU_RS232</span>),
-                <span class='ident'>mode</span> <span class='kw'>if</span> <span class='ident'>mode</span> <span class='op'>==</span> <span class='ident'>serial_mode</span>::<span class='ident'>MODBUS_RTU_RS485</span> <span class='kw'>as</span> <span class='ident'>i32</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>serial_mode</span>::<span class='ident'>MODBUS_RTU_RS485</span>),
+                <span class='ident'>mode</span> <span class='kw'>if</span> <span class='ident'>mode</span> <span class='op'>==</span> <span class='ident'>SerialMode</span>::<span class='ident'>MODBUS_RTU_RS232</span> <span class='kw'>as</span> <span class='ident'>i32</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>SerialMode</span>::<span class='ident'>MODBUS_RTU_RS232</span>),
+                <span class='ident'>mode</span> <span class='kw'>if</span> <span class='ident'>mode</span> <span class='op'>==</span> <span class='ident'>SerialMode</span>::<span class='ident'>MODBUS_RTU_RS485</span> <span class='kw'>as</span> <span class='ident'>i32</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>SerialMode</span>::<span class='ident'>MODBUS_RTU_RS485</span>),
                 _ <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not get RTU serial mode&quot;</span>.<span class='ident'>into</span>()),
             }
         }
@@ -556,17 +556,17 @@
     <span class='doccomment'>/// # Examples</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```</span>
-    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusRTU, serial_mode};</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusRTU, SerialMode};</span>
     <span class='doccomment'>/// let mut modbus = Modbus::new_rtu(&quot;/dev/ttyUSB0&quot;, 115200, &#39;N&#39;, 8, 1).unwrap();</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// assert!(modbus.rtu_set_serial_mode(serial_mode::MODBUS_RTU_RS232).is_ok());</span>
+    <span class='doccomment'>/// assert!(modbus.rtu_set_serial_mode(SerialMode::MODBUS_RTU_RS232).is_ok());</span>
     <span class='doccomment'>/// ```</span>
-    <span class='kw'>fn</span> <span class='ident'>rtu_set_serial_mode</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>mode</span>: <span class='ident'>serial_mode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>serial_mode</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>rtu_set_serial_mode</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>mode</span>: <span class='ident'>SerialMode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>SerialMode</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='kw'>let</span> <span class='ident'>mode</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_rtu_set_serial_mode</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>mode</span> <span class='kw'>as</span> <span class='ident'>c_int</span>) <span class='kw'>as</span> <span class='ident'>u32</span>;
             <span class='kw'>match</span> <span class='ident'>mode</span> {
-                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RS232</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>serial_mode</span>::<span class='ident'>MODBUS_RTU_RS232</span>),
-                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RS485</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>serial_mode</span>::<span class='ident'>MODBUS_RTU_RS485</span>),
+                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RS232</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>SerialMode</span>::<span class='ident'>MODBUS_RTU_RS232</span>),
+                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RS485</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>SerialMode</span>::<span class='ident'>MODBUS_RTU_RS485</span>),
                 _ <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not set RTU serial mode&quot;</span>.<span class='ident'>into</span>()),
             }
         }
@@ -575,33 +575,33 @@
     <span class='doccomment'>/// `rtu_set_rts` - set the RTS mode in RTU</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// The [`rtu_set_rts()`](#method.rtu_set_rts) function shall set the Request To Send mode to communicate on a RS485 serial bus.</span>
-    <span class='doccomment'>/// By default, the mode is set to `request_to_send_mode::MODBUS_RTU_RTS_NONE` and no signal is issued before writing data on the wire.</span>
+    <span class='doccomment'>/// By default, the mode is set to `RequestToSendMode::MODBUS_RTU_RTS_NONE` and no signal is issued before writing data on the wire.</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// To enable the RTS mode, the values `request_to_send_mode::MODBUS_RTU_RTS_UP` or `request_to_send_mode::MODBUS_RTU_RTS_DOWN` must be used,</span>
-    <span class='doccomment'>/// these modes enable the RTS mode and set the polarity at the same time. When `request_to_send_mode::MODBUS_RTU_RTS_UP` is used,</span>
+    <span class='doccomment'>/// To enable the RTS mode, the values `RequestToSendMode::MODBUS_RTU_RTS_UP` or `RequestToSendMode::MODBUS_RTU_RTS_DOWN` must be used,</span>
+    <span class='doccomment'>/// these modes enable the RTS mode and set the polarity at the same time. When `RequestToSendMode::MODBUS_RTU_RTS_UP` is used,</span>
     <span class='doccomment'>/// an ioctl call is made with RTS flag enabled then data is written on the bus after a delay of 1 ms,</span>
     <span class='doccomment'>/// then another ioctl call is made with the RTS flag disabled and again a delay of 1 ms occurs.</span>
-    <span class='doccomment'>/// The `request_to_send_mode::MODBUS_RTU_RTS_DOWN` mode applies the same procedure but with an inverted RTS flag.</span>
+    <span class='doccomment'>/// The `RequestToSendMode::MODBUS_RTU_RTS_DOWN` mode applies the same procedure but with an inverted RTS flag.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// This function can only be used with a context using a RTU backend.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// # Examples</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```</span>
-    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusRTU, serial_mode, request_to_send_mode};</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusRTU, SerialMode, RequestToSendMode};</span>
     <span class='doccomment'>/// let mut modbus = Modbus::new_rtu(&quot;/dev/ttyUSB0&quot;, 115200, &#39;N&#39;, 8, 1).unwrap();</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// let serial_mode = modbus.rtu_set_serial_mode(serial_mode::MODBUS_RTU_RS485);</span>
+    <span class='doccomment'>/// let serial_mode = modbus.rtu_set_serial_mode(SerialMode::MODBUS_RTU_RS485);</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// assert!(modbus.rtu_set_rts(request_to_send_mode::MODBUS_RTU_RTS_UP).is_ok());</span>
+    <span class='doccomment'>/// assert!(modbus.rtu_set_rts(RequestToSendMode::MODBUS_RTU_RTS_UP).is_ok());</span>
     <span class='doccomment'>/// ```</span>
-    <span class='kw'>fn</span> <span class='ident'>rtu_set_rts</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>mode</span>: <span class='ident'>request_to_send_mode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>request_to_send_mode</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>rtu_set_rts</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>mode</span>: <span class='ident'>RequestToSendMode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>RequestToSendMode</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='kw'>let</span> <span class='ident'>mode</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_rtu_set_rts</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>mode</span> <span class='kw'>as</span> <span class='ident'>c_int</span>) <span class='kw'>as</span> <span class='ident'>u32</span>;
             <span class='kw'>match</span> <span class='ident'>mode</span> {
-                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_NONE</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>request_to_send_mode</span>::<span class='ident'>MODBUS_RTU_RTS_NONE</span>),
-                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_UP</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>request_to_send_mode</span>::<span class='ident'>MODBUS_RTU_RTS_UP</span>),
-                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_DOWN</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>request_to_send_mode</span>::<span class='ident'>MODBUS_RTU_RTS_DOWN</span>),
+                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_NONE</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>RequestToSendMode</span>::<span class='ident'>MODBUS_RTU_RTS_NONE</span>),
+                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_UP</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>RequestToSendMode</span>::<span class='ident'>MODBUS_RTU_RTS_UP</span>),
+                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_DOWN</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>RequestToSendMode</span>::<span class='ident'>MODBUS_RTU_RTS_DOWN</span>),
                 _ <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not set RTS mode&quot;</span>.<span class='ident'>into</span>()),
             }
         }
@@ -619,24 +619,24 @@
     <span class='doccomment'>/// # Examples</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```</span>
-    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusRTU, serial_mode, request_to_send_mode};</span>
+    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusRTU, SerialMode, RequestToSendMode};</span>
     <span class='doccomment'>/// let mut modbus = Modbus::new_rtu(&quot;/dev/ttyUSB0&quot;, 115200, &#39;N&#39;, 8, 1).unwrap();</span>
     <span class='doccomment'>///</span>
-    <span class='doccomment'>/// match modbus.rtu_set_serial_mode(serial_mode::MODBUS_RTU_RS485) {</span>
+    <span class='doccomment'>/// match modbus.rtu_set_serial_mode(SerialMode::MODBUS_RTU_RS485) {</span>
     <span class='doccomment'>///     Ok(mode) =&gt; {</span>
-    <span class='doccomment'>///         assert_eq!(mode, serial_mode::MODBUS_RTU_RS485);</span>
+    <span class='doccomment'>///         assert_eq!(mode, SerialMode::MODBUS_RTU_RS485);</span>
     <span class='doccomment'>///         assert!(modbus.rtu_get_rts().is_ok())</span>
     <span class='doccomment'>///     },</span>
     <span class='doccomment'>///     Err(_) =&gt; {}</span>
     <span class='doccomment'>/// };</span>
     <span class='doccomment'>/// ```</span>
-    <span class='kw'>fn</span> <span class='ident'>rtu_get_rts</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>request_to_send_mode</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>rtu_get_rts</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>RequestToSendMode</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
             <span class='kw'>let</span> <span class='ident'>mode</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_rtu_get_rts</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>) <span class='kw'>as</span> <span class='ident'>u32</span>;
             <span class='kw'>match</span> <span class='ident'>mode</span> {
-                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_NONE</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>request_to_send_mode</span>::<span class='ident'>MODBUS_RTU_RTS_NONE</span>),
-                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_UP</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>request_to_send_mode</span>::<span class='ident'>MODBUS_RTU_RTS_UP</span>),
-                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_DOWN</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>request_to_send_mode</span>::<span class='ident'>MODBUS_RTU_RTS_DOWN</span>),
+                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_NONE</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>RequestToSendMode</span>::<span class='ident'>MODBUS_RTU_RTS_NONE</span>),
+                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_UP</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>RequestToSendMode</span>::<span class='ident'>MODBUS_RTU_RTS_UP</span>),
+                <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_RTU_RTS_DOWN</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>RequestToSendMode</span>::<span class='ident'>MODBUS_RTU_RTS_DOWN</span>),
                 _ <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not get RTS mode&quot;</span>.<span class='ident'>into</span>()),
             }
         }
@@ -653,7 +653,7 @@
     <span class='doccomment'>/// This function can only be used with a context using a RTU backend.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// TODO: implement rtu_set_custom_rts()!</span>
-    <span class='kw'>fn</span> <span class='ident'>rtu_set_custom_rts</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>_mode</span>: <span class='ident'>request_to_send_mode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>rtu_set_custom_rts</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>_mode</span>: <span class='ident'>RequestToSendMode</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
         <span class='macro'>unimplemented</span><span class='macro'>!</span>()
     }
 

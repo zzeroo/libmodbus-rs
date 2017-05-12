@@ -110,12 +110,8 @@
 <span id="65">65</span>
 <span id="66">66</span>
 <span id="67">67</span>
-<span id="68">68</span>
-<span id="69">69</span>
-<span id="70">70</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>errors</span>::<span class='kw-2'>*</span>;
-<span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_int</span>, <span class='ident'>c_uint</span>, <span class='ident'>c_void</span>};
 <span class='kw'>use</span> <span class='ident'>libmodbus_sys</span>;
 
 
@@ -146,8 +142,6 @@
     <span class='doccomment'>/// ```</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>number_bits</span>: <span class='ident'>i32</span>, <span class='ident'>number_input_bits</span> : <span class='ident'>i32</span>, <span class='ident'>number_registers</span>: <span class='ident'>i32</span>, <span class='ident'>number_input_registers</span>: <span class='ident'>i32</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>ModbusMapping</span><span class='op'>&gt;</span> {
         <span class='kw'>unsafe</span> {
-            <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ptr</span>;
-
             <span class='kw'>let</span> <span class='ident'>modbus_mapping</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_mapping_new</span>(<span class='ident'>number_bits</span>, <span class='ident'>number_input_bits</span> , <span class='ident'>number_registers</span>, <span class='ident'>number_input_registers</span>);
             <span class='kw'>if</span> <span class='ident'>modbus_mapping</span>.<span class='ident'>is_null</span>() {
                 <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not create ModbusMapping&quot;</span>.<span class='ident'>into</span>())
