@@ -20,7 +20,7 @@ use std::str;
 ///     - [`reply_exception()`](struct.Modbus.html#method.reply_exception)
 ///
 pub trait ModbusClient {
-    fn read_bits(&self, address: u8, num_bit: i32) -> Result<Vec<u8>>;
+    fn read_bits(&self, address: u8, num_bit: i32, destination: &mut [u8]) -> Result<i32>;
     fn read_input_bits(&self, address: u8, num_bit: i32) -> Result<Vec<u8>>;
     fn read_registers(&self, address: u8, num_bit: i32) -> Result<Vec<u16>>;
     fn read_input_registers(&self, address: u8, num_bit: i32) -> Result<Vec<u16>>;
@@ -57,12 +57,11 @@ impl ModbusClient for Modbus {
     ///     Err(e) => println!("Error: {}", e),
     /// }
     /// ```
-    fn read_bits(&self, address: u8, num_bit: i32) -> Result<Vec<u8>> {
+    fn read_bits(&self, address: u8, num_bit: i32, destination: &mut [u8]) -> Result<i32> {
         unsafe {
-            let mut tab_reg = vec![0u8; num_bit as usize];
-            match libmodbus_sys::modbus_read_bits(self.ctx, address as i32, num_bit, tab_reg.as_mut_ptr()){
+            match libmodbus_sys::modbus_read_bits(self.ctx, address as i32, num_bit, destination.as_mut_ptr()){
                 -1 => { Err("Could not read bits".into()) }
-                 _ => { Ok(tab_reg) }
+                 len => { Ok(len) }
             }
         }
     }

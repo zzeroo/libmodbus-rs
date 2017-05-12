@@ -20,7 +20,6 @@ const ADDRESS_END: usize    = 99;
 
 extern crate rand;
 extern crate libmodbus_rs;
-#[macro_use] extern crate error_chain;
 
 use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
 use libmodbus_rs::errors::*;
@@ -33,12 +32,13 @@ fn run() -> Result<()> {
     // Initialize random number generator
     let mut rng = rand::thread_rng();
 
-    let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    let mut server_socket = modbus.tcp_listen(10).unwrap();
+    let mut modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
     modbus.set_debug(true)?;
 
-    modbus.connect();
-    // modbus.tcp_accept(&mut server_socket);
+    // `accept()` and `listen()` are not working yeat?
+    // let mut socket = modbus.tcp_listen(10)?;
+    // modbus.tcp_accept(&mut socket)?;
+    modbus.connect()?;
 
     let mut nb = ADDRESS_END - ADDRESS_START;
 
@@ -48,12 +48,13 @@ fn run() -> Result<()> {
     let response_registers = vec![0u16; nb];
     let mut rw_request_registers = vec![0u16; nb];
 
-    let num_fail = 0;
+    let mut num_failures = 0;
 
     for _ in 0..LOOPS {
         let mut address = ADDRESS_START;
 
         for address in ADDRESS_START..ADDRESS_END {
+            // generate random numbers
             for i in 0..nb {
                 // Random values for the request registers
                 request_registers[i] = rng.gen::<u16>();
@@ -62,15 +63,33 @@ fn run() -> Result<()> {
                 // request_bits contain the half value of the random request_registers value
                 request_bits[i] = (request_registers[i] % 2) as u8;
             }
-            println!("request_registers for address: {}\n{:?}", &address, &request_registers);
-            println!("rw_request_registers:\n{:?}", &rw_request_registers);
-            println!("request_bits:\n{:?}", &request_bits);
 
             nb = ADDRESS_END - address;
 
-            // Write bit
-            let rc = modbus.write_bit(address as u8, match request_bits[0] { 0 => true, _ => false } );
+            // WRITE BIT
+            match modbus.write_bit(address as u8, match request_bits[0] { 0 => true, _ => false } ) {
+                Err(_) => {
+                    println!("Error, could not write_bit()");
+                    num_failures += 1;
+                }
+                Ok(_) => {
+                    match modbus.read_bits(address as u8, 1, &mut request_bits) {
+                        Err(_) => {
+                            println!("Error, cound not read_bits() single");
+                            num_failures += 1;
+                        }
+                        Ok(_) => {}
+                    }
+                }
+            }
         }
+    }
+
+    print!("Test: ");
+    if num_failures > 0 {
+        println!("{} FAILS", num_failures);
+    } else {
+        println!("SUCCESS");
     }
 
     Ok(())

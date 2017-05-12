@@ -6,7 +6,7 @@ use libmodbus_rs::errors::*;
 
 fn run() -> Result<()> {
     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
-    // modbus.set_debug(true)?;
+    modbus.set_debug(true)?;
 
     let modbus_mapping = ModbusMapping::new(500, 500, 500, 500)?;
 
@@ -18,8 +18,12 @@ fn run() -> Result<()> {
         let mut query = vec![0u8; MODBUS_TCP_MAX_ADU_LENGTH as usize];
 
         match modbus.receive(&mut query) {
-            Ok(n) => {modbus.reply(&query, n, &modbus_mapping)}
-            Err(_) => {break}
+            Ok(n) => {
+                modbus.reply(&query, n, &modbus_mapping)
+            }
+            Err(_) => {
+                break
+            }
         }?;
     }
     Err("Quit the loop. This is the ok, default behavior.".into())
