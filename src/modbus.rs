@@ -33,7 +33,7 @@ impl Modbus {
     pub fn connect(&self) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_connect(self.ctx) {
-                -1 => Err("Could not create new Modbus context".into()),
+                -1 => Err("Could not connect".into()),
                 _ => Ok(0),
             }
         }
