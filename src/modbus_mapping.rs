@@ -1,5 +1,4 @@
 use errors::*;
-use libc::{c_int, c_uint, c_void};
 use libmodbus_sys;
 
 
@@ -30,8 +29,6 @@ impl ModbusMapping {
     /// ```
     pub fn new(number_bits: i32, number_input_bits : i32, number_registers: i32, number_input_registers: i32) -> Result<ModbusMapping> {
         unsafe {
-            use std::ptr;
-
             let modbus_mapping = libmodbus_sys::modbus_mapping_new(number_bits, number_input_bits , number_registers, number_input_registers);
             if modbus_mapping.is_null() {
                 Err("Could not create ModbusMapping".into())

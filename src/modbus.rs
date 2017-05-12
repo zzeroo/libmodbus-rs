@@ -20,20 +20,16 @@ impl Modbus {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// match modbus.connect() {
-    ///     Ok(_) => {}
-    ///     Err(e) => println!("Error: {}", e),
-    /// }
+    /// assert!(modbus.connect().is_ok())
     /// ```
     pub fn connect(&self) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_connect(self.ctx) {
-                -1 => Err("Could not create new Modbus context".into()),
+                -1 => Err("Could not connect".into()),
                 _ => Ok(0),
             }
         }
@@ -46,7 +42,6 @@ impl Modbus {
     ///
     /// ```
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// assert!(modbus.flush().is_ok());
@@ -77,6 +72,10 @@ impl Modbus {
     ///     The broadcast address is MODBUS_BROADCAST_ADDRESS.
     ///     This special value must be use when you want all Modbus devices of the network receive the request.
     ///
+    /// # Parameters
+    ///
+    /// * `slave`   - new slave ID
+    ///
     /// # Examples
     ///
     /// ```
@@ -84,12 +83,8 @@ impl Modbus {
     ///
     /// const YOUR_DEVICE_ID: i32 = 1;
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
-    /// modbus.set_slave(YOUR_DEVICE_ID);
     ///
-    /// match modbus.connect() {
-    ///     Ok(_) => {}
-    ///     Err(e) => println!("Error: {}", e),
-    /// }
+    /// assert!(modbus.set_slave(YOUR_DEVICE_ID).is_ok());
     /// ```
     pub fn set_slave(&mut self, slave: i32) -> Result<i32> {
         unsafe {
@@ -112,13 +107,18 @@ impl Modbus {
     /// <00><14><00><00><00><09><12><03><06><02><2B><00><00><00><00>
     /// ```
     ///
+    /// # Parameters
+    ///
+    /// * `flag`    - `true` of `false`, enables or disables debug mode
+    ///
     /// # Examples
     ///
     /// ```
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// modbus.set_debug(true);
+    ///
+    /// assert!(modbus.set_debug(true).is_ok());
     /// ```
     pub fn set_debug(&mut self, flag: bool) -> Result<i32> {
         unsafe {
