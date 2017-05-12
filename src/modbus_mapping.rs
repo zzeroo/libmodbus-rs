@@ -18,7 +18,6 @@ impl ModbusMapping {
     /// * `number_registers` - How many registers sould allocated
     /// * `number_input_registers` - How many input registers sould allocated
     ///
-    ///
     /// # Examples
     ///
     /// ```

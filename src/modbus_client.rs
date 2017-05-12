@@ -43,6 +43,10 @@ impl ModbusClient for Modbus {
     ///
     /// The function uses the Modbus function code 0x01 (read coil status).
     ///
+    /// # Return value
+    ///
+    /// The function returns a Result with the number of read bits if successful, or an Error.
+    ///
     /// # Parameters
     ///
     /// * `address` - address of the remote device
@@ -72,6 +76,10 @@ impl ModbusClient for Modbus {
     ///
     /// The function uses the Modbus function code 0x02 (read input status).
     ///
+    /// # Return value
+    ///
+    /// The function returns a Result with the number of read input status if successful, or an Error.
+    ///
     /// # Parameters
     ///
     /// * `address` - address of the remote device
@@ -99,6 +107,10 @@ impl ModbusClient for Modbus {
     /// The [`read_registers()`](#method.read_registers) function shall read the content of the nb holding registers to the address addr of the remote device.
     ///
     /// The function uses the Modbus function code 0x03 (read holding registers).
+    ///
+    /// # Return value
+    ///
+    /// The function returns a Result with the number of read registers if successful, or an Error.
     ///
     /// # Parameters
     ///
@@ -128,6 +140,10 @@ impl ModbusClient for Modbus {
     ///
     /// The function uses the Modbus function code 0x04 (read input registers). The holding registers and input registers have different historical meaning,
     /// but nowadays it’s more common to use holding registers only.
+    ///
+    /// # Return value
+    ///
+    /// The function returns a Result with the number of read input registers if successful, or an Error.
     ///
     /// # Parameters
     ///
@@ -161,6 +177,12 @@ impl ModbusClient for Modbus {
     ///     * the run indicator status (0x00 = OFF, 0xFF = ON)
     ///     * additional data specific to each controller. For example, libmodbus returns the version of the library as a string.
     ///
+    /// # Return value
+    ///
+    /// The function returns a Result the number of read data if successful, or an Error.
+    /// If the output was truncated due to the `max_dest` limit then the return value is the number of bytes which would have been written
+    /// to `dest` if enough space had been available. Thus, a return value greater than `max_dest` means that the response data was truncated.
+    ///
     /// # Parameters
     ///
     /// * `max_dest` - limit the return value to max_dest bytes
@@ -189,6 +211,10 @@ impl ModbusClient for Modbus {
     ///
     /// The function uses the Modbus function code 0x05 (force single coil).
     ///
+    /// # Return value
+    ///
+    /// The function returns a Result containing a `1` if successful, or an Error.
+    ///
     /// # Parameters
     ///
     /// * `address` - address of the remote device
@@ -215,6 +241,10 @@ impl ModbusClient for Modbus {
     /// The [`write_bits()`](#method.write_bits) function shall write the status of the nb bits (coils) from src at the address addr of the remote device. The src array must contains bytes set to TRUE or FALSE.
     ///
     /// The function uses the Modbus function code 0x0F (force multiple coils).
+    ///
+    /// # Return value
+    ///
+    /// The function returns a Result containing a `1` if successful, or an Error.
     ///
     /// # Parameters
     ///
@@ -244,6 +274,10 @@ impl ModbusClient for Modbus {
     ///
     /// The function uses the Modbus function code 0x06 (preset single register).
     ///
+    /// # Return value
+    ///
+    /// The function returns a Result containing the number of written bits if successful, or an Error.
+    ///
     /// # Parameters
     ///
     /// * `address` - address of the remote device
@@ -270,6 +304,10 @@ impl ModbusClient for Modbus {
     /// The [`write_registers()`](#method.write_registers) function shall write the content of the nb holding registers from the array src at address addr of the remote device.
     ///
     /// The function uses the Modbus function code 0x10 (preset multiple registers).
+    ///
+    /// # Return value
+    ///
+    /// The function returns a Result containing the number of written registers if successful, or an Error.
     ///
     /// # Parameters
     ///
@@ -303,6 +341,10 @@ impl ModbusClient for Modbus {
     /// The [`write_and_read_registers()`](#method.write_and_read_registers) function shall write the content of the write_nb holding registers from the array src to the address write_addr of the remote device then shall read the content of the read_nb holding registers to the address read_addr of the remote device. The result of reading is stored in dest array as word values (16 bits).
     ///
     /// The function uses the Modbus function code 0x17 (write/read registers).
+    ///
+    /// # Return value
+    ///
+    /// The function returns a Result containing the number of read registers if successful, or an Error.
     ///
     /// # Parameters
     ///
@@ -341,6 +383,10 @@ impl ModbusClient for Modbus {
     /// The public header of libmodbus provides a list of supported Modbus functions codes,
     /// prefixed by MODBUS_FC_ (eg. MODBUS_FC_READ_HOLDING_REGISTERS), to help build of raw requests.
     ///
+    /// # Return value
+    ///
+    /// The function returns a Result containing the full message length, counting the extra data relating to the backend, if successful, or an Error.
+    ///
     /// # Parameters
     ///
     /// * `raw_request`   - raw request to send
@@ -376,14 +422,14 @@ impl ModbusClient for Modbus {
     /// If you want to write code compatible with both, you can use the constant MODBUS_MAX_ADU_LENGTH (maximum value of all libmodbus backends).
     /// Take care to allocate enough memory to store responses to avoid crashes of your server.
     ///
+    /// # Return value
+    ///
+    /// The function returns a Result containing the response length if successful, or an Error.
+    /// The returned request length can be zero if the indication request is ignored (eg. a query for another slave in RTU mode).
+    ///
     /// # Parameters
     ///
     /// * `response`   - store for the received response
-    ///
-    /// # Return value
-    ///
-    /// This function returns a Result<i32> where the i32 is response len. The returned request length can be zero
-    /// if the indication request is ignored (eg. a query for another slave in RTU mode). Otherwise it shall return an Error.
     ///
     /// # Examples
     ///
@@ -426,17 +472,20 @@ impl ModbusClient for Modbus {
     ///
     /// The initial request req is required to build a valid response.
     ///
+    /// # Return value
+    ///
+    /// The function returns the length of the response sent if successful, or an Error.
+    ///
+    /// # Parameters
+    ///
+    /// * `request`         - initial request, required to build a valid response
+    /// * `exception_code`  - Exception Code
+    ///
     /// # Examples
     ///
     /// ```
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    ///
-    /// match modbus.connect() {
-    ///     Ok(_) => {}
-    ///     Err(e) => println!("Error: {}", e),
-    /// }
     /// ```
     fn reply_exception(&self, request: &[u8], exception_code: u32) -> Result<i32> {
         unsafe {
