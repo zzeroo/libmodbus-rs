@@ -28,7 +28,7 @@ impl ModbusMapping {
     ///
     /// let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
     /// ```
-    pub fn new(number_bits: c_int, number_input_bits : c_int, number_registers: c_int, number_input_registers: c_int) -> Result<ModbusMapping> {
+    pub fn new(number_bits: i32, number_input_bits : i32, number_registers: i32, number_input_registers: i32) -> Result<ModbusMapping> {
         unsafe {
             use std::ptr;
 

@@ -95,7 +95,7 @@ html_root_url = "https://zzeroo.com/")]
 //!
 //! In TCP mode, you must not use the usual [`connect()`](struct.Modbus.html#method.connect) to establish the connection but a pair of accept/listen calls
 //!
-//! * [`tcp_listen()`](#method.tcp_listen), [`tcp_accept()`](#method.tcp_accept), [`tcp_pi_listen`()](#method.tcp_pi_listen), [`tcp_pi_accept`()](#method.tcp_pi_accept)
+//! * [`tcp_listen()`](struct.Modbus.html#method.tcp_listen), [`tcp_accept()`](struct.Modbus.html#method.tcp_accept), [`tcp_pi_listen`()](struct.Modbus.html#method.tcp_pi_listen), [`tcp_pi_accept`()](struct.Modbus.html#method.tcp_pi_accept)
 //!
 //! then the data can be received with
 //!

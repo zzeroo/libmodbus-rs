@@ -58,12 +58,12 @@ impl ModbusTCP for Modbus {
 
     /// `tcp_accept` - accept a new connection on a TCP Modbus socket (IPv4)
     ///
+    /// The [`tcp_accept()`](#method.tcp_accept) function shall extract the first connection on the
+    /// queue of pending connections and create a new socket given as argument.
+    ///
     /// # Parameters
     ///
     /// * `socket`  - Socket
-    ///
-    /// The [`tcp_accept()`](#method.tcp_accept) function shall extract the first connection on the
-    /// queue of pending connections and create a new socket given as argument.
     ///
     /// # Examples
     ///
@@ -87,13 +87,13 @@ impl ModbusTCP for Modbus {
 
     /// `tcp_listen` - create and listen a TCP Modbus socket (IPv4)
     ///
-    /// # Parameters
-    ///
-    /// * `num_connection`  - maximum number of incoming connections on the specified IP address
-    ///
     /// The [`tcp_listen()`](#method.tcp_listen) function shall create a socket and listen to maximum
     /// `num_connection` incoming connections on the specified IP address.
     /// If IP address is set to NULL or '0.0.0.0', any addresses will be listen.
+    ///
+    /// # Parameters
+    ///
+    /// * `num_connection`  - maximum number of incoming connections on the specified IP address
     ///
     /// # Examples
     ///

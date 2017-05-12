@@ -17,32 +17,6 @@ macro_rules! t {
     })
 }
 
-// stolen from: https://github.com/alexcrichton/backtrace-rs/blob/master/backtrace-sys/build.rs
-fn try_tool(compiler: &gcc::Tool, cc: &str, compiler_suffix: &str, tool_suffix: &str)
-            -> Option<PathBuf> {
-    if !cc.ends_with(compiler_suffix) {
-        return None
-    }
-    let cc = cc.replace(compiler_suffix, tool_suffix);
-    let candidate = compiler.path().parent().unwrap().join(cc);
-    if Command::new(&candidate).output().is_ok() {
-        Some(candidate)
-    } else {
-        None
-    }
-}
-// stolen from: https://github.com/alexcrichton/backtrace-rs/blob/master/backtrace-sys/build.rs, too
-fn find_tool(compiler: &gcc::Tool, cc: &str, tool: &str) -> PathBuf {
-    // Allow overrides via env var
-    if let Some(s) = env::var_os(tool.to_uppercase()) {
-        return s.into()
-    }
-    let tool_suffix = format!("-{}", tool);
-    try_tool(compiler, cc, "-gcc", &tool_suffix)
-        .or_else(|| try_tool(compiler, cc, "-clang", &tool_suffix))
-        .or_else(|| try_tool(compiler, cc, "-cc", &tool_suffix))
-        .unwrap_or_else(|| PathBuf::from(tool))
-}
 
 const LIBMODBUS_DIR: &'static str = "libmodbus";
 
@@ -81,7 +55,6 @@ fn main() {
 
     let cfg = gcc::Config::new();
     let compiler = cfg.get_compiler();
-    let cc = compiler.path().file_name().unwrap().to_str().unwrap();
     let mut flags = OsString::new();
     for (i, flag) in compiler.args().iter().enumerate() {
         if i > 0 {
