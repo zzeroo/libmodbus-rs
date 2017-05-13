@@ -69,22 +69,22 @@ fn run() -> Result<()> {
             // WRITE BIT
             let rc = modbus.write_bit(address as i32, match request_bits[0] { 0 => false, _ => true } );
             match rc {
-                -1 => { // Error
-                    println!("ERROR could not write_bit ({:?})", rc);
+                Err(_) => { // Error
+                    println!("ERROR could not write_bit ({:?})", &rc);
                     println!("Address = {}, value = {}", address, request_bits[0]);
                     num_failures += 1;
                 }
-                1 => {
+                Ok(_) => {
                     let rc = modbus.read_bits(address as i32, 1, &mut response_bits);
                     match rc {
-                        -1 => {
-                            println!("ERROR could not read_bits single ({:?})", rc);
+                        Err(_) => {
+                            println!("ERROR could not read_bits single ({:?})", &rc);
                             println!("address = {}", address);
                             num_failures += 1;
                         }
-                        _ => {
+                        Ok(_) => {
                             if request_bits[0] != response_bits[0] {
-                                println!("ERROR could not read_bits single ({:?})", rc);
+                                println!("ERROR could not read_bits single ({:?})", &rc);
                                 println!("address = {}", address);
                                 num_failures += 1;
                             }

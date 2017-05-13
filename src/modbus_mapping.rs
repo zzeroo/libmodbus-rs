@@ -26,20 +26,25 @@ impl ModbusMapping {
     ///
     /// let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
     /// ```
-    pub fn new(number_bits: i32, number_input_bits : i32, number_registers: i32, number_input_registers: i32) -> Result<ModbusMapping> {
+    pub fn new(number_bits: i32, number_input_bits: i32, number_registers: i32, number_input_registers: i32)
+               -> Result<ModbusMapping> {
         unsafe {
-            let modbus_mapping = libmodbus_sys::modbus_mapping_new(number_bits, number_input_bits , number_registers, number_input_registers);
+            let modbus_mapping = libmodbus_sys::modbus_mapping_new(number_bits,
+                                                                   number_input_bits,
+                                                                   number_registers,
+                                                                   number_input_registers);
             if modbus_mapping.is_null() {
                 Err("Could not create ModbusMapping".into())
             } else {
-                Ok(ModbusMapping {modbus_mapping: modbus_mapping} )
+                Ok(ModbusMapping { modbus_mapping: modbus_mapping })
             }
         }
     }
 
     /// `mapping_free` - free a modbus_mapping_t structure
     ///
-    /// The function shall free the four arrays of mb_mapping_t structure and finally the mb_mapping_t referenced by mb_mapping.
+    /// The function shall free the four arrays of mb_mapping_t structure and finally the mb_mapping_t referenced by
+    /// mb_mapping.
     ///
     /// **It should not nessesary to call these function. Because rusts drop trait handles that for you!**
     ///

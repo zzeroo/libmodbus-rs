@@ -41,12 +41,10 @@ impl ModbusTCP for Modbus {
     ///     Err(e) => println!("Error: {}", e),
     /// }
     /// ```
-    fn new_tcp(ip: &str,
-                    port: u32) -> Result<Modbus> {
+    fn new_tcp(ip: &str, port: u32) -> Result<Modbus> {
         unsafe {
             let ip = CString::new(ip).unwrap();
-            let ctx = libmodbus_sys::modbus_new_tcp(ip.as_ptr(),
-                port as c_int);
+            let ctx = libmodbus_sys::modbus_new_tcp(ip.as_ptr(), port as c_int);
 
             if ctx.is_null() {
                 Err("Could not create new TCP Modbus contrext".into())

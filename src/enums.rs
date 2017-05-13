@@ -1,25 +1,30 @@
 
 /// Modbus protocol exceptions
 ///
-///Documentation source: https://en.wikipedia.org/wiki/Modbus#Main_Modbus_exception_codes
+/// Documentation source: https://en.wikipedia.org/wiki/Modbus#Main_Modbus_exception_codes
 #[repr(C)]
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Exception {
     /// (1) Illegal Function - Function code received in the query is not recognized or allowed by slave
     ILLEGAL_FUNCTION = 1,
-    /// (2) Illegal Data Address - Data address of some or all the required entities are not allowed or do not exist in slave
+    /// (2) Illegal Data Address - Data address of some or all the required entities are not allowed or do not exist in
+    /// slave
     ILLEGAL_DATA_ADDRESS,
     /// (3) Illegal Data Value - Value is not accepted by slave
     ILLEGAL_DATA_VALUE,
     /// (4) Slave Device Failure - Unrecoverable error occurred while slave was attempting to perform requested action
     SLAVE_OR_SERVER_FAILURE,
-    /// (5) Acknowledge - Slave has accepted request and is processing it, but a long duration of time is required. This response is returned to prevent a timeout error from occurring in the master. Master can next issue a Poll Program Complete message to determine whether processing is completed
+    /// (5) Acknowledge - Slave has accepted request and is processing it, but a long duration of time is required.
+    /// This response is returned to prevent a timeout error from occurring in the master. Master can next issue a Poll
+    /// Program Complete message to determine whether processing is completed
     ACKNOWLEDGE,
     /// (6) Slave Device Busy - Slave is engaged in processing a long-duration command. Master should retry later
     SLAVE_OR_SERVER_BUSY,
-    /// (7) Negative Acknowledge - Slave cannot perform the programming functions. Master should request diagnostic or error information from slave
+    /// (7) Negative Acknowledge - Slave cannot perform the programming functions. Master should request diagnostic or
+    /// error information from slave
     NEGATIVE_ACKNOWLEDGE,
-    /// (8) Memory Parity Error - Slave detected a parity error in memory. Master can retry the request, but service may be required on the slave device
+    /// (8) Memory Parity Error - Slave detected a parity error in memory. Master can retry the request, but service
+    /// may be required on the slave device
     MEMORY_PARITY,
     /// (9) Not defined
     NOT_DEFINED,
