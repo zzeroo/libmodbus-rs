@@ -125,7 +125,7 @@ mod modbus_tcp;
 mod modbus;
 pub mod errors;
 
-pub use self::enums::FunctionCode;
+pub use self::enums::{Exceptions, FunctionCode};
 pub use self::modbus_client::ModbusClient;
 pub use self::modbus_mapping::ModbusMapping;
 pub use self::modbus_rtu::{ModbusRTU, RequestToSendMode, SerialMode};
