@@ -115,7 +115,7 @@ extern crate libc;
 extern crate libmodbus_sys;
 #[macro_use] extern crate error_chain;
 
-pub mod errors;
+mod enums;
 mod modbus_client;
 mod modbus_mapping;
 mod modbus_rtu;
@@ -123,7 +123,9 @@ mod modbus_server;
 mod modbus_tcp_pi;
 mod modbus_tcp;
 mod modbus;
+pub mod errors;
 
+pub use self::enums::FunctionCode;
 pub use self::modbus_client::ModbusClient;
 pub use self::modbus_mapping::ModbusMapping;
 pub use self::modbus_rtu::{ModbusRTU, RequestToSendMode, SerialMode};
@@ -135,3 +137,4 @@ pub use self::modbus::Modbus;
 pub use libmodbus_sys::MODBUS_TCP_DEFAULT_PORT;
 pub use libmodbus_sys::MODBUS_TCP_MAX_ADU_LENGTH;
 pub use libmodbus_sys::MODBUS_MAX_ADU_LENGTH;
+pub use libmodbus_sys::MODBUS_MAX_PDU_LENGTH;
