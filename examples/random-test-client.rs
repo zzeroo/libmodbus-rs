@@ -33,7 +33,7 @@ fn run() -> Result<()> {
     let mut rng = rand::thread_rng();
 
     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
-    modbus.set_debug(true)?;
+    // modbus.set_debug(true)?;
 
     // `accept()` and `listen()` are not working yeat?
     // let mut socket = modbus.tcp_listen(10)?;
@@ -43,7 +43,7 @@ fn run() -> Result<()> {
     let mut num_bit = ADDRESS_END - ADDRESS_START;
 
     let mut request_bits = vec![0u8; num_bit];
-    let response_bits = vec![0u8; num_bit];
+    let mut response_bits = vec![0u8; num_bit];
     let mut request_registers = vec![0u16; num_bit];
     let response_registers = vec![0u16; num_bit];
     let mut rw_request_registers = vec![0u16; num_bit];
@@ -67,27 +67,62 @@ fn run() -> Result<()> {
             num_bit = ADDRESS_END - address;
 
             // WRITE BIT
-            match modbus.write_bit(address as i32, match request_bits[0] { 0 => true, _ => false } ) {
-                Err(_) => {
-                    println!("Error, could not write_bit()");
+            let rc = modbus.write_bit(address as i32, match request_bits[0] { 0 => false, _ => true } );
+            match rc {
+                -1 => { // Error
+                    println!("ERROR could not write_bit ({:?})", rc);
+                    println!("Address = {}, value = {}", address, request_bits[0]);
                     num_failures += 1;
                 }
-                Ok(_) => {
-                    match modbus.read_bits(address as i32, 1, &mut request_bits) {
-                        Err(_) => {
-                            println!("Error, cound not read_bits() single");
+                1 => {
+                    let rc = modbus.read_bits(address as i32, 1, &mut response_bits);
+                    match rc {
+                        -1 => {
+                            println!("ERROR could not read_bits single ({:?})", rc);
+                            println!("address = {}", address);
                             num_failures += 1;
                         }
-                        Ok(_) => {}
+                        _ => {
+                            if request_bits[0] != response_bits[0] {
+                                println!("ERROR could not read_bits single ({:?})", rc);
+                                println!("address = {}", address);
+                                num_failures += 1;
+                            }
+                        }
                     }
                 }
+                _ => {}
             }
 
-            // MULTIPLE BITS
-            match modbus.write_bits(address as i32, num_bit as i32, &mut request_bits) {
-                Ok(_) => {}
-                Err(_) => {}
-            }
+            // // MULTIPLE BITS
+            // let rc = modbus.write_bits(address as i32, num_bit as i32, &mut request_bits)?;
+            // match rc {
+            //     -1 => {
+            //         println!("ERROR modbus_write_bits ({:?})", rc);
+            //         println!("Address = {}, num_bit = {}", address, num_bit);
+            //         num_failures += 1;
+            //     }
+            //     _ => {
+            //         let rc = modbus.read_bits(address as i32, num_bit as i32, &mut request_bits)?;
+            //         match rc {
+            //             -1 => {
+            //                 println!("ERROR modbus_read_bits");
+            //                 println!("Address = {}, num_bit = {}", address, num_bit);
+            //                 num_failures += 1;
+            //             }
+            //             _ => {
+            //                 for i in 0..num_bit {
+            //                     if response_bits[i] != request_bits[i] {
+            //                         println!("ERROR modbus_read_bits");
+            //                         println!("Address = {address}, value {request} (0x{request:X}) != {response} (0x{response:X})",
+            //                             address=address, request=request_bits[i], response=response_bits[i]);
+            //                         num_failures += 1;
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         }
     }
 

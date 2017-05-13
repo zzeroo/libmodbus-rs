@@ -6,7 +6,7 @@ use libmodbus_rs::errors::*;
 
 fn run() -> Result<()> {
     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
-    modbus.set_debug(true)?;
+    // modbus.set_debug(true)?;
 
     let modbus_mapping = ModbusMapping::new(500, 500, 500, 500)?;
 
