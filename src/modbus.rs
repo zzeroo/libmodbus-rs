@@ -167,7 +167,7 @@ impl Modbus {
     ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -213,7 +213,7 @@ impl Modbus {
     ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -238,15 +238,34 @@ impl Modbus {
     /// wait for a response
     /// in the **timeout_sec** and **timeout_usec** arguments.
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
+    /// # Parameters
+    ///
+    /// * `timeout_sec`  - timeout sec
+    /// * `timeout_usec` - timeout usec
+    ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// let mut timeout_sec = 0;
+    /// let mut timeout_usec = 0;
+    ///
+    /// assert!(modbus.get_response_timeout(&mut timeout_sec, &mut timeout_usec).is_ok());
     /// ```
-    pub fn get_response_timeout(&self) -> Result<(i32, i32)> {
-        unimplemented!()
+    pub fn get_response_timeout(&self, timeout_sec: *mut u32, timeout_usec: *mut u32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_get_response_timeout(self.ctx, timeout_sec, timeout_usec) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(0),
+                _ => unreachable!(),
+            }
+        }
     }
 
     /// `set_response_timeout` - set timeout for response
@@ -271,7 +290,7 @@ impl Modbus {
     ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
