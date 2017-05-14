@@ -18,7 +18,7 @@ This crate based on the latest libmodbus git:master branch. I plan to support th
 
 ## Building libmodbus-rs
 
-The libmobus ffi bindings (libmodbus-sys) are build using [bindgen][bindgen]. [Bindgen need Clang 3.9 or greater on your system.][bindgen-requirements]
+The libmobus ffi bindings (libmodbus-sys) are build using [bindgen][bindgen]. [Bindgen need Clang 3.9 or greater on your system.][bindgen-reg]
 
 ### Debian-based Linuxes
 
@@ -32,7 +32,7 @@ The libmobus ffi bindings (libmodbus-sys) are build using [bindgen][bindgen]. [B
 # pacman -S clang
 ```
 
-For mor information about the bindgen requirements please visit [https://servo.github.io/rust-bindgen/requirements.html][bindgen-requirements]
+For mor information about the bindgen requirements please visit [https://servo.github.io/rust-bindgen/requirements.html][bindgen-reg]
 
 ## Examples
 
@@ -86,4 +86,4 @@ This project hosts the original libmodbus documentation, used here, as well. Ple
 [libmodbus-repo]: https://github.com/stephane/libmodbus.git
 [libmodbus-docu]: http://zzeroo.github.io/libmodbus-rs/libmodbus/libmodbus.html
 [bindgen]: https://github.com/servo/rust-bindgen
-[bindgen-reqirements]: https://servo.github.io/rust-bindgen/requirements.html
+[bindgen-reg]: https://servo.github.io/rust-bindgen/requirements.html
