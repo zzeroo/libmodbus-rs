@@ -1,13 +1,20 @@
 [package]
-
 name = "libmodbus-sys"
 version = "0.4.0"
 authors = ["Stefan Müller <co@zzeroo.com>"]
 links = "modbus"
 build = "build.rs"
-repository = "https://github.com/zzeroo/libmodbus-rs"
-license = "LGPL-2.1"
-description = "Native bindings to the libmodbus library"
+keywords = ["modbus", "libmodbus"]
+documentation = "https://github.com/zzeroo/libmodbus-rs.git"
+repository = "https://github.com/zzeroo/libmodbus-rs.git"
+homepage = "https://github.com/zzeroo/libmodbus-rs.git"
+description = """
+Native bindings to the libmodbus C library.
+Libmodbus is a free software library to send/receive data with a device which respects the Modbus protocol.
+This library can use a serial port or an Ethernet connection.
+http://libmodbus.org/
+"""
+license = "LGPL-2.1" # same as libmodbus
 
 [lib]
 name = "libmodbus_sys"
