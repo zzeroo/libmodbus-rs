@@ -96,6 +96,24 @@ html_root_url = "https://zzeroo.com/")]
 //!
 //! ### Common
 //!
+//! Common methods to modify or change the current modbus context. Some of these function are not nessesary in Rust (e.g. because the Drop trait and so on)
+//!
+//! * Free libmodbus context
+//!     - [`free()`](struct.Modbus.html#method.free) **It should normaly not nessesary to call this function.**<br />
+//!     Memory handling under Rust controlls the [`Drop trait`](https://doc.rust-lang.org/std/ops/trait.Drop.html) in "the book" you find [more information about](https://doc.rust-lang.org/book/ffi.html#destructors).
+//! * Set slave ID
+//!     - [`set_slave()`](struct.Modbus.html#method.set_slave)
+//! * Enable debug mode
+//!     - [`set_debug()`](struct.Modbus.html#method.set_debug)
+//! * Timeout settings
+//!     - [`get_byte_timeout()`](struct.Modbus.html#method.get_byte_timeout) [`set_byte_timeout()`](struct.Modbus.html#method.set_byte_timeout) [`get_response_timeout()`](struct.Modbus.html#method.get_response_timeout) [`set_response_timeout()`](struct.Modbus.html#method.set_response_timeout)
+//! * Error recovery mod
+//!     - [`set_error_recovery()`](struct.Modbus.html#method.set_error_recovery)
+//! * Setter/getter of internal socket
+//!     - [`set_socket()`](struct.Modbus.html#method.set_socket) [`get_socket()`](struct.Modbus.html#method.get_socket)
+//! * Information about header
+//!     - [`get_header_length()`](struct.Modbus.html#method.get_header_length)
+//!
 //! ### Connection
 //!
 //! ### [`Client`](trait.ModbusClient.html)
@@ -163,7 +181,7 @@ mod modbus_tcp;
 mod modbus;
 pub mod errors;
 
-pub use self::enums::{Exception, FunctionCode};
+pub use self::enums::{ErrorRecoveryMode, Exception, FunctionCode};
 pub use self::modbus_client::ModbusClient;
 pub use self::modbus_mapping::ModbusMapping;
 pub use self::modbus_rtu::{ModbusRTU, RequestToSendMode, SerialMode};

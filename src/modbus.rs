@@ -1,3 +1,4 @@
+use enums::ErrorRecoveryMode;
 use errors::*;
 use libc::{c_int, c_uint};
 use libmodbus_sys;
@@ -19,6 +20,10 @@ impl Modbus {
     /// The [`connect()`](#method.connect) function shall establish a connection to a Modbus server,
     /// a network or a bus.
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
     /// # Examples
     ///
     /// ```rust,no_run
@@ -39,6 +44,10 @@ impl Modbus {
     /// `flush` - flush non-transmitted data
     /// The [`flush()`](#method.flush) function shall discard data received but not read to the socket or file
     /// descriptor associated to the context ctx.
+    ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
     ///
     /// # Examples
     ///
@@ -74,6 +83,10 @@ impl Modbus {
     ///     The special value MODBUS_TCP_SLAVE (0xFF) can be used in TCP mode to restore the default value.
     ///     The broadcast address is MODBUS_BROADCAST_ADDRESS.
     ///     This special value must be use when you want all Modbus devices of the network receive the request.
+    ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
@@ -112,6 +125,10 @@ impl Modbus {
     /// <00><14><00><00><00><09><12><03><06><02><2B><00><00><00><00>
     /// ```
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
     /// # Parameters
     ///
     /// * `flag`    - `true` of `false`, enables or disables debug mode
@@ -139,16 +156,34 @@ impl Modbus {
     /// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between
     /// two consecutive bytes of the same message `Result<(to_sec, to_usec)>`.
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
+    /// # Parameters
+    ///
+    /// * `timeout_sec`  - timeout sec
+    /// * `timeout_usec` - timeout usec
+    ///
     /// # Examples
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
+    ///
+    /// let mut timeout_sec = 0;
+    /// let mut timeout_usec = 0;
+    ///
+    /// assert!(modbus.get_byte_timeout(&mut timeout_sec, &mut timeout_usec).is_ok());
     /// ```
-    pub fn get_byte_timeout(&self) -> Result<(i32, i32)> {
-        unimplemented!()
+    pub fn get_byte_timeout(&self, timeout_sec: *mut u32, timeout_usec: *mut u32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_get_byte_timeout(self.ctx, timeout_sec, timeout_usec) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(0),
+                _ => unreachable!(),
+            }
+        }
     }
 
     /// `set_byte_timeout` - set timeout between bytes
@@ -167,13 +202,16 @@ impl Modbus {
     /// of the response timeout.
     /// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
     /// # Examples
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
     /// ```
     pub fn set_byte_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32)> {
         unimplemented!()
@@ -211,6 +249,10 @@ impl Modbus {
     /// governs the entire handling of the response, the full confirmation response must be received before expiration
     /// of the response timeout.
     /// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.
+    ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
     ///
     /// # Examples
     ///
@@ -254,6 +296,11 @@ impl Modbus {
     ///
     /// It’s not recommended to enable error recovery for slave/server.
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    /// The C library sets errno to one of the values of [ErrorRecoveryMode]().
+    ///
     /// # Examples
     ///
     /// ```rust,no_run
@@ -261,7 +308,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
-    pub fn set_error_recovery(&mut self, _modbus_error_recovery_mode: libmodbus_sys::modbus_error_recovery_mode)
+    pub fn set_error_recovery(&mut self, error_recovery_mode: ErrorRecoveryMode)
                               -> Result<i32> {
         unimplemented!()
     }
