@@ -304,15 +304,21 @@ impl Modbus {
     /// the backend.
     /// This function is convenient to manipulate a message and so its limited to low-level operations.
     ///
+    /// # Return values
+    ///
+    /// The header length as integer value.
+    ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
-    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// assert_eq!(modbus.get_header_length(), 7);
     /// ```
-    pub fn get_header_length(&self) -> Result<u32> {
-        unimplemented!()
+    pub fn get_header_length(&self) -> i32 {
+        unsafe {
+            libmodbus_sys::modbus_get_header_length(self.ctx)
+        }
     }
 
     /// `close` - close a Modbus connection
