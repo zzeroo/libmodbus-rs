@@ -30,6 +30,8 @@ fn run() -> Result<()> {
 
     // ModbusMapping and Modbus struct are dropped here, automatically by Rusts Drop trait.
     // Hence no manual `modbus_mapping_free(mb_mapping)`, `modbus_close(ctx)` nor `modbus_free(ctx)` needed, like in C.
+
+    Ok(())
 }
 
 fn main() {
