@@ -57,7 +57,7 @@ impl ModbusClient for Modbus {
     ///
     /// # Return value
     ///
-    /// The function shall return the number of read bits if successful. Otherwise it contains an Error .
+    /// The function shall return the number of read bits if successful. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
@@ -94,7 +94,7 @@ impl ModbusClient for Modbus {
     ///
     /// # Return value
     ///
-    /// The function shall return the number of read input status if successful. Otherwise it contains an Error .
+    /// The function shall return the number of read input status if successful. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///

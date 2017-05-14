@@ -26,10 +26,12 @@ fn run() -> Result<()> {
             }
         }?;
     }
-    Err("Quit the loop. This is the ok, default behavior.".into())
+    println!("Quit the loop: Connection reset by peer");
 
     // ModbusMapping and Modbus struct are dropped here, automatically by Rusts Drop trait.
     // Hence no manual `modbus_mapping_free(mb_mapping)`, `modbus_close(ctx)` nor `modbus_free(ctx)` needed, like in C.
+
+    Ok(())
 }
 
 fn main() {

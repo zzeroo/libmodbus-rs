@@ -1,6 +1,6 @@
 [package]
 name = "libmodbus-rs"
-version = "0.4.1"
+version = "0.4.2"
 authors = ["Stefan Müller <co@zzeroo.com>"]
 readme = "README.md"
 keywords = ["modbus", "libmodbus"]
@@ -17,8 +17,8 @@ license = "LGPL-2.1" # same as libmodbus
 categories = ["api-bindings"]
 
 [badges]
-travis-ci = { repository = "zzeroo/git2-rs" }
-appveyor = { repository = "zzeroo/git2-rs" }
+travis-ci = { repository = "zzeroo/libmodbus-rs" }
+appveyor = { repository = "zzeroo/libmodbus-rs" }
 
 [dependencies]
 error-chain = "0.10"

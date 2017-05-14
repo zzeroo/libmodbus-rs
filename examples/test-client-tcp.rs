@@ -53,12 +53,12 @@ fn run() -> Result<()> {
     modbus.connect()?;
 
     // Write and read registers test
-    //test_write_and_read_registers(&modbus);
+    // test_write_and_read_registers(&modbus);
     // Raw request tests
-    //test_raw_request(&modbus);
-    //test_reply_exception(&modbus);
+    // test_raw_request(&modbus);
+    // test_reply_exception(&modbus);
     // test_read_bits(&modbus);
-    
+
 
     Ok(())
 }

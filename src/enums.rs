@@ -67,3 +67,11 @@ pub enum FunctionCode {
     /// 0x23 Read/Write Multiple Registers
     WRITE_AND_READ_REGISTERS = 23,
 }
+
+#[repr(u32)]
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum ErrorRecoveryMode {
+    NONE = 0,
+    LINK = 2,
+    PROTOCOL = 4,
+}

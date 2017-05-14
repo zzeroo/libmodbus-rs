@@ -1,6 +1,8 @@
+use enums::ErrorRecoveryMode;
 use errors::*;
 use libc::{c_int, c_uint};
 use libmodbus_sys;
+use std::io::Error;
 
 
 /// Safe interface for [libmodbus](http://libmodbus.org)
@@ -18,6 +20,10 @@ impl Modbus {
     /// The [`connect()`](#method.connect) function shall establish a connection to a Modbus server,
     /// a network or a bus.
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
     /// # Examples
     ///
     /// ```rust,no_run
@@ -29,7 +35,7 @@ impl Modbus {
     pub fn connect(&self) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_connect(self.ctx) {
-                -1 => Err("Could not connect".into()),
+                -1 => bail!(Error::last_os_error()),
                 _ => Ok(0),
             }
         }
@@ -38,6 +44,10 @@ impl Modbus {
     /// `flush` - flush non-transmitted data
     /// The [`flush()`](#method.flush) function shall discard data received but not read to the socket or file
     /// descriptor associated to the context ctx.
+    ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
     ///
     /// # Examples
     ///
@@ -50,7 +60,7 @@ impl Modbus {
     pub fn flush(&self) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_flush(self.ctx) {
-                -1 => Err("Could not flush".into()),
+                -1 => bail!(Error::last_os_error()),
                 _ => Ok(0),
             }
         }
@@ -74,6 +84,10 @@ impl Modbus {
     ///     The broadcast address is MODBUS_BROADCAST_ADDRESS.
     ///     This special value must be use when you want all Modbus devices of the network receive the request.
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
     /// # Parameters
     ///
     /// * `slave`   - new slave ID
@@ -91,7 +105,7 @@ impl Modbus {
     pub fn set_slave(&mut self, slave: i32) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_set_slave(self.ctx, slave as c_int) {
-                -1 => Err("Could not set slave address".into()),
+                -1 => bail!(Error::last_os_error()),
                 _ => Ok(0),
             }
         }
@@ -111,6 +125,10 @@ impl Modbus {
     /// <00><14><00><00><00><09><12><03><06><02><2B><00><00><00><00>
     /// ```
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
     /// # Parameters
     ///
     /// * `flag`    - `true` of `false`, enables or disables debug mode
@@ -127,7 +145,7 @@ impl Modbus {
     pub fn set_debug(&mut self, flag: bool) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_set_debug(self.ctx, flag as c_int) {
-                -1 => Err("Could not set debug".into()),
+                -1 => bail!(Error::last_os_error()),
                 _ => Ok(0),
             }
         }
@@ -136,18 +154,36 @@ impl Modbus {
     /// `get_byte_timeout` - get timeout between bytes
     ///
     /// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between
-    /// two consecutive bytes of the same message `Result<(to_sec, to_usec)>`.
+    /// two consecutive bytes of the same message `Result<(timeout_sec, timeout_usec)>`.
+    ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
+    /// # Parameters
+    ///
+    /// * `timeout_sec`  - timeout sec
+    /// * `timeout_usec` - timeout usec
     ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
+    ///
+    /// let mut timeout_sec = 0;
+    /// let mut timeout_usec = 0;
+    ///
+    /// assert!(modbus.get_byte_timeout(&mut timeout_sec, &mut timeout_usec).is_ok());
     /// ```
-    pub fn get_byte_timeout(&self) -> Result<(i32, i32)> {
-        unimplemented!()
+    pub fn get_byte_timeout(&self, timeout_sec: *mut u32, timeout_usec: *mut u32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_get_byte_timeout(self.ctx, timeout_sec, timeout_usec) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(0),
+                _ => unreachable!(),
+            }
+        }
     }
 
     /// `set_byte_timeout` - set timeout between bytes
@@ -158,41 +194,78 @@ impl Modbus {
     /// longer than the defined timeout,
     /// an ETIMEDOUT error will be raised by the function waiting for a response.
     ///
-    /// The value of **to_usec** argument must be in the range 0 to 999999.
+    /// The value of **timeout_usec** argument must be in the range 0 to 999999.
     ///
-    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case,
+    /// If both **timeout_sec** and **timeout_usec** are zero, this timeout will not be used at all. In this case,
     /// [`set_byte_timeout()`](#method.set_byte_timeout)
     /// governs the entire handling of the response, the full confirmation response must be received before expiration
     /// of the response timeout.
     /// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
+    /// # Parameters
+    ///
+    /// * `timeout_sec`  - timeout sec
+    /// * `timeout_usec` - timeout usec
+    ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));
+    ///
+    /// let timeout_sec = 1;
+    /// let timeout_usec = 500;
+    ///
+    /// assert!(modbus.set_byte_timeout(timeout_sec, timeout_usec).is_ok());
     /// ```
-    pub fn set_byte_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32)> {
-        unimplemented!()
+    pub fn set_byte_timeout(&mut self, timeout_sec: u32, timeout_usec: u32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_set_byte_timeout(self.ctx, timeout_sec, timeout_usec) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(0),
+                _ => unreachable!(),
+            }
+        }
     }
 
     /// `get_response_timeout` - get timeout for response
     ///
     /// The [`get_response_timeout()`](#method.get_response_timeout) function shall return the timeout interval used to
     /// wait for a response
-    /// in the **to_sec** and **to_usec** arguments.
+    /// in the **timeout_sec** and **timeout_usec** arguments.
+    ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
+    /// # Parameters
+    ///
+    /// * `timeout_sec`  - timeout sec
+    /// * `timeout_usec` - timeout usec
     ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// let mut timeout_sec = 0;
+    /// let mut timeout_usec = 0;
+    ///
+    /// assert!(modbus.get_response_timeout(&mut timeout_sec, &mut timeout_usec).is_ok());
     /// ```
-    pub fn get_response_timeout(&self) -> Result<(i32, i32)> {
-        unimplemented!()
+    pub fn get_response_timeout(&self, timeout_sec: *mut u32, timeout_usec: *mut u32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_get_response_timeout(self.ctx, timeout_sec, timeout_usec) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(0),
+                _ => unreachable!(),
+            }
+        }
     }
 
     /// `set_response_timeout` - set timeout for response
@@ -203,23 +276,42 @@ impl Modbus {
     /// an ETIMEDOUT error will be raised by the function waiting for a response. When byte timeout is disabled,
     /// the full confirmation response must be received before expiration of the response timeout.
     ///
-    /// The value of **to_usec** argument must be in the range 0 to 999999.
+    /// The value of **timeout_usec** argument must be in the range 0 to 999999.
     ///
-    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case,
+    /// If both **timeout_sec** and **timeout_usec** are zero, this timeout will not be used at all. In this case,
     /// [`set_response_timeout()`](#method.set_response_timeout)
     /// governs the entire handling of the response, the full confirmation response must be received before expiration
     /// of the response timeout.
     /// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
+    /// # Parameters
+    ///
+    /// * `timeout_sec`  - timeout sec
+    /// * `timeout_usec` - timeout usec
+    ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// let timeout_sec = 1;
+    /// let timeout_usec = 500;
+    ///
+    /// assert!(modbus.set_response_timeout(timeout_sec, timeout_usec).is_ok());
     /// ```
-    pub fn set_response_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32)> {
-        unimplemented!()
+    pub fn set_response_timeout(&mut self, timeout_sec: u32, timeout_usec: u32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_set_response_timeout(self.ctx, timeout_sec, timeout_usec) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(0),
+                _ => unreachable!(),
+            }
+        }
     }
 
     /// `set_error_recovery` - set the error recovery mode
@@ -253,33 +345,60 @@ impl Modbus {
     ///
     /// It’s not recommended to enable error recovery for slave/server.
     ///
+    /// # Return value
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    /// The C library sets errno to one of the values of [ErrorRecoveryMode]().
+    ///
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
+    /// use libmodbus_rs::{Modbus, ModbusTCP, ErrorRecoveryMode};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// //assert!(modbus.set_error_recovery(ErrorRecoveryMode::LINK | ErrorRecoveryMode::PROTOCOL))
     /// ```
-    pub fn set_error_recovery(&mut self, _modbus_error_recovery_mode: libmodbus_sys::modbus_error_recovery_mode)
-                              -> Result<i32> {
+    pub fn set_error_recovery(&mut self, error_recovery_mode: ErrorRecoveryMode)
+                              -> Result<i32>
+    {
         unimplemented!()
+        // unsafe {
+        //     let error_recovery_mode = error_recovery_mode;
+        //     match libmodbus_sys::modbus_set_error_recovery(self.ctx, error_recovery_mode.into()) {
+        //         -1 => bail!(Error::last_os_error()),
+        //         0 => Ok(0),
+        //         _ => unreachable!(),
+        //     }
+        // }
     }
 
+    // TODO: Add examples from: http://zzeroo.github.io/libmodbus-rs/libmodbus/modbus_set_socket.html
     /// `set_socket` - set socket of the context
     ///
     /// The [`set_socket()`](#method.set_socket) function shall set the socket or file descriptor in the libmodbus
     /// context.
     /// This function is useful for managing multiple client connections to the same server.
     ///
+    /// # Return values
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// assert_eq!(modbus.set_socket(1337).unwrap(), 0);
     /// ```
-    pub fn set_socket(&mut self, _socket: u32) -> Result<i32> {
-        unimplemented!()
+    pub fn set_socket(&mut self, socket: i32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_set_socket(self.ctx, socket) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(0),
+                _ => unreachable!(),
+            }
+        }
     }
 
     /// `get_socket` - set socket of the context
@@ -287,15 +406,25 @@ impl Modbus {
     /// The [`get_socket()`](#method.get_socket) function shall return the current socket or file descriptor of the
     /// libmodbus context.
     ///
+    /// # Return value
+    ///
+    /// The function returns a Result containing the current socket or file descriptor of the context if successful. Otherwise it contains an Error.
+    ///
     /// # Examples
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let socket = modbus.get_socket().unwrap();
     /// ```
-    pub fn get_socket(&self) -> Result<u32> {
-        unimplemented!()
+    pub fn get_socket(&self) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_get_socket(self.ctx) {
+                -1 => bail!(Error::last_os_error()),
+                socket => Ok(socket),
+            }
+        }
     }
 
     /// `get_header_length` - retrieve the current header length
@@ -304,15 +433,21 @@ impl Modbus {
     /// the backend.
     /// This function is convenient to manipulate a message and so its limited to low-level operations.
     ///
+    /// # Return values
+    ///
+    /// The header length as integer value.
+    ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
-    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// assert_eq!(modbus.get_header_length(), 7);
     /// ```
-    pub fn get_header_length(&self) -> Result<u32> {
-        unimplemented!()
+    pub fn get_header_length(&self) -> i32 {
+        unsafe {
+            libmodbus_sys::modbus_get_header_length(self.ctx)
+        }
     }
 
     /// `close` - close a Modbus connection
