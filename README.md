@@ -1,5 +1,5 @@
 # libmodbus-rs
-## [libmodbus](http://libmodbus.org/) bindings for Rust [![Crates.io version]](https://img.shields.io/crates/v/libmodbus-rs.svg)[![Build Status](https://travis-ci.org/zzeroo/libmodbus-rs.svg?branch=master)](https://travis-ci.org/zzeroo/libmodbus-rs) [![Build status](https://ci.appveyor.com/api/projects/status/dfjyswsgj6menctw?svg=true)](https://ci.appveyor.com/project/zzeroo/libmodbus-rs)
+## [libmodbus](http://libmodbus.org/) bindings for Rust [![Crates.io version](https://img.shields.io/crates/v/libmodbus-rs.svg)](https://crates.io/crates/libmodbus-rs) [![Build Status](https://travis-ci.org/zzeroo/libmodbus-rs.svg?branch=master)](https://travis-ci.org/zzeroo/libmodbus-rs) [![Build status](https://ci.appveyor.com/api/projects/status/dfjyswsgj6menctw?svg=true)](https://ci.appveyor.com/project/zzeroo/libmodbus-rs)
 
 [Homepage |][homepage]&nbsp;
 [Documentation |][docu]&nbsp;
