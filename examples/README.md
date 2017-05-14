@@ -36,4 +36,4 @@ Of course you can use some number other than ptyp5. Perhaps pick one with a high
 
 Wikipedia has more about ptys: http://en.wikipedia.org/wiki/Pseudo_terminal
 
-This tip is from SO [http://stackoverflow.com/questions/52187/virtual-serial-port-for-linux](http://stackoverflow.com/questions/52187/virtual-serial-port-for-linux)
+This tip is from Stackoverflow user _apenwarr_ http://stackoverflow.com/questions/52187/virtual-serial-port-for-linux)
