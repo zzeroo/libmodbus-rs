@@ -266,21 +266,33 @@ impl Modbus {
         unimplemented!()
     }
 
+    // TODO: Add examples from: http://zzeroo.github.io/libmodbus-rs/libmodbus/modbus_set_socket.html
     /// `set_socket` - set socket of the context
     ///
     /// The [`set_socket()`](#method.set_socket) function shall set the socket or file descriptor in the libmodbus
     /// context.
     /// This function is useful for managing multiple client connections to the same server.
     ///
+    /// # Return values
+    ///
+    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// assert_eq!(modbus.set_socket(1337).unwrap(), 0);
     /// ```
-    pub fn set_socket(&mut self, _socket: u32) -> Result<i32> {
-        unimplemented!()
+    pub fn set_socket(&mut self, socket: i32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_set_socket(self.ctx, socket) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(0),
+                _ => unreachable!(),
+            }
+        }
     }
 
     /// `get_socket` - set socket of the context
@@ -297,7 +309,7 @@ impl Modbus {
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// 
+    ///
     /// let socket = modbus.get_socket().unwrap();
     /// ```
     pub fn get_socket(&self) -> Result<i32> {
