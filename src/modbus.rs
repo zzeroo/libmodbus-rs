@@ -154,7 +154,7 @@ impl Modbus {
     /// `get_byte_timeout` - get timeout between bytes
     ///
     /// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between
-    /// two consecutive bytes of the same message `Result<(to_sec, to_usec)>`.
+    /// two consecutive bytes of the same message `Result<(timeout_sec, timeout_usec)>`.
     ///
     /// # Return value
     ///
@@ -194,9 +194,9 @@ impl Modbus {
     /// longer than the defined timeout,
     /// an ETIMEDOUT error will be raised by the function waiting for a response.
     ///
-    /// The value of **to_usec** argument must be in the range 0 to 999999.
+    /// The value of **timeout_usec** argument must be in the range 0 to 999999.
     ///
-    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case,
+    /// If both **timeout_sec** and **timeout_usec** are zero, this timeout will not be used at all. In this case,
     /// [`set_byte_timeout()`](#method.set_byte_timeout)
     /// governs the entire handling of the response, the full confirmation response must be received before expiration
     /// of the response timeout.
@@ -206,22 +206,37 @@ impl Modbus {
     ///
     /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
     ///
+    /// # Parameters
+    ///
+    /// * `timeout_sec`  - timeout sec
+    /// * `timeout_usec` - timeout usec
+    ///
     /// # Examples
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// let timeout_sec = 1;
+    /// let timeout_usec = 500;
+    ///
+    /// assert!(modbus.set_byte_timeout(timeout_sec, timeout_usec).is_ok());
     /// ```
-    pub fn set_byte_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32)> {
-        unimplemented!()
+    pub fn set_byte_timeout(&mut self, timeout_sec: u32, timeout_usec: u32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_set_byte_timeout(self.ctx, timeout_sec, timeout_usec) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(0),
+                _ => unreachable!(),
+            }
+        }
     }
 
     /// `get_response_timeout` - get timeout for response
     ///
     /// The [`get_response_timeout()`](#method.get_response_timeout) function shall return the timeout interval used to
     /// wait for a response
-    /// in the **to_sec** and **to_usec** arguments.
+    /// in the **timeout_sec** and **timeout_usec** arguments.
     ///
     /// # Examples
     ///
@@ -242,9 +257,9 @@ impl Modbus {
     /// an ETIMEDOUT error will be raised by the function waiting for a response. When byte timeout is disabled,
     /// the full confirmation response must be received before expiration of the response timeout.
     ///
-    /// The value of **to_usec** argument must be in the range 0 to 999999.
+    /// The value of **timeout_usec** argument must be in the range 0 to 999999.
     ///
-    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case,
+    /// If both **timeout_sec** and **timeout_usec** are zero, this timeout will not be used at all. In this case,
     /// [`set_response_timeout()`](#method.set_response_timeout)
     /// governs the entire handling of the response, the full confirmation response must be received before expiration
     /// of the response timeout.
@@ -261,7 +276,7 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
-    pub fn set_response_timeout(&mut self, _to_sec: u32, _to_usec: u32) -> Result<(i32, i32)> {
+    pub fn set_response_timeout(&mut self, timeout_sec: u32, timeout_usec: u32) -> Result<(i32, i32)> {
         unimplemented!()
     }
 
