@@ -574,10 +574,147 @@
 <span id="529">529</span>
 <span id="530">530</span>
 <span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
+<span id="543">543</span>
+<span id="544">544</span>
+<span id="545">545</span>
+<span id="546">546</span>
+<span id="547">547</span>
+<span id="548">548</span>
+<span id="549">549</span>
+<span id="550">550</span>
+<span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
+<span id="582">582</span>
+<span id="583">583</span>
+<span id="584">584</span>
+<span id="585">585</span>
+<span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
+<span id="618">618</span>
+<span id="619">619</span>
+<span id="620">620</span>
+<span id="621">621</span>
+<span id="622">622</span>
+<span id="623">623</span>
+<span id="624">624</span>
+<span id="625">625</span>
+<span id="626">626</span>
+<span id="627">627</span>
+<span id="628">628</span>
+<span id="629">629</span>
+<span id="630">630</span>
+<span id="631">631</span>
+<span id="632">632</span>
+<span id="633">633</span>
+<span id="634">634</span>
+<span id="635">635</span>
+<span id="636">636</span>
+<span id="637">637</span>
+<span id="638">638</span>
+<span id="639">639</span>
+<span id="640">640</span>
+<span id="641">641</span>
+<span id="642">642</span>
+<span id="643">643</span>
+<span id="644">644</span>
+<span id="645">645</span>
+<span id="646">646</span>
+<span id="647">647</span>
+<span id="648">648</span>
+<span id="649">649</span>
+<span id="650">650</span>
+<span id="651">651</span>
+<span id="652">652</span>
+<span id="653">653</span>
+<span id="654">654</span>
+<span id="655">655</span>
+<span id="656">656</span>
+<span id="657">657</span>
+<span id="658">658</span>
+<span id="659">659</span>
+<span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
 </pre><pre class="rust ">
+<span class="kw">use</span> <span class="ident">enums</span>::<span class="ident">ErrorRecoveryMode</span>;
 <span class="kw">use</span> <span class="ident">errors</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_int</span>, <span class="ident">c_uint</span>};
 <span class="kw">use</span> <span class="ident">libmodbus_sys</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>;
 
 
 <span class="doccomment">/// Safe interface for [libmodbus](http://libmodbus.org)</span>
@@ -595,6 +732,10 @@
     <span class="doccomment">/// The [`connect()`](#method.connect) function shall establish a connection to a Modbus server,</span>
     <span class="doccomment">/// a network or a bus.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return value</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
@@ -606,7 +747,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_connect</span>(<span class="self">self</span>.<span class="ident">ctx</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Could not connect&quot;</span>.<span class="ident">into</span>()),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 _ <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
             }
         }
@@ -615,6 +756,10 @@
     <span class="doccomment">/// `flush` - flush non-transmitted data</span>
     <span class="doccomment">/// The [`flush()`](#method.flush) function shall discard data received but not read to the socket or file</span>
     <span class="doccomment">/// descriptor associated to the context ctx.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return value</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
@@ -627,7 +772,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_flush</span>(<span class="self">self</span>.<span class="ident">ctx</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Could not flush&quot;</span>.<span class="ident">into</span>()),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 _ <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
             }
         }
@@ -651,6 +796,10 @@
     <span class="doccomment">///     The broadcast address is MODBUS_BROADCAST_ADDRESS.</span>
     <span class="doccomment">///     This special value must be use when you want all Modbus devices of the network receive the request.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return value</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `slave`   - new slave ID</span>
@@ -668,7 +817,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_slave</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">slave</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_slave</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">slave</span> <span class="kw">as</span> <span class="ident">c_int</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Could not set slave address&quot;</span>.<span class="ident">into</span>()),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 _ <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
             }
         }
@@ -688,6 +837,10 @@
     <span class="doccomment">/// &lt;00&gt;&lt;14&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;09&gt;&lt;12&gt;&lt;03&gt;&lt;06&gt;&lt;02&gt;&lt;2B&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;</span>
     <span class="doccomment">/// ```</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return value</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `flag`    - `true` of `false`, enables or disables debug mode</span>
@@ -704,7 +857,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_debug</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">flag</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_debug</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">flag</span> <span class="kw">as</span> <span class="ident">c_int</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Could not set debug&quot;</span>.<span class="ident">into</span>()),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 _ <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
             }
         }
@@ -713,18 +866,36 @@
     <span class="doccomment">/// `get_byte_timeout` - get timeout between bytes</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between</span>
-    <span class="doccomment">/// two consecutive bytes of the same message `Result&lt;(to_sec, to_usec)&gt;`.</span>
+    <span class="doccomment">/// two consecutive bytes of the same message `Result&lt;(timeout_sec, timeout_usec)&gt;`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return value</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Parameters</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `timeout_sec`  - timeout sec</span>
+    <span class="doccomment">/// * `timeout_usec` - timeout usec</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
+    <span class="doccomment">/// ```rust</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let mut timeout_sec = 0;</span>
+    <span class="doccomment">/// let mut timeout_usec = 0;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// assert!(modbus.get_byte_timeout(&amp;mut timeout_sec, &amp;mut timeout_usec).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_byte_timeout</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">i32</span>, <span class="ident">i32</span>)<span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_byte_timeout</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">timeout_sec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u32</span>, <span class="ident">timeout_usec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_get_byte_timeout</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">timeout_sec</span>, <span class="ident">timeout_usec</span>) {
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
+                <span class="number">0</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
+                _ <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+            }
+        }
     }
 
     <span class="doccomment">/// `set_byte_timeout` - set timeout between bytes</span>
@@ -735,41 +906,78 @@
     <span class="doccomment">/// longer than the defined timeout,</span>
     <span class="doccomment">/// an ETIMEDOUT error will be raised by the function waiting for a response.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The value of **to_usec** argument must be in the range 0 to 999999.</span>
+    <span class="doccomment">/// The value of **timeout_usec** argument must be in the range 0 to 999999.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case,</span>
+    <span class="doccomment">/// If both **timeout_sec** and **timeout_usec** are zero, this timeout will not be used at all. In this case,</span>
     <span class="doccomment">/// [`set_byte_timeout()`](#method.set_byte_timeout)</span>
     <span class="doccomment">/// governs the entire handling of the response, the full confirmation response must be received before expiration</span>
     <span class="doccomment">/// of the response timeout.</span>
     <span class="doccomment">/// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return value</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Parameters</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `timeout_sec`  - timeout sec</span>
+    <span class="doccomment">/// * `timeout_usec` - timeout usec</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
+    <span class="doccomment">/// ```rust</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// assert_eq!(modbus.get_byte_timeout().unwrap(), (0, 0));</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let timeout_sec = 1;</span>
+    <span class="doccomment">/// let timeout_usec = 500;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// assert!(modbus.set_byte_timeout(timeout_sec, timeout_usec).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_byte_timeout</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_to_sec</span>: <span class="ident">u32</span>, <span class="ident">_to_usec</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">i32</span>, <span class="ident">i32</span>)<span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_byte_timeout</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">timeout_sec</span>: <span class="ident">u32</span>, <span class="ident">timeout_usec</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_byte_timeout</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">timeout_sec</span>, <span class="ident">timeout_usec</span>) {
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
+                <span class="number">0</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
+                _ <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+            }
+        }
     }
 
     <span class="doccomment">/// `get_response_timeout` - get timeout for response</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The [`get_response_timeout()`](#method.get_response_timeout) function shall return the timeout interval used to</span>
     <span class="doccomment">/// wait for a response</span>
-    <span class="doccomment">/// in the **to_sec** and **to_usec** arguments.</span>
+    <span class="doccomment">/// in the **timeout_sec** and **timeout_usec** arguments.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return value</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Parameters</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `timeout_sec`  - timeout sec</span>
+    <span class="doccomment">/// * `timeout_usec` - timeout usec</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
+    <span class="doccomment">/// ```rust</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let mut timeout_sec = 0;</span>
+    <span class="doccomment">/// let mut timeout_usec = 0;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// assert!(modbus.get_response_timeout(&amp;mut timeout_sec, &amp;mut timeout_usec).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_response_timeout</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">i32</span>, <span class="ident">i32</span>)<span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_response_timeout</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">timeout_sec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u32</span>, <span class="ident">timeout_usec</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_get_response_timeout</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">timeout_sec</span>, <span class="ident">timeout_usec</span>) {
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
+                <span class="number">0</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
+                _ <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+            }
+        }
     }
 
     <span class="doccomment">/// `set_response_timeout` - set timeout for response</span>
@@ -780,23 +988,42 @@
     <span class="doccomment">/// an ETIMEDOUT error will be raised by the function waiting for a response. When byte timeout is disabled,</span>
     <span class="doccomment">/// the full confirmation response must be received before expiration of the response timeout.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The value of **to_usec** argument must be in the range 0 to 999999.</span>
+    <span class="doccomment">/// The value of **timeout_usec** argument must be in the range 0 to 999999.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case,</span>
+    <span class="doccomment">/// If both **timeout_sec** and **timeout_usec** are zero, this timeout will not be used at all. In this case,</span>
     <span class="doccomment">/// [`set_response_timeout()`](#method.set_response_timeout)</span>
     <span class="doccomment">/// governs the entire handling of the response, the full confirmation response must be received before expiration</span>
     <span class="doccomment">/// of the response timeout.</span>
     <span class="doccomment">/// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return value</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Parameters</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `timeout_sec`  - timeout sec</span>
+    <span class="doccomment">/// * `timeout_usec` - timeout usec</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
+    <span class="doccomment">/// ```rust</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let timeout_sec = 1;</span>
+    <span class="doccomment">/// let timeout_usec = 500;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// assert!(modbus.set_response_timeout(timeout_sec, timeout_usec).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_response_timeout</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_to_sec</span>: <span class="ident">u32</span>, <span class="ident">_to_usec</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">i32</span>, <span class="ident">i32</span>)<span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_response_timeout</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">timeout_sec</span>: <span class="ident">u32</span>, <span class="ident">timeout_usec</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_response_timeout</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">timeout_sec</span>, <span class="ident">timeout_usec</span>) {
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
+                <span class="number">0</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
+                _ <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+            }
+        }
     }
 
     <span class="doccomment">/// `set_error_recovery` - set the error recovery mode</span>
@@ -830,33 +1057,60 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// It’s not recommended to enable error recovery for slave/server.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return value</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The C library sets errno to one of the values of [ErrorRecoveryMode]().</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
+    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP, ErrorRecoveryMode};</span>
     <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// //assert!(modbus.set_error_recovery(ErrorRecoveryMode::LINK | ErrorRecoveryMode::PROTOCOL))</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_error_recovery</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_modbus_error_recovery_mode</span>: <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_error_recovery_mode</span>)
-                              <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_error_recovery</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">error_recovery_mode</span>: <span class="ident">ErrorRecoveryMode</span>)
+                              <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>
+    {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
+        <span class="comment">// unsafe {</span>
+        <span class="comment">//     let error_recovery_mode = error_recovery_mode;</span>
+        <span class="comment">//     match libmodbus_sys::modbus_set_error_recovery(self.ctx, error_recovery_mode.into()) {</span>
+        <span class="comment">//         -1 =&gt; bail!(Error::last_os_error()),</span>
+        <span class="comment">//         0 =&gt; Ok(0),</span>
+        <span class="comment">//         _ =&gt; unreachable!(),</span>
+        <span class="comment">//     }</span>
+        <span class="comment">// }</span>
     }
 
+    <span class="comment">// TODO: Add examples from: http://zzeroo.github.io/libmodbus-rs/libmodbus/modbus_set_socket.html</span>
     <span class="doccomment">/// `set_socket` - set socket of the context</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The [`set_socket()`](#method.set_socket) function shall set the socket or file descriptor in the libmodbus</span>
     <span class="doccomment">/// context.</span>
     <span class="doccomment">/// This function is useful for managing multiple client connections to the same server.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return values</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
+    <span class="doccomment">/// ```rust</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
     <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// assert_eq!(modbus.set_socket(1337).unwrap(), 0);</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_socket</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_socket</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_socket</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">socket</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_socket</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">socket</span>) {
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
+                <span class="number">0</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="number">0</span>),
+                _ <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+            }
+        }
     }
 
     <span class="doccomment">/// `get_socket` - set socket of the context</span>
@@ -864,15 +1118,25 @@
     <span class="doccomment">/// The [`get_socket()`](#method.get_socket) function shall return the current socket or file descriptor of the</span>
     <span class="doccomment">/// libmodbus context.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return value</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The function returns a Result containing the current socket or file descriptor of the context if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+    <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class="doccomment">/// let socket = modbus.get_socket().unwrap();</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_socket</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_socket</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_get_socket</span>(<span class="self">self</span>.<span class="ident">ctx</span>) {
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
+                <span class="ident">socket</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">socket</span>),
+            }
+        }
     }
 
     <span class="doccomment">/// `get_header_length` - retrieve the current header length</span>
@@ -881,15 +1145,21 @@
     <span class="doccomment">/// the backend.</span>
     <span class="doccomment">/// This function is convenient to manipulate a message and so its limited to low-level operations.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// # Return values</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The header length as integer value.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
+    <span class="doccomment">/// ```rust</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class="doccomment">/// assert_eq!(modbus.get_header_length(), 7);</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_header_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> {
-        <span class="macro">unimplemented</span><span class="macro">!</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_header_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">i32</span> {
+        <span class="kw">unsafe</span> {
+            <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_get_header_length</span>(<span class="self">self</span>.<span class="ident">ctx</span>)
+        }
     }
 
     <span class="doccomment">/// `close` - close a Modbus connection</span>

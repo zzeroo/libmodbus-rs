@@ -112,6 +112,14 @@
 <span id="67">67</span>
 <span id="68">68</span>
 <span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
 </pre><pre class="rust ">
 
 <span class="doccomment">/// Modbus protocol exceptions</span>
@@ -181,6 +189,14 @@
     <span class="ident">MASK_WRITE_REGISTER</span> <span class="op">=</span> <span class="number">22</span>,
     <span class="doccomment">/// 0x23 Read/Write Multiple Registers</span>
     <span class="ident">WRITE_AND_READ_REGISTERS</span> <span class="op">=</span> <span class="number">23</span>,
+}
+
+<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">u32</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ErrorRecoveryMode</span> {
+    <span class="ident">NONE</span> <span class="op">=</span> <span class="number">0</span>,
+    <span class="ident">LINK</span> <span class="op">=</span> <span class="number">2</span>,
+    <span class="ident">PROTOCOL</span> <span class="op">=</span> <span class="number">4</span>,
 }
 </pre>
 </section>

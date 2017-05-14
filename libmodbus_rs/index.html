@@ -48,7 +48,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/lib.rs.html#1-178' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/libmodbus_rs/lib.rs.html#1-196' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>This is an &#39;hopefully&#39; safe Rust interface for the <a href="http://libmodbus.org/">libmodbus</a> C library from
 <a href="http://libmodbus.org/">http://libmodbus.org/</a>.</p>
 
@@ -157,6 +157,47 @@ additional memory.</p>
 </ul>
 
 <h3 id='common' class='section-header'><a href='#common'>Common</a></h3>
+<p>Common methods to modify or change the current modbus context. Some of these function are not nessesary in Rust (e.g. because the Drop trait and so on)</p>
+
+<ul>
+<li>Free libmodbus context
+
+<ul>
+<li><a href="struct.Modbus.html#method.free"><code>free()</code></a> <strong>It should normaly not nessesary to call this function.</strong><br />
+Memory handling under Rust controlls the <a href="https://doc.rust-lang.org/std/ops/trait.Drop.html"><code>Drop trait</code></a> in &quot;the book&quot; you find <a href="https://doc.rust-lang.org/book/ffi.html#destructors">more information about</a>.</li>
+</ul></li>
+<li>Set slave ID
+
+<ul>
+<li><a href="struct.Modbus.html#method.set_slave"><code>set_slave()</code></a></li>
+</ul></li>
+<li>Enable debug mode
+
+<ul>
+<li><a href="struct.Modbus.html#method.set_debug"><code>set_debug()</code></a></li>
+</ul></li>
+<li>Timeout settings
+
+<ul>
+<li><a href="struct.Modbus.html#method.get_byte_timeout"><code>get_byte_timeout()</code></a> <a href="struct.Modbus.html#method.set_byte_timeout"><code>set_byte_timeout()</code></a> <a href="struct.Modbus.html#method.get_response_timeout"><code>get_response_timeout()</code></a> <a href="struct.Modbus.html#method.set_response_timeout"><code>set_response_timeout()</code></a></li>
+</ul></li>
+<li>Error recovery mod
+
+<ul>
+<li><a href="struct.Modbus.html#method.set_error_recovery"><code>set_error_recovery()</code></a></li>
+</ul></li>
+<li>Setter/getter of internal socket
+
+<ul>
+<li><a href="struct.Modbus.html#method.set_socket"><code>set_socket()</code></a> <a href="struct.Modbus.html#method.get_socket"><code>get_socket()</code></a></li>
+</ul></li>
+<li>Information about header
+
+<ul>
+<li><a href="struct.Modbus.html#method.get_header_length"><code>get_header_length()</code></a></li>
+</ul></li>
+</ul>
+
 <h3 id='connection' class='section-header'><a href='#connection'>Connection</a></h3>
 <h3 id='a-hreftraitmodbusclienthtmlclienta' class='section-header'><a href='#a-hreftraitmodbusclienthtmlclienta'><a href="trait.ModbusClient.html"><code>Client</code></a></a></h3>
 <p>The Modbus protocol defines different data types and functions to read and write them from/to remote devices.
@@ -240,6 +281,13 @@ but a pair of accept/listen calls</p>
                            </td>
                        </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.ErrorRecoveryMode.html"
+                                  title='enum libmodbus_rs::ErrorRecoveryMode'>ErrorRecoveryMode</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
                        <tr class=' module-item'>
                            <td><a class="enum" href="enum.Exception.html"
                                   title='enum libmodbus_rs::Exception'>Exception</a></td>

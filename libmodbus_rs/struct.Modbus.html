@@ -48,7 +48,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#11-13' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#13-15' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Modbus {
     pub ctx: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="type" href="../libmodbus_sys/type.modbus_t.html" title="type libmodbus_sys::modbus_t">modbus_t</a>,
 }</pre><div class='docblock'><p>Safe interface for <a href="http://libmodbus.org">libmodbus</a></p>
@@ -58,12 +58,15 @@ traits and a implementation with a, hopefully safe, interface.</p>
 </div><h2 class='fields'>Fields</h2><span id='structfield.ctx' class="structfield">
                            <span id='ctx.v' class='invisible'>
                            <code>ctx: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="type" href="../libmodbus_sys/type.modbus_t.html" title="type libmodbus_sys::modbus_t">modbus_t</a></code>
-                           </span></span><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#15-372' title='goto source code'>[src]</a></span></h3>
+                           </span></span><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#17-507' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.connect' class="method"><span id='connect.v' class='invisible'><code>fn <a href='#method.connect' class='fnname'>connect</a>(&amp;self) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>connect</code> - establish a Modbus connection</p>
 
 <p>The <a href="#method.connect"><code>connect()</code></a> function shall establish a connection to a Modbus server,
 a network or a bus.</p>
+
+<h1 id='return-value' class='section-header'><a href='#return-value'>Return value</a></h1>
+<p>The function return a Result containing a <code>0i32</code> if successful. Otherwise it contains an Error.</p>
 
 <h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
@@ -75,6 +78,9 @@ a network or a bus.</p>
 <div class='docblock'><p><code>flush</code> - flush non-transmitted data
 The <a href="#method.flush"><code>flush()</code></a> function shall discard data received but not read to the socket or file
 descriptor associated to the context ctx.</p>
+
+<h1 id='return-value-1' class='section-header'><a href='#return-value-1'>Return value</a></h1>
+<p>The function return a Result containing a <code>0i32</code> if successful. Otherwise it contains an Error.</p>
 
 <h1 id='examples-1' class='section-header'><a href='#examples-1'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
@@ -100,6 +106,9 @@ TCP
     The special value MODBUS_TCP_SLAVE (0xFF) can be used in TCP mode to restore the default value.
     The broadcast address is MODBUS_BROADCAST_ADDRESS.
     This special value must be use when you want all Modbus devices of the network receive the request.</p>
+
+<h1 id='return-value-2' class='section-header'><a href='#return-value-2'>Return value</a></h1>
+<p>The function return a Result containing a <code>0i32</code> if successful. Otherwise it contains an Error.</p>
 
 <h1 id='parameters' class='section-header'><a href='#parameters'>Parameters</a></h1>
 <ul>
@@ -128,6 +137,9 @@ Waiting for a confirmation…
 &lt;00&gt;&lt;14&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;09&gt;&lt;12&gt;&lt;03&gt;&lt;06&gt;&lt;02&gt;&lt;2B&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;&lt;00&gt;
 </code></pre>
 
+<h1 id='return-value-3' class='section-header'><a href='#return-value-3'>Return value</a></h1>
+<p>The function return a Result containing a <code>0i32</code> if successful. Otherwise it contains an Error.</p>
+
 <h1 id='parameters-1' class='section-header'><a href='#parameters-1'>Parameters</a></h1>
 <ul>
 <li><code>flag</code>    - <code>true</code> of <code>false</code>, enables or disables debug mode</li>
@@ -140,19 +152,31 @@ Waiting for a confirmation…
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
 
 <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">modbus</span>.<span class="ident">set_debug</span>(<span class="bool-val">true</span>).<span class="ident">is_ok</span>());</pre>
-</div><h4 id='method.get_byte_timeout' class="method"><span id='get_byte_timeout.v' class='invisible'><code>fn <a href='#method.get_byte_timeout' class='fnname'>get_byte_timeout</a>(&amp;self) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>&gt;</code></span></h4>
+</div><h4 id='method.get_byte_timeout' class="method"><span id='get_byte_timeout.v' class='invisible'><code>fn <a href='#method.get_byte_timeout' class='fnname'>get_byte_timeout</a>(&amp;self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeout_sec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeout_usec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>get_byte_timeout</code> - get timeout between bytes</p>
 
 <p><a href="#method.get_byte_timeout"><code>get_byte_timeout()</code></a> function returns a tupple with the timeout interval between
-two consecutive bytes of the same message <code>Result&lt;(to_sec, to_usec)&gt;</code>.</p>
+two consecutive bytes of the same message <code>Result&lt;(timeout_sec, timeout_usec)&gt;</code>.</p>
+
+<h1 id='return-value-4' class='section-header'><a href='#return-value-4'>Return value</a></h1>
+<p>The function return a Result containing a <code>0i32</code> if successful. Otherwise it contains an Error.</p>
+
+<h1 id='parameters-2' class='section-header'><a href='#parameters-2'>Parameters</a></h1>
+<ul>
+<li><code>timeout_sec</code>  - timeout sec</li>
+<li><code>timeout_usec</code> - timeout usec</li>
+</ul>
 
 <h1 id='examples-4' class='section-header'><a href='#examples-4'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusTCP</span>};
-
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
-<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus</span>.<span class="ident">get_byte_timeout</span>().<span class="ident">unwrap</span>(), (<span class="number">0</span>, <span class="number">0</span>));</pre>
-</div><h4 id='method.set_byte_timeout' class="method"><span id='set_byte_timeout.v' class='invisible'><code>fn <a href='#method.set_byte_timeout' class='fnname'>set_byte_timeout</a>(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _to_sec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _to_usec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>&gt;</code></span></h4>
+
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">timeout_sec</span> <span class="op">=</span> <span class="number">0</span>;
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">timeout_usec</span> <span class="op">=</span> <span class="number">0</span>;
+
+<span class="macro">assert</span><span class="macro">!</span>(<span class="ident">modbus</span>.<span class="ident">get_byte_timeout</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">timeout_sec</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">timeout_usec</span>).<span class="ident">is_ok</span>());</pre>
+</div><h4 id='method.set_byte_timeout' class="method"><span id='set_byte_timeout.v' class='invisible'><code>fn <a href='#method.set_byte_timeout' class='fnname'>set_byte_timeout</a>(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeout_sec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeout_usec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>set_byte_timeout</code> - set timeout between bytes</p>
 
 <p>The <a href="#method.set_byte_timeout"><code>set_byte_timeout()</code></a> function shall set the timeout interval between two
@@ -161,33 +185,58 @@ The timeout is an upper bound on the amount of time elapsed before select() retu
 longer than the defined timeout,
 an ETIMEDOUT error will be raised by the function waiting for a response.</p>
 
-<p>The value of <strong>to_usec</strong> argument must be in the range 0 to 999999.</p>
+<p>The value of <strong>timeout_usec</strong> argument must be in the range 0 to 999999.</p>
 
-<p>If both <strong>to_sec</strong> and <strong>to_usec</strong> are zero, this timeout will not be used at all. In this case,
+<p>If both <strong>timeout_sec</strong> and <strong>timeout_usec</strong> are zero, this timeout will not be used at all. In this case,
 <a href="#method.set_byte_timeout"><code>set_byte_timeout()</code></a>
 governs the entire handling of the response, the full confirmation response must be received before expiration
 of the response timeout.
 When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.</p>
 
+<h1 id='return-value-5' class='section-header'><a href='#return-value-5'>Return value</a></h1>
+<p>The function return a Result containing a <code>0i32</code> if successful. Otherwise it contains an Error.</p>
+
+<h1 id='parameters-3' class='section-header'><a href='#parameters-3'>Parameters</a></h1>
+<ul>
+<li><code>timeout_sec</code>  - timeout sec</li>
+<li><code>timeout_usec</code> - timeout usec</li>
+</ul>
+
 <h1 id='examples-5' class='section-header'><a href='#examples-5'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusTCP</span>};
-
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
-<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus</span>.<span class="ident">get_byte_timeout</span>().<span class="ident">unwrap</span>(), (<span class="number">0</span>, <span class="number">0</span>));</pre>
-</div><h4 id='method.get_response_timeout' class="method"><span id='get_response_timeout.v' class='invisible'><code>fn <a href='#method.get_response_timeout' class='fnname'>get_response_timeout</a>(&amp;self) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>&gt;</code></span></h4>
+
+<span class="kw">let</span> <span class="ident">timeout_sec</span> <span class="op">=</span> <span class="number">1</span>;
+<span class="kw">let</span> <span class="ident">timeout_usec</span> <span class="op">=</span> <span class="number">500</span>;
+
+<span class="macro">assert</span><span class="macro">!</span>(<span class="ident">modbus</span>.<span class="ident">set_byte_timeout</span>(<span class="ident">timeout_sec</span>, <span class="ident">timeout_usec</span>).<span class="ident">is_ok</span>());</pre>
+</div><h4 id='method.get_response_timeout' class="method"><span id='get_response_timeout.v' class='invisible'><code>fn <a href='#method.get_response_timeout' class='fnname'>get_response_timeout</a>(&amp;self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeout_sec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeout_usec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>get_response_timeout</code> - get timeout for response</p>
 
 <p>The <a href="#method.get_response_timeout"><code>get_response_timeout()</code></a> function shall return the timeout interval used to
 wait for a response
-in the <strong>to_sec</strong> and <strong>to_usec</strong> arguments.</p>
+in the <strong>timeout_sec</strong> and <strong>timeout_usec</strong> arguments.</p>
+
+<h1 id='return-value-6' class='section-header'><a href='#return-value-6'>Return value</a></h1>
+<p>The function return a Result containing a <code>0i32</code> if successful. Otherwise it contains an Error.</p>
+
+<h1 id='parameters-4' class='section-header'><a href='#parameters-4'>Parameters</a></h1>
+<ul>
+<li><code>timeout_sec</code>  - timeout sec</li>
+<li><code>timeout_usec</code> - timeout usec</li>
+</ul>
 
 <h1 id='examples-6' class='section-header'><a href='#examples-6'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
 
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();</pre>
-</div><h4 id='method.set_response_timeout' class="method"><span id='set_response_timeout.v' class='invisible'><code>fn <a href='#method.set_response_timeout' class='fnname'>set_response_timeout</a>(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _to_sec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _to_usec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>&gt;</code></span></h4>
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">timeout_sec</span> <span class="op">=</span> <span class="number">0</span>;
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">timeout_usec</span> <span class="op">=</span> <span class="number">0</span>;
+
+<span class="macro">assert</span><span class="macro">!</span>(<span class="ident">modbus</span>.<span class="ident">get_response_timeout</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">timeout_sec</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">timeout_usec</span>).<span class="ident">is_ok</span>());</pre>
+</div><h4 id='method.set_response_timeout' class="method"><span id='set_response_timeout.v' class='invisible'><code>fn <a href='#method.set_response_timeout' class='fnname'>set_response_timeout</a>(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeout_sec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; timeout_usec: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>set_response_timeout</code> - set timeout for response</p>
 
 <p>The <a href="#method.set_response_timeout"><code>set_response_timeout()</code></a> function shall set the timeout interval used to
@@ -196,20 +245,33 @@ When a byte timeout is set, if elapsed time for the first byte of response is lo
 an ETIMEDOUT error will be raised by the function waiting for a response. When byte timeout is disabled,
 the full confirmation response must be received before expiration of the response timeout.</p>
 
-<p>The value of <strong>to_usec</strong> argument must be in the range 0 to 999999.</p>
+<p>The value of <strong>timeout_usec</strong> argument must be in the range 0 to 999999.</p>
 
-<p>If both <strong>to_sec</strong> and <strong>to_usec</strong> are zero, this timeout will not be used at all. In this case,
+<p>If both <strong>timeout_sec</strong> and <strong>timeout_usec</strong> are zero, this timeout will not be used at all. In this case,
 <a href="#method.set_response_timeout"><code>set_response_timeout()</code></a>
 governs the entire handling of the response, the full confirmation response must be received before expiration
 of the response timeout.
 When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.</p>
 
+<h1 id='return-value-7' class='section-header'><a href='#return-value-7'>Return value</a></h1>
+<p>The function return a Result containing a <code>0i32</code> if successful. Otherwise it contains an Error.</p>
+
+<h1 id='parameters-5' class='section-header'><a href='#parameters-5'>Parameters</a></h1>
+<ul>
+<li><code>timeout_sec</code>  - timeout sec</li>
+<li><code>timeout_usec</code> - timeout usec</li>
+</ul>
+
 <h1 id='examples-7' class='section-header'><a href='#examples-7'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
 
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();</pre>
-</div><h4 id='method.set_error_recovery' class="method"><span id='set_error_recovery.v' class='invisible'><code>fn <a href='#method.set_error_recovery' class='fnname'>set_error_recovery</a>(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; _modbus_error_recovery_mode: <a class="enum" href="../libmodbus_sys/enum.modbus_error_recovery_mode.html" title="enum libmodbus_sys::modbus_error_recovery_mode">modbus_error_recovery_mode</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h4>
+<span class="kw">let</span> <span class="ident">timeout_sec</span> <span class="op">=</span> <span class="number">1</span>;
+<span class="kw">let</span> <span class="ident">timeout_usec</span> <span class="op">=</span> <span class="number">500</span>;
+
+<span class="macro">assert</span><span class="macro">!</span>(<span class="ident">modbus</span>.<span class="ident">set_response_timeout</span>(<span class="ident">timeout_sec</span>, <span class="ident">timeout_usec</span>).<span class="ident">is_ok</span>());</pre>
+</div><h4 id='method.set_error_recovery' class="method"><span id='set_error_recovery.v' class='invisible'><code>fn <a href='#method.set_error_recovery' class='fnname'>set_error_recovery</a>(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; error_recovery_mode: <a class="enum" href="../libmodbus_rs/enum.ErrorRecoveryMode.html" title="enum libmodbus_rs::ErrorRecoveryMode">ErrorRecoveryMode</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>set_error_recovery</code> - set the error recovery mode</p>
 
 <p>The <a href="#method.set_error_recovery"><code>set_error_recovery()</code></a> function shall set the error recovery mode to apply
@@ -241,46 +303,62 @@ The response timeout delay will be used to sleep.</p>
 
 <p>It’s not recommended to enable error recovery for slave/server.</p>
 
+<h1 id='return-value-8' class='section-header'><a href='#return-value-8'>Return value</a></h1>
+<p>The function return a Result containing a <code>0i32</code> if successful. Otherwise it contains an Error.
+The C library sets errno to one of the values of <a href="">ErrorRecoveryMode</a>.</p>
+
 <h1 id='examples-8' class='section-header'><a href='#examples-8'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
-<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusTCP</span>, <span class="ident">ErrorRecoveryMode</span>};
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
 
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();</pre>
-</div><h4 id='method.set_socket' class="method"><span id='set_socket.v' class='invisible'><code>fn <a href='#method.set_socket' class='fnname'>set_socket</a>(&amp;mut self, _socket: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h4>
+<span class="comment">//assert!(modbus.set_error_recovery(ErrorRecoveryMode::LINK | ErrorRecoveryMode::PROTOCOL))</span></pre>
+</div><h4 id='method.set_socket' class="method"><span id='set_socket.v' class='invisible'><code>fn <a href='#method.set_socket' class='fnname'>set_socket</a>(&amp;mut self, socket: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>set_socket</code> - set socket of the context</p>
 
 <p>The <a href="#method.set_socket"><code>set_socket()</code></a> function shall set the socket or file descriptor in the libmodbus
 context.
 This function is useful for managing multiple client connections to the same server.</p>
 
+<h1 id='return-values' class='section-header'><a href='#return-values'>Return values</a></h1>
+<p>The function return a Result containing a <code>0i32</code> if successful. Otherwise it contains an Error.</p>
+
 <h1 id='examples-9' class='section-header'><a href='#examples-9'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
 
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();</pre>
-</div><h4 id='method.get_socket' class="method"><span id='get_socket.v' class='invisible'><code>fn <a href='#method.get_socket' class='fnname'>get_socket</a>(&amp;self) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</code></span></h4>
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus</span>.<span class="ident">set_socket</span>(<span class="number">1337</span>).<span class="ident">unwrap</span>(), <span class="number">0</span>);</pre>
+</div><h4 id='method.get_socket' class="method"><span id='get_socket.v' class='invisible'><code>fn <a href='#method.get_socket' class='fnname'>get_socket</a>(&amp;self) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>get_socket</code> - set socket of the context</p>
 
 <p>The <a href="#method.get_socket"><code>get_socket()</code></a> function shall return the current socket or file descriptor of the
 libmodbus context.</p>
 
+<h1 id='return-value-9' class='section-header'><a href='#return-value-9'>Return value</a></h1>
+<p>The function returns a Result containing the current socket or file descriptor of the context if successful. Otherwise it contains an Error.</p>
+
 <h1 id='examples-10' class='section-header'><a href='#examples-10'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
 
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();</pre>
-</div><h4 id='method.get_header_length' class="method"><span id='get_header_length.v' class='invisible'><code>fn <a href='#method.get_header_length' class='fnname'>get_header_length</a>(&amp;self) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;</code></span></h4>
+<span class="kw">let</span> <span class="ident">socket</span> <span class="op">=</span> <span class="ident">modbus</span>.<span class="ident">get_socket</span>().<span class="ident">unwrap</span>();</pre>
+</div><h4 id='method.get_header_length' class="method"><span id='get_header_length.v' class='invisible'><code>fn <a href='#method.get_header_length' class='fnname'>get_header_length</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a></code></span></h4>
 <div class='docblock'><p><code>get_header_length</code> - retrieve the current header length</p>
 
 <p>The <a href="#method.get_header_length"><code>get_header_length()</code></a> function shall retrieve the current header length from
 the backend.
 This function is convenient to manipulate a message and so its limited to low-level operations.</p>
 
+<h1 id='return-values-1' class='section-header'><a href='#return-values-1'>Return values</a></h1>
+<p>The header length as integer value.</p>
+
 <h1 id='examples-11' class='section-header'><a href='#examples-11'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusTCP</span>};
-
-<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();</pre>
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus</span>.<span class="ident">get_header_length</span>(), <span class="number">7</span>);</pre>
 </div><h4 id='method.close' class="method"><span id='close.v' class='invisible'><code>fn <a href='#method.close' class='fnname'>close</a>(&amp;self)</code></span></h4>
 <div class='docblock'><p><code>close</code> - close a Modbus connection</p>
 
@@ -332,10 +410,10 @@ The result of reading is stored in <code>Result&lt;Vec&lt;u8&gt;&gt;</code>.</p>
 
 <p>The function uses the Modbus function code 0x01 (read coil status).</p>
 
-<h1 id='return-value' class='section-header'><a href='#return-value'>Return value</a></h1>
-<p>The function shall return the number of read bits if successful. Otherwise it contains an Error .</p>
+<h1 id='return-value-10' class='section-header'><a href='#return-value-10'>Return value</a></h1>
+<p>The function shall return the number of read bits if successful. Otherwise it contains an Error.</p>
 
-<h1 id='parameters-2' class='section-header'><a href='#parameters-2'>Parameters</a></h1>
+<h1 id='parameters-6' class='section-header'><a href='#parameters-6'>Parameters</a></h1>
 <ul>
 <li><code>address</code> - address of the remote device</li>
 <li><code>num_bit</code> - number of coils to read</li>
@@ -359,10 +437,10 @@ The result of reading is stored in dest array as unsigned bytes (8 bits) set to 
 
 <p>The function uses the Modbus function code 0x02 (read input status).</p>
 
-<h1 id='return-value-1' class='section-header'><a href='#return-value-1'>Return value</a></h1>
-<p>The function shall return the number of read input status if successful. Otherwise it contains an Error .</p>
+<h1 id='return-value-11' class='section-header'><a href='#return-value-11'>Return value</a></h1>
+<p>The function shall return the number of read input status if successful. Otherwise it contains an Error.</p>
 
-<h1 id='parameters-3' class='section-header'><a href='#parameters-3'>Parameters</a></h1>
+<h1 id='parameters-7' class='section-header'><a href='#parameters-7'>Parameters</a></h1>
 <ul>
 <li><code>address</code> - address of the remote device</li>
 <li><code>num_bit</code> - number of input bits to read</li>
@@ -385,10 +463,10 @@ the address addr of the remote device.</p>
 
 <p>The function uses the Modbus function code 0x03 (read holding registers).</p>
 
-<h1 id='return-value-2' class='section-header'><a href='#return-value-2'>Return value</a></h1>
+<h1 id='return-value-12' class='section-header'><a href='#return-value-12'>Return value</a></h1>
 <p>The function shall return the number of read registers if successful. Otherwise it contains an Error.</p>
 
-<h1 id='parameters-4' class='section-header'><a href='#parameters-4'>Parameters</a></h1>
+<h1 id='parameters-8' class='section-header'><a href='#parameters-8'>Parameters</a></h1>
 <ul>
 <li><code>address</code> - address of the remote device</li>
 <li><code>num_bit</code> - number of holding registers to read</li>
@@ -413,10 +491,10 @@ registers to address addr of the remote device.</p>
 registers have different historical meaning,
 but nowadays it’s more common to use holding registers only.</p>
 
-<h1 id='return-value-3' class='section-header'><a href='#return-value-3'>Return value</a></h1>
+<h1 id='return-value-13' class='section-header'><a href='#return-value-13'>Return value</a></h1>
 <p>The function shall return the number of read input registers if successful. Otherwise it contains an Error.</p>
 
-<h1 id='parameters-5' class='section-header'><a href='#parameters-5'>Parameters</a></h1>
+<h1 id='parameters-9' class='section-header'><a href='#parameters-9'>Parameters</a></h1>
 <ul>
 <li><code>address</code> - address of the remote device</li>
 <li><code>num_bit</code> - number of input registers to read</li>
@@ -445,7 +523,7 @@ how the
 * additional data specific to each controller. For example, libmodbus returns the version of the library as
 a string.</p>
 
-<h1 id='return-value-4' class='section-header'><a href='#return-value-4'>Return value</a></h1>
+<h1 id='return-value-14' class='section-header'><a href='#return-value-14'>Return value</a></h1>
 <p>The function shall return the number of read data if successful.</p>
 
 <p>If the output was truncated due to the <code>max_dest</code> limit then the return value is the number of bytes which
@@ -455,7 +533,7 @@ response data was truncated.</p>
 
 <p>Otherwise it contains an Error.</p>
 
-<h1 id='parameters-6' class='section-header'><a href='#parameters-6'>Parameters</a></h1>
+<h1 id='parameters-10' class='section-header'><a href='#parameters-10'>Parameters</a></h1>
 <ul>
 <li><code>max_dest</code> - limit the return value to max_dest bytes</li>
 <li><code>dest</code> - the response is stored here</li>
@@ -481,10 +559,10 @@ The value must be set to <code>true</code> of <code>false</code>.</p>
 
 <p>The function uses the Modbus function code 0x05 (force single coil).</p>
 
-<h1 id='return-value-5' class='section-header'><a href='#return-value-5'>Return value</a></h1>
+<h1 id='return-value-15' class='section-header'><a href='#return-value-15'>Return value</a></h1>
 <p>The function shall return 1 if successful. Otherwise it contains an Error.</p>
 
-<h1 id='parameters-7' class='section-header'><a href='#parameters-7'>Parameters</a></h1>
+<h1 id='parameters-11' class='section-header'><a href='#parameters-11'>Parameters</a></h1>
 <ul>
 <li><code>address</code> - address of the remote device</li>
 <li><code>status</code> - status that should write at the address <code>addr</code></li>
@@ -505,10 +583,10 @@ the address addr of the remote device.</p>
 
 <p>The function uses the Modbus function code 0x06 (preset single register).</p>
 
-<h1 id='return-value-6' class='section-header'><a href='#return-value-6'>Return value</a></h1>
+<h1 id='return-value-16' class='section-header'><a href='#return-value-16'>Return value</a></h1>
 <p>The function shall return 1 if successful. Otherwise it contains an Error.</p>
 
-<h1 id='parameters-8' class='section-header'><a href='#parameters-8'>Parameters</a></h1>
+<h1 id='parameters-12' class='section-header'><a href='#parameters-12'>Parameters</a></h1>
 <ul>
 <li><code>address</code> - address of the remote device</li>
 <li><code>value</code> - vec with the value of the holding register which shall be written</li>
@@ -530,10 +608,10 @@ address addr of the remote device. The src array must contains bytes set to TRUE
 
 <p>The function shall return the number of written bits if successful. Otherwise it contains an Error.</p>
 
-<h1 id='return-value-7' class='section-header'><a href='#return-value-7'>Return value</a></h1>
+<h1 id='return-value-17' class='section-header'><a href='#return-value-17'>Return value</a></h1>
 <p>The function returns a Result containing a <code>1</code> if successful, or an Error.</p>
 
-<h1 id='parameters-9' class='section-header'><a href='#parameters-9'>Parameters</a></h1>
+<h1 id='parameters-13' class='section-header'><a href='#parameters-13'>Parameters</a></h1>
 <ul>
 <li><code>address</code> - address of the remote device</li>
 <li><code>num_bit</code> - status that should write at the address <code>addr</code></li>
@@ -556,10 +634,10 @@ from the array src at address addr of the remote device.</p>
 
 <p>The function uses the Modbus function code 0x10 (preset multiple registers).</p>
 
-<h1 id='return-value-8' class='section-header'><a href='#return-value-8'>Return value</a></h1>
+<h1 id='return-value-18' class='section-header'><a href='#return-value-18'>Return value</a></h1>
 <p>The function shall return the number of written registers if successful. Otherwise it contains an Error.</p>
 
-<h1 id='parameters-10' class='section-header'><a href='#parameters-10'>Parameters</a></h1>
+<h1 id='parameters-14' class='section-header'><a href='#parameters-14'>Parameters</a></h1>
 <ul>
 <li><code>address</code> - address of the remote device</li>
 <li><code>num_bit</code> - number of holding registers that should write at the address <code>addr</code></li>
@@ -584,10 +662,10 @@ reading is stored in dest array as word values (16 bits).</p>
 
 <p>The function uses the Modbus function code 0x17 (write/read registers).</p>
 
-<h1 id='return-value-9' class='section-header'><a href='#return-value-9'>Return value</a></h1>
+<h1 id='return-value-19' class='section-header'><a href='#return-value-19'>Return value</a></h1>
 <p>The function shall return the number of read registers if successful. Otherwise it contains an Error.</p>
 
-<h1 id='parameters-11' class='section-header'><a href='#parameters-11'>Parameters</a></h1>
+<h1 id='parameters-15' class='section-header'><a href='#parameters-15'>Parameters</a></h1>
 <ul>
 <li><code>write_address</code>   - address of the remote device</li>
 <li><code>write_num_bit</code>   - number of holding registers</li>
@@ -621,16 +699,16 @@ This function can be used to send request not handled by the library.</p>
 <p>The public header of libmodbus provides a list of supported Modbus functions codes,
 prefixed by MODBUS_FC_ (eg. MODBUS_FC_READ_HOLDING_REGISTERS), to help build of raw requests.</p>
 
-<h1 id='return-value-10' class='section-header'><a href='#return-value-10'>Return value</a></h1>
+<h1 id='return-value-20' class='section-header'><a href='#return-value-20'>Return value</a></h1>
 <p>The function returns a Result containing the full message length, counting the extra data relating to the
 backend, if successful, or an Error.</p>
 
-<h1 id='parameters-12' class='section-header'><a href='#parameters-12'>Parameters</a></h1>
+<h1 id='parameters-16' class='section-header'><a href='#parameters-16'>Parameters</a></h1>
 <ul>
 <li><code>raw_request</code>   - raw request to send</li>
 </ul>
 
-<h1 id='return-value-11' class='section-header'><a href='#return-value-11'>Return value</a></h1>
+<h1 id='return-value-21' class='section-header'><a href='#return-value-21'>Return value</a></h1>
 <p>The function returns a Result, containing the full message lenght,  counting the extra data relating to the
 backend, if successful. Or an Error.</p>
 
@@ -659,12 +737,12 @@ If you want to write code compatible with both, you can use the constant MODBUS_
 of all libmodbus backends).
 Take care to allocate enough memory to store responses to avoid crashes of your server.</p>
 
-<h1 id='return-value-12' class='section-header'><a href='#return-value-12'>Return value</a></h1>
+<h1 id='return-value-22' class='section-header'><a href='#return-value-22'>Return value</a></h1>
 <p>The function returns a Result containing the response length if successful, or an Error.
 The returned request length can be zero if the indication request is ignored (eg. a query for another slave in
 RTU mode).</p>
 
-<h1 id='parameters-13' class='section-header'><a href='#parameters-13'>Parameters</a></h1>
+<h1 id='parameters-17' class='section-header'><a href='#parameters-17'>Parameters</a></h1>
 <ul>
 <li><code>response</code>   - store for the received response</li>
 </ul>
@@ -702,10 +780,10 @@ RTU mode).</p>
 
 <p>The initial request req is required to build a valid response.</p>
 
-<h1 id='return-value-13' class='section-header'><a href='#return-value-13'>Return value</a></h1>
+<h1 id='return-value-23' class='section-header'><a href='#return-value-23'>Return value</a></h1>
 <p>The function returns the length of the response sent if successful, or an Error.</p>
 
-<h1 id='parameters-14' class='section-header'><a href='#parameters-14'>Parameters</a></h1>
+<h1 id='parameters-18' class='section-header'><a href='#parameters-18'>Parameters</a></h1>
 <ul>
 <li><code>request</code>         - initial request, required to build a valid response</li>
 <li><code>exception_code</code>  - Exception Code</li>
@@ -880,7 +958,7 @@ Request To Send  delay period of the libmodbus context ctx.</p>
 
 <p>This function can only be used with a context using a RTU backend.</p>
 
-<h1 id='return-value-14' class='section-header'><a href='#return-value-14'>Return value</a></h1>
+<h1 id='return-value-24' class='section-header'><a href='#return-value-24'>Return value</a></h1>
 <p>The <a href="#method.rtu_get_rts_delay"><code>rtu_get_rts_delay()</code></a> function shall return the current RTS delay in
 microseconds
 if successful. Otherwise it shall return <code>ModbusError::NotRTU</code>.</p>
@@ -899,7 +977,7 @@ the libmodbus context.</p>
 
 <p>This function can only be used with a context using a RTU backend.</p>
 
-<h1 id='return-value-15' class='section-header'><a href='#return-value-15'>Return value</a></h1>
+<h1 id='return-value-25' class='section-header'><a href='#return-value-25'>Return value</a></h1>
 <p>The <a href="#method.rtu_set_rts_delay"><code>rtu_set_rts_delay()</code></a> function shall return 0 if successful.
 Otherwise it shall return <code>ModbusError::NotRTU</code>.</p>
 
@@ -980,7 +1058,7 @@ necessary to have administrator privileges.</p>
 <p>The <a href="#method.tcp_pi_accept"><code>tcp_pi_accept()</code></a> function shall extract the first connection on the
 queue of pending connections and create a new socket given as argument.</p>
 
-<h1 id='parameters-15' class='section-header'><a href='#parameters-15'>Parameters</a></h1>
+<h1 id='parameters-19' class='section-header'><a href='#parameters-19'>Parameters</a></h1>
 <ul>
 <li><code>socket</code>  - Socket</li>
 </ul>
@@ -998,7 +1076,7 @@ queue of pending connections and create a new socket given as argument.</p>
 <p>The <a href="#method.tcp_pi_listen"><code>tcp_pi_listen()</code></a> function shall create a socket and listen to maximum
 <code>num_connection</code> incoming connections on the specifieded node.</p>
 
-<h1 id='parameters-16' class='section-header'><a href='#parameters-16'>Parameters</a></h1>
+<h1 id='parameters-20' class='section-header'><a href='#parameters-20'>Parameters</a></h1>
 <ul>
 <li><code>num_connection</code>  - maximum number of incoming connections on the specified IP address</li>
 </ul>
@@ -1057,7 +1135,7 @@ equal to 1024 because it’s not necessary to have administrator privileges.</p>
 <p>The <a href="#method.tcp_accept"><code>tcp_accept()</code></a> function shall extract the first connection on the
 queue of pending connections and create a new socket given as argument.</p>
 
-<h1 id='parameters-17' class='section-header'><a href='#parameters-17'>Parameters</a></h1>
+<h1 id='parameters-21' class='section-header'><a href='#parameters-21'>Parameters</a></h1>
 <ul>
 <li><code>socket</code>  - Socket</li>
 </ul>
@@ -1077,7 +1155,7 @@ queue of pending connections and create a new socket given as argument.</p>
 <code>num_connection</code> incoming connections on the specified IP address.
 If IP address is set to NULL or &#39;0.0.0.0&#39;, any addresses will be listen.</p>
 
-<h1 id='parameters-18' class='section-header'><a href='#parameters-18'>Parameters</a></h1>
+<h1 id='parameters-22' class='section-header'><a href='#parameters-22'>Parameters</a></h1>
 <ul>
 <li><code>num_connection</code>  - maximum number of incoming connections on the specified IP address</li>
 </ul>
@@ -1089,7 +1167,7 @@ If IP address is set to NULL or &#39;0.0.0.0&#39;, any addresses will be listen.
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
 
 <span class="kw">let</span> <span class="ident">socket</span> <span class="op">=</span> <span class="ident">modbus</span>.<span class="ident">tcp_listen</span>(<span class="number">1</span>);</pre>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#526-531' title='goto source code'>[src]</a></span></h3>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#661-666' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.drop' class="method"><span id='drop.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#tymethod.drop' class='fnname'>drop</a>(&amp;mut self)</code></span></h4>
 <div class='docblock'><p>A method called when the value goes out of scope. <a href="https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#tymethod.drop">Read more</a></p>
 </div></div></section>
