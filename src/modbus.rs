@@ -1,6 +1,7 @@
 use errors::*;
 use libc::{c_int, c_uint};
 use libmodbus_sys;
+use std::io::Error;
 
 
 /// Safe interface for [libmodbus](http://libmodbus.org)
@@ -29,7 +30,7 @@ impl Modbus {
     pub fn connect(&self) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_connect(self.ctx) {
-                -1 => Err("Could not connect".into()),
+                -1 => bail!(Error::last_os_error()),
                 _ => Ok(0),
             }
         }
@@ -50,7 +51,7 @@ impl Modbus {
     pub fn flush(&self) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_flush(self.ctx) {
-                -1 => Err("Could not flush".into()),
+                -1 => bail!(Error::last_os_error()),
                 _ => Ok(0),
             }
         }
@@ -91,7 +92,7 @@ impl Modbus {
     pub fn set_slave(&mut self, slave: i32) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_set_slave(self.ctx, slave as c_int) {
-                -1 => Err("Could not set slave address".into()),
+                -1 => bail!(Error::last_os_error()),
                 _ => Ok(0),
             }
         }
@@ -127,7 +128,7 @@ impl Modbus {
     pub fn set_debug(&mut self, flag: bool) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_set_debug(self.ctx, flag as c_int) {
-                -1 => Err("Could not set debug".into()),
+                -1 => bail!(Error::last_os_error()),
                 _ => Ok(0),
             }
         }
@@ -287,15 +288,25 @@ impl Modbus {
     /// The [`get_socket()`](#method.get_socket) function shall return the current socket or file descriptor of the
     /// libmodbus context.
     ///
+    /// # Return value
+    ///
+    /// The function returns a Result containing the current socket or file descriptor of the context if successful. Otherwise it contains an Error.
+    ///
     /// # Examples
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
-    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// 
+    /// let socket = modbus.get_socket().unwrap();
     /// ```
-    pub fn get_socket(&self) -> Result<u32> {
-        unimplemented!()
+    pub fn get_socket(&self) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_get_socket(self.ctx) {
+                -1 => bail!(Error::last_os_error()),
+                socket => Ok(socket),
+            }
+        }
     }
 
     /// `get_header_length` - retrieve the current header length
