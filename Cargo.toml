@@ -23,6 +23,6 @@ appveyor = { repository = "zzeroo/git2-rs" }
 [dependencies]
 error-chain = "0.10"
 libc = "0.2"
-libmodbus-sys = { path = "libmodbus-sys", version = "0.4.0" }
+libmodbus-sys = { path = "libmodbus-sys", version = "0.4.1" }
 
 rand = "0.3"
