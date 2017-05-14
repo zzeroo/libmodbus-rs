@@ -17,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -43,7 +43,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -359,322 +359,322 @@
 <span id="314">314</span>
 <span id="315">315</span>
 <span id="316">316</span>
-</pre><pre class='rust '>
-<span class='comment'>// Copyright © 2015, Peter Atashian</span>
-<span class='comment'>// Licensed under the MIT License &lt;LICENSE.md&gt;</span>
-<span class='doccomment'>//! FFI bindings to dbghelp.</span>
-<span class='attribute'>#<span class='op'>!</span>[<span class='ident'>cfg</span>(<span class='ident'>windows</span>)]</span>
-<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>winapi</span>;
-<span class='kw'>use</span> <span class='ident'>winapi</span>::<span class='kw-2'>*</span>;
-<span class='kw'>extern</span> <span class='string'>&quot;system&quot;</span> {
-    <span class='comment'>// pub fn DbgHelpCreateUserDump();</span>
-    <span class='comment'>// pub fn DbgHelpCreateUserDumpW();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>EnumDirTree</span>(
-        <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>RootPath</span>: <span class='ident'>PCSTR</span>, <span class='ident'>InputPathName</span>: <span class='ident'>PCSTR</span>, <span class='ident'>OutputPathBuffer</span>: <span class='ident'>PSTR</span>,
-        <span class='ident'>cb</span>: <span class='ident'>PENUMDIRTREE_CALLBACK</span>, <span class='ident'>data</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>EnumDirTreeW</span>(
-        <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>RootPath</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>InputPathName</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>OutputPathBuffer</span>: <span class='ident'>PWSTR</span>,
-        <span class='ident'>cb</span>: <span class='ident'>PENUMDIRTREE_CALLBACKW</span>, <span class='ident'>data</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='comment'>// pub fn EnumerateLoadedModules();</span>
-    <span class='comment'>// pub fn EnumerateLoadedModules64();</span>
-    <span class='comment'>// pub fn EnumerateLoadedModulesEx();</span>
-    <span class='comment'>// pub fn EnumerateLoadedModulesExW();</span>
-    <span class='comment'>// pub fn EnumerateLoadedModulesW64();</span>
-    <span class='comment'>// pub fn ExtensionApiVersion();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>FindDebugInfoFile</span>(<span class='ident'>FileName</span>: <span class='ident'>PCSTR</span>, <span class='ident'>SymbolPath</span>: <span class='ident'>PCSTR</span>, <span class='ident'>DebugFilePath</span>: <span class='ident'>PSTR</span>) <span class='op'>-&gt;</span> <span class='ident'>HANDLE</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>FindDebugInfoFileEx</span>(
-        <span class='ident'>FileName</span>: <span class='ident'>PCSTR</span>, <span class='ident'>SymbolPath</span>: <span class='ident'>PCSTR</span>, <span class='ident'>DebugFilePath</span>: <span class='ident'>PSTR</span>,
-        <span class='ident'>Callback</span>: <span class='ident'>PFIND_DEBUG_FILE_CALLBACK</span>, <span class='ident'>CallerData</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>HANDLE</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>FindDebugInfoFileExW</span>(
-        <span class='ident'>FileName</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>SymbolPath</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>DebugFilePath</span>: <span class='ident'>PWSTR</span>,
-        <span class='ident'>Callback</span>: <span class='ident'>PFIND_DEBUG_FILE_CALLBACKW</span>, <span class='ident'>CallerData</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>HANDLE</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>FindExecutableImage</span>(<span class='ident'>FileName</span>: <span class='ident'>PCSTR</span>, <span class='ident'>SymbolPath</span>: <span class='ident'>PCSTR</span>, <span class='ident'>ImageFilePath</span>: <span class='ident'>PSTR</span>) <span class='op'>-&gt;</span> <span class='ident'>HANDLE</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>FindExecutableImageEx</span>(
-        <span class='ident'>FileName</span>: <span class='ident'>PCSTR</span>, <span class='ident'>SymbolPath</span>: <span class='ident'>PCSTR</span>, <span class='ident'>ImageFilePath</span>: <span class='ident'>PSTR</span>, <span class='ident'>Callback</span>: <span class='ident'>PFIND_EXE_FILE_CALLBACK</span>,
-        <span class='ident'>CallerData</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>HANDLE</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>FindExecutableImageExW</span>(
-        <span class='ident'>FileName</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>SymbolPath</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>ImageFilePath</span>: <span class='ident'>PWSTR</span>,
-        <span class='ident'>Callback</span>: <span class='ident'>PFIND_EXE_FILE_CALLBACKW</span>, <span class='ident'>CallerData</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>HANDLE</span>;
-    <span class='comment'>// pub fn FindFileInPath();</span>
-    <span class='comment'>// pub fn FindFileInSearchPath();</span>
-    <span class='comment'>// pub fn GetSymLoadError();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>GetTimestampForLoadedLibrary</span>(<span class='ident'>Module</span>: <span class='ident'>HMODULE</span>) <span class='op'>-&gt;</span> <span class='ident'>DWORD</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>ImageDirectoryEntryToData</span>(
-        <span class='ident'>Base</span>: <span class='ident'>PVOID</span>, <span class='ident'>MappedAsImage</span>: <span class='ident'>BOOLEAN</span>, <span class='ident'>DirectoryEntry</span>: <span class='ident'>USHORT</span>, <span class='ident'>Size</span>: <span class='ident'>PULONG</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>PVOID</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>ImageDirectoryEntryToDataEx</span>(
-        <span class='ident'>Base</span>: <span class='ident'>PVOID</span>, <span class='ident'>MappedAsImage</span>: <span class='ident'>BOOLEAN</span>, <span class='ident'>DirectoryEntry</span>: <span class='ident'>USHORT</span>, <span class='ident'>Size</span>: <span class='ident'>PULONG</span>,
-        <span class='ident'>FoundHeader</span>: <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>PIMAGE_SECTION_HEADER</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>PVOID</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>ImageNtHeader</span>(<span class='ident'>Base</span>: <span class='ident'>PVOID</span>) <span class='op'>-&gt;</span> <span class='ident'>PIMAGE_NT_HEADERS</span>;
-    <span class='comment'>// pub fn ImageRvaToSection();</span>
-    <span class='comment'>// pub fn ImageRvaToVa();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>ImagehlpApiVersion</span>() <span class='op'>-&gt;</span> <span class='ident'>LPAPI_VERSION</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>ImagehlpApiVersionEx</span>(<span class='ident'>AppVersion</span>: <span class='ident'>LPAPI_VERSION</span>) <span class='op'>-&gt;</span> <span class='ident'>LPAPI_VERSION</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>MakeSureDirectoryPathExists</span>(<span class='ident'>DirPath</span>: <span class='ident'>PCSTR</span>) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>any</span>(<span class='ident'>target_arch</span> <span class='op'>=</span> <span class='string'>&quot;x86&quot;</span>, <span class='ident'>target_arch</span> <span class='op'>=</span> <span class='string'>&quot;arm&quot;</span>))]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>MapDebugInformation</span>(
-        <span class='ident'>FileHandle</span>: <span class='ident'>HANDLE</span>, <span class='ident'>FileName</span>: <span class='ident'>PCSTR</span>, <span class='ident'>SymbolPath</span>: <span class='ident'>PCSTR</span>, <span class='ident'>ImageBase</span>: <span class='ident'>ULONG</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>PIMAGE_DEBUG_INFORMATION</span>;
-    <span class='comment'>// pub fn MiniDumpReadDumpStream();</span>
-    <span class='comment'>// pub fn MiniDumpWriteDump();</span>
-    <span class='comment'>// pub fn RangeMapAddPeImageSections();</span>
-    <span class='comment'>// pub fn RangeMapCreate();</span>
-    <span class='comment'>// pub fn RangeMapFree();</span>
-    <span class='comment'>// pub fn RangeMapRead();</span>
-    <span class='comment'>// pub fn RangeMapRemove();</span>
-    <span class='comment'>// pub fn RangeMapWrite();</span>
-    <span class='comment'>// pub fn RemoveInvalidModuleList();</span>
-    <span class='comment'>// pub fn ReportSymbolLoadSummary();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SearchTreeForFile</span>(
-        <span class='ident'>RootPath</span>: <span class='ident'>PCSTR</span>, <span class='ident'>InputPathName</span>: <span class='ident'>PCSTR</span>, <span class='ident'>OutputPathBuffer</span>: <span class='ident'>PSTR</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SearchTreeForFileW</span>(
-        <span class='ident'>RootPath</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>InputPathName</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>OutputPathBuffer</span>: <span class='ident'>PWSTR</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='comment'>// pub fn SetCheckUserInterruptShared();</span>
-    <span class='comment'>// pub fn SetSymLoadError();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>StackWalk</span>(
-        <span class='ident'>MachineType</span>: <span class='ident'>DWORD</span>, <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>hThread</span>: <span class='ident'>HANDLE</span>, <span class='ident'>StackFrame</span>: <span class='ident'>LPSTACKFRAME</span>,
-        <span class='ident'>ContextRecord</span>: <span class='ident'>PVOID</span>, <span class='ident'>ReadMemoryRoutine</span>: <span class='ident'>PREAD_PROCESS_MEMORY_ROUTINE</span>,
-        <span class='ident'>FunctionTableAccessRoutine</span>: <span class='ident'>PFUNCTION_TABLE_ACCESS_ROUTINE</span>,
-        <span class='ident'>GetModuleBaseRoutine</span>: <span class='ident'>PGET_MODULE_BASE_ROUTINE</span>,
-        <span class='ident'>TranslateAddress</span>: <span class='ident'>PTRANSLATE_ADDRESS_ROUTINE</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>StackWalk64</span>(
-        <span class='ident'>MachineType</span>: <span class='ident'>DWORD</span>, <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>hThread</span>: <span class='ident'>HANDLE</span>, <span class='ident'>StackFrame</span>: <span class='ident'>LPSTACKFRAME64</span>,
-        <span class='ident'>ContextRecord</span>: <span class='ident'>PVOID</span>, <span class='ident'>ReadMemoryRoutine</span>: <span class='ident'>PREAD_PROCESS_MEMORY_ROUTINE64</span>,
-        <span class='ident'>FunctionTableAccessRoutine</span>: <span class='ident'>PFUNCTION_TABLE_ACCESS_ROUTINE64</span>,
-        <span class='ident'>GetModuleBaseRoutine</span>: <span class='ident'>PGET_MODULE_BASE_ROUTINE64</span>,
-        <span class='ident'>TranslateAddress</span>: <span class='ident'>PTRANSLATE_ADDRESS_ROUTINE64</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>StackWalkEx</span>(
-        <span class='ident'>MachineType</span>: <span class='ident'>DWORD</span>, <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>hThread</span>: <span class='ident'>HANDLE</span>, <span class='ident'>StackFrame</span>: <span class='ident'>LPSTACKFRAME64</span>,
-        <span class='ident'>ContextRecord</span>: <span class='ident'>PVOID</span>, <span class='ident'>ReadMemoryRoutine</span>: <span class='ident'>PREAD_PROCESS_MEMORY_ROUTINE64</span>,
-        <span class='ident'>FunctionTableAccessRoutine</span>: <span class='ident'>PFUNCTION_TABLE_ACCESS_ROUTINE64</span>,
-        <span class='ident'>GetModuleBaseRoutine</span>: <span class='ident'>PGET_MODULE_BASE_ROUTINE64</span>,
-        <span class='ident'>TranslateAddress</span>: <span class='ident'>PTRANSLATE_ADDRESS_ROUTINE64</span>, <span class='ident'>Flags</span>: <span class='ident'>DWORD</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='comment'>// pub fn SymAddSourceStream();</span>
-    <span class='comment'>// pub fn SymAddSourceStreamA();</span>
-    <span class='comment'>// pub fn SymAddSourceStreamW();</span>
-    <span class='comment'>// pub fn SymAddSymbol();</span>
-    <span class='comment'>// pub fn SymAddSymbolW();</span>
-    <span class='comment'>// pub fn SymAddrIncludeInlineTrace();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymCleanup</span>(<span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='comment'>// pub fn SymCompareInlineTrace();</span>
-    <span class='comment'>// pub fn SymDeleteSymbol();</span>
-    <span class='comment'>// pub fn SymDeleteSymbolW();</span>
-    <span class='comment'>// pub fn SymEnumLines();</span>
-    <span class='comment'>// pub fn SymEnumLinesW();</span>
-    <span class='comment'>// pub fn SymEnumProcesses();</span>
-    <span class='comment'>// pub fn SymEnumSourceFileTokens();</span>
-    <span class='comment'>// pub fn SymEnumSourceFiles();</span>
-    <span class='comment'>// pub fn SymEnumSourceFilesW();</span>
-    <span class='comment'>// pub fn SymEnumSourceLines();</span>
-    <span class='comment'>// pub fn SymEnumSourceLinesW();</span>
-    <span class='comment'>// pub fn SymEnumSym();</span>
-    <span class='comment'>// pub fn SymEnumSymbols();</span>
-    <span class='comment'>// pub fn SymEnumSymbolsEx();</span>
-    <span class='comment'>// pub fn SymEnumSymbolsExW();</span>
-    <span class='comment'>// pub fn SymEnumSymbolsForAddr();</span>
-    <span class='comment'>// pub fn SymEnumSymbolsForAddrW();</span>
-    <span class='comment'>// pub fn SymEnumSymbolsW();</span>
-    <span class='comment'>// pub fn SymEnumTypes();</span>
-    <span class='comment'>// pub fn SymEnumTypesByName();</span>
-    <span class='comment'>// pub fn SymEnumTypesByNameW();</span>
-    <span class='comment'>// pub fn SymEnumTypesW();</span>
-    <span class='comment'>// pub fn SymEnumerateModules();</span>
-    <span class='comment'>// pub fn SymEnumerateModules64();</span>
-    <span class='comment'>// pub fn SymEnumerateModulesW64();</span>
-    <span class='comment'>// pub fn SymEnumerateSymbols();</span>
-    <span class='comment'>// pub fn SymEnumerateSymbols64();</span>
-    <span class='comment'>// pub fn SymEnumerateSymbolsW();</span>
-    <span class='comment'>// pub fn SymEnumerateSymbolsW64();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymFindDebugInfoFile</span>(
-        <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>FileName</span>: <span class='ident'>PCSTR</span>, <span class='ident'>DebugFilePath</span>: <span class='ident'>PSTR</span>,
-        <span class='ident'>Callback</span>: <span class='ident'>PFIND_DEBUG_FILE_CALLBACK</span>, <span class='ident'>CallerData</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>HANDLE</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymFindDebugInfoFileW</span>(
-        <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>FileName</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>DebugFilePath</span>: <span class='ident'>PWSTR</span>,
-        <span class='ident'>Callback</span>: <span class='ident'>PFIND_DEBUG_FILE_CALLBACKW</span>, <span class='ident'>CallerData</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>HANDLE</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymFindExecutableImage</span>(
-        <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>FileName</span>: <span class='ident'>PCSTR</span>, <span class='ident'>ImageFilePath</span>: <span class='ident'>PSTR</span>, <span class='ident'>Callback</span>: <span class='ident'>PFIND_EXE_FILE_CALLBACK</span>,
-        <span class='ident'>CallerData</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>HANDLE</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymFindExecutableImageW</span>(
-        <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>FileName</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>ImageFilePath</span>: <span class='ident'>PWSTR</span>,
-        <span class='ident'>Callback</span>: <span class='ident'>PFIND_EXE_FILE_CALLBACKW</span>, <span class='ident'>CallerData</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>HANDLE</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymFindFileInPath</span>(
-        <span class='ident'>hprocess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>SearchPath</span>: <span class='ident'>PCSTR</span>, <span class='ident'>FileName</span>: <span class='ident'>PCSTR</span>, <span class='ident'>id</span>: <span class='ident'>PVOID</span>, <span class='ident'>two</span>: <span class='ident'>DWORD</span>, <span class='ident'>three</span>: <span class='ident'>DWORD</span>,
-        <span class='ident'>flags</span>: <span class='ident'>DWORD</span>, <span class='ident'>FoundFile</span>: <span class='ident'>PSTR</span>, <span class='ident'>callback</span>: <span class='ident'>PFINDFILEINPATHCALLBACK</span>, <span class='ident'>context</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymFindFileInPathW</span>(
-        <span class='ident'>hprocess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>SearchPath</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>FileName</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>id</span>: <span class='ident'>PVOID</span>, <span class='ident'>two</span>: <span class='ident'>DWORD</span>,
-        <span class='ident'>three</span>: <span class='ident'>DWORD</span>, <span class='ident'>flags</span>: <span class='ident'>DWORD</span>, <span class='ident'>FoundFile</span>: <span class='ident'>PWSTR</span>, <span class='ident'>callback</span>: <span class='ident'>PFINDFILEINPATHCALLBACKW</span>,
-        <span class='ident'>context</span>: <span class='ident'>PVOID</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='comment'>// pub fn SymFromAddr();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymFromAddrW</span>(
-        <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>Address</span>: <span class='ident'>DWORD64</span>, <span class='ident'>Displacement</span>: <span class='ident'>PDWORD64</span>, <span class='ident'>Symbol</span>: <span class='ident'>PSYMBOL_INFOW</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='comment'>// pub fn SymFromIndex();</span>
-    <span class='comment'>// pub fn SymFromIndexW();</span>
-    <span class='comment'>// pub fn SymFromInlineContext();</span>
-    <span class='comment'>// pub fn SymFromInlineContextW();</span>
-    <span class='comment'>// pub fn SymFromName();</span>
-    <span class='comment'>// pub fn SymFromNameW();</span>
-    <span class='comment'>// pub fn SymFromToken();</span>
-    <span class='comment'>// pub fn SymFromTokenW();</span>
-    <span class='comment'>// pub fn SymFunctionTableAccess();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymFunctionTableAccess64</span>(<span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>AddrBase</span>: <span class='ident'>DWORD64</span>) <span class='op'>-&gt;</span> <span class='ident'>PVOID</span>;
-    <span class='comment'>// pub fn SymFunctionTableAccess64AccessRoutines();</span>
-    <span class='comment'>// pub fn SymGetFileLineOffsets64();</span>
-    <span class='comment'>// pub fn SymGetHomeDirectory();</span>
-    <span class='comment'>// pub fn SymGetHomeDirectoryW();</span>
-    <span class='comment'>// pub fn SymGetLineFromAddr();</span>
-    <span class='comment'>// pub fn SymGetLineFromAddr64();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymGetLineFromAddrW64</span>(
-        <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>dwAddr</span>: <span class='ident'>DWORD64</span>, <span class='ident'>pdwDisplacement</span>: <span class='ident'>PDWORD</span>, <span class='ident'>Line</span>: <span class='ident'>PIMAGEHLP_LINEW64</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='comment'>// pub fn SymGetLineFromInlineContext();</span>
-    <span class='comment'>// pub fn SymGetLineFromInlineContextW();</span>
-    <span class='comment'>// pub fn SymGetLineFromName();</span>
-    <span class='comment'>// pub fn SymGetLineFromName64();</span>
-    <span class='comment'>// pub fn SymGetLineFromNameW64();</span>
-    <span class='comment'>// pub fn SymGetLineNext();</span>
-    <span class='comment'>// pub fn SymGetLineNext64();</span>
-    <span class='comment'>// pub fn SymGetLineNextW64();</span>
-    <span class='comment'>// pub fn SymGetLinePrev();</span>
-    <span class='comment'>// pub fn SymGetLinePrev64();</span>
-    <span class='comment'>// pub fn SymGetLinePrevW64();</span>
-    <span class='comment'>// pub fn SymGetModuleBase();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymGetModuleBase64</span>(<span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>AddrBase</span>: <span class='ident'>DWORD64</span>) <span class='op'>-&gt;</span> <span class='ident'>DWORD64</span>;
-    <span class='comment'>// pub fn SymGetModuleInfo();</span>
-    <span class='comment'>// pub fn SymGetModuleInfo64();</span>
-    <span class='comment'>// pub fn SymGetModuleInfoW();</span>
-    <span class='comment'>// pub fn SymGetModuleInfoW64();</span>
-    <span class='comment'>// pub fn SymGetOmaps();</span>
-    <span class='comment'>// pub fn SymGetOptions();</span>
-    <span class='comment'>// pub fn SymGetScope();</span>
-    <span class='comment'>// pub fn SymGetScopeW();</span>
-    <span class='comment'>// pub fn SymGetSearchPath();</span>
-    <span class='comment'>// pub fn SymGetSearchPathW();</span>
-    <span class='comment'>// pub fn SymGetSourceFile();</span>
-    <span class='comment'>// pub fn SymGetSourceFileFromToken();</span>
-    <span class='comment'>// pub fn SymGetSourceFileFromTokenW();</span>
-    <span class='comment'>// pub fn SymGetSourceFileToken();</span>
-    <span class='comment'>// pub fn SymGetSourceFileTokenW();</span>
-    <span class='comment'>// pub fn SymGetSourceFileW();</span>
-    <span class='comment'>// pub fn SymGetSourceVarFromToken();</span>
-    <span class='comment'>// pub fn SymGetSourceVarFromTokenW();</span>
-    <span class='comment'>// pub fn SymGetSymFromAddr();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymGetSymFromAddr64</span>(
-        <span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>Address</span>: <span class='ident'>DWORD64</span>, <span class='ident'>Displacement</span>: <span class='ident'>PDWORD64</span>, <span class='ident'>Symbol</span>: <span class='ident'>PIMAGEHLP_SYMBOL64</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='comment'>// pub fn SymGetSymFromName();</span>
-    <span class='comment'>// pub fn SymGetSymFromName64();</span>
-    <span class='comment'>// pub fn SymGetSymNext();</span>
-    <span class='comment'>// pub fn SymGetSymNext64();</span>
-    <span class='comment'>// pub fn SymGetSymPrev();</span>
-    <span class='comment'>// pub fn SymGetSymPrev64();</span>
-    <span class='comment'>// pub fn SymGetSymbolFile();</span>
-    <span class='comment'>// pub fn SymGetSymbolFileW();</span>
-    <span class='comment'>// pub fn SymGetTypeFromName();</span>
-    <span class='comment'>// pub fn SymGetTypeFromNameW();</span>
-    <span class='comment'>// pub fn SymGetTypeInfo();</span>
-    <span class='comment'>// pub fn SymGetTypeInfoEx();</span>
-    <span class='comment'>// pub fn SymGetUnwindInfo();</span>
-    <span class='comment'>// pub fn SymInitialize();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>SymInitializeW</span>(<span class='ident'>hProcess</span>: <span class='ident'>HANDLE</span>, <span class='ident'>UserSearchPath</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>fInvadeProcess</span>: <span class='ident'>BOOL</span>) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='comment'>// pub fn SymLoadModule();</span>
-    <span class='comment'>// pub fn SymLoadModule64();</span>
-    <span class='comment'>// pub fn SymLoadModuleEx();</span>
-    <span class='comment'>// pub fn SymLoadModuleExW();</span>
-    <span class='comment'>// pub fn SymMatchFileName();</span>
-    <span class='comment'>// pub fn SymMatchFileNameW();</span>
-    <span class='comment'>// pub fn SymMatchString();</span>
-    <span class='comment'>// pub fn SymMatchStringA();</span>
-    <span class='comment'>// pub fn SymMatchStringW();</span>
-    <span class='comment'>// pub fn SymNext();</span>
-    <span class='comment'>// pub fn SymNextW();</span>
-    <span class='comment'>// pub fn SymPrev();</span>
-    <span class='comment'>// pub fn SymPrevW();</span>
-    <span class='comment'>// pub fn SymQueryInlineTrace();</span>
-    <span class='comment'>// pub fn SymRefreshModuleList();</span>
-    <span class='comment'>// pub fn SymRegisterCallback();</span>
-    <span class='comment'>// pub fn SymRegisterCallback64();</span>
-    <span class='comment'>// pub fn SymRegisterCallbackW64();</span>
-    <span class='comment'>// pub fn SymRegisterFunctionEntryCallback();</span>
-    <span class='comment'>// pub fn SymRegisterFunctionEntryCallback64();</span>
-    <span class='comment'>// pub fn SymSearch();</span>
-    <span class='comment'>// pub fn SymSearchW();</span>
-    <span class='comment'>// pub fn SymSetContext();</span>
-    <span class='comment'>// pub fn SymSetHomeDirectory();</span>
-    <span class='comment'>// pub fn SymSetHomeDirectoryW();</span>
-    <span class='comment'>// pub fn SymSetOptions();</span>
-    <span class='comment'>// pub fn SymSetParentWindow();</span>
-    <span class='comment'>// pub fn SymSetScopeFromAddr();</span>
-    <span class='comment'>// pub fn SymSetScopeFromIndex();</span>
-    <span class='comment'>// pub fn SymSetScopeFromInlineContext();</span>
-    <span class='comment'>// pub fn SymSetSearchPath();</span>
-    <span class='comment'>// pub fn SymSetSearchPathW();</span>
-    <span class='comment'>// pub fn SymSrvDeltaName();</span>
-    <span class='comment'>// pub fn SymSrvDeltaNameW();</span>
-    <span class='comment'>// pub fn SymSrvGetFileIndexInfo();</span>
-    <span class='comment'>// pub fn SymSrvGetFileIndexInfoW();</span>
-    <span class='comment'>// pub fn SymSrvGetFileIndexString();</span>
-    <span class='comment'>// pub fn SymSrvGetFileIndexStringW();</span>
-    <span class='comment'>// pub fn SymSrvGetFileIndexes();</span>
-    <span class='comment'>// pub fn SymSrvGetFileIndexesW();</span>
-    <span class='comment'>// pub fn SymSrvGetSupplement();</span>
-    <span class='comment'>// pub fn SymSrvGetSupplementW();</span>
-    <span class='comment'>// pub fn SymSrvIsStore();</span>
-    <span class='comment'>// pub fn SymSrvIsStoreW();</span>
-    <span class='comment'>// pub fn SymSrvStoreFile();</span>
-    <span class='comment'>// pub fn SymSrvStoreFileW();</span>
-    <span class='comment'>// pub fn SymSrvStoreSupplement();</span>
-    <span class='comment'>// pub fn SymSrvStoreSupplementW();</span>
-    <span class='comment'>// pub fn SymUnDName();</span>
-    <span class='comment'>// pub fn SymUnDName64();</span>
-    <span class='comment'>// pub fn SymUnloadModule();</span>
-    <span class='comment'>// pub fn SymUnloadModule64();</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>UnDecorateSymbolName</span>(
-        <span class='ident'>name</span>: <span class='ident'>PCSTR</span>, <span class='ident'>outputString</span>: <span class='ident'>PSTR</span>, <span class='ident'>maxStringLength</span>: <span class='ident'>DWORD</span>, <span class='ident'>flags</span>: <span class='ident'>DWORD</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>DWORD</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>UnDecorateSymbolNameW</span>(
-        <span class='ident'>name</span>: <span class='ident'>PCWSTR</span>, <span class='ident'>outputString</span>: <span class='ident'>PWSTR</span>, <span class='ident'>maxStringLength</span>: <span class='ident'>DWORD</span>, <span class='ident'>flags</span>: <span class='ident'>DWORD</span>,
-    ) <span class='op'>-&gt;</span> <span class='ident'>DWORD</span>;
-    <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>any</span>(<span class='ident'>target_arch</span> <span class='op'>=</span> <span class='string'>&quot;x86&quot;</span>, <span class='ident'>target_arch</span> <span class='op'>=</span> <span class='string'>&quot;arm&quot;</span>))]</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>UnmapDebugInformation</span>(<span class='ident'>DebugInfo</span>: <span class='ident'>PIMAGE_DEBUG_INFORMATION</span>) <span class='op'>-&gt;</span> <span class='ident'>BOOL</span>;
-    <span class='comment'>// pub fn WinDbgExtensionDllInit();</span>
-    <span class='comment'>// pub fn block();</span>
-    <span class='comment'>// pub fn chksym();</span>
-    <span class='comment'>// pub fn dbghelp();</span>
-    <span class='comment'>// pub fn dh();</span>
-    <span class='comment'>// pub fn fptr();</span>
-    <span class='comment'>// pub fn homedir();</span>
-    <span class='comment'>// pub fn inlinedbg();</span>
-    <span class='comment'>// pub fn itoldyouso();</span>
-    <span class='comment'>// pub fn lmi();</span>
-    <span class='comment'>// pub fn lminfo();</span>
-    <span class='comment'>// pub fn omap();</span>
-    <span class='comment'>// pub fn optdbgdump();</span>
-    <span class='comment'>// pub fn optdbgdumpaddr();</span>
-    <span class='comment'>// pub fn srcfiles();</span>
-    <span class='comment'>// pub fn stack_force_ebp();</span>
-    <span class='comment'>// pub fn stackdbg();</span>
-    <span class='comment'>// pub fn sym();</span>
-    <span class='comment'>// pub fn symsrv();</span>
-    <span class='comment'>// pub fn vc7fpo();</span>
+</pre><pre class="rust ">
+<span class="comment">// Copyright © 2015, Peter Atashian</span>
+<span class="comment">// Licensed under the MIT License &lt;LICENSE.md&gt;</span>
+<span class="doccomment">//! FFI bindings to dbghelp.</span>
+<span class="attribute">#<span class="op">!</span>[<span class="ident">cfg</span>(<span class="ident">windows</span>)]</span>
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">winapi</span>;
+<span class="kw">use</span> <span class="ident">winapi</span>::<span class="kw-2">*</span>;
+<span class="kw">extern</span> <span class="string">&quot;system&quot;</span> {
+    <span class="comment">// pub fn DbgHelpCreateUserDump();</span>
+    <span class="comment">// pub fn DbgHelpCreateUserDumpW();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">EnumDirTree</span>(
+        <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">RootPath</span>: <span class="ident">PCSTR</span>, <span class="ident">InputPathName</span>: <span class="ident">PCSTR</span>, <span class="ident">OutputPathBuffer</span>: <span class="ident">PSTR</span>,
+        <span class="ident">cb</span>: <span class="ident">PENUMDIRTREE_CALLBACK</span>, <span class="ident">data</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">EnumDirTreeW</span>(
+        <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">RootPath</span>: <span class="ident">PCWSTR</span>, <span class="ident">InputPathName</span>: <span class="ident">PCWSTR</span>, <span class="ident">OutputPathBuffer</span>: <span class="ident">PWSTR</span>,
+        <span class="ident">cb</span>: <span class="ident">PENUMDIRTREE_CALLBACKW</span>, <span class="ident">data</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="comment">// pub fn EnumerateLoadedModules();</span>
+    <span class="comment">// pub fn EnumerateLoadedModules64();</span>
+    <span class="comment">// pub fn EnumerateLoadedModulesEx();</span>
+    <span class="comment">// pub fn EnumerateLoadedModulesExW();</span>
+    <span class="comment">// pub fn EnumerateLoadedModulesW64();</span>
+    <span class="comment">// pub fn ExtensionApiVersion();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">FindDebugInfoFile</span>(<span class="ident">FileName</span>: <span class="ident">PCSTR</span>, <span class="ident">SymbolPath</span>: <span class="ident">PCSTR</span>, <span class="ident">DebugFilePath</span>: <span class="ident">PSTR</span>) <span class="op">-&gt;</span> <span class="ident">HANDLE</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">FindDebugInfoFileEx</span>(
+        <span class="ident">FileName</span>: <span class="ident">PCSTR</span>, <span class="ident">SymbolPath</span>: <span class="ident">PCSTR</span>, <span class="ident">DebugFilePath</span>: <span class="ident">PSTR</span>,
+        <span class="ident">Callback</span>: <span class="ident">PFIND_DEBUG_FILE_CALLBACK</span>, <span class="ident">CallerData</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">HANDLE</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">FindDebugInfoFileExW</span>(
+        <span class="ident">FileName</span>: <span class="ident">PCWSTR</span>, <span class="ident">SymbolPath</span>: <span class="ident">PCWSTR</span>, <span class="ident">DebugFilePath</span>: <span class="ident">PWSTR</span>,
+        <span class="ident">Callback</span>: <span class="ident">PFIND_DEBUG_FILE_CALLBACKW</span>, <span class="ident">CallerData</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">HANDLE</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">FindExecutableImage</span>(<span class="ident">FileName</span>: <span class="ident">PCSTR</span>, <span class="ident">SymbolPath</span>: <span class="ident">PCSTR</span>, <span class="ident">ImageFilePath</span>: <span class="ident">PSTR</span>) <span class="op">-&gt;</span> <span class="ident">HANDLE</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">FindExecutableImageEx</span>(
+        <span class="ident">FileName</span>: <span class="ident">PCSTR</span>, <span class="ident">SymbolPath</span>: <span class="ident">PCSTR</span>, <span class="ident">ImageFilePath</span>: <span class="ident">PSTR</span>, <span class="ident">Callback</span>: <span class="ident">PFIND_EXE_FILE_CALLBACK</span>,
+        <span class="ident">CallerData</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">HANDLE</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">FindExecutableImageExW</span>(
+        <span class="ident">FileName</span>: <span class="ident">PCWSTR</span>, <span class="ident">SymbolPath</span>: <span class="ident">PCWSTR</span>, <span class="ident">ImageFilePath</span>: <span class="ident">PWSTR</span>,
+        <span class="ident">Callback</span>: <span class="ident">PFIND_EXE_FILE_CALLBACKW</span>, <span class="ident">CallerData</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">HANDLE</span>;
+    <span class="comment">// pub fn FindFileInPath();</span>
+    <span class="comment">// pub fn FindFileInSearchPath();</span>
+    <span class="comment">// pub fn GetSymLoadError();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">GetTimestampForLoadedLibrary</span>(<span class="ident">Module</span>: <span class="ident">HMODULE</span>) <span class="op">-&gt;</span> <span class="ident">DWORD</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ImageDirectoryEntryToData</span>(
+        <span class="ident">Base</span>: <span class="ident">PVOID</span>, <span class="ident">MappedAsImage</span>: <span class="ident">BOOLEAN</span>, <span class="ident">DirectoryEntry</span>: <span class="ident">USHORT</span>, <span class="ident">Size</span>: <span class="ident">PULONG</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">PVOID</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ImageDirectoryEntryToDataEx</span>(
+        <span class="ident">Base</span>: <span class="ident">PVOID</span>, <span class="ident">MappedAsImage</span>: <span class="ident">BOOLEAN</span>, <span class="ident">DirectoryEntry</span>: <span class="ident">USHORT</span>, <span class="ident">Size</span>: <span class="ident">PULONG</span>,
+        <span class="ident">FoundHeader</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PIMAGE_SECTION_HEADER</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">PVOID</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ImageNtHeader</span>(<span class="ident">Base</span>: <span class="ident">PVOID</span>) <span class="op">-&gt;</span> <span class="ident">PIMAGE_NT_HEADERS</span>;
+    <span class="comment">// pub fn ImageRvaToSection();</span>
+    <span class="comment">// pub fn ImageRvaToVa();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ImagehlpApiVersion</span>() <span class="op">-&gt;</span> <span class="ident">LPAPI_VERSION</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ImagehlpApiVersionEx</span>(<span class="ident">AppVersion</span>: <span class="ident">LPAPI_VERSION</span>) <span class="op">-&gt;</span> <span class="ident">LPAPI_VERSION</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">MakeSureDirectoryPathExists</span>(<span class="ident">DirPath</span>: <span class="ident">PCSTR</span>) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>))]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">MapDebugInformation</span>(
+        <span class="ident">FileHandle</span>: <span class="ident">HANDLE</span>, <span class="ident">FileName</span>: <span class="ident">PCSTR</span>, <span class="ident">SymbolPath</span>: <span class="ident">PCSTR</span>, <span class="ident">ImageBase</span>: <span class="ident">ULONG</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">PIMAGE_DEBUG_INFORMATION</span>;
+    <span class="comment">// pub fn MiniDumpReadDumpStream();</span>
+    <span class="comment">// pub fn MiniDumpWriteDump();</span>
+    <span class="comment">// pub fn RangeMapAddPeImageSections();</span>
+    <span class="comment">// pub fn RangeMapCreate();</span>
+    <span class="comment">// pub fn RangeMapFree();</span>
+    <span class="comment">// pub fn RangeMapRead();</span>
+    <span class="comment">// pub fn RangeMapRemove();</span>
+    <span class="comment">// pub fn RangeMapWrite();</span>
+    <span class="comment">// pub fn RemoveInvalidModuleList();</span>
+    <span class="comment">// pub fn ReportSymbolLoadSummary();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SearchTreeForFile</span>(
+        <span class="ident">RootPath</span>: <span class="ident">PCSTR</span>, <span class="ident">InputPathName</span>: <span class="ident">PCSTR</span>, <span class="ident">OutputPathBuffer</span>: <span class="ident">PSTR</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SearchTreeForFileW</span>(
+        <span class="ident">RootPath</span>: <span class="ident">PCWSTR</span>, <span class="ident">InputPathName</span>: <span class="ident">PCWSTR</span>, <span class="ident">OutputPathBuffer</span>: <span class="ident">PWSTR</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="comment">// pub fn SetCheckUserInterruptShared();</span>
+    <span class="comment">// pub fn SetSymLoadError();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">StackWalk</span>(
+        <span class="ident">MachineType</span>: <span class="ident">DWORD</span>, <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">hThread</span>: <span class="ident">HANDLE</span>, <span class="ident">StackFrame</span>: <span class="ident">LPSTACKFRAME</span>,
+        <span class="ident">ContextRecord</span>: <span class="ident">PVOID</span>, <span class="ident">ReadMemoryRoutine</span>: <span class="ident">PREAD_PROCESS_MEMORY_ROUTINE</span>,
+        <span class="ident">FunctionTableAccessRoutine</span>: <span class="ident">PFUNCTION_TABLE_ACCESS_ROUTINE</span>,
+        <span class="ident">GetModuleBaseRoutine</span>: <span class="ident">PGET_MODULE_BASE_ROUTINE</span>,
+        <span class="ident">TranslateAddress</span>: <span class="ident">PTRANSLATE_ADDRESS_ROUTINE</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">StackWalk64</span>(
+        <span class="ident">MachineType</span>: <span class="ident">DWORD</span>, <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">hThread</span>: <span class="ident">HANDLE</span>, <span class="ident">StackFrame</span>: <span class="ident">LPSTACKFRAME64</span>,
+        <span class="ident">ContextRecord</span>: <span class="ident">PVOID</span>, <span class="ident">ReadMemoryRoutine</span>: <span class="ident">PREAD_PROCESS_MEMORY_ROUTINE64</span>,
+        <span class="ident">FunctionTableAccessRoutine</span>: <span class="ident">PFUNCTION_TABLE_ACCESS_ROUTINE64</span>,
+        <span class="ident">GetModuleBaseRoutine</span>: <span class="ident">PGET_MODULE_BASE_ROUTINE64</span>,
+        <span class="ident">TranslateAddress</span>: <span class="ident">PTRANSLATE_ADDRESS_ROUTINE64</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">StackWalkEx</span>(
+        <span class="ident">MachineType</span>: <span class="ident">DWORD</span>, <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">hThread</span>: <span class="ident">HANDLE</span>, <span class="ident">StackFrame</span>: <span class="ident">LPSTACKFRAME64</span>,
+        <span class="ident">ContextRecord</span>: <span class="ident">PVOID</span>, <span class="ident">ReadMemoryRoutine</span>: <span class="ident">PREAD_PROCESS_MEMORY_ROUTINE64</span>,
+        <span class="ident">FunctionTableAccessRoutine</span>: <span class="ident">PFUNCTION_TABLE_ACCESS_ROUTINE64</span>,
+        <span class="ident">GetModuleBaseRoutine</span>: <span class="ident">PGET_MODULE_BASE_ROUTINE64</span>,
+        <span class="ident">TranslateAddress</span>: <span class="ident">PTRANSLATE_ADDRESS_ROUTINE64</span>, <span class="ident">Flags</span>: <span class="ident">DWORD</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="comment">// pub fn SymAddSourceStream();</span>
+    <span class="comment">// pub fn SymAddSourceStreamA();</span>
+    <span class="comment">// pub fn SymAddSourceStreamW();</span>
+    <span class="comment">// pub fn SymAddSymbol();</span>
+    <span class="comment">// pub fn SymAddSymbolW();</span>
+    <span class="comment">// pub fn SymAddrIncludeInlineTrace();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymCleanup</span>(<span class="ident">hProcess</span>: <span class="ident">HANDLE</span>) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="comment">// pub fn SymCompareInlineTrace();</span>
+    <span class="comment">// pub fn SymDeleteSymbol();</span>
+    <span class="comment">// pub fn SymDeleteSymbolW();</span>
+    <span class="comment">// pub fn SymEnumLines();</span>
+    <span class="comment">// pub fn SymEnumLinesW();</span>
+    <span class="comment">// pub fn SymEnumProcesses();</span>
+    <span class="comment">// pub fn SymEnumSourceFileTokens();</span>
+    <span class="comment">// pub fn SymEnumSourceFiles();</span>
+    <span class="comment">// pub fn SymEnumSourceFilesW();</span>
+    <span class="comment">// pub fn SymEnumSourceLines();</span>
+    <span class="comment">// pub fn SymEnumSourceLinesW();</span>
+    <span class="comment">// pub fn SymEnumSym();</span>
+    <span class="comment">// pub fn SymEnumSymbols();</span>
+    <span class="comment">// pub fn SymEnumSymbolsEx();</span>
+    <span class="comment">// pub fn SymEnumSymbolsExW();</span>
+    <span class="comment">// pub fn SymEnumSymbolsForAddr();</span>
+    <span class="comment">// pub fn SymEnumSymbolsForAddrW();</span>
+    <span class="comment">// pub fn SymEnumSymbolsW();</span>
+    <span class="comment">// pub fn SymEnumTypes();</span>
+    <span class="comment">// pub fn SymEnumTypesByName();</span>
+    <span class="comment">// pub fn SymEnumTypesByNameW();</span>
+    <span class="comment">// pub fn SymEnumTypesW();</span>
+    <span class="comment">// pub fn SymEnumerateModules();</span>
+    <span class="comment">// pub fn SymEnumerateModules64();</span>
+    <span class="comment">// pub fn SymEnumerateModulesW64();</span>
+    <span class="comment">// pub fn SymEnumerateSymbols();</span>
+    <span class="comment">// pub fn SymEnumerateSymbols64();</span>
+    <span class="comment">// pub fn SymEnumerateSymbolsW();</span>
+    <span class="comment">// pub fn SymEnumerateSymbolsW64();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymFindDebugInfoFile</span>(
+        <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">FileName</span>: <span class="ident">PCSTR</span>, <span class="ident">DebugFilePath</span>: <span class="ident">PSTR</span>,
+        <span class="ident">Callback</span>: <span class="ident">PFIND_DEBUG_FILE_CALLBACK</span>, <span class="ident">CallerData</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">HANDLE</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymFindDebugInfoFileW</span>(
+        <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">FileName</span>: <span class="ident">PCWSTR</span>, <span class="ident">DebugFilePath</span>: <span class="ident">PWSTR</span>,
+        <span class="ident">Callback</span>: <span class="ident">PFIND_DEBUG_FILE_CALLBACKW</span>, <span class="ident">CallerData</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">HANDLE</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymFindExecutableImage</span>(
+        <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">FileName</span>: <span class="ident">PCSTR</span>, <span class="ident">ImageFilePath</span>: <span class="ident">PSTR</span>, <span class="ident">Callback</span>: <span class="ident">PFIND_EXE_FILE_CALLBACK</span>,
+        <span class="ident">CallerData</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">HANDLE</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymFindExecutableImageW</span>(
+        <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">FileName</span>: <span class="ident">PCWSTR</span>, <span class="ident">ImageFilePath</span>: <span class="ident">PWSTR</span>,
+        <span class="ident">Callback</span>: <span class="ident">PFIND_EXE_FILE_CALLBACKW</span>, <span class="ident">CallerData</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">HANDLE</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymFindFileInPath</span>(
+        <span class="ident">hprocess</span>: <span class="ident">HANDLE</span>, <span class="ident">SearchPath</span>: <span class="ident">PCSTR</span>, <span class="ident">FileName</span>: <span class="ident">PCSTR</span>, <span class="ident">id</span>: <span class="ident">PVOID</span>, <span class="ident">two</span>: <span class="ident">DWORD</span>, <span class="ident">three</span>: <span class="ident">DWORD</span>,
+        <span class="ident">flags</span>: <span class="ident">DWORD</span>, <span class="ident">FoundFile</span>: <span class="ident">PSTR</span>, <span class="ident">callback</span>: <span class="ident">PFINDFILEINPATHCALLBACK</span>, <span class="ident">context</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymFindFileInPathW</span>(
+        <span class="ident">hprocess</span>: <span class="ident">HANDLE</span>, <span class="ident">SearchPath</span>: <span class="ident">PCWSTR</span>, <span class="ident">FileName</span>: <span class="ident">PCWSTR</span>, <span class="ident">id</span>: <span class="ident">PVOID</span>, <span class="ident">two</span>: <span class="ident">DWORD</span>,
+        <span class="ident">three</span>: <span class="ident">DWORD</span>, <span class="ident">flags</span>: <span class="ident">DWORD</span>, <span class="ident">FoundFile</span>: <span class="ident">PWSTR</span>, <span class="ident">callback</span>: <span class="ident">PFINDFILEINPATHCALLBACKW</span>,
+        <span class="ident">context</span>: <span class="ident">PVOID</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="comment">// pub fn SymFromAddr();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymFromAddrW</span>(
+        <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">Address</span>: <span class="ident">DWORD64</span>, <span class="ident">Displacement</span>: <span class="ident">PDWORD64</span>, <span class="ident">Symbol</span>: <span class="ident">PSYMBOL_INFOW</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="comment">// pub fn SymFromIndex();</span>
+    <span class="comment">// pub fn SymFromIndexW();</span>
+    <span class="comment">// pub fn SymFromInlineContext();</span>
+    <span class="comment">// pub fn SymFromInlineContextW();</span>
+    <span class="comment">// pub fn SymFromName();</span>
+    <span class="comment">// pub fn SymFromNameW();</span>
+    <span class="comment">// pub fn SymFromToken();</span>
+    <span class="comment">// pub fn SymFromTokenW();</span>
+    <span class="comment">// pub fn SymFunctionTableAccess();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymFunctionTableAccess64</span>(<span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">AddrBase</span>: <span class="ident">DWORD64</span>) <span class="op">-&gt;</span> <span class="ident">PVOID</span>;
+    <span class="comment">// pub fn SymFunctionTableAccess64AccessRoutines();</span>
+    <span class="comment">// pub fn SymGetFileLineOffsets64();</span>
+    <span class="comment">// pub fn SymGetHomeDirectory();</span>
+    <span class="comment">// pub fn SymGetHomeDirectoryW();</span>
+    <span class="comment">// pub fn SymGetLineFromAddr();</span>
+    <span class="comment">// pub fn SymGetLineFromAddr64();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymGetLineFromAddrW64</span>(
+        <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">dwAddr</span>: <span class="ident">DWORD64</span>, <span class="ident">pdwDisplacement</span>: <span class="ident">PDWORD</span>, <span class="ident">Line</span>: <span class="ident">PIMAGEHLP_LINEW64</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="comment">// pub fn SymGetLineFromInlineContext();</span>
+    <span class="comment">// pub fn SymGetLineFromInlineContextW();</span>
+    <span class="comment">// pub fn SymGetLineFromName();</span>
+    <span class="comment">// pub fn SymGetLineFromName64();</span>
+    <span class="comment">// pub fn SymGetLineFromNameW64();</span>
+    <span class="comment">// pub fn SymGetLineNext();</span>
+    <span class="comment">// pub fn SymGetLineNext64();</span>
+    <span class="comment">// pub fn SymGetLineNextW64();</span>
+    <span class="comment">// pub fn SymGetLinePrev();</span>
+    <span class="comment">// pub fn SymGetLinePrev64();</span>
+    <span class="comment">// pub fn SymGetLinePrevW64();</span>
+    <span class="comment">// pub fn SymGetModuleBase();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymGetModuleBase64</span>(<span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">AddrBase</span>: <span class="ident">DWORD64</span>) <span class="op">-&gt;</span> <span class="ident">DWORD64</span>;
+    <span class="comment">// pub fn SymGetModuleInfo();</span>
+    <span class="comment">// pub fn SymGetModuleInfo64();</span>
+    <span class="comment">// pub fn SymGetModuleInfoW();</span>
+    <span class="comment">// pub fn SymGetModuleInfoW64();</span>
+    <span class="comment">// pub fn SymGetOmaps();</span>
+    <span class="comment">// pub fn SymGetOptions();</span>
+    <span class="comment">// pub fn SymGetScope();</span>
+    <span class="comment">// pub fn SymGetScopeW();</span>
+    <span class="comment">// pub fn SymGetSearchPath();</span>
+    <span class="comment">// pub fn SymGetSearchPathW();</span>
+    <span class="comment">// pub fn SymGetSourceFile();</span>
+    <span class="comment">// pub fn SymGetSourceFileFromToken();</span>
+    <span class="comment">// pub fn SymGetSourceFileFromTokenW();</span>
+    <span class="comment">// pub fn SymGetSourceFileToken();</span>
+    <span class="comment">// pub fn SymGetSourceFileTokenW();</span>
+    <span class="comment">// pub fn SymGetSourceFileW();</span>
+    <span class="comment">// pub fn SymGetSourceVarFromToken();</span>
+    <span class="comment">// pub fn SymGetSourceVarFromTokenW();</span>
+    <span class="comment">// pub fn SymGetSymFromAddr();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymGetSymFromAddr64</span>(
+        <span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">Address</span>: <span class="ident">DWORD64</span>, <span class="ident">Displacement</span>: <span class="ident">PDWORD64</span>, <span class="ident">Symbol</span>: <span class="ident">PIMAGEHLP_SYMBOL64</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="comment">// pub fn SymGetSymFromName();</span>
+    <span class="comment">// pub fn SymGetSymFromName64();</span>
+    <span class="comment">// pub fn SymGetSymNext();</span>
+    <span class="comment">// pub fn SymGetSymNext64();</span>
+    <span class="comment">// pub fn SymGetSymPrev();</span>
+    <span class="comment">// pub fn SymGetSymPrev64();</span>
+    <span class="comment">// pub fn SymGetSymbolFile();</span>
+    <span class="comment">// pub fn SymGetSymbolFileW();</span>
+    <span class="comment">// pub fn SymGetTypeFromName();</span>
+    <span class="comment">// pub fn SymGetTypeFromNameW();</span>
+    <span class="comment">// pub fn SymGetTypeInfo();</span>
+    <span class="comment">// pub fn SymGetTypeInfoEx();</span>
+    <span class="comment">// pub fn SymGetUnwindInfo();</span>
+    <span class="comment">// pub fn SymInitialize();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SymInitializeW</span>(<span class="ident">hProcess</span>: <span class="ident">HANDLE</span>, <span class="ident">UserSearchPath</span>: <span class="ident">PCWSTR</span>, <span class="ident">fInvadeProcess</span>: <span class="ident">BOOL</span>) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="comment">// pub fn SymLoadModule();</span>
+    <span class="comment">// pub fn SymLoadModule64();</span>
+    <span class="comment">// pub fn SymLoadModuleEx();</span>
+    <span class="comment">// pub fn SymLoadModuleExW();</span>
+    <span class="comment">// pub fn SymMatchFileName();</span>
+    <span class="comment">// pub fn SymMatchFileNameW();</span>
+    <span class="comment">// pub fn SymMatchString();</span>
+    <span class="comment">// pub fn SymMatchStringA();</span>
+    <span class="comment">// pub fn SymMatchStringW();</span>
+    <span class="comment">// pub fn SymNext();</span>
+    <span class="comment">// pub fn SymNextW();</span>
+    <span class="comment">// pub fn SymPrev();</span>
+    <span class="comment">// pub fn SymPrevW();</span>
+    <span class="comment">// pub fn SymQueryInlineTrace();</span>
+    <span class="comment">// pub fn SymRefreshModuleList();</span>
+    <span class="comment">// pub fn SymRegisterCallback();</span>
+    <span class="comment">// pub fn SymRegisterCallback64();</span>
+    <span class="comment">// pub fn SymRegisterCallbackW64();</span>
+    <span class="comment">// pub fn SymRegisterFunctionEntryCallback();</span>
+    <span class="comment">// pub fn SymRegisterFunctionEntryCallback64();</span>
+    <span class="comment">// pub fn SymSearch();</span>
+    <span class="comment">// pub fn SymSearchW();</span>
+    <span class="comment">// pub fn SymSetContext();</span>
+    <span class="comment">// pub fn SymSetHomeDirectory();</span>
+    <span class="comment">// pub fn SymSetHomeDirectoryW();</span>
+    <span class="comment">// pub fn SymSetOptions();</span>
+    <span class="comment">// pub fn SymSetParentWindow();</span>
+    <span class="comment">// pub fn SymSetScopeFromAddr();</span>
+    <span class="comment">// pub fn SymSetScopeFromIndex();</span>
+    <span class="comment">// pub fn SymSetScopeFromInlineContext();</span>
+    <span class="comment">// pub fn SymSetSearchPath();</span>
+    <span class="comment">// pub fn SymSetSearchPathW();</span>
+    <span class="comment">// pub fn SymSrvDeltaName();</span>
+    <span class="comment">// pub fn SymSrvDeltaNameW();</span>
+    <span class="comment">// pub fn SymSrvGetFileIndexInfo();</span>
+    <span class="comment">// pub fn SymSrvGetFileIndexInfoW();</span>
+    <span class="comment">// pub fn SymSrvGetFileIndexString();</span>
+    <span class="comment">// pub fn SymSrvGetFileIndexStringW();</span>
+    <span class="comment">// pub fn SymSrvGetFileIndexes();</span>
+    <span class="comment">// pub fn SymSrvGetFileIndexesW();</span>
+    <span class="comment">// pub fn SymSrvGetSupplement();</span>
+    <span class="comment">// pub fn SymSrvGetSupplementW();</span>
+    <span class="comment">// pub fn SymSrvIsStore();</span>
+    <span class="comment">// pub fn SymSrvIsStoreW();</span>
+    <span class="comment">// pub fn SymSrvStoreFile();</span>
+    <span class="comment">// pub fn SymSrvStoreFileW();</span>
+    <span class="comment">// pub fn SymSrvStoreSupplement();</span>
+    <span class="comment">// pub fn SymSrvStoreSupplementW();</span>
+    <span class="comment">// pub fn SymUnDName();</span>
+    <span class="comment">// pub fn SymUnDName64();</span>
+    <span class="comment">// pub fn SymUnloadModule();</span>
+    <span class="comment">// pub fn SymUnloadModule64();</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">UnDecorateSymbolName</span>(
+        <span class="ident">name</span>: <span class="ident">PCSTR</span>, <span class="ident">outputString</span>: <span class="ident">PSTR</span>, <span class="ident">maxStringLength</span>: <span class="ident">DWORD</span>, <span class="ident">flags</span>: <span class="ident">DWORD</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">DWORD</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">UnDecorateSymbolNameW</span>(
+        <span class="ident">name</span>: <span class="ident">PCWSTR</span>, <span class="ident">outputString</span>: <span class="ident">PWSTR</span>, <span class="ident">maxStringLength</span>: <span class="ident">DWORD</span>, <span class="ident">flags</span>: <span class="ident">DWORD</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">DWORD</span>;
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;x86&quot;</span>, <span class="ident">target_arch</span> <span class="op">=</span> <span class="string">&quot;arm&quot;</span>))]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">UnmapDebugInformation</span>(<span class="ident">DebugInfo</span>: <span class="ident">PIMAGE_DEBUG_INFORMATION</span>) <span class="op">-&gt;</span> <span class="ident">BOOL</span>;
+    <span class="comment">// pub fn WinDbgExtensionDllInit();</span>
+    <span class="comment">// pub fn block();</span>
+    <span class="comment">// pub fn chksym();</span>
+    <span class="comment">// pub fn dbghelp();</span>
+    <span class="comment">// pub fn dh();</span>
+    <span class="comment">// pub fn fptr();</span>
+    <span class="comment">// pub fn homedir();</span>
+    <span class="comment">// pub fn inlinedbg();</span>
+    <span class="comment">// pub fn itoldyouso();</span>
+    <span class="comment">// pub fn lmi();</span>
+    <span class="comment">// pub fn lminfo();</span>
+    <span class="comment">// pub fn omap();</span>
+    <span class="comment">// pub fn optdbgdump();</span>
+    <span class="comment">// pub fn optdbgdumpaddr();</span>
+    <span class="comment">// pub fn srcfiles();</span>
+    <span class="comment">// pub fn stack_force_ebp();</span>
+    <span class="comment">// pub fn stackdbg();</span>
+    <span class="comment">// pub fn sym();</span>
+    <span class="comment">// pub fn symsrv();</span>
+    <span class="comment">// pub fn vc7fpo();</span>
 }
 </pre>
 </section>

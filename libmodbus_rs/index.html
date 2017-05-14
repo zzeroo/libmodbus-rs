@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="https://zzeroo.github.io/share/favicon.ico">
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc mod">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -43,33 +43,44 @@
         </form>
     </nav>
 
-    <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>libmodbus_rs</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Crate <a class="mod" href=''>libmodbus_rs</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/lib.rs.html#1-137' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>This is an &#39;hopefully&#39; safe Rust interface for the <a href="http://libmodbus.org/">libmodbus</a> C library from <a href="http://libmodbus.org/">http://libmodbus.org/</a>.</p>
+               </span><a class='srclink' href='../src/libmodbus_rs/lib.rs.html#1-178' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>This is an &#39;hopefully&#39; safe Rust interface for the <a href="http://libmodbus.org/">libmodbus</a> C library from
+<a href="http://libmodbus.org/">http://libmodbus.org/</a>.</p>
 
-<p><a href="http://libmodbus.org/">libmodbus</a> is a library to send/receive data with a device which respects the Modbus protocol.
-This library contains various backends to communicate over different networks (eg. serial in RTU mode or Ethernet in TCP/IPv6).
+<p><a href="http://libmodbus.org/">libmodbus</a> is a library to send/receive data with a device which respects the Modbus
+protocol.
+This library contains various backends to communicate over different networks (eg. serial in RTU mode or Ethernet
+in TCP/IPv6).
 The <a href="http://www.modbus.org">http://www.modbus.org</a> site provides documentation about the protocol at <a href="http://www.modbus.org/specs.php">http://www.modbus.org/specs.php</a>.</p>
 
-<p>libmodbus provides an abstraction of the lower communication layers and offers the same API on all supported platforms.</p>
+<p>libmodbus provides an abstraction of the lower communication layers and offers the same API on all supported
+platforms.</p>
 
-<p>This documentation presents an overview of libmodbus concepts, describes how libmodbus abstracts Modbus communication with
-different hardware and platforms and provides a reference manual for the functions provided by the libmodbus library.</p>
+<p>This documentation presents an overview of libmodbus concepts, describes how libmodbus abstracts Modbus
+communication with
+different hardware and platforms and provides a reference manual for the functions provided by the libmodbus
+library.</p>
 
 <p><strong>This project hosts the original libmodbus documentation, used here, as well.</strong><br />
 Please have a look at: <a href="../libmodbus/libmodbus.html">libmodbus/libmodbus.html</a></p>
 
 <h2 id='contexts' class='section-header'><a href='#contexts'>Contexts</a></h2>
-<p>The Modbus protocol contains many variants (eg. serial RTU or Ehternet TCP), to ease the implementation of a variant, the library was designed to use a backend for each variant.</p>
+<p>The Modbus protocol contains many variants (eg. serial RTU or Ehternet TCP), to ease the implementation of a
+variant, the library was designed to use a backend for each variant.</p>
 
-<p><strong>libmodbus-rs provides traits and matching implementations for these variants.</strong> See <a href="trait.ModbusRTU.html">ModbusRTU</a> (trait), <a href="struct.Modbus.html#method.new_rtu">Modbus::new_rtu()</a> (implementation) or <a href="trait.ModbusTCP.html">ModbusTCP</a> (trait).</p>
+<p><strong>libmodbus-rs provides traits and matching implementations for these variants.</strong> See
+<a href="trait.ModbusRTU.html">ModbusRTU</a> (trait), <a href="struct.Modbus.html#method.new_rtu">Modbus::new_rtu()</a> (implementation)
+or <a href="trait.ModbusTCP.html">ModbusTCP</a> (trait).</p>
 
-<p>The backends are also a convenient way to fulfill other requirements (eg. real-time operations). Each backend offers a specific function to create a new modbus_t context.
-The modbus_t context is an opaque structure containing all necessary information to establish a connection with others Modbus devices according to the selected variant.</p>
+<p>The backends are also a convenient way to fulfill other requirements (eg. real-time operations). Each backend
+offers a specific function to create a new modbus_t context.
+The modbus_t context is an opaque structure containing all necessary information to establish a connection with
+others Modbus devices according to the selected variant.</p>
 
 <p>You can choose the best context for your needs among:</p>
 
@@ -80,19 +91,26 @@ The modbus_t context is an opaque structure containing all necessary information
 </ul>
 
 <h3 id='a-hreftraitmodbusrtuhtmlrtu-contexta' class='section-header'><a href='#a-hreftraitmodbusrtuhtmlrtu-contexta'><a href="trait.ModbusRTU.html">RTU Context</a></a></h3>
-<p>The RTU backend (Remote Terminal Unit) is used in serial communication and makes use of a compact, binary representation of the data for protocol communication.
-The RTU format follows the commands/data with a cyclic redundancy check checksum as an error check mechanism to ensure the reliability of data.
-Modbus RTU is the most common implementation available for Modbus. A Modbus RTU message must be transmitted continuously without inter-character hesitations
+<p>The RTU backend (Remote Terminal Unit) is used in serial communication and makes use of a compact, binary
+representation of the data for protocol communication.
+The RTU format follows the commands/data with a cyclic redundancy check checksum as an error check mechanism to
+ensure the reliability of data.
+Modbus RTU is the most common implementation available for Modbus. A Modbus RTU message must be transmitted
+continuously without inter-character hesitations
 (extract from Wikipedia, Modbus, <a href="http://en.wikipedia.org/wiki/Modbus">http://en.wikipedia.org/wiki/Modbus</a> (as of Mar. 13, 2011, 20:51 GMT).</p>
 
-<p>The Modbus RTU framing calls a slave, a device/service which handle Modbus requests, and a master, a client which send requests. The communication is always initiated by the master.</p>
+<p>The Modbus RTU framing calls a slave, a device/service which handle Modbus requests, and a master, a client which
+send requests. The communication is always initiated by the master.</p>
 
-<p>Many Modbus devices can be connected together on the same physical link so before sending a message, you must set the slave (receiver) with modbus_set_slave(3).
+<p>Many Modbus devices can be connected together on the same physical link so before sending a message, you must set
+the slave (receiver) with modbus_set_slave(3).
 If you’re running a slave, its slave number will be used to filter received messages.</p>
 
 <p>The libmodbus implementation of RTU isn’t time based as stated in original Modbus specification,
-instead all bytes are sent as fast as possible and a response or an indication is considered complete when all expected characters have been received.
-This implementation offers very fast communication but you must take care to set a response timeout of slaves less than response timeout of master
+instead all bytes are sent as fast as possible and a response or an indication is considered complete when all
+expected characters have been received.
+This implementation offers very fast communication but you must take care to set a response timeout of slaves less
+than response timeout of master
 (ortherwise other slaves may ignore master requests when one of the slave is not responding).</p>
 
 <ul>
@@ -101,11 +119,13 @@ This implementation offers very fast communication but you must take care to set
 <ul>
 <li><a href="struct.Modbus.html#method.new_rtu"><code>new_rtu()</code></a></li>
 </ul></li>
-<li><p>Set the serial mode</p>
-
-<ul>
-<li><a href="struct.Modbus.html#method.rtu_get_serial_mode"><code>rtu_get_serial_mode()</code></a>, <a href="struct.Modbus.html#method.rtu_set_serial_mode"><code>rtu_set_serial_mode()</code></a>, <a href="struct.Modbus.html#method.rtu_get_rts"><code>rtu_get_rts()</code></a>, <a href="struct.Modbus.html#method.rtu_set_rts"><code>rtu_set_rts()</code></a>, <a href="struct.Modbus.html#method.rtu_set_custom_rts"><code>rtu_set_custom_rts()</code></a>, <a href="struct.Modbus.html#method.rtu_get_rts_delay"><code>rtu_get_rts_delay()</code></a>, <a href="struct.Modbus.html#method.rtu_set_rts_delay"><code>rtu_set_rts_delay()</code></a></li>
-</ul></li>
+<li><p>Set the serial mode</p></li>
+<li><p><a href="struct.Modbus.html#method.rtu_get_serial_mode"><code>rtu_get_serial_mode()</code></a>,
+<a href="struct.Modbus.html#method.rtu_set_serial_mode"><code>rtu_set_serial_mode()</code></a>,
+<a href="struct.Modbus.html#method.rtu_get_rts"><code>rtu_get_rts()</code></a>, <a href="struct.Modbus.html#method.rtu_set_rts"><code>rtu_set_rts()</code></a>,
+<a href="struct.Modbus.html#method.rtu_set_custom_rts"><code>rtu_set_custom_rts()</code></a>,
+<a href="struct.Modbus.html#method.rtu_get_rts_delay"><code>rtu_get_rts_delay()</code></a>,
+<a href="struct.Modbus.html#method.rtu_set_rts_delay"><code>rtu_set_rts_delay()</code></a></p></li>
 </ul>
 
 <h3 id='a-hreftraitmodbustcphtmltcp-ipv4-contexta' class='section-header'><a href='#a-hreftraitmodbustcphtmltcp-ipv4-contexta'><a href="trait.ModbusTCP.html">TCP (IPv4) Context</a></a></h3>
@@ -121,10 +141,12 @@ It does not require a checksum calculation as lower layer takes care of the same
 </ul>
 
 <h3 id='a-hreftraitmodbustcppihtmltcp-pi-ipv4-and-ipv6-contexta' class='section-header'><a href='#a-hreftraitmodbustcppihtmltcp-pi-ipv4-and-ipv6-contexta'><a href="trait.ModbusTCPPI.html">TCP PI (IPv4 and IPv6) Context</a></a></h3>
-<p>The TCP PI (Protocol Independent) backend implements a Modbus variant used for communications over TCP IPv4 and IPv6 networks.
+<p>The TCP PI (Protocol Independent) backend implements a Modbus variant used for communications over TCP IPv4 and
+IPv6 networks.
 It does not require a checksum calculation as lower layer takes care of the same.</p>
 
-<p>Contrary to the TCP IPv4 only backend, the TCP PI backend offers hostname resolution but it consumes about 1Kb of additional memory.</p>
+<p>Contrary to the TCP IPv4 only backend, the TCP PI backend offers hostname resolution but it consumes about 1Kb of
+additional memory.</p>
 
 <ul>
 <li>Create a Modbus TCP context
@@ -141,26 +163,25 @@ It does not require a checksum calculation as lower layer takes care of the same
 The following functions are used by the clients to send Modbus requests:</p>
 
 <ul>
-<li>Read data
-
-<ul>
-<li><a href="struct.Modbus.html#method.read_bits"><code>read_bits()</code></a>, <a href="struct.Modbus.html#method.read_input_bits"><code>read_input_bits()</code></a>, <a href="struct.Modbus.html#method.read_registers"><code>read_registers()</code></a>, <a href="struct.Modbus.html#method.read_input_registers"><code>read_input_registers()</code></a>, <a href="struct.Modbus.html#method.report_slave_id"><code>report_slave_id()</code></a></li>
-</ul></li>
-<li>Write data
-
-<ul>
-<li><a href="struct.Modbus.html#method.write_bit"><code>write_bit()</code></a>, <a href="struct.Modbus.html#method.write_register"><code>write_register()</code></a>, <a href="struct.Modbus.html#method.write_bits"><code>write_bits()</code></a>, <a href="struct.Modbus.html#method.write_registers"><code>write_registers()</code></a></li>
-</ul></li>
+<li>Read data</li>
+<li><a href="struct.Modbus.html#method.read_bits"><code>read_bits()</code></a>,
+<a href="struct.Modbus.html#method.read_input_bits"><code>read_input_bits()</code></a>,
+<a href="struct.Modbus.html#method.read_registers"><code>read_registers()</code></a>,
+<a href="struct.Modbus.html#method.read_input_registers"><code>read_input_registers()</code></a>,
+<a href="struct.Modbus.html#method.report_slave_id"><code>report_slave_id()</code></a></li>
+<li>Write data</li>
+<li><a href="struct.Modbus.html#method.write_bit"><code>write_bit()</code></a>,
+<a href="struct.Modbus.html#method.write_register"><code>write_register()</code></a>,
+<a href="struct.Modbus.html#method.write_bits"><code>write_bits()</code></a>,
+<a href="struct.Modbus.html#method.write_registers"><code>write_registers()</code></a></li>
 <li>Write and read data
 
 <ul>
 <li><a href="struct.Modbus.html#method.write_and_read_registers"><code>write_and_read_registers()</code></a></li>
 </ul></li>
-<li>Raw requests
-
-<ul>
-<li><a href="struct.Modbus.html#method.send_raw_request"><code>send_raw_request()</code></a>, <a href="struct.Modbus.html#method.receive_confirmation"><code>receive_confirmation()</code></a></li>
-</ul></li>
+<li>Raw requests</li>
+<li><a href="struct.Modbus.html#method.send_raw_request"><code>send_raw_request()</code></a>,
+<a href="struct.Modbus.html#method.receive_confirmation"><code>receive_confirmation()</code></a></li>
 <li>Reply an exception
 
 <ul>
@@ -171,10 +192,13 @@ The following functions are used by the clients to send Modbus requests:</p>
 <h3 id='a-hreftraitmodbusserverhtmlservera' class='section-header'><a href='#a-hreftraitmodbusserverhtmlservera'><a href="trait.ModbusServer.html"><code>Server</code></a></a></h3>
 <p>The server is waiting for request from clients and must answer when it is concerned by the request.</p>
 
-<p>In TCP , you must not use the usual <a href="struct.Modbus.html#method.connect"><code>connect()</code></a> to establish the connection but a pair of accept/listen calls</p>
+<p>In TCP , you must not use the usual <a href="struct.Modbus.html#method.connect"><code>connect()</code></a> to establish the connection
+but a pair of accept/listen calls</p>
 
 <ul>
-<li><a href="struct.Modbus.html#method.tcp_listen"><code>tcp_listen()</code></a>, <a href="struct.Modbus.html#method.tcp_accept"><code>tcp_accept()</code></a>, <a href="struct.Modbus.html#method.tcp_pi_listen"><code>tcp_pi_listen</code>()</a>, <a href="struct.Modbus.html#method.tcp_pi_accept"><code>tcp_pi_accept</code>()</a></li>
+<li><a href="struct.Modbus.html#method.tcp_listen"><code>tcp_listen()</code></a>, <a href="struct.Modbus.html#method.tcp_accept"><code>tcp_accept()</code></a>,
+<a href="struct.Modbus.html#method.tcp_pi_listen"><code>tcp_pi_listen</code>()</a>,
+<a href="struct.Modbus.html#method.tcp_pi_accept"><code>tcp_pi_accept</code>()</a></li>
 </ul>
 
 <p>then the data can be received with</p>
@@ -189,107 +213,134 @@ The following functions are used by the clients to send Modbus requests:</p>
 <li><a href="struct.Modbus.html#method.reply"><code>reply()</code></a>, <a href="struct.Modbus.html#method.reply_exception"><code>reply_exception()</code></a></li>
 </ul>
 
-<p>To handle the mapping of your Modbus data, you must use a <a href="struct.ModbusMapping.html"><code>ModbusMapping</code></a> struct: <a href="struct.ModbusMapping.html#method.new"><code>ModbusMapping::new()</code></a></p>
+<p>To handle the mapping of your Modbus data, you must use a <a href="struct.ModbusMapping.html"><code>ModbusMapping</code></a> struct:
+<a href="struct.ModbusMapping.html#method.new"><code>ModbusMapping::new()</code></a></p>
 </div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='mod' href='errors/index.html'
-                                  title='libmodbus_rs::errors'>errors</a></td>
+                           <td><a class="mod" href="errors/index.html"
+                                  title='mod libmodbus_rs::errors'>errors</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.Modbus.html'
-                                  title='libmodbus_rs::Modbus'>Modbus</a></td>
+                           <td><a class="struct" href="struct.Modbus.html"
+                                  title='struct libmodbus_rs::Modbus'>Modbus</a></td>
                            <td class='docblock-short'>
                                 <p>Safe interface for <a href="http://libmodbus.org">libmodbus</a></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.ModbusMapping.html'
-                                  title='libmodbus_rs::ModbusMapping'>ModbusMapping</a></td>
+                           <td><a class="struct" href="struct.ModbusMapping.html"
+                                  title='struct libmodbus_rs::ModbusMapping'>ModbusMapping</a></td>
                            <td class='docblock-short'>
                                 <p>To handle the mapping of your Modbus data, you must use this struct</p>
                            </td>
                        </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='enum' href='enum.RequestToSendMode.html'
-                                  title='libmodbus_rs::RequestToSendMode'>RequestToSendMode</a></td>
+                           <td><a class="enum" href="enum.Exception.html"
+                                  title='enum libmodbus_rs::Exception'>Exception</a></td>
+                           <td class='docblock-short'>
+                                <p>Modbus protocol exceptions</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.FunctionCode.html"
+                                  title='enum libmodbus_rs::FunctionCode'>FunctionCode</a></td>
+                           <td class='docblock-short'>
+                                <p>Modbus function codes</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="enum" href="enum.RequestToSendMode.html"
+                                  title='enum libmodbus_rs::RequestToSendMode'>RequestToSendMode</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='enum' href='enum.SerialMode.html'
-                                  title='libmodbus_rs::SerialMode'>SerialMode</a></td>
+                           <td><a class="enum" href="enum.SerialMode.html"
+                                  title='enum libmodbus_rs::SerialMode'>SerialMode</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr></table><h2 id='constants' class='section-header'><a href="#constants">Constants</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='constant' href='constant.MODBUS_MAX_ADU_LENGTH.html'
-                                  title='libmodbus_rs::MODBUS_MAX_ADU_LENGTH'>MODBUS_MAX_ADU_LENGTH</a></td>
+                           <td><a class="constant" href="constant.MODBUS_MAX_ADU_LENGTH.html"
+                                  title='constant libmodbus_rs::MODBUS_MAX_ADU_LENGTH'>MODBUS_MAX_ADU_LENGTH</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='constant' href='constant.MODBUS_TCP_DEFAULT_PORT.html'
-                                  title='libmodbus_rs::MODBUS_TCP_DEFAULT_PORT'>MODBUS_TCP_DEFAULT_PORT</a></td>
+                           <td><a class="constant" href="constant.MODBUS_MAX_PDU_LENGTH.html"
+                                  title='constant libmodbus_rs::MODBUS_MAX_PDU_LENGTH'>MODBUS_MAX_PDU_LENGTH</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='constant' href='constant.MODBUS_TCP_MAX_ADU_LENGTH.html'
-                                  title='libmodbus_rs::MODBUS_TCP_MAX_ADU_LENGTH'>MODBUS_TCP_MAX_ADU_LENGTH</a></td>
+                           <td><a class="constant" href="constant.MODBUS_TCP_DEFAULT_PORT.html"
+                                  title='constant libmodbus_rs::MODBUS_TCP_DEFAULT_PORT'>MODBUS_TCP_DEFAULT_PORT</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="constant" href="constant.MODBUS_TCP_MAX_ADU_LENGTH.html"
+                                  title='constant libmodbus_rs::MODBUS_TCP_MAX_ADU_LENGTH'>MODBUS_TCP_MAX_ADU_LENGTH</a></td>
                            <td class='docblock-short'>
                                 
                            </td>
                        </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table>
                        <tr class=' module-item'>
-                           <td><a class='trait' href='trait.ModbusClient.html'
-                                  title='libmodbus_rs::ModbusClient'>ModbusClient</a></td>
+                           <td><a class="trait" href="trait.ModbusClient.html"
+                                  title='trait libmodbus_rs::ModbusClient'>ModbusClient</a></td>
                            <td class='docblock-short'>
                                 <p>The Modbus protocol defines different data types and functions to read and write them from/to remote devices.
 The following functions are used by the clients to send Modbus requests:</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='trait' href='trait.ModbusRTU.html'
-                                  title='libmodbus_rs::ModbusRTU'>ModbusRTU</a></td>
+                           <td><a class="trait" href="trait.ModbusRTU.html"
+                                  title='trait libmodbus_rs::ModbusRTU'>ModbusRTU</a></td>
                            <td class='docblock-short'>
-                                <p>The RTU backend (Remote Terminal Unit) is used in serial communication and makes use of a compact, binary representation of the data for protocol communication.
-The RTU format follows the commands/data with a cyclic redundancy check checksum as an error check mechanism to ensure the reliability of data.
-Modbus RTU is the most common implementation available for Modbus. A Modbus RTU message must be transmitted continuously without inter-character hesitations
+                                <p>The RTU backend (Remote Terminal Unit) is used in serial communication and makes use of a compact, binary
+representation of the data for protocol communication.
+The RTU format follows the commands/data with a cyclic redundancy check checksum as an error check mechanism to
+ensure the reliability of data.
+Modbus RTU is the most common implementation available for Modbus. A Modbus RTU message must be transmitted
+continuously without inter-character hesitations
 (extract from Wikipedia, Modbus, <a href="http://en.wikipedia.org/wiki/Modbus">http://en.wikipedia.org/wiki/Modbus</a> (as of Mar. 13, 2011, 20:51 GMT).</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='trait' href='trait.ModbusServer.html'
-                                  title='libmodbus_rs::ModbusServer'>ModbusServer</a></td>
+                           <td><a class="trait" href="trait.ModbusServer.html"
+                                  title='trait libmodbus_rs::ModbusServer'>ModbusServer</a></td>
                            <td class='docblock-short'>
-                                <p>The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus offers the following functions to handle requests:</p>
+                                <p>The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus
+offers the following functions to handle requests:</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='trait' href='trait.ModbusTCP.html'
-                                  title='libmodbus_rs::ModbusTCP'>ModbusTCP</a></td>
+                           <td><a class="trait" href="trait.ModbusTCP.html"
+                                  title='trait libmodbus_rs::ModbusTCP'>ModbusTCP</a></td>
                            <td class='docblock-short'>
                                 <p>The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
 It does not require a checksum calculation as lower layer takes care of the same.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='trait' href='trait.ModbusTCPPI.html'
-                                  title='libmodbus_rs::ModbusTCPPI'>ModbusTCPPI</a></td>
+                           <td><a class="trait" href="trait.ModbusTCPPI.html"
+                                  title='trait libmodbus_rs::ModbusTCPPI'>ModbusTCPPI</a></td>
                            <td class='docblock-short'>
-                                <p>The TCP PI (Protocol Independent) backend implements a Modbus variant used for communications over TCP IPv4 and IPv6 networks.
+                                <p>The TCP PI (Protocol Independent) backend implements a Modbus variant used for communications over TCP IPv4 and
+IPv6 networks.
 It does not require a checksum calculation as lower layer takes care of the same.</p>
                            </td>
                        </tr></table></section>

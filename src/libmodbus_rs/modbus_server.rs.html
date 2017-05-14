@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="https://zzeroo.github.io/share/favicon.ico">
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -43,7 +43,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1"> 1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1"> 1</span>
 <span id="2"> 2</span>
 <span id="3"> 3</span>
 <span id="4"> 4</span>
@@ -120,80 +120,94 @@
 <span id="75">75</span>
 <span id="76">76</span>
 <span id="77">77</span>
-</pre><pre class='rust '>
-<span class='kw'>use</span> <span class='ident'>errors</span>::<span class='kw-2'>*</span>;
-<span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_char</span>, <span class='ident'>c_int</span>};
-<span class='kw'>use</span> <span class='ident'>libmodbus_sys</span>;
-<span class='kw'>use</span> <span class='ident'>modbus_mapping</span>::<span class='ident'>ModbusMapping</span>;
-<span class='kw'>use</span> <span class='ident'>modbus</span>::<span class='ident'>Modbus</span>;
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+</pre><pre class="rust ">
+<span class="kw">use</span> <span class="ident">errors</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_char</span>, <span class="ident">c_int</span>};
+<span class="kw">use</span> <span class="ident">libmodbus_sys</span>;
+<span class="kw">use</span> <span class="ident">modbus_mapping</span>::<span class="ident">ModbusMapping</span>;
+<span class="kw">use</span> <span class="ident">modbus</span>::<span class="ident">Modbus</span>;
 
 
-<span class='doccomment'>/// The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus offers the following functions to handle requests:</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// * Receive</span>
-<span class='doccomment'>///     - [`receive()`](struct.Modbus.html#method.receive)</span>
-<span class='doccomment'>/// * Reply</span>
-<span class='doccomment'>///     - [`reply()`](struct.Modbus.html#method.reply), [`reply_exception()`](struct.Modbus.html#method.reply_exception)</span>
-<span class='doccomment'>///</span>
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>ModbusServer</span> {
-    <span class='kw'>fn</span> <span class='ident'>receive</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>request</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> [<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>;
-    <span class='kw'>fn</span> <span class='ident'>reply</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>request</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>], <span class='ident'>request_len</span>: <span class='ident'>i32</span>, <span class='ident'>modbus_mapping</span>: <span class='kw-2'>&amp;</span><span class='ident'>ModbusMapping</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span>;
+<span class="doccomment">/// The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus</span>
+<span class="doccomment">/// offers the following functions to handle requests:</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// * Receive</span>
+<span class="doccomment">///     - [`receive()`](struct.Modbus.html#method.receive)</span>
+<span class="doccomment">/// * Reply</span>
+<span class="doccomment">///     - [`reply()`](struct.Modbus.html#method.reply), [`reply_exception()`](struct.Modbus.html#method.reply_exception)</span>
+<span class="doccomment">///</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ModbusServer</span> {
+    <span class="kw">fn</span> <span class="ident">receive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">reply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">request_len</span>: <span class="ident">i32</span>, <span class="ident">modbus_mapping</span>: <span class="kw-2">&amp;</span><span class="ident">ModbusMapping</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
 }
 
-<span class='kw'>impl</span> <span class='ident'>ModbusServer</span> <span class='kw'>for</span> <span class='ident'>Modbus</span> {
-    <span class='doccomment'>/// `receive` - receive an indication request</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// The [`receive()`](#method.receive) function shall receive an indication request from the socket of the context ctx.</span>
-    <span class='doccomment'>/// This function is used by Modbus slave/server to receive and analyze indication request sent by the masters/clients.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// If you need to use another socket or file descriptor than the one defined in the context ctx, see the function [`set_socket()`](struct.Modbus.html#method.set_socket).</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// # Examples</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// ```rust,no_run</span>
-    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP, MODBUS_MAX_ADU_LENGTH};</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class='doccomment'>/// let mut query = vec![0; MODBUS_MAX_ADU_LENGTH as usize];</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// assert!(modbus.receive(&amp;mut query).is_ok());</span>
-    <span class='doccomment'>/// ```</span>
-    <span class='kw'>fn</span> <span class='ident'>receive</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>request</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> [<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
-        <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>request</span>.<span class='ident'>len</span>() <span class='op'>&lt;=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>MODBUS_MAX_ADU_LENGTH</span> <span class='kw'>as</span> <span class='ident'>usize</span>);
+<span class="kw">impl</span> <span class="ident">ModbusServer</span> <span class="kw">for</span> <span class="ident">Modbus</span> {
+    <span class="doccomment">/// `receive` - receive an indication request</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The [`receive()`](#method.receive) function shall receive an indication request from the socket of the context</span>
+    <span class="doccomment">/// ctx.</span>
+    <span class="doccomment">/// This function is used by Modbus slave/server to receive and analyze indication request sent by the</span>
+    <span class="doccomment">/// masters/clients.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If you need to use another socket or file descriptor than the one defined in the context ctx, see the function</span>
+    <span class="doccomment">/// [`set_socket()`](struct.Modbus.html#method.set_socket).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust,no_run</span>
+    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP, MODBUS_MAX_ADU_LENGTH};</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class="doccomment">/// let mut query = vec![0; MODBUS_MAX_ADU_LENGTH as usize];</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// assert!(modbus.receive(&amp;mut query).is_ok());</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">fn</span> <span class="ident">receive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">request</span>.<span class="ident">len</span>() <span class="op">&lt;=</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_MAX_ADU_LENGTH</span> <span class="kw">as</span> <span class="ident">usize</span>);
 
-        <span class='kw'>unsafe</span> {
-            <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_receive</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>request</span>.<span class='ident'>as_mut_ptr</span>() );
-            <span class='kw'>match</span> <span class='ident'>len</span> {
-                <span class='op'>-</span><span class='number'>1</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not receive an idication request&quot;</span>.<span class='ident'>into</span>()),
-                <span class='ident'>len</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>len</span>),
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_receive</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">request</span>.<span class="ident">as_mut_ptr</span>());
+            <span class="kw">match</span> <span class="ident">len</span> {
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Could not receive an idication request&quot;</span>.<span class="ident">into</span>()),
+                <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span>),
             }
         }
     }
 
-    <span class='doccomment'>/// `modbus_reply` - send a reponse to the received request</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// The [`reply()`](#method.reply) function shall send a response to received request. The request req given in argument is analyzed, a response is then built and sent by using the information of the modbus context ctx.</span>
-    <span class='doccomment'>/// If the request indicates to read or write a value the operation will done in the modbus mapping mb_mapping according to the type of the manipulated data.</span>
-    <span class='doccomment'>/// If an error occurs, an exception response will be sent.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// This function is designed for Modbus server.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// # Examples</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// ```rust,no_run</span>
-    <span class='doccomment'>/// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP, MODBUS_MAX_ADU_LENGTH};</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class='doccomment'>/// let mut query = vec![0; MODBUS_MAX_ADU_LENGTH as usize];</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// assert!(modbus.receive(&amp;mut query).is_ok());</span>
-    <span class='doccomment'>/// ```</span>
-    <span class='kw'>fn</span> <span class='ident'>reply</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>request</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>], <span class='ident'>request_len</span>: <span class='ident'>i32</span>, <span class='ident'>modbus_mapping</span>: <span class='kw-2'>&amp;</span><span class='ident'>ModbusMapping</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>i32</span><span class='op'>&gt;</span> {
-        <span class='kw'>unsafe</span> {
-            <span class='kw'>let</span> <span class='ident'>len</span> <span class='op'>=</span> <span class='ident'>libmodbus_sys</span>::<span class='ident'>modbus_reply</span>(<span class='self'>self</span>.<span class='ident'>ctx</span>, <span class='ident'>request</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>request_len</span>, <span class='ident'>modbus_mapping</span>.<span class='ident'>modbus_mapping</span>);
-            <span class='kw'>match</span> <span class='ident'>len</span> {
-                <span class='op'>-</span><span class='number'>1</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='string'>&quot;Could not reply&quot;</span>.<span class='ident'>into</span>()),
-                <span class='ident'>len</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Ok</span>(<span class='ident'>len</span>),
+    <span class="doccomment">/// `modbus_reply` - send a reponse to the received request</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The [`reply()`](#method.reply) function shall send a response to received request. The request req given in</span>
+    <span class="doccomment">/// argument is analyzed, a response is then built and sent by using the information of the modbus context ctx.</span>
+    <span class="doccomment">/// If the request indicates to read or write a value the operation will done in the modbus mapping mb_mapping</span>
+    <span class="doccomment">/// according to the type of the manipulated data.</span>
+    <span class="doccomment">/// If an error occurs, an exception response will be sent.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This function is designed for Modbus server.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Examples</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust,no_run</span>
+    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP, MODBUS_MAX_ADU_LENGTH};</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+    <span class="doccomment">/// let mut query = vec![0; MODBUS_MAX_ADU_LENGTH as usize];</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// assert!(modbus.receive(&amp;mut query).is_ok());</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">fn</span> <span class="ident">reply</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">request_len</span>: <span class="ident">i32</span>, <span class="ident">modbus_mapping</span>: <span class="kw-2">&amp;</span><span class="ident">ModbusMapping</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">unsafe</span> {
+            <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span>
+                <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_reply</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">request</span>.<span class="ident">as_ptr</span>(), <span class="ident">request_len</span>, <span class="ident">modbus_mapping</span>.<span class="ident">modbus_mapping</span>);
+            <span class="kw">match</span> <span class="ident">len</span> {
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="string">&quot;Could not reply&quot;</span>.<span class="ident">into</span>()),
+                <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span>),
             }
         }
     }

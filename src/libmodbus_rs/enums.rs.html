@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="Source to the Rust file `src/enums.rs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang">
+
+    <title>enums.rs.html -- source</title>
+
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    
+
+    <link rel="shortcut icon" href="https://zzeroo.github.io/share/favicon.ico">
+    
+</head>
+<body class="rustdoc source">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <a href='../../libmodbus_rs/index.html'><img src='https://zzeroo.github.io/share/zzeroo-logo.png' alt='logo' width='100'></a>
+        
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content"><pre class="line-numbers"><span id="1"> 1</span>
+<span id="2"> 2</span>
+<span id="3"> 3</span>
+<span id="4"> 4</span>
+<span id="5"> 5</span>
+<span id="6"> 6</span>
+<span id="7"> 7</span>
+<span id="8"> 8</span>
+<span id="9"> 9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+</pre><pre class="rust ">
+
+<span class="doccomment">/// Modbus protocol exceptions</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Documentation source: https://en.wikipedia.org/wiki/Modbus#Main_Modbus_exception_codes</span>
+<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">Exception</span> {
+    <span class="doccomment">/// (1) Illegal Function - Function code received in the query is not recognized or allowed by slave</span>
+    <span class="ident">ILLEGAL_FUNCTION</span> <span class="op">=</span> <span class="number">1</span>,
+    <span class="doccomment">/// (2) Illegal Data Address - Data address of some or all the required entities are not allowed or do not exist in</span>
+    <span class="doccomment">/// slave</span>
+    <span class="ident">ILLEGAL_DATA_ADDRESS</span>,
+    <span class="doccomment">/// (3) Illegal Data Value - Value is not accepted by slave</span>
+    <span class="ident">ILLEGAL_DATA_VALUE</span>,
+    <span class="doccomment">/// (4) Slave Device Failure - Unrecoverable error occurred while slave was attempting to perform requested action</span>
+    <span class="ident">SLAVE_OR_SERVER_FAILURE</span>,
+    <span class="doccomment">/// (5) Acknowledge - Slave has accepted request and is processing it, but a long duration of time is required.</span>
+    <span class="doccomment">/// This response is returned to prevent a timeout error from occurring in the master. Master can next issue a Poll</span>
+    <span class="doccomment">/// Program Complete message to determine whether processing is completed</span>
+    <span class="ident">ACKNOWLEDGE</span>,
+    <span class="doccomment">/// (6) Slave Device Busy - Slave is engaged in processing a long-duration command. Master should retry later</span>
+    <span class="ident">SLAVE_OR_SERVER_BUSY</span>,
+    <span class="doccomment">/// (7) Negative Acknowledge - Slave cannot perform the programming functions. Master should request diagnostic or</span>
+    <span class="doccomment">/// error information from slave</span>
+    <span class="ident">NEGATIVE_ACKNOWLEDGE</span>,
+    <span class="doccomment">/// (8) Memory Parity Error - Slave detected a parity error in memory. Master can retry the request, but service</span>
+    <span class="doccomment">/// may be required on the slave device</span>
+    <span class="ident">MEMORY_PARITY</span>,
+    <span class="doccomment">/// (9) Not defined</span>
+    <span class="ident">NOT_DEFINED</span>,
+    <span class="doccomment">/// (10) Gateway Path Unavailable - Specialized for Modbus gateways. Indicates a misconfigured gateway</span>
+    <span class="ident">GATEWAY_PATH</span>,
+    <span class="doccomment">/// (11) Gateway Target Device Failed to Respond - Specialized for Modbus gateways. Sent when slave fails to respond</span>
+    <span class="ident">GATEWAY_TARGET</span>,
+}
+
+
+
+<span class="doccomment">/// Modbus function codes</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Documentation source: https://en.wikipedia.org/wiki/Modbus#Supported_function_codes</span>
+<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">FunctionCode</span> {
+    <span class="doccomment">/// 0x01 Read Coils</span>
+    <span class="ident">READ_COILS</span> <span class="op">=</span> <span class="number">1</span>,
+    <span class="doccomment">/// 0x02 Read Discrete Inputs</span>
+    <span class="ident">READ_DISCRETE_INPUTS</span> <span class="op">=</span> <span class="number">2</span>,
+    <span class="doccomment">/// 0x03 Read Multiple Holding Registers</span>
+    <span class="ident">READ_HOLDING_REGISTERS</span> <span class="op">=</span> <span class="number">3</span>,
+    <span class="doccomment">/// 0x04 Read Input Registers</span>
+    <span class="ident">READ_INPUT_REGISTERS</span> <span class="op">=</span> <span class="number">4</span>,
+    <span class="doccomment">/// 0x05 Write Single Coil</span>
+    <span class="ident">WRITE_SINGLE_COIL</span> <span class="op">=</span> <span class="number">5</span>,
+    <span class="doccomment">/// 0x06 Write Single Holding Register</span>
+    <span class="ident">WRITE_SINGLE_REGISTER</span> <span class="op">=</span> <span class="number">6</span>,
+    <span class="doccomment">/// 0x07 Read Exception Status</span>
+    <span class="ident">READ_EXCEPTION_STATUS</span> <span class="op">=</span> <span class="number">7</span>,
+    <span class="doccomment">/// 0x15 Write Multiple Coils</span>
+    <span class="ident">WRITE_MULTIPLE_COILS</span> <span class="op">=</span> <span class="number">15</span>,
+    <span class="doccomment">/// 0x16 Write Multiple Holding Registers</span>
+    <span class="ident">WRITE_MULTIPLE_REGISTERS</span> <span class="op">=</span> <span class="number">16</span>,
+    <span class="doccomment">/// 0x17 Report Slave ID</span>
+    <span class="ident">REPORT_SLAVE_ID</span> <span class="op">=</span> <span class="number">17</span>,
+    <span class="doccomment">/// 0x22 Mask Write Register</span>
+    <span class="ident">MASK_WRITE_REGISTER</span> <span class="op">=</span> <span class="number">22</span>,
+    <span class="doccomment">/// 0x23 Read/Write Multiple Registers</span>
+    <span class="ident">WRITE_AND_READ_REGISTERS</span> <span class="op">=</span> <span class="number">23</span>,
+}
+</pre>
+</section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "libmodbus_rs";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

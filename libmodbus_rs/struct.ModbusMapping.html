@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="https://zzeroo.github.io/share/favicon.ico">
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc struct">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -43,20 +43,20 @@
         </form>
     </nav>
 
-    <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>libmodbus_rs</a>::<wbr><a class='struct' href=''>ModbusMapping</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>libmodbus_rs</a>::<wbr><a class="struct" href=''>ModbusMapping</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
                </span><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#7-9' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct ModbusMapping {
-    pub modbus_mapping: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../libmodbus_sys/struct.modbus_mapping_t.html' title='libmodbus_sys::modbus_mapping_t'>modbus_mapping_t</a>,
+    pub modbus_mapping: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="struct" href="../libmodbus_sys/struct.modbus_mapping_t.html" title="struct libmodbus_sys::modbus_mapping_t">modbus_mapping_t</a>,
 }</pre><div class='docblock'><p>To handle the mapping of your Modbus data, you must use this struct</p>
-</div><h2 class='fields'>Fields</h2><span id='structfield.modbus_mapping' class='structfield'>
+</div><h2 class='fields'>Fields</h2><span id='structfield.modbus_mapping' class="structfield">
                            <span id='modbus_mapping.v' class='invisible'>
-                           <code>modbus_mapping: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../libmodbus_sys/struct.modbus_mapping_t.html' title='libmodbus_sys::modbus_mapping_t'>modbus_mapping_t</a></code>
-                           </span></span><span class='stab '></span><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../libmodbus_rs/struct.ModbusMapping.html' title='libmodbus_rs::ModbusMapping'>ModbusMapping</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#11-61' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.new' class='method'><span id='new.v' class='invisible'><code>fn <a href='#method.new' class='fnname'>new</a>(number_bits: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_input_bits: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_registers: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_input_registers: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='type' href='../libmodbus_rs/errors/type.Result.html' title='libmodbus_rs::errors::Result'>Result</a>&lt;<a class='struct' href='../libmodbus_rs/struct.ModbusMapping.html' title='libmodbus_rs::ModbusMapping'>ModbusMapping</a>&gt;</code></span></h4>
+                           <code>modbus_mapping: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="struct" href="../libmodbus_sys/struct.modbus_mapping_t.html" title="struct libmodbus_sys::modbus_mapping_t">modbus_mapping_t</a></code>
+                           </span></span><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class="struct" href="../libmodbus_rs/struct.ModbusMapping.html" title="struct libmodbus_rs::ModbusMapping">ModbusMapping</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#11-65' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.new' class="method"><span id='new.v' class='invisible'><code>fn <a href='#method.new' class='fnname'>new</a>(number_bits: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_input_bits: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_registers: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_input_registers: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="struct" href="../libmodbus_rs/struct.ModbusMapping.html" title="struct libmodbus_rs::ModbusMapping">ModbusMapping</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>new</code> - allocate four arrays of bits and registers</p>
 
 <h1 id='parameters' class='section-header'><a href='#parameters'>Parameters</a></h1>
@@ -68,27 +68,28 @@
 </ul>
 
 <h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
-<pre class='rust rust-example-rendered'>
-<span class='kw'>use</span> <span class='ident'>libmodbus_rs</span>::{<span class='ident'>Modbus</span>, <span class='ident'>ModbusMapping</span>, <span class='ident'>ModbusTCP</span>};
-<span class='kw'>let</span> <span class='ident'>modbus</span> <span class='op'>=</span> <span class='ident'>Modbus</span>::<span class='ident'>new_tcp</span>(<span class='string'>&quot;127.0.0.1&quot;</span>, <span class='number'>1502</span>).<span class='ident'>unwrap</span>();
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusMapping</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
 
-<span class='kw'>let</span> <span class='ident'>modbus_mapping</span> <span class='op'>=</span> <span class='ident'>ModbusMapping</span>::<span class='ident'>new</span>(<span class='number'>500</span>, <span class='number'>500</span>, <span class='number'>500</span>, <span class='number'>500</span>).<span class='ident'>unwrap</span>();</pre>
-</div><h4 id='method.free' class='method'><span id='free.v' class='invisible'><code>fn <a href='#method.free' class='fnname'>free</a>(&amp;mut self)</code></span></h4>
+<span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">500</span>, <span class="number">500</span>, <span class="number">500</span>, <span class="number">500</span>).<span class="ident">unwrap</span>();</pre>
+</div><h4 id='method.free' class="method"><span id='free.v' class='invisible'><code>fn <a href='#method.free' class='fnname'>free</a>(&amp;mut self)</code></span></h4>
 <div class='docblock'><p><code>mapping_free</code> - free a modbus_mapping_t structure</p>
 
-<p>The function shall free the four arrays of mb_mapping_t structure and finally the mb_mapping_t referenced by mb_mapping.</p>
+<p>The function shall free the four arrays of mb_mapping_t structure and finally the mb_mapping_t referenced by
+mb_mapping.</p>
 
 <p><strong>It should not nessesary to call these function. Because rusts drop trait handles that for you!</strong></p>
 
 <h1 id='examples-1' class='section-header'><a href='#examples-1'>Examples</a></h1>
-<pre class='rust rust-example-rendered'>
-<span class='kw'>use</span> <span class='ident'>libmodbus_rs</span>::<span class='ident'>ModbusMapping</span>;
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::<span class="ident">ModbusMapping</span>;
 
-<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>modbus_mapping</span> <span class='op'>=</span> <span class='ident'>ModbusMapping</span>::<span class='ident'>new</span>(<span class='number'>500</span>, <span class='number'>500</span>, <span class='number'>500</span>, <span class='number'>500</span>).<span class='ident'>unwrap</span>();
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">500</span>, <span class="number">500</span>, <span class="number">500</span>, <span class="number">500</span>).<span class="ident">unwrap</span>();
 
-<span class='ident'>modbus_mapping</span>.<span class='ident'>free</span>();</pre>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../libmodbus_rs/struct.ModbusMapping.html' title='libmodbus_rs::ModbusMapping'>ModbusMapping</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#63-67' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.drop' class='method'><span id='drop.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#tymethod.drop' class='fnname'>drop</a>(&amp;mut self)</code></span></h4>
+<span class="ident">modbus_mapping</span>.<span class="ident">free</span>();</pre>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../libmodbus_rs/struct.ModbusMapping.html" title="struct libmodbus_rs::ModbusMapping">ModbusMapping</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#67-71' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.drop' class="method"><span id='drop.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#tymethod.drop' class='fnname'>drop</a>(&amp;mut self)</code></span></h4>
 <div class='docblock'><p>A method called when the value goes out of scope. <a href="https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#tymethod.drop">Read more</a></p>
 </div></div></section>
     <section id='search' class="content hidden"></section>
