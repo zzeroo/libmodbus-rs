@@ -288,15 +288,30 @@ impl Modbus {
     ///
     /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
     ///
+    /// # Parameters
+    ///
+    /// * `timeout_sec`  - timeout sec
+    /// * `timeout_usec` - timeout usec
+    ///
     /// # Examples
     ///
     /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// let timeout_sec = 1;
+    /// let timeout_usec = 500;
+    ///
+    /// assert!(modbus.set_response_timeout(timeout_sec, timeout_usec).is_ok());
     /// ```
-    pub fn set_response_timeout(&mut self, timeout_sec: u32, timeout_usec: u32) -> Result<(i32, i32)> {
-        unimplemented!()
+    pub fn set_response_timeout(&mut self, timeout_sec: u32, timeout_usec: u32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_set_response_timeout(self.ctx, timeout_sec, timeout_usec) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(0),
+                _ => unreachable!(),
+            }
+        }
     }
 
     /// `set_error_recovery` - set the error recovery mode
@@ -338,13 +353,23 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
+    /// use libmodbus_rs::{Modbus, ModbusTCP, ErrorRecoveryMode};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// //assert!(modbus.set_error_recovery(ErrorRecoveryMode::LINK | ErrorRecoveryMode::PROTOCOL))
     /// ```
     pub fn set_error_recovery(&mut self, error_recovery_mode: ErrorRecoveryMode)
-                              -> Result<i32> {
+                              -> Result<i32>
+    {
         unimplemented!()
+        // unsafe {
+        //     let error_recovery_mode = error_recovery_mode;
+        //     match libmodbus_sys::modbus_set_error_recovery(self.ctx, error_recovery_mode.into()) {
+        //         -1 => bail!(Error::last_os_error()),
+        //         0 => Ok(0),
+        //         _ => unreachable!(),
+        //     }
+        // }
     }
 
     // TODO: Add examples from: http://zzeroo.github.io/libmodbus-rs/libmodbus/modbus_set_socket.html

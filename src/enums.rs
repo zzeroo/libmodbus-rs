@@ -71,7 +71,7 @@ pub enum FunctionCode {
 #[repr(u32)]
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum ErrorRecoveryMode {
-    NONE = 0u32,
+    NONE = 0,
     LINK = 2,
     PROTOCOL = 4,
 }
