@@ -36,7 +36,8 @@ impl Modbus {
     }
 
     /// `flush` - flush non-transmitted data
-    /// The [`flush()`](#method.flush) function shall discard data received but not read to the socket or file descriptor associated to the context ctx.
+    /// The [`flush()`](#method.flush) function shall discard data received but not read to the socket or file
+    /// descriptor associated to the context ctx.
     ///
     /// # Examples
     ///
@@ -62,7 +63,8 @@ impl Modbus {
     ///
     /// RTU
     ///     Define the slave ID of the remote device to talk in master mode or set the internal slave ID in slave mode.
-    ///     According to the protocol, a Modbus device must only accept message holding its slave number or the special broadcast number.
+    /// According to the protocol, a Modbus device must only accept message holding its slave number or the special
+    /// broadcast number.
     /// TCP
     ///     The slave number is only required in TCP if the message must reach a device on a serial network.
     ///     Some not compliant devices or software (such as modpoll) uses the slave ID as unit identifier,
@@ -97,8 +99,10 @@ impl Modbus {
 
     /// `set_debug` - set debug flag of the context
     ///
-    /// The [`set_debug()`](#method.set_debug) function shall set the debug flag of the modbus_t context by using the argument flag.
-    /// By default, the boolean flag is set to FALSE. When the flag value is set to TRUE, many verbose messages are displayed on stdout and stderr.
+    /// The [`set_debug()`](#method.set_debug) function shall set the debug flag of the modbus_t context by using the
+    /// argument flag.
+    /// By default, the boolean flag is set to FALSE. When the flag value is set to TRUE, many verbose messages are
+    /// displayed on stdout and stderr.
     /// For example, this flag is useful to display the bytes of the Modbus messages.
     ///
     /// ```bash
@@ -131,7 +135,8 @@ impl Modbus {
 
     /// `get_byte_timeout` - get timeout between bytes
     ///
-    /// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between two consecutive bytes of the same message `Result<(to_sec, to_usec)>`.
+    /// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between
+    /// two consecutive bytes of the same message `Result<(to_sec, to_usec)>`.
     ///
     /// # Examples
     ///
@@ -147,14 +152,18 @@ impl Modbus {
 
     /// `set_byte_timeout` - set timeout between bytes
     ///
-    /// The [`set_byte_timeout()`](#method.set_byte_timeout) function shall set the timeout interval between two consecutive bytes of the same message.
-    /// The timeout is an upper bound on the amount of time elapsed before select() returns, if the time elapsed is longer than the defined timeout,
+    /// The [`set_byte_timeout()`](#method.set_byte_timeout) function shall set the timeout interval between two
+    /// consecutive bytes of the same message.
+    /// The timeout is an upper bound on the amount of time elapsed before select() returns, if the time elapsed is
+    /// longer than the defined timeout,
     /// an ETIMEDOUT error will be raised by the function waiting for a response.
     ///
     /// The value of **to_usec** argument must be in the range 0 to 999999.
     ///
-    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case, [`set_byte_timeout()`](#method.set_byte_timeout)
-    /// governs the entire handling of the response, the full confirmation response must be received before expiration of the response timeout.
+    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case,
+    /// [`set_byte_timeout()`](#method.set_byte_timeout)
+    /// governs the entire handling of the response, the full confirmation response must be received before expiration
+    /// of the response timeout.
     /// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.
     ///
     /// # Examples
@@ -171,7 +180,8 @@ impl Modbus {
 
     /// `get_response_timeout` - get timeout for response
     ///
-    /// The [`get_response_timeout()`](#method.get_response_timeout) function shall return the timeout interval used to wait for a response
+    /// The [`get_response_timeout()`](#method.get_response_timeout) function shall return the timeout interval used to
+    /// wait for a response
     /// in the **to_sec** and **to_usec** arguments.
     ///
     /// # Examples
@@ -187,15 +197,18 @@ impl Modbus {
 
     /// `set_response_timeout` - set timeout for response
     ///
-    /// The [`set_response_timeout()`](#method.set_response_timeout) function shall set the timeout interval used to wait for a response.
+    /// The [`set_response_timeout()`](#method.set_response_timeout) function shall set the timeout interval used to
+    /// wait for a response.
     /// When a byte timeout is set, if elapsed time for the first byte of response is longer than the given timeout,
     /// an ETIMEDOUT error will be raised by the function waiting for a response. When byte timeout is disabled,
     /// the full confirmation response must be received before expiration of the response timeout.
     ///
     /// The value of **to_usec** argument must be in the range 0 to 999999.
     ///
-    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case, [`set_response_timeout()`](#method.set_response_timeout)
-    /// governs the entire handling of the response, the full confirmation response must be received before expiration of the response timeout.
+    /// If both **to_sec** and **to_usec** are zero, this timeout will not be used at all. In this case,
+    /// [`set_response_timeout()`](#method.set_response_timeout)
+    /// governs the entire handling of the response, the full confirmation response must be received before expiration
+    /// of the response timeout.
     /// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.
     ///
     /// # Examples
@@ -211,20 +224,29 @@ impl Modbus {
 
     /// `set_error_recovery` - set the error recovery mode
     ///
-    /// The [`set_error_recovery()`](#method.set_error_recovery) function shall set the error recovery mode to apply when the connection fails or
-    /// the byte received is not expected. The argument error_recovery may be bitwise-or’ed with zero or more of the following constants.
+    /// The [`set_error_recovery()`](#method.set_error_recovery) function shall set the error recovery mode to apply
+    /// when the connection fails or
+    /// the byte received is not expected. The argument error_recovery may be bitwise-or’ed with zero or more of the
+    /// following constants.
     ///
-    /// By default there is no error recovery (MODBUS_ERROR_RECOVERY_NONE) so the application is responsible for controlling the error values
+    /// By default there is no error recovery (MODBUS_ERROR_RECOVERY_NONE) so the application is responsible for
+    /// controlling the error values
     /// returned by libmodbus functions and for handling them if necessary.
     ///
-    /// When MODBUS_ERROR_RECOVERY_LINK is set, the library will attempt an reconnection after a delay defined by response timeout of the libmodbus context.
-    /// This mode will try an infinite close/connect loop until success on send call and will just try one time to re-establish the connection on
-    /// select/read calls (if the connection was down, the values to read are certainly not available any more after reconnection, except for slave/server).
-    /// This mode will also run flush requests after a delay based on  the current response timeout in some situations (eg. timeout of select call).
+    /// When MODBUS_ERROR_RECOVERY_LINK is set, the library will attempt an reconnection after a delay defined by
+    /// response timeout of the libmodbus context.
+    /// This mode will try an infinite close/connect loop until success on send call and will just try one time to
+    /// re-establish the connection on
+    /// select/read calls (if the connection was down, the values to read are certainly not available any more after
+    /// reconnection, except for slave/server).
+    /// This mode will also run flush requests after a delay based on  the current response timeout in some situations
+    /// (eg. timeout of select call).
     /// The reconnection attempt can hang for several seconds if the network to the remote target unit is down.
     ///
-    /// When MODBUS_ERROR_RECOVERY_PROTOCOL is set, a sleep and flush sequence will be used to clean up the ongoing communication, this can
-    /// occurs when the message length is invalid, the TID is wrong or the received function code is not the expected one.
+    /// When MODBUS_ERROR_RECOVERY_PROTOCOL is set, a sleep and flush sequence will be used to clean up the ongoing
+    /// communication, this can
+    /// occurs when the message length is invalid, the TID is wrong or the received function code is not the expected
+    /// one.
     /// The response timeout delay will be used to sleep.
     ///
     /// The modes are mask values and so they are complementary.
@@ -238,13 +260,15 @@ impl Modbus {
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// ```
-    pub fn set_error_recovery(&mut self, _modbus_error_recovery_mode: libmodbus_sys::modbus_error_recovery_mode) -> Result<i32> {
+    pub fn set_error_recovery(&mut self, _modbus_error_recovery_mode: libmodbus_sys::modbus_error_recovery_mode)
+                              -> Result<i32> {
         unimplemented!()
     }
 
     /// `set_socket` - set socket of the context
     ///
-    /// The [`set_socket()`](#method.set_socket) function shall set the socket or file descriptor in the libmodbus context.
+    /// The [`set_socket()`](#method.set_socket) function shall set the socket or file descriptor in the libmodbus
+    /// context.
     /// This function is useful for managing multiple client connections to the same server.
     ///
     /// # Examples
@@ -260,7 +284,8 @@ impl Modbus {
 
     /// `get_socket` - set socket of the context
     ///
-    /// The [`get_socket()`](#method.get_socket) function shall return the current socket or file descriptor of the libmodbus context.
+    /// The [`get_socket()`](#method.get_socket) function shall return the current socket or file descriptor of the
+    /// libmodbus context.
     ///
     /// # Examples
     ///
@@ -275,7 +300,8 @@ impl Modbus {
 
     /// `get_header_length` - retrieve the current header length
     ///
-    /// The [`get_header_length()`](#method.get_header_length) function shall retrieve the current header length from the backend.
+    /// The [`get_header_length()`](#method.get_header_length) function shall retrieve the current header length from
+    /// the backend.
     /// This function is convenient to manipulate a message and so its limited to low-level operations.
     ///
     /// # Examples
@@ -291,7 +317,8 @@ impl Modbus {
 
     /// `close` - close a Modbus connection
     ///
-    /// The [`close()`](#method.close) function shall close the connection established with the backend set in the context.
+    /// The [`close()`](#method.close) function shall close the connection established with the backend set in the
+    /// context.
     ///
     /// **It should not nessesary to call these function. Because rusts drop trait handles that for you!**
     ///
@@ -396,7 +423,8 @@ pub fn get_byte_from_bits(_src: u8, index: c_int, _num_bits: c_uint) {
 /// `get_float_abcd` - get a float value from 2 registers in ABCD byte order
 ///
 /// The [`get_float_abcd()`](#method.get_float_abcd) function shall get a float from 4 bytes in usual Modbus format.
-/// The src array must be a pointer on two 16 bits values, for example, if the first word is set to 0x0020 and the second to 0xF147,
+/// The src array must be a pointer on two 16 bits values, for example, if the first word is set to 0x0020 and the
+/// second to 0xF147,
 /// the float value will be read as 123456.0.
 ///
 /// # Examples

@@ -1,13 +1,17 @@
 [package]
-
 name = "libmodbus-sys"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["Stefan Müller <co@zzeroo.com>"]
 links = "modbus"
 build = "build.rs"
-repository = "https://github.com/zzeroo/libmodbus-rs"
-license = "LGPL-2.1"
-description = "Native bindings to the libmodbus library"
+keywords = ["modbus", "libmodbus"]
+documentation = "http://zzeroo.github.io/libmodbus-rs/libmodbus_rs/index.html"
+repository = "https://github.com/zzeroo/libmodbus-rs.git"
+homepage = "http://zzeroo.github.io/libmodbus-rs"
+description = """
+FFI bindings to the libmodbus C library.
+"""
+license = "LGPL-2.1" # same as libmodbus
 
 [lib]
 name = "libmodbus_sys"
