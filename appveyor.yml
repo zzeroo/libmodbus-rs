@@ -28,7 +28,7 @@ environment:
     - TARGET: x86_64-pc-windows-gnu
       CHANNEL: nightly
     - TARGET: x86_64-pc-windows-msvc
-CHANNEL: nightly
+      CHANNEL: nightly
 
 # Install LLVM, Clang, Rust and Cargo
 # (Based on https://github.com/KyleMayes/clang-sys/blob/87b674e9274c50995a6a4601e1160165490cb0e7/ci/install.bat
