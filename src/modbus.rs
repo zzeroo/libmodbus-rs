@@ -528,6 +528,14 @@ pub fn set_bits_from_byte(_dest: u8, index: c_int, value: u8) {
 /// The [`set_bits_from_bytes()`](#method.set_bits_from_bytes) function shall set many bits from a single byte.
 /// All 8 bits from the byte value will be written to dest array starting at index position.
 ///
+/// # Parameters
+///
+/// `dest` - destination slice
+/// `index` - starting position where the bit should written
+/// `num_bit`   - how many bits should written
+/// `bytes` - All the bits of the `bytes` parameter, read from the first position of the vec `bytes` are written as bits in the `dest` vec,
+///     starting at position `index`
+///
 /// # Examples
 ///
 /// ```rust,no_run
@@ -535,8 +543,10 @@ pub fn set_bits_from_byte(_dest: u8, index: c_int, value: u8) {
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
-pub fn set_bits_from_bytes(dest: &[u8], index: u32, num_bit: u16, bytes: &[u8]) {
-    println!("Ok");
+pub fn set_bits_from_bytes(dest: &mut [u8], index: u32, num_bit: u16, bytes: &[u8]) {
+    unsafe {
+        libmodbus_sys::modbus_set_bits_from_bytes(dest.as_mut_ptr(), index as c_int, num_bit as c_uint, bytes.as_ptr())
+    }
 }
 
 /// `get_byte_from_bits` - get the value from many bit
