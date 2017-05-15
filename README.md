@@ -15,9 +15,18 @@ This crate based on the latest libmodbus git:master branch. I plan to support th
 
 Include the dependencies into your `Cargo.toml` file.
 
+### for stable (crates.io)
+
 ```toml
 [dependencies]
-libmodbus = "0.4"
+libmodbus-rs = "0.4"
+```
+
+### or development (github master)
+
+```toml
+[dependencies]
+libmodbus-rs = { git = "https://github.com/zzeroo/libmodbus-rs.git" }
 ```
 
 Some header files of the original libmodbus C library are recreated as traits (e.g. ModbusTCP, ModbusRTU, ModbusServer, ModbusClient, ...).
@@ -30,6 +39,12 @@ use libmodbus_rs::{Modbus, ModbusTCP, ModbusServer};
 ```
 
 The examples in the examples dir, show this.
+
+## Documentation
+
+[Documentation (crates.io)][docu]
+
+[Documentation (master)][docu-master]
 
 ## Building libmodbus-rs
 
@@ -96,7 +111,8 @@ This project hosts the original libmodbus documentation, used here, as well. Ple
 
 [homepage]: http://zzeroo.github.io/libmodbus-rs
 [repo]: https://github.com/zzeroo/libmodbus-rs
-[docu]: http://zzeroo.github.io/libmodbus-rs/libmodbus_rs/index.html
+[docu]: https://docs.rs/crate/libmodbus-rs
+[docu-master]: http://zzeroo.github.io/libmodbus-rs/libmodbus_rs/index.html
 [libmodbus]: http://libmodbus.org
 [libmodbus-repo]: https://github.com/stephane/libmodbus.git
 [libmodbus-docu]: http://zzeroo.github.io/libmodbus-rs/libmodbus/libmodbus.html
