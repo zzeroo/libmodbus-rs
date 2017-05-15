@@ -19,14 +19,14 @@ Include the dependencies into your `Cargo.toml` file.
 
 ```toml
 [dependencies]
-libmodbus = "0.4"
+libmodbus-rs = "0.4"
 ```
 
 ### or development (github master)
 
 ```toml
 [dependencies]
-libmodbus = { git = "https://github.com/zzeroo/libmodbus-rs.git" }
+libmodbus-rs = { git = "https://github.com/zzeroo/libmodbus-rs.git" }
 ```
 
 Some header files of the original libmodbus C library are recreated as traits (e.g. ModbusTCP, ModbusRTU, ModbusServer, ModbusClient, ...).
