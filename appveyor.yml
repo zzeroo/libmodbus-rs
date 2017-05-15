@@ -1,4 +1,6 @@
 environment:
+  LLVM_VERSION: 4.0.0
+  CLANG_VERSION: clang_4_0
   matrix:
     - TARGET: x86_64-pc-windows-gnu
       MSYS_BITS: 64
