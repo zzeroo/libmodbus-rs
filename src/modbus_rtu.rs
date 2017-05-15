@@ -91,7 +91,7 @@ impl ModbusRTU for Modbus {
     /// ```
     /// use libmodbus_rs::{Modbus, ModbusRTU};
     ///
-    /// const YOUR_DEVICE_ID: i32 = 1;
+    /// const YOUR_DEVICE_ID: u8 = 1;
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     /// modbus.set_slave(YOUR_DEVICE_ID);
     ///

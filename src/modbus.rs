@@ -97,12 +97,12 @@ impl Modbus {
     /// ```
     /// use libmodbus_rs::{Modbus, ModbusRTU};
     ///
-    /// const YOUR_DEVICE_ID: i32 = 1;
+    /// const YOUR_DEVICE_ID: u8 = 1;
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
     /// assert!(modbus.set_slave(YOUR_DEVICE_ID).is_ok());
     /// ```
-    pub fn set_slave(&mut self, slave: i32) -> Result<i32> {
+    pub fn set_slave(&mut self, slave: u8) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_set_slave(self.ctx, slave as c_int) {
                 -1 => bail!(Error::last_os_error()),
