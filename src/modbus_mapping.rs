@@ -1,15 +1,21 @@
 use errors::*;
 use libmodbus_sys;
+use std::io::Error;
 
 
 /// To handle the mapping of your Modbus data, you must use this struct
 ///
+#[derive(Debug)]
 pub struct ModbusMapping {
     pub modbus_mapping: *mut libmodbus_sys::modbus_mapping_t,
 }
 
 impl ModbusMapping {
     /// `new` - allocate four arrays of bits and registers
+    ///
+    /// # Return values
+    ///
+    /// The function returns a Result containing the new allocated structure if successful. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
@@ -34,7 +40,7 @@ impl ModbusMapping {
                                                                    number_registers,
                                                                    number_input_registers);
             if modbus_mapping.is_null() {
-                Err("Could not create ModbusMapping".into())
+                bail!(Error::last_os_error())
             } else {
                 Ok(ModbusMapping { modbus_mapping: modbus_mapping })
             }
@@ -52,7 +58,6 @@ impl ModbusMapping {
     ///
     /// ```
     /// use libmodbus_rs::ModbusMapping;
-    ///
     /// let mut modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
     ///
     /// modbus_mapping.free();

@@ -2,6 +2,7 @@ use errors::*;
 use libmodbus_sys;
 use modbus::Modbus;
 use std::ffi::CString;
+use std::io::Error;
 
 
 /// The TCP PI (Protocol Independent) backend implements a Modbus variant used for communications over TCP IPv4 and
@@ -54,7 +55,7 @@ impl ModbusTCPPI for Modbus {
             let ctx = libmodbus_sys::modbus_new_tcp_pi(node.as_ptr(), service.as_ptr());
 
             if ctx.is_null() {
-                Err("Could not create new TCPPI Modbus context".into())
+                bail!(Error::last_os_error())
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -82,7 +83,7 @@ impl ModbusTCPPI for Modbus {
     fn tcp_pi_accept(&mut self, socket: &mut i32) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_tcp_pi_accept(self.ctx, socket) {
-                -1 => Err("Could not accept on TCP".into()),
+                -1 => bail!(Error::last_os_error()),
                 socket => Ok(socket),
             }
         }
@@ -125,7 +126,7 @@ impl ModbusTCPPI for Modbus {
     fn tcp_pi_listen(&mut self, num_connection: i32) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_tcp_pi_listen(self.ctx, num_connection) {
-                -1 => Err("Could not listen on tcp port".into()),
+                -1 => bail!(Error::last_os_error()),
                 socket => Ok(socket),
             }
         }

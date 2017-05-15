@@ -3,6 +3,7 @@ use libc::c_int;
 use libmodbus_sys;
 use modbus::Modbus;
 use std::ffi::CString;
+use std::io::Error;
 
 
 /// The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
@@ -47,7 +48,7 @@ impl ModbusTCP for Modbus {
             let ctx = libmodbus_sys::modbus_new_tcp(ip.as_ptr(), port as c_int);
 
             if ctx.is_null() {
-                Err("Could not create new TCP Modbus contrext".into())
+                bail!(Error::last_os_error())
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -76,7 +77,7 @@ impl ModbusTCP for Modbus {
     fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_tcp_accept(self.ctx, socket) {
-                -1 => Err("Could not accept on TCP".into()),
+                -1 => bail!(Error::last_os_error()),
                 socket => Ok(socket),
             }
         }
@@ -105,7 +106,7 @@ impl ModbusTCP for Modbus {
     fn tcp_listen(&mut self, num_connection: i32) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_tcp_listen(self.ctx, num_connection) {
-                -1 => Err("Could not listen on tcp port".into()),
+                -1 => bail!(Error::last_os_error()),
                 socket => Ok(socket),
             }
         }

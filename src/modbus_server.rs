@@ -3,6 +3,7 @@ use libc::{c_char, c_int};
 use libmodbus_sys;
 use modbus_mapping::ModbusMapping;
 use modbus::Modbus;
+use std::io::Error;
 
 
 /// The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus
@@ -45,7 +46,7 @@ impl ModbusServer for Modbus {
         unsafe {
             let len = libmodbus_sys::modbus_receive(self.ctx, request.as_mut_ptr());
             match len {
-                -1 => Err("Could not receive an idication request".into()),
+                -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }
         }
@@ -76,7 +77,7 @@ impl ModbusServer for Modbus {
             let len =
                 libmodbus_sys::modbus_reply(self.ctx, request.as_ptr(), request_len, modbus_mapping.modbus_mapping);
             match len {
-                -1 => Err("Could not reply".into()),
+                -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }
         }
