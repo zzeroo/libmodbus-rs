@@ -189,6 +189,7 @@ pub use self::modbus_server::ModbusServer;
 pub use self::modbus_tcp_pi::ModbusTCPPI;
 pub use self::modbus_tcp::ModbusTCP;
 pub use self::modbus::Modbus;
+pub use self::modbus::{set_bits_from_bytes};
 
 pub use libmodbus_sys::MODBUS_TCP_DEFAULT_PORT;
 pub use libmodbus_sys::MODBUS_TCP_MAX_ADU_LENGTH;

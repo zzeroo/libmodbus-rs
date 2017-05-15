@@ -520,7 +520,7 @@ impl Modbus {
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
 pub fn set_bits_from_byte(_dest: u8, index: c_int, value: u8) {
-    unimplemented!()
+    println!("Ok");
 }
 
 /// `set_bits_from_bytes` -  set many bits from an array of bytes
@@ -535,8 +535,8 @@ pub fn set_bits_from_byte(_dest: u8, index: c_int, value: u8) {
 ///
 /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// ```
-pub fn set_bits_from_bytes(_dest: u8, _index: c_uint, _num_bits: c_uint, _tab_bytes: Vec<u8>) {
-    unimplemented!()
+pub fn set_bits_from_bytes(dest: &[u8], index: u32, num_bit: u16, bytes: &[u8]) {
+    println!("Ok");
 }
 
 /// `get_byte_from_bits` - get the value from many bit
