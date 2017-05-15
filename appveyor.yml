@@ -1,6 +1,7 @@
 environment:
   LLVM_VERSION: 4.0.0
   CLANG_VERSION: clang_4_0
+  RUST_BACKTRACE: 1
   matrix:
     # Stable channel
     - TARGET: i686-pc-windows-gnu
