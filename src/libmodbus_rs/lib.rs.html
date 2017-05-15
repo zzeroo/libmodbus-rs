@@ -239,6 +239,14 @@
 <span id="194">194</span>
 <span id="195">195</span>
 <span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
 </pre><pre class="rust ">
 <span class="attribute">#<span class="op">!</span>[<span class="ident">doc</span>(<span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://zzeroo.github.io/share/zzeroo-logo.png&quot;</span>,
        <span class="ident">html_favicon_url</span> <span class="op">=</span> <span class="string">&quot;https://zzeroo.github.io/share/favicon.ico&quot;</span>,
@@ -431,11 +439,19 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus_tcp_pi</span>::<span class="ident">ModbusTCPPI</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus_tcp</span>::<span class="ident">ModbusTCP</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus</span>::<span class="ident">Modbus</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus</span>::{<span class="ident">set_bits_from_byte</span>, <span class="ident">set_bits_from_bytes</span>, <span class="ident">get_byte_from_bits</span>,
+    <span class="ident">get_float_abcd</span>, <span class="ident">set_float_abcd</span>, <span class="ident">get_float_badc</span>, <span class="ident">set_float_badc</span>,
+    <span class="ident">get_float_cdab</span>, <span class="ident">set_float_cdab</span>, <span class="ident">get_float_dcba</span>, <span class="ident">set_float_dcba</span>,
+};
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_TCP_DEFAULT_PORT</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_TCP_MAX_ADU_LENGTH</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_MAX_ADU_LENGTH</span>;
+
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_MAX_PDU_LENGTH</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_MAX_ADU_LENGTH</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_ENOBASE</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_TCP_DEFAULT_PORT</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_TCP_SLAVE</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_TCP_MAX_ADU_LENGTH</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_RTU_MAX_ADU_LENGTH</span>;
 </pre>
 </section>
     <section id='search' class="content hidden"></section>

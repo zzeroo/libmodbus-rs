@@ -709,6 +709,135 @@
 <span id="664">664</span>
 <span id="665">665</span>
 <span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+<span id="682">682</span>
+<span id="683">683</span>
+<span id="684">684</span>
+<span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
+<span id="704">704</span>
+<span id="705">705</span>
+<span id="706">706</span>
+<span id="707">707</span>
+<span id="708">708</span>
+<span id="709">709</span>
+<span id="710">710</span>
+<span id="711">711</span>
+<span id="712">712</span>
+<span id="713">713</span>
+<span id="714">714</span>
+<span id="715">715</span>
+<span id="716">716</span>
+<span id="717">717</span>
+<span id="718">718</span>
+<span id="719">719</span>
+<span id="720">720</span>
+<span id="721">721</span>
+<span id="722">722</span>
+<span id="723">723</span>
+<span id="724">724</span>
+<span id="725">725</span>
+<span id="726">726</span>
+<span id="727">727</span>
+<span id="728">728</span>
+<span id="729">729</span>
+<span id="730">730</span>
+<span id="731">731</span>
+<span id="732">732</span>
+<span id="733">733</span>
+<span id="734">734</span>
+<span id="735">735</span>
+<span id="736">736</span>
+<span id="737">737</span>
+<span id="738">738</span>
+<span id="739">739</span>
+<span id="740">740</span>
+<span id="741">741</span>
+<span id="742">742</span>
+<span id="743">743</span>
+<span id="744">744</span>
+<span id="745">745</span>
+<span id="746">746</span>
+<span id="747">747</span>
+<span id="748">748</span>
+<span id="749">749</span>
+<span id="750">750</span>
+<span id="751">751</span>
+<span id="752">752</span>
+<span id="753">753</span>
+<span id="754">754</span>
+<span id="755">755</span>
+<span id="756">756</span>
+<span id="757">757</span>
+<span id="758">758</span>
+<span id="759">759</span>
+<span id="760">760</span>
+<span id="761">761</span>
+<span id="762">762</span>
+<span id="763">763</span>
+<span id="764">764</span>
+<span id="765">765</span>
+<span id="766">766</span>
+<span id="767">767</span>
+<span id="768">768</span>
+<span id="769">769</span>
+<span id="770">770</span>
+<span id="771">771</span>
+<span id="772">772</span>
+<span id="773">773</span>
+<span id="774">774</span>
+<span id="775">775</span>
+<span id="776">776</span>
+<span id="777">777</span>
+<span id="778">778</span>
+<span id="779">779</span>
+<span id="780">780</span>
+<span id="781">781</span>
+<span id="782">782</span>
+<span id="783">783</span>
+<span id="784">784</span>
+<span id="785">785</span>
+<span id="786">786</span>
+<span id="787">787</span>
+<span id="788">788</span>
+<span id="789">789</span>
+<span id="790">790</span>
+<span id="791">791</span>
+<span id="792">792</span>
+<span id="793">793</span>
+<span id="794">794</span>
+<span id="795">795</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">enums</span>::<span class="ident">ErrorRecoveryMode</span>;
 <span class="kw">use</span> <span class="ident">errors</span>::<span class="kw-2">*</span>;
@@ -809,12 +938,12 @@
     <span class="doccomment">/// ```</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusRTU};</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// const YOUR_DEVICE_ID: i32 = 1;</span>
+    <span class="doccomment">/// const YOUR_DEVICE_ID: u8 = 1;</span>
     <span class="doccomment">/// let mut modbus = Modbus::new_rtu(&quot;/dev/ttyUSB0&quot;, 115200, &#39;N&#39;, 8, 1).unwrap();</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(modbus.set_slave(YOUR_DEVICE_ID).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_slave</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">slave</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_slave</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">slave</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_slave</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">slave</span> <span class="kw">as</span> <span class="ident">c_int</span>) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
@@ -1218,21 +1347,32 @@
     }
 }
 
-
 <span class="doccomment">/// `set_bits_from_byte` - set many bits from a single byte value</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The [`set_bits_from_byte()`](#method.set_bits_from_byte) function shall set many bits from a single byte.</span>
 <span class="doccomment">/// All 8 bits from the byte value will be written to dest array starting at index position.</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// # Parameters</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `dest` - destination slice</span>
+<span class="doccomment">/// `index` - starting position where the bit should written</span>
+<span class="doccomment">/// `value` - set many bits from a single byte. All 8 bits from the byte `value` will be written to `dest` slice starting at `index` position.</span>
+<span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};</span>
+<span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// assert_eq!(modbus_mapping.get_input_bits_mut(), [0u8, 0, 0, 0, 0]);</span>
+<span class="doccomment">/// libmodbus_rs::set_bits_from_byte(modbus_mapping.get_input_bits_mut(), 2, 0b1111_1111);</span>
+<span class="doccomment">/// assert_eq!(modbus_mapping.get_input_bits_mut(), [0u8, 0, 1, 1, 1]);</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_bits_from_byte</span>(<span class="ident">_dest</span>: <span class="ident">u8</span>, <span class="ident">index</span>: <span class="ident">c_int</span>, <span class="ident">value</span>: <span class="ident">u8</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_bits_from_byte</span>(<span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>], <span class="ident">index</span>: <span class="ident">u32</span>, <span class="ident">value</span>: <span class="ident">u8</span>) {
+    <span class="kw">unsafe</span> {
+        <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_bits_from_byte</span>(<span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">index</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">value</span>)
+    }
 }
 
 <span class="doccomment">/// `set_bits_from_bytes` -  set many bits from an array of bytes</span>
@@ -1240,133 +1380,251 @@
 <span class="doccomment">/// The [`set_bits_from_bytes()`](#method.set_bits_from_bytes) function shall set many bits from a single byte.</span>
 <span class="doccomment">/// All 8 bits from the byte value will be written to dest array starting at index position.</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// # Parameters</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `dest` - destination slice</span>
+<span class="doccomment">/// `index` - starting position where the bit should written</span>
+<span class="doccomment">/// `num_bit`   - how many bits should written</span>
+<span class="doccomment">/// `bytes` - All the bits of the `bytes` parameter, read from the first position of the vec `bytes` are written as bits in the `dest` vec,</span>
+<span class="doccomment">///     starting at position `index`</span>
+<span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};</span>
+<span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// assert_eq!(modbus_mapping.get_input_bits_mut(), [0u8, 0, 0, 0, 0]);</span>
+<span class="doccomment">/// libmodbus_rs::set_bits_from_bytes(modbus_mapping.get_input_bits_mut(), 0, 2, &amp;[0b0000_1111]);</span>
+<span class="doccomment">/// assert_eq!(modbus_mapping.get_input_bits_mut(), [1u8, 1, 0, 0, 0]);</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_bits_from_bytes</span>(<span class="ident">_dest</span>: <span class="ident">u8</span>, <span class="ident">_index</span>: <span class="ident">c_uint</span>, <span class="ident">_num_bits</span>: <span class="ident">c_uint</span>, <span class="ident">_tab_bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_bits_from_bytes</span>(<span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>], <span class="ident">index</span>: <span class="ident">u32</span>, <span class="ident">num_bit</span>: <span class="ident">u16</span>, <span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) {
+    <span class="kw">unsafe</span> {
+        <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_bits_from_bytes</span>(<span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>(), <span class="ident">index</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num_bit</span> <span class="kw">as</span> <span class="ident">c_uint</span>, <span class="ident">bytes</span>.<span class="ident">as_ptr</span>())
+    }
 }
 
 <span class="doccomment">/// `get_byte_from_bits` - get the value from many bit</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The [`get_byte_from_bits()`](#method.get_byte_from_bits) function shall extract a value from many bits.</span>
-<span class="doccomment">/// All nb_bits bits from src at position index will be read as a single value. To obtain a full byte, set nb_bits to 8.</span>
+<span class="doccomment">/// All num_bit bits from src at position index will be read as a single value. To obtain a full byte, set num_bit to 8.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Return value</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The function shall return a byte containing the bits read.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Parameters</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `src`       - bits source</span>
+<span class="doccomment">/// `index`     - starting position where the bit will be read</span>
+<span class="doccomment">/// `num_bit`   - All `num_bit` bits from `src` at position `index` will be read as a single value. To obtain a full byte, set `num_bit` to 8.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};</span>
+<span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// assert_eq!(libmodbus_rs::get_byte_from_bits(&amp;[0b1111_1111], 0 ,8), 255);</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_byte_from_bits</span>(<span class="ident">_src</span>: <span class="ident">u8</span>, <span class="ident">index</span>: <span class="ident">c_int</span>, <span class="ident">_num_bits</span>: <span class="ident">c_uint</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_byte_from_bits</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">index</span>: <span class="ident">u8</span>, <span class="ident">num_bit</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="ident">u8</span> {
+    <span class="kw">unsafe</span> {
+        <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_get_byte_from_bits</span>(<span class="ident">src</span>.<span class="ident">as_ptr</span>(), <span class="ident">index</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num_bit</span> <span class="kw">as</span> <span class="ident">c_uint</span>)
+    }
 }
 
 <span class="doccomment">/// `get_float_abcd` - get a float value from 2 registers in ABCD byte order</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The [`get_float_abcd()`](#method.get_float_abcd) function shall get a float from 4 bytes in usual Modbus format.</span>
-<span class="doccomment">/// The src array must be a pointer on two 16 bits values, for example, if the first word is set to 0x0020 and the</span>
-<span class="doccomment">/// second to 0xF147,</span>
+<span class="doccomment">/// The src slice mut contain two 16 bits values, for example, if the first word is set to 0x0020 and the</span>
+<span class="doccomment">/// second to 0xF147, the float value will be read as 123456.0.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Return value</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The function shall return a float.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Parameters</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `src`   - slice of two 16 bits values</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// assert_eq!(libmodbus_rs::get_float_abcd(&amp;[0x0020, 0xF147]), 123456.0);</span>
+<span class="doccomment">/// ```</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_abcd</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>; <span class="number">2</span>]) <span class="op">-&gt;</span> <span class="ident">f32</span> {
+    <span class="kw">unsafe</span> {
+        <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_get_float_abcd</span>(<span class="ident">src</span>.<span class="ident">as_ptr</span>())
+    }
+}
+
+<span class="doccomment">/// `set_float_abcd` - set a float value in 2 registers using ABCD byte order</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The [`set_float_abcd()`](#method.set_float_abcd) function shall set a float to 4 bytes in usual Modbus format.</span>
+<span class="doccomment">/// The dest slice must contain two 16 bits values to be able to store the full result of the conversion.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Parameters</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `src`   - float to 4 bytes (f32)</span>
+<span class="doccomment">/// `dest`  - slice must contain two 16 bits values</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Examples</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// let mut dest = vec![0; 2];</span>
+<span class="doccomment">/// libmodbus_rs::set_float_abcd(123456.0, &amp;mut dest);</span>
+<span class="doccomment">/// assert_eq!(&amp;dest, &amp;[0x0020, 0xF147]);</span>
+<span class="doccomment">/// ```</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_abcd</span>(<span class="ident">src</span>: <span class="ident">f32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) { <span class="comment">// &amp;mut [u16; 2] is not working here</span>
+    <span class="kw">unsafe</span> {
+        <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_float_abcd</span>(<span class="ident">src</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>())
+    }
+}
+
+<span class="doccomment">/// `get_float_badc` - get a float value from 2 registers in BADC byte order</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The [`get_float_badc()`](#method.get_float_badc) function shall get a float from 4 bytes with swapped bytes (BADC instead of ABCD).</span>
+<span class="doccomment">/// The src slice mut contain two 16 bits values, for example, if the first word is set to 0x2000 and the second to 0x47F1,</span>
 <span class="doccomment">/// the float value will be read as 123456.0.</span>
 <span class="doccomment">///</span>
+<span class="doccomment">/// # Return value</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The function shall return a float.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Parameters</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `src`   - slice of two 16 bits values</span>
+<span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// assert_eq!(libmodbus_rs::get_float_badc(&amp;[0x2000, 0x47F1]), 123456.0);</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_abcd</span>(<span class="ident">_src</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_badc</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>; <span class="number">2</span>]) <span class="op">-&gt;</span> <span class="ident">f32</span> {
+    <span class="kw">unsafe</span> {
+        <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_get_float_badc</span>(<span class="ident">src</span>.<span class="ident">as_ptr</span>())
+    }
 }
 
+<span class="doccomment">/// `set_float_badc` - set a float value in 2 registers using BADC byte order</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The [`set_float_badc()`](#method.set_float_badc) function shall set a float to 4 bytes in swapped bytes Modbus format (BADC insted of ABCD).</span>
+<span class="doccomment">/// The dest slice must contain two 16 bits values to be able to store the full result of the conversion.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Parameters</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `src`   - float to 4 bytes (f32)</span>
+<span class="doccomment">/// `dest`  - slice must contain two 16 bits values</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// let mut dest = vec![0; 2];</span>
+<span class="doccomment">/// libmodbus_rs::set_float_badc(123456.0, &amp;mut dest);</span>
+<span class="doccomment">/// assert_eq!(&amp;dest, &amp;[0x2000, 0x47F1]);</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_abcd</span>(<span class="ident">_dest</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_badc</span>(<span class="ident">src</span>: <span class="ident">f32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) { <span class="comment">// &amp;mut [u16; 2] is not working here</span>
+    <span class="kw">unsafe</span> {
+        <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_float_badc</span>(<span class="ident">src</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>())
+    }
 }
 
+<span class="doccomment">/// `get_float_cdab` - get a float value from 2 registers in CDAB byte order</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The [`get_float_cdab()`](#method.get_float_cdab) function shall get a float from 4 bytes with swapped bytes (CDAB instead of ABCD).</span>
+<span class="doccomment">/// The src slice mut contain two 16 bits values, for example, if the first word is set to 0x2000 and the second to 0x47F1,</span>
+<span class="doccomment">/// the float value will be read as 123456.0.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Return value</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The function shall return a float.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Parameters</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `src`   - slice of two 16 bits values</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// assert_eq!(libmodbus_rs::get_float_cdab(&amp;[0xF147, 0x0020]), 123456.0);</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_badc</span>(<span class="ident">_src</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_cdab</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>; <span class="number">2</span>]) <span class="op">-&gt;</span> <span class="ident">f32</span> {
+    <span class="kw">unsafe</span> {
+        <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_get_float_cdab</span>(<span class="ident">src</span>.<span class="ident">as_ptr</span>())
+    }
 }
 
+<span class="doccomment">/// `set_float_cdab` - set a float value in 2 registers using CDAB byte order</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The [`set_float_cdab()`](#method.set_float_cdab) function shall set a float to 4 bytes in swapped bytes Modbus format (CDAB insted of ABCD).</span>
+<span class="doccomment">/// The dest slice must contain two 16 bits values to be able to store the full result of the conversion.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Parameters</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `src`   - float to 4 bytes (f32)</span>
+<span class="doccomment">/// `dest`  - slice must contain two 16 bits values</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// let mut dest = vec![0; 2];</span>
+<span class="doccomment">/// libmodbus_rs::set_float_cdab(123456.0, &amp;mut dest);</span>
+<span class="doccomment">/// assert_eq!(&amp;dest, &amp;[0xF147, 0x0020]);</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_badc</span>(<span class="ident">_dest</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_cdab</span>(<span class="ident">src</span>: <span class="ident">f32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) { <span class="comment">// &amp;mut [u16; 2] is not working here</span>
+    <span class="kw">unsafe</span> {
+        <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_float_cdab</span>(<span class="ident">src</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>())
+    }
 }
 
+<span class="doccomment">/// `get_float_dcba` - get a float value from 2 registers in DCBA byte order</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The [`get_float_dcba()`](#method.get_float_dcba) function shall get a float from 4 bytes with swapped bytes (DCBA instead of ABCD).</span>
+<span class="doccomment">/// The src slice mut contain two 16 bits values, for example, if the first word is set to 0x2000 and the second to 0x47F1,</span>
+<span class="doccomment">/// the float value will be read as 123456.0.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Return value</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The function shall return a float.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Parameters</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `src`   - slice of two 16 bits values</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// assert_eq!(libmodbus_rs::get_float_dcba(&amp;[0x47F1, 0x2000]), 123456.0);</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_cdab</span>(<span class="ident">_src</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_dcba</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>; <span class="number">2</span>]) <span class="op">-&gt;</span> <span class="ident">f32</span> {
+    <span class="kw">unsafe</span> {
+        <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_get_float_dcba</span>(<span class="ident">src</span>.<span class="ident">as_ptr</span>())
+    }
 }
 
+<span class="doccomment">/// `set_float_dcba` - set a float value in 2 registers using DCBA byte order</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The [`set_float_dcba()`](#method.set_float_dcba) function shall set a float to 4 bytes in swapped bytes Modbus format (DCBA insted of ABCD).</span>
+<span class="doccomment">/// The dest slice must contain two 16 bits values to be able to store the full result of the conversion.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Parameters</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `src`   - float to 4 bytes (f32)</span>
+<span class="doccomment">/// `dest`  - slice must contain two 16 bits values</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Examples</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
+<span class="doccomment">/// ```rust</span>
+<span class="doccomment">/// let mut dest = vec![0; 2];</span>
+<span class="doccomment">/// libmodbus_rs::set_float_dcba(123456.0, &amp;mut dest);</span>
+<span class="doccomment">/// assert_eq!(&amp;dest, &amp;[0x47F1, 0x2000]);</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_cdab</span>(<span class="ident">_dest</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
-}
-
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_float_dcba</span>(<span class="ident">_src</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
-}
-
-<span class="doccomment">///</span>
-<span class="doccomment">/// # Examples</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// ```rust,no_run</span>
-<span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusTCP};</span>
-<span class="doccomment">///</span>
-<span class="doccomment">/// let mut modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-<span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_dcba</span>(<span class="ident">_dest</span>: <span class="ident">u16</span>) {
-    <span class="macro">unimplemented</span><span class="macro">!</span>()
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_float_dcba</span>(<span class="ident">src</span>: <span class="ident">f32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) { <span class="comment">// &amp;mut [u16; 2] is not working here</span>
+    <span class="kw">unsafe</span> {
+        <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_set_float_dcba</span>(<span class="ident">src</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>())
+    }
 }
 
 

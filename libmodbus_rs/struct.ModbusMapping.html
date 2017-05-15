@@ -48,16 +48,19 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#7-9' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#10-12' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct ModbusMapping {
     pub modbus_mapping: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="struct" href="../libmodbus_sys/struct.modbus_mapping_t.html" title="struct libmodbus_sys::modbus_mapping_t">modbus_mapping_t</a>,
 }</pre><div class='docblock'><p>To handle the mapping of your Modbus data, you must use this struct</p>
 </div><h2 class='fields'>Fields</h2><span id='structfield.modbus_mapping' class="structfield">
                            <span id='modbus_mapping.v' class='invisible'>
                            <code>modbus_mapping: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a><a class="struct" href="../libmodbus_sys/struct.modbus_mapping_t.html" title="struct libmodbus_sys::modbus_mapping_t">modbus_mapping_t</a></code>
-                           </span></span><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class="struct" href="../libmodbus_rs/struct.ModbusMapping.html" title="struct libmodbus_rs::ModbusMapping">ModbusMapping</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#11-65' title='goto source code'>[src]</a></span></h3>
+                           </span></span><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class="struct" href="../libmodbus_rs/struct.ModbusMapping.html" title="struct libmodbus_rs::ModbusMapping">ModbusMapping</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#14-313' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.new' class="method"><span id='new.v' class='invisible'><code>fn <a href='#method.new' class='fnname'>new</a>(number_bits: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_input_bits: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_registers: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_input_registers: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="struct" href="../libmodbus_rs/struct.ModbusMapping.html" title="struct libmodbus_rs::ModbusMapping">ModbusMapping</a>&gt;</code></span></h4>
 <div class='docblock'><p><code>new</code> - allocate four arrays of bits and registers</p>
+
+<h1 id='return-values' class='section-header'><a href='#return-values'>Return values</a></h1>
+<p>The function returns a Result containing the new allocated structure if successful. Otherwise it contains an Error.</p>
 
 <h1 id='parameters' class='section-header'><a href='#parameters'>Parameters</a></h1>
 <ul>
@@ -73,6 +76,37 @@
 <span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
 
 <span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">500</span>, <span class="number">500</span>, <span class="number">500</span>, <span class="number">500</span>).<span class="ident">unwrap</span>();</pre>
+</div><h4 id='method.new_start_address' class="method"><span id='new_start_address.v' class='invisible'><code>fn <a href='#method.new_start_address' class='fnname'>new_start_address</a>(start_bits: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_bits: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start_input_bits: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_input_bits: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start_registers: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_registers: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; start_input_registers: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number_input_registers: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="struct" href="../libmodbus_rs/struct.ModbusMapping.html" title="struct libmodbus_rs::ModbusMapping">ModbusMapping</a>&gt;</code></span></h4>
+<div class='docblock'><p><code>mapping_new_start_address</code> - allocate four arrays of bits and registers accessible from their starting addresses</p>
+
+<p>The modbus_mapping_new_start_address() function shall allocate four arrays to store bits, input bits, registers and inputs registers. The pointers are stored in modbus_mapping_t structure. All values of the arrays are initialized to zero.
+The different starting adresses make it possible to place the mapping at any address in each address space. This way, you can give access to values stored at high adresses without allocating memory from the address zero, for eg. to make available registers from 10000 to 10009, you can use:
+mb_mapping = modbus_mapping_offset_start_address(0, 0, 0, 0, 10000, 10, 0, 0);
+With this code, only 10 registers (uint16_t) are allocated.
+If it isn’t necessary to allocate an array for a specific type of data, you can pass the zero value in argument, the associated pointer will be NULL.
+This function is convenient to handle requests in a Modbus server/slave.</p>
+
+<h1 id='return-value' class='section-header'><a href='#return-value'>Return value</a></h1>
+<p>The function returns a Result containing the new allocated structure if successful. Otherwise it contains an Error.</p>
+
+<h1 id='parameters-1' class='section-header'><a href='#parameters-1'>Parameters</a></h1>
+<ul>
+<li><code>start_bits</code>              - start address of bits array</li>
+<li><code>number_bits</code>             - How many bits sould allocated</li>
+<li><code>start_input_bits</code>        - start address of input bits array</li>
+<li><code>number_input_bits</code>       - How many bits sould allocated</li>
+<li><code>start_registers</code>         - start address of register array</li>
+<li><code>number_registers</code>        - How many registers sould allocated</li>
+<li><code>start_input_registers</code>   - start address of input register array</li>
+<li><code>number_input_registers</code>  - How many input registers sould allocated</li>
+</ul>
+
+<h1 id='examples-1' class='section-header'><a href='#examples-1'>Examples</a></h1>
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusMapping</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
+
+<span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new_start_address</span>(<span class="number">10</span>, <span class="number">500</span>, <span class="number">10</span>, <span class="number">500</span>, <span class="number">10</span>, <span class="number">500</span>, <span class="number">10</span>, <span class="number">500</span>).<span class="ident">unwrap</span>();</pre>
 </div><h4 id='method.free' class="method"><span id='free.v' class='invisible'><code>fn <a href='#method.free' class='fnname'>free</a>(&amp;mut self)</code></span></h4>
 <div class='docblock'><p><code>mapping_free</code> - free a modbus_mapping_t structure</p>
 
@@ -81,14 +115,136 @@ mb_mapping.</p>
 
 <p><strong>It should not nessesary to call these function. Because rusts drop trait handles that for you!</strong></p>
 
-<h1 id='examples-1' class='section-header'><a href='#examples-1'>Examples</a></h1>
+<h1 id='examples-2' class='section-header'><a href='#examples-2'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">libmodbus_rs</span>::<span class="ident">ModbusMapping</span>;
-
 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">500</span>, <span class="number">500</span>, <span class="number">500</span>, <span class="number">500</span>).<span class="ident">unwrap</span>();
 
 <span class="ident">modbus_mapping</span>.<span class="ident">free</span>();</pre>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../libmodbus_rs/struct.ModbusMapping.html" title="struct libmodbus_rs::ModbusMapping">ModbusMapping</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#67-71' title='goto source code'>[src]</a></span></h3>
+</div><h4 id='method.get_bits' class="method"><span id='get_bits.v' class='invisible'><code>fn <a href='#method.get_bits' class='fnname'>get_bits</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h4>
+<div class='docblock'><p><code>get_bits</code> - returns a slice constructed from the <code>tab_bits</code> and <code>nb_bits</code> member of the orig. modbus_mapping_t struct</p>
+
+<p><code>tab_bits</code> is an pointer, and this function returns a valid Rust slice to work with.</p>
+
+<h1 id='return-value-1' class='section-header'><a href='#return-value-1'>Return value</a></h1>
+<p>This function returns an immutable slice of <code>u8</code>&#39;s</p>
+
+<h1 id='examples-3' class='section-header'><a href='#examples-3'>Examples</a></h1>
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusMapping</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
+<span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>).<span class="ident">unwrap</span>();
+
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus_mapping</span>.<span class="ident">get_bits</span>(), [<span class="number">0u8</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>])</pre>
+</div><h4 id='method.get_bits_mut' class="method"><span id='get_bits_mut.v' class='invisible'><code>fn <a href='#method.get_bits_mut' class='fnname'>get_bits_mut</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h4>
+<div class='docblock'><p><code>get_bits_mut</code> - returns a mutable slice constructed from the <code>tab_bits</code> and <code>nb_bits</code> member of the orig. modbus_mapping_t struct</p>
+
+<p><code>tab_bits</code> is an pointer, and this function returns a valid, mutable Rust slice to work with.</p>
+
+<h1 id='return-value-2' class='section-header'><a href='#return-value-2'>Return value</a></h1>
+<p>This function returns an mutable slice of <code>u8</code>&#39;s</p>
+
+<h1 id='examples-4' class='section-header'><a href='#examples-4'>Examples</a></h1>
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusMapping</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
+<span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>).<span class="ident">unwrap</span>();
+
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus_mapping</span>.<span class="ident">get_bits_mut</span>(), [<span class="number">0u8</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>])</pre>
+</div><h4 id='method.get_input_bits' class="method"><span id='get_input_bits.v' class='invisible'><code>fn <a href='#method.get_input_bits' class='fnname'>get_input_bits</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h4>
+<div class='docblock'><p><code>get_input_bits</code> - returns a slice constructed from the <code>tab_input_bits</code> and <code>nb_input_bits</code> member of the orig. modbus_mapping_t struct</p>
+
+<p><code>tab_input_bits</code> is an pointer, and this function returns a valid Rust slice to work with.</p>
+
+<h1 id='return-value-3' class='section-header'><a href='#return-value-3'>Return value</a></h1>
+<p>This function returns an immutable slice of <code>u8</code>&#39;s</p>
+
+<h1 id='examples-5' class='section-header'><a href='#examples-5'>Examples</a></h1>
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusMapping</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
+<span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>).<span class="ident">unwrap</span>();
+
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus_mapping</span>.<span class="ident">get_input_bits</span>(), [<span class="number">0u8</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>])</pre>
+</div><h4 id='method.get_input_bits_mut' class="method"><span id='get_input_bits_mut.v' class='invisible'><code>fn <a href='#method.get_input_bits_mut' class='fnname'>get_input_bits_mut</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h4>
+<div class='docblock'><p><code>get_input_bits_mut</code> - returns a mutable slice constructed from the <code>tab_input_bits</code> and <code>nb_input_bits</code> member of the orig. modbus_mapping_t struct</p>
+
+<p><code>tab_bits</code> is an pointer, and this function returns a valid, mutable Rust slice to work with.</p>
+
+<h1 id='return-value-4' class='section-header'><a href='#return-value-4'>Return value</a></h1>
+<p>This function returns an mutable slice of <code>u8</code>&#39;s</p>
+
+<h1 id='examples-6' class='section-header'><a href='#examples-6'>Examples</a></h1>
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusMapping</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
+<span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>).<span class="ident">unwrap</span>();
+
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus_mapping</span>.<span class="ident">get_input_bits_mut</span>(), [<span class="number">0u8</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>])</pre>
+</div><h4 id='method.get_input_registers' class="method"><span id='get_input_registers.v' class='invisible'><code>fn <a href='#method.get_input_registers' class='fnname'>get_input_registers</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h4>
+<div class='docblock'><p><code>get_input_registers</code> - returns a slice constructed from the <code>tab_input_registers</code> and <code>nb_input_registers</code> member of the orig. modbus_mapping_t struct</p>
+
+<p><code>tab_input_registers</code> is an pointer, and this function returns a valid Rust slice to work with.</p>
+
+<h1 id='return-value-5' class='section-header'><a href='#return-value-5'>Return value</a></h1>
+<p>This function returns an immutable slice of <code>u8</code>&#39;s</p>
+
+<h1 id='examples-7' class='section-header'><a href='#examples-7'>Examples</a></h1>
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusMapping</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
+<span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>).<span class="ident">unwrap</span>();
+
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus_mapping</span>.<span class="ident">get_input_registers</span>(), [<span class="number">0u16</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>])</pre>
+</div><h4 id='method.get_input_registers_mut' class="method"><span id='get_input_registers_mut.v' class='invisible'><code>fn <a href='#method.get_input_registers_mut' class='fnname'>get_input_registers_mut</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h4>
+<div class='docblock'><p><code>get_input_registers_mut</code> - returns a mutable slice constructed from the <code>tab_input_registers</code> and <code>nb_input_registers</code> member of the orig. modbus_mapping_t struct</p>
+
+<p><code>tab_input_registers</code> is an pointer, and this function returns a valid, mutable Rust slice to work with.</p>
+
+<h1 id='return-value-6' class='section-header'><a href='#return-value-6'>Return value</a></h1>
+<p>This function returns an mutable slice of <code>u16</code>&#39;s</p>
+
+<h1 id='examples-8' class='section-header'><a href='#examples-8'>Examples</a></h1>
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusMapping</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
+<span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>).<span class="ident">unwrap</span>();
+
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus_mapping</span>.<span class="ident">get_input_registers_mut</span>(), [<span class="number">0u16</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>])</pre>
+</div><h4 id='method.get_registers' class="method"><span id='get_registers.v' class='invisible'><code>fn <a href='#method.get_registers' class='fnname'>get_registers</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h4>
+<div class='docblock'><p><code>get_registers</code> - returns a slice constructed from the <code>tab_registers</code> and <code>nb_registers</code> member of the orig. modbus_mapping_t struct</p>
+
+<p><code>tab_registers</code> is an pointer, and this function returns a valid Rust slice to work with.</p>
+
+<h1 id='return-value-7' class='section-header'><a href='#return-value-7'>Return value</a></h1>
+<p>This function returns an immutable slice of <code>u8</code>&#39;s</p>
+
+<h1 id='examples-9' class='section-header'><a href='#examples-9'>Examples</a></h1>
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusMapping</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
+<span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>).<span class="ident">unwrap</span>();
+
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus_mapping</span>.<span class="ident">get_registers</span>(), [<span class="number">0u16</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>])</pre>
+</div><h4 id='method.get_registers_mut' class="method"><span id='get_registers_mut.v' class='invisible'><code>fn <a href='#method.get_registers_mut' class='fnname'>get_registers_mut</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a></code></span></h4>
+<div class='docblock'><p><code>get_registers_mut</code> - returns a mutable slice constructed from the <code>tab_registers</code> and <code>nb_registers</code> member of the orig. modbus_mapping_t struct</p>
+
+<p><code>tab_registers</code> is an pointer, and this function returns a valid, mutable Rust slice to work with.</p>
+
+<h1 id='return-value-8' class='section-header'><a href='#return-value-8'>Return value</a></h1>
+<p>This function returns an mutable slice of <code>u16</code>&#39;s</p>
+
+<h1 id='examples-10' class='section-header'><a href='#examples-10'>Examples</a></h1>
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">libmodbus_rs</span>::{<span class="ident">Modbus</span>, <span class="ident">ModbusMapping</span>, <span class="ident">ModbusTCP</span>};
+<span class="kw">let</span> <span class="ident">modbus</span> <span class="op">=</span> <span class="ident">Modbus</span>::<span class="ident">new_tcp</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">1502</span>).<span class="ident">unwrap</span>();
+<span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ModbusMapping</span>::<span class="ident">new</span>(<span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">5</span>).<span class="ident">unwrap</span>();
+
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">modbus_mapping</span>.<span class="ident">get_registers_mut</span>(), [<span class="number">0u16</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>])</pre>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="struct" href="../libmodbus_rs/struct.ModbusMapping.html" title="struct libmodbus_rs::ModbusMapping">ModbusMapping</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#9' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class="method"><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/core/fmt/type.Result.html" title="type core::fmt::Result">Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html" title="trait core::ops::Drop">Drop</a> for <a class="struct" href="../libmodbus_rs/struct.ModbusMapping.html" title="struct libmodbus_rs::ModbusMapping">ModbusMapping</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus_mapping.rs.html#315-319' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.drop' class="method"><span id='drop.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#tymethod.drop' class='fnname'>drop</a>(&amp;mut self)</code></span></h4>
 <div class='docblock'><p>A method called when the value goes out of scope. <a href="https://doc.rust-lang.org/nightly/core/ops/trait.Drop.html#tymethod.drop">Read more</a></p>
 </div></div></section>
