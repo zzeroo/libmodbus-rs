@@ -55,6 +55,6 @@ test_script:
   - cargo build --verbose --target %TARGET%
   - cargo test --target %TARGET%
 
-branches:
-  only:
-    - master
+# branches:
+#   only:
+#     - master
