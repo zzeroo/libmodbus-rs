@@ -34,6 +34,7 @@ fn run() -> Result<()> {
     Ok(())
 }
 
+
 fn main() {
     if let Err(ref err) = run() {
         println!("Error: {}", err);
