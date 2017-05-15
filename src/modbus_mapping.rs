@@ -1,15 +1,22 @@
 use errors::*;
+use libc::c_uint;
 use libmodbus_sys;
+use std::io::Error;
 
 
 /// To handle the mapping of your Modbus data, you must use this struct
 ///
+#[derive(Debug)]
 pub struct ModbusMapping {
     pub modbus_mapping: *mut libmodbus_sys::modbus_mapping_t,
 }
 
 impl ModbusMapping {
     /// `new` - allocate four arrays of bits and registers
+    ///
+    /// # Return values
+    ///
+    /// The function returns a Result containing the new allocated structure if successful. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
@@ -34,7 +41,57 @@ impl ModbusMapping {
                                                                    number_registers,
                                                                    number_input_registers);
             if modbus_mapping.is_null() {
-                Err("Could not create ModbusMapping".into())
+                bail!(Error::last_os_error())
+            } else {
+                Ok(ModbusMapping { modbus_mapping: modbus_mapping })
+            }
+        }
+    }
+
+    /// `mapping_new_start_address` - allocate four arrays of bits and registers accessible from their starting addresses
+    ///
+    /// The modbus_mapping_new_start_address() function shall allocate four arrays to store bits, input bits, registers and inputs registers. The pointers are stored in modbus_mapping_t structure. All values of the arrays are initialized to zero.
+    /// The different starting adresses make it possible to place the mapping at any address in each address space. This way, you can give access to values stored at high adresses without allocating memory from the address zero, for eg. to make available registers from 10000 to 10009, you can use:
+    /// mb_mapping = modbus_mapping_offset_start_address(0, 0, 0, 0, 10000, 10, 0, 0);
+    /// With this code, only 10 registers (uint16_t) are allocated.
+    /// If it isn’t necessary to allocate an array for a specific type of data, you can pass the zero value in argument, the associated pointer will be NULL.
+    /// This function is convenient to handle requests in a Modbus server/slave.
+    ///
+    /// # Return value
+    ///
+    /// The function returns a Result containing the new allocated structure if successful. Otherwise it contains an Error.
+    ///
+    /// # Parameters
+    ///
+    /// * `start_bits`              - start address of bits array
+    /// * `number_bits`             - How many bits sould allocated
+    /// * `start_input_bits`        - start address of input bits array
+    /// * `number_input_bits`       - How many bits sould allocated
+    /// * `start_registers`         - start address of register array
+    /// * `number_registers`        - How many registers sould allocated
+    /// * `start_input_registers`   - start address of input register array
+    /// * `number_input_registers`  - How many input registers sould allocated
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// let modbus_mapping = ModbusMapping::new_start_address(10, 500, 10, 500, 10, 500, 10, 500).unwrap();
+    /// ```
+    pub fn new_start_address(start_bits: u16, number_bits: u16,
+                             start_input_bits: u16, number_input_bits: u16,
+                             start_registers: u16, number_registers: u16,
+                             start_input_registers: u16, number_input_registers: u16)
+               -> Result<ModbusMapping> {
+        unsafe {
+            let modbus_mapping = libmodbus_sys::modbus_mapping_new_start_address(start_bits as c_uint, number_bits as c_uint,
+                                                                                 start_input_bits as c_uint, number_input_bits as c_uint,
+                                                                                 start_registers as c_uint, number_registers as c_uint,
+                                                                                 start_input_registers as c_uint, number_input_registers as c_uint);
+            if modbus_mapping.is_null() {
+                bail!(Error::last_os_error())
             } else {
                 Ok(ModbusMapping { modbus_mapping: modbus_mapping })
             }
@@ -52,7 +109,6 @@ impl ModbusMapping {
     ///
     /// ```
     /// use libmodbus_rs::ModbusMapping;
-    ///
     /// let mut modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
     ///
     /// modbus_mapping.free();
@@ -60,6 +116,198 @@ impl ModbusMapping {
     pub fn free(&mut self) {
         unsafe {
             libmodbus_sys::modbus_mapping_free(self.modbus_mapping);
+        }
+    }
+
+    // TODO: Add better documentation
+    /// `get_bits` - returns a slice constructed from the `tab_bits` and `nb_bits` member of the orig. modbus_mapping_t struct
+    ///
+    /// `tab_bits` is an pointer, and this function returns a valid Rust slice to work with.
+    ///
+    /// # Return value
+    ///
+    /// This function returns an immutable slice of `u8`'s
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+    ///
+    /// assert_eq!(modbus_mapping.get_bits(), [0u8, 0, 0, 0, 0])
+    /// ```
+    pub fn get_bits(&self) -> &[u8] {
+        unsafe {
+            ::std::slice::from_raw_parts((*self.modbus_mapping).tab_bits, (*self.modbus_mapping).nb_bits as usize)
+        }
+    }
+
+    // TODO: Add better documentation
+    /// `get_bits_mut` - returns a mutable slice constructed from the `tab_bits` and `nb_bits` member of the orig. modbus_mapping_t struct
+    ///
+    /// `tab_bits` is an pointer, and this function returns a valid, mutable Rust slice to work with.
+    ///
+    /// # Return value
+    ///
+    /// This function returns an mutable slice of `u8`'s
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+    ///
+    /// assert_eq!(modbus_mapping.get_bits_mut(), [0u8, 0, 0, 0, 0])
+    /// ```
+    pub fn get_bits_mut(&self) -> &mut [u8] {
+        unsafe {
+            ::std::slice::from_raw_parts_mut((*self.modbus_mapping).tab_bits, (*self.modbus_mapping).nb_bits as usize)
+        }
+    }
+
+    // TODO: Add better documentation
+    /// `get_input_bits` - returns a slice constructed from the `tab_input_bits` and `nb_input_bits` member of the orig. modbus_mapping_t struct
+    ///
+    /// `tab_input_bits` is an pointer, and this function returns a valid Rust slice to work with.
+    ///
+    /// # Return value
+    ///
+    /// This function returns an immutable slice of `u8`'s
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+    ///
+    /// assert_eq!(modbus_mapping.get_input_bits(), [0u8, 0, 0, 0, 0])
+    /// ```
+    pub fn get_input_bits(&self) -> &[u8] {
+        unsafe {
+            ::std::slice::from_raw_parts((*self.modbus_mapping).tab_input_bits, (*self.modbus_mapping).nb_input_bits as usize)
+        }
+    }
+
+    // TODO: Add better documentation
+    /// `get_input_bits_mut` - returns a mutable slice constructed from the `tab_input_bits` and `nb_input_bits` member of the orig. modbus_mapping_t struct
+    ///
+    /// `tab_bits` is an pointer, and this function returns a valid, mutable Rust slice to work with.
+    ///
+    /// # Return value
+    ///
+    /// This function returns an mutable slice of `u8`'s
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+    ///
+    /// assert_eq!(modbus_mapping.get_input_bits_mut(), [0u8, 0, 0, 0, 0])
+    /// ```
+    pub fn get_input_bits_mut(&self) -> &mut [u8] {
+        unsafe {
+            ::std::slice::from_raw_parts_mut((*self.modbus_mapping).tab_input_bits, (*self.modbus_mapping).nb_input_bits as usize)
+        }
+    }
+
+    // TODO: Add better documentation
+    /// `get_input_registers` - returns a slice constructed from the `tab_input_registers` and `nb_input_registers` member of the orig. modbus_mapping_t struct
+    ///
+    /// `tab_input_registers` is an pointer, and this function returns a valid Rust slice to work with.
+    ///
+    /// # Return value
+    ///
+    /// This function returns an immutable slice of `u8`'s
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+    ///
+    /// assert_eq!(modbus_mapping.get_input_registers(), [0u16, 0, 0, 0, 0])
+    /// ```
+    pub fn get_input_registers(&self) -> &[u16] {
+        unsafe {
+            ::std::slice::from_raw_parts((*self.modbus_mapping).tab_input_registers, (*self.modbus_mapping).nb_input_registers as usize)
+        }
+    }
+
+    // TODO: Add better documentation
+    /// `get_input_registers_mut` - returns a mutable slice constructed from the `tab_input_registers` and `nb_input_registers` member of the orig. modbus_mapping_t struct
+    ///
+    /// `tab_input_registers` is an pointer, and this function returns a valid, mutable Rust slice to work with.
+    ///
+    /// # Return value
+    ///
+    /// This function returns an mutable slice of `u16`'s
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+    ///
+    /// assert_eq!(modbus_mapping.get_input_registers_mut(), [0u16, 0, 0, 0, 0])
+    /// ```
+    pub fn get_input_registers_mut(&self) -> &mut [u16] {
+        unsafe {
+            ::std::slice::from_raw_parts_mut((*self.modbus_mapping).tab_input_registers, (*self.modbus_mapping).nb_input_registers as usize)
+        }
+    }
+
+    // TODO: Add better documentation
+    /// `get_registers` - returns a slice constructed from the `tab_registers` and `nb_registers` member of the orig. modbus_mapping_t struct
+    ///
+    /// `tab_registers` is an pointer, and this function returns a valid Rust slice to work with.
+    ///
+    /// # Return value
+    ///
+    /// This function returns an immutable slice of `u8`'s
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+    ///
+    /// assert_eq!(modbus_mapping.get_registers(), [0u16, 0, 0, 0, 0])
+    /// ```
+    pub fn get_registers(&self) -> &[u16] {
+        unsafe {
+            ::std::slice::from_raw_parts((*self.modbus_mapping).tab_registers, (*self.modbus_mapping).nb_registers as usize)
+        }
+    }
+
+    // TODO: Add better documentation
+    /// `get_registers_mut` - returns a mutable slice constructed from the `tab_registers` and `nb_registers` member of the orig. modbus_mapping_t struct
+    ///
+    /// `tab_registers` is an pointer, and this function returns a valid, mutable Rust slice to work with.
+    ///
+    /// # Return value
+    ///
+    /// This function returns an mutable slice of `u16`'s
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+    ///
+    /// assert_eq!(modbus_mapping.get_registers_mut(), [0u16, 0, 0, 0, 0])
+    /// ```
+    pub fn get_registers_mut(&self) -> &mut [u16] {
+        unsafe {
+            ::std::slice::from_raw_parts_mut((*self.modbus_mapping).tab_registers, (*self.modbus_mapping).nb_registers as usize)
         }
     }
 }

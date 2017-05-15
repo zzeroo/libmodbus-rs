@@ -3,6 +3,7 @@ use libc::{c_char, c_int};
 use libmodbus_sys;
 use modbus::Modbus;
 use std::ffi::CString;
+use std::io::Error;
 use std::str;
 
 
@@ -90,7 +91,7 @@ impl ModbusRTU for Modbus {
     /// ```
     /// use libmodbus_rs::{Modbus, ModbusRTU};
     ///
-    /// const YOUR_DEVICE_ID: i32 = 1;
+    /// const YOUR_DEVICE_ID: u8 = 1;
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     /// modbus.set_slave(YOUR_DEVICE_ID);
     ///
@@ -109,7 +110,7 @@ impl ModbusRTU for Modbus {
                                                     stop_bit as c_int);
 
             if ctx.is_null() {
-                Err("Could not create new RTU context".into())
+                bail!(Error::last_os_error())
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -152,7 +153,7 @@ impl ModbusRTU for Modbus {
             match mode {
                 mode if mode == SerialMode::MODBUS_RTU_RS232 as i32 => Ok(SerialMode::MODBUS_RTU_RS232),
                 mode if mode == SerialMode::MODBUS_RTU_RS485 as i32 => Ok(SerialMode::MODBUS_RTU_RS485),
-                _ => Err("Could not get RTU serial mode".into()),
+                _ => bail!(Error::last_os_error()),
             }
         }
     }
@@ -191,7 +192,7 @@ impl ModbusRTU for Modbus {
             match mode {
                 libmodbus_sys::MODBUS_RTU_RS232 => Ok(SerialMode::MODBUS_RTU_RS232),
                 libmodbus_sys::MODBUS_RTU_RS485 => Ok(SerialMode::MODBUS_RTU_RS485),
-                _ => Err("Could not set RTU serial mode".into()),
+                _ => bail!(Error::last_os_error()),
             }
         }
     }
@@ -230,7 +231,7 @@ impl ModbusRTU for Modbus {
                 libmodbus_sys::MODBUS_RTU_RTS_NONE => Ok(RequestToSendMode::MODBUS_RTU_RTS_NONE),
                 libmodbus_sys::MODBUS_RTU_RTS_UP => Ok(RequestToSendMode::MODBUS_RTU_RTS_UP),
                 libmodbus_sys::MODBUS_RTU_RTS_DOWN => Ok(RequestToSendMode::MODBUS_RTU_RTS_DOWN),
-                _ => Err("Could not set RTS mode".into()),
+                _ => bail!(Error::last_os_error()),
             }
         }
     }
@@ -266,7 +267,7 @@ impl ModbusRTU for Modbus {
                 libmodbus_sys::MODBUS_RTU_RTS_NONE => Ok(RequestToSendMode::MODBUS_RTU_RTS_NONE),
                 libmodbus_sys::MODBUS_RTU_RTS_UP => Ok(RequestToSendMode::MODBUS_RTU_RTS_UP),
                 libmodbus_sys::MODBUS_RTU_RTS_DOWN => Ok(RequestToSendMode::MODBUS_RTU_RTS_DOWN),
-                _ => Err("Could not get RTS mode".into()),
+                _ => bail!(Error::last_os_error()),
             }
         }
     }
@@ -311,7 +312,7 @@ impl ModbusRTU for Modbus {
     fn rtu_get_rts_delay(&self) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_rtu_get_rts_delay(self.ctx) {
-                -1 => Err("Could not set RTS delay".into()),
+                -1 => bail!(Error::last_os_error()),
                 delay => Ok(delay),
             }
         }
@@ -340,7 +341,7 @@ impl ModbusRTU for Modbus {
     fn rtu_set_rts_delay(&mut self, us: i32) -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_rtu_set_rts_delay(self.ctx, us as c_int) {
-                -1 => Err("Could not set RTS delay".into()),
+                -1 => bail!(Error::last_os_error()),
                 _ => Ok(0),
             }
         }
