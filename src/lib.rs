@@ -168,8 +168,7 @@ html_root_url = "https://zzeroo.com/")]
 
 extern crate libc;
 extern crate libmodbus_sys;
-#[macro_use]
-extern crate error_chain;
+#[macro_use] extern crate error_chain;
 
 mod enums;
 mod modbus_client;
