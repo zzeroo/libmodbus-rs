@@ -49,6 +49,10 @@ fn run(matches: &ArgMatches) -> Result<()> {
 
     println!(">> Registers: \n{:?}", &response_register);
 
+    for (index, r) in response_register.iter().enumerate() {
+        println!("{} {}", index, r);
+    }
+
     Ok(())
 }
 
