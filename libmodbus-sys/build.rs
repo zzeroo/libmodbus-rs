@@ -33,7 +33,7 @@ fn main() {
     // if `pkg-config` is present and the libmodbus headers are found
     // we use `pkg-config` to find the include_path and call bindgen with it.
     //
-    if let Ok(library) = pkg_config::find_library("libmodbus") {
+    if let Ok(library) = pkg_config::probe_library("libmodbus") {
         if let Some(include) = library.include_paths.get(0) {
             run_bindgen(&include);
         }
@@ -53,7 +53,7 @@ fn main() {
     let _ = fs::remove_dir_all(env::var("OUT_DIR").unwrap());
     t!(fs::create_dir_all(env::var("OUT_DIR").unwrap()));
 
-    let cfg = gcc::Config::new();
+    let cfg = gcc::Build::new();
     let compiler = cfg.get_compiler();
     let mut flags = OsString::new();
     for (i, flag) in compiler.args().iter().enumerate() {
