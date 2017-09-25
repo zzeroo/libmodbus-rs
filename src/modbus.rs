@@ -4,6 +4,14 @@ use libc::{c_int, c_uint};
 use libmodbus_sys;
 use std::io::Error;
 
+/// Timeout struct
+//
+// For use with timeout methods such as get_byte_timeout and set_byte_timeout
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Timeout {
+    pub sec: u32,
+    pub usec: u32,
+}
 
 /// Safe interface for [libmodbus](http://libmodbus.org)
 ///
@@ -22,7 +30,7 @@ impl Modbus {
     ///
     /// # Return value
     ///
-    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    /// The function return an OK Result if successful. Otherwise it contains an Error.
     ///
     /// # Examples
     ///
@@ -32,11 +40,12 @@ impl Modbus {
     ///
     /// assert!(modbus.connect().is_ok())
     /// ```
-    pub fn connect(&self) -> Result<i32> {
+    pub fn connect(&self) -> Result<()> {
         unsafe {
             match libmodbus_sys::modbus_connect(self.ctx) {
                 -1 => bail!(Error::last_os_error()),
-                _ => Ok(0),
+                0 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
@@ -47,7 +56,7 @@ impl Modbus {
     ///
     /// # Return value
     ///
-    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    /// The function return an OK Result if successful. Otherwise it contains an Error.
     ///
     /// # Examples
     ///
@@ -57,11 +66,12 @@ impl Modbus {
     ///
     /// assert!(modbus.flush().is_ok());
     /// ```
-    pub fn flush(&self) -> Result<i32> {
+    pub fn flush(&self) -> Result<()> {
         unsafe {
             match libmodbus_sys::modbus_flush(self.ctx) {
                 -1 => bail!(Error::last_os_error()),
-                _ => Ok(0),
+                0 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
@@ -86,7 +96,7 @@ impl Modbus {
     ///
     /// # Return value
     ///
-    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    /// The function return an OK Result if successful. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
@@ -102,11 +112,12 @@ impl Modbus {
     ///
     /// assert!(modbus.set_slave(YOUR_DEVICE_ID).is_ok());
     /// ```
-    pub fn set_slave(&mut self, slave: u8) -> Result<i32> {
+    pub fn set_slave(&mut self, slave: u8) -> Result<()> {
         unsafe {
             match libmodbus_sys::modbus_set_slave(self.ctx, slave as c_int) {
                 -1 => bail!(Error::last_os_error()),
-                _ => Ok(0),
+                0 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
@@ -127,7 +138,7 @@ impl Modbus {
     ///
     /// # Return value
     ///
-    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    /// The function return an OK Result if successful. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
@@ -142,11 +153,12 @@ impl Modbus {
     ///
     /// assert!(modbus.set_debug(true).is_ok());
     /// ```
-    pub fn set_debug(&mut self, flag: bool) -> Result<i32> {
+    pub fn set_debug(&mut self, flag: bool) -> Result<()> {
         unsafe {
             match libmodbus_sys::modbus_set_debug(self.ctx, flag as c_int) {
                 -1 => bail!(Error::last_os_error()),
-                _ => Ok(0),
+                0 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
@@ -158,12 +170,7 @@ impl Modbus {
     ///
     /// # Return value
     ///
-    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
-    ///
-    /// # Parameters
-    ///
-    /// * `timeout_sec`  - timeout sec
-    /// * `timeout_usec` - timeout usec
+    /// The function return a Result containing a `Timeout` if successful. Otherwise it contains an Error.
     ///
     /// # Examples
     ///
@@ -171,17 +178,15 @@ impl Modbus {
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// let mut timeout_sec = 0;
-    /// let mut timeout_usec = 0;
-    ///
-    /// assert!(modbus.get_byte_timeout(&mut timeout_sec, &mut timeout_usec).is_ok());
+    /// assert!(modbus.get_byte_timeout().is_ok());
     /// ```
-    pub fn get_byte_timeout(&self, timeout_sec: *mut u32, timeout_usec: *mut u32) -> Result<i32> {
+    pub fn get_byte_timeout(&self) -> Result<Timeout> {
+        let mut timeout = Timeout { sec: 0, usec: 0 };
         unsafe {
-            match libmodbus_sys::modbus_get_byte_timeout(self.ctx, timeout_sec, timeout_usec) {
+            match libmodbus_sys::modbus_get_byte_timeout(self.ctx, &mut timeout.sec, &mut timeout.usec) {
                 -1 => bail!(Error::last_os_error()),
-                0 => Ok(0),
-                _ => unreachable!(),
+                0 => Ok(timeout),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
@@ -204,30 +209,28 @@ impl Modbus {
     ///
     /// # Return value
     ///
-    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    /// The function return an OK Result if successful. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
-    /// * `timeout_sec`  - timeout sec
-    /// * `timeout_usec` - timeout usec
+    /// * `timeout`  - Timeout struct with `timeout_sec` and `timeout_usec`
     ///
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// let timeout_sec = 1;
-    /// let timeout_usec = 500;
+    /// let timeout = Timeout { sec: 1, usec: 500 };
     ///
-    /// assert!(modbus.set_byte_timeout(timeout_sec, timeout_usec).is_ok());
+    /// assert!(modbus.set_byte_timeout(timeout).is_ok());
     /// ```
-    pub fn set_byte_timeout(&mut self, timeout_sec: u32, timeout_usec: u32) -> Result<i32> {
+    pub fn set_byte_timeout(&mut self, timeout: Timeout) -> Result<()> {
         unsafe {
-            match libmodbus_sys::modbus_set_byte_timeout(self.ctx, timeout_sec, timeout_usec) {
+            match libmodbus_sys::modbus_set_byte_timeout(self.ctx, timeout.sec, timeout.usec) {
                 -1 => bail!(Error::last_os_error()),
-                0 => Ok(0),
-                _ => unreachable!(),
+                0 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
@@ -240,12 +243,7 @@ impl Modbus {
     ///
     /// # Return value
     ///
-    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
-    ///
-    /// # Parameters
-    ///
-    /// * `timeout_sec`  - timeout sec
-    /// * `timeout_usec` - timeout usec
+    /// The function return a Result containing a `Timeout` if successful. Otherwise it contains an Error.
     ///
     /// # Examples
     ///
@@ -253,17 +251,15 @@ impl Modbus {
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// let mut timeout_sec = 0;
-    /// let mut timeout_usec = 0;
-    ///
-    /// assert!(modbus.get_response_timeout(&mut timeout_sec, &mut timeout_usec).is_ok());
+    /// assert!(modbus.get_response_timeout().is_ok());
     /// ```
-    pub fn get_response_timeout(&self, timeout_sec: *mut u32, timeout_usec: *mut u32) -> Result<i32> {
+    pub fn get_response_timeout(&self) -> Result<Timeout> {
+        let mut timeout = Timeout { sec: 0, usec: 0 };
         unsafe {
-            match libmodbus_sys::modbus_get_response_timeout(self.ctx, timeout_sec, timeout_usec) {
+            match libmodbus_sys::modbus_get_response_timeout(self.ctx, &mut timeout.sec, &mut timeout.usec) {
                 -1 => bail!(Error::last_os_error()),
-                0 => Ok(0),
-                _ => unreachable!(),
+                0 => Ok(timeout),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
@@ -286,7 +282,7 @@ impl Modbus {
     ///
     /// # Return value
     ///
-    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    /// The function return an OK Result if successful. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
@@ -296,20 +292,19 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// let timeout_sec = 1;
-    /// let timeout_usec = 500;
+    /// let timeout = Timeout { sec: 1, usec: 500 };
     ///
-    /// assert!(modbus.set_response_timeout(timeout_sec, timeout_usec).is_ok());
+    /// assert!(modbus.set_response_timeout(timeout).is_ok());
     /// ```
-    pub fn set_response_timeout(&mut self, timeout_sec: u32, timeout_usec: u32) -> Result<i32> {
+    pub fn set_response_timeout(&mut self, timeout: Timeout) -> Result<()> {
         unsafe {
-            match libmodbus_sys::modbus_set_response_timeout(self.ctx, timeout_sec, timeout_usec) {
+            match libmodbus_sys::modbus_set_response_timeout(self.ctx, timeout.sec, timeout.usec) {
                 -1 => bail!(Error::last_os_error()),
-                0 => Ok(0),
-                _ => unreachable!(),
+                0 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
