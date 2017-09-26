@@ -50,19 +50,30 @@ The examples in the examples dir, show this.
 
 The libmobus ffi bindings (libmodbus-sys) are build using [bindgen][bindgen]. [Bindgen need Clang 3.9 or greater on your system.][bindgen-reg]
 
-### Debian based
+### Dependencies Archlinux
 
 ```sh
-# apt-get install llvm-3.9-dev libclang-3.9-dev clang-3.9
+pacman -S autoconf clang39 git libtool make
 ```
 
-### Arch
+### Dependencies Debian based (e.g. Ubuntu)
 
 ```sh
-# pacman -S clang
+apt-get install autoconf build-essential curl clang-3.9 git-core libtool
 ```
+
+Look also at the local ci/ docker files under `./ci/docker-archlinux` and `.ci/docker-debian9` for a known working, minimal setup.
 
 For mor information about the bindgen requirements please visit [https://servo.github.io/rust-bindgen/requirements.html][bindgen-reg]
+
+If all dependencies are solved, compile with `cargo build` and/ or run the tests with `cargo test`.
+
+```sh
+git clone https://github.com/zzeroo/libmodbus-rs
+cd libmodbus-rs
+cargo build
+```
+
 
 ## Examples
 
@@ -88,12 +99,6 @@ In another shell start the client after the server
 cargo run --example random-test-client
 ```
 
-
-```sh
-$ git clone https://github.com/zzeroo/libmodbus-rs
-$ cd libmodbus-rs
-$ cargo build
-```
 
 # License
 
