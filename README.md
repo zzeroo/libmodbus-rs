@@ -1,11 +1,13 @@
 # libmodbus-rs
-## [libmodbus](http://libmodbus.org/) bindings for Rust [![Crates.io version](https://img.shields.io/crates/v/libmodbus-rs.svg)](https://crates.io/crates/libmodbus-rs) [![Build Status](https://travis-ci.org/zzeroo/libmodbus-rs.svg?branch=master)](https://travis-ci.org/zzeroo/libmodbus-rs) [![Build status](https://ci.appveyor.com/api/projects/status/dfjyswsgj6menctw?svg=true)](https://ci.appveyor.com/project/zzeroo/libmodbus-rs) [![Coverage Status](https://coveralls.io/repos/github/zzeroo/libmodbus-rs/badge.svg?branch=master)](https://coveralls.io/github/zzeroo/libmodbus-rs?branch=master)
+## [libmodbus](http://libmodbus.org/) bindings for Rust &nbsp;
+[![Crates.io version](https://img.shields.io/crates/v/libmodbus-rs.svg)](https://crates.io/crates/libmodbus-rs) &nbsp;
+[![Build Status](https://travis-ci.org/zzeroo/libmodbus-rs.svg?branch=master)](https://travis-ci.org/zzeroo/libmodbus-rs) &nbsp;
+[![Coverage Status](https://coveralls.io/repos/github/zzeroo/libmodbus-rs/badge.svg?branch=master)](https://coveralls.io/github/zzeroo/libmodbus-rs?branch=master)
 
-[Homepage |][homepage]&nbsp;
-[Documentation |][docu]&nbsp;
-[original libmodbus Documentation |][libmodbus-docu]&nbsp;
-[Repo auf Github.com |][repo]
-
+[Homepage |][homepage] &nbsp;
+[Documentation |][doc] &nbsp;
+[Original libmodbus documentation |][libmodbus-doc] &nbsp;
+[Github repo |][repo]
 
 **This crate is in early beta state. Please don't use in production and expect odd behavior.**
 
@@ -38,31 +40,42 @@ extern crate libmodbus_rs;
 use libmodbus_rs::{Modbus, ModbusTCP, ModbusServer};
 ```
 
-The examples in the examples dir, show this.
+The examples in the examples directory show this.
 
 ## Documentation
 
-[Documentation (crates.io)][docu]
+[Documentation (crates.io)][doc]
 
-[Documentation (master)][docu-master]
+[Documentation (master)][doc-master]
 
 ## Building libmodbus-rs
 
-The libmobus ffi bindings (libmodbus-sys) are build using [bindgen][bindgen]. [Bindgen need Clang 3.9 or greater on your system.][bindgen-reg]
+The libmodbus ffi bindings (libmodbus-sys) are build using [bindgen][bindgen]. [Bindgen need Clang 3.9 or greater on your system.][bindgen-reg]
 
-### Debian based
-
-```sh
-# apt-get install llvm-3.9-dev libclang-3.9-dev clang-3.9
-```
-
-### Arch
+### Dependencies Archlinux
 
 ```sh
-# pacman -S clang
+pacman -S autoconf clang39 git libtool make
 ```
 
-For mor information about the bindgen requirements please visit [https://servo.github.io/rust-bindgen/requirements.html][bindgen-reg]
+### Dependencies Debian based (e.g. Ubuntu)
+
+```sh
+apt-get install autoconf build-essential curl clang-3.9 git-core libtool
+```
+
+Look also at the local ci/ docker files under `./ci/docker-archlinux` and `.ci/docker-debian9` for a known working, minimal setup.
+
+For more information about the bindgen requirements please visit [https://servo.github.io/rust-bindgen/requirements.html][bindgen-reg]
+
+If all dependencies are solved, compile with `cargo build` and/ or run the tests with `cargo test`.
+
+```sh
+git clone https://github.com/zzeroo/libmodbus-rs
+cd libmodbus-rs
+cargo build
+```
+
 
 ## Examples
 
@@ -75,7 +88,7 @@ All original libmodbus examples are reproduced in Rust. You can find them in the
 
 * `unit-test-server.rs` and unit-test-client run a full unit test suite. These programs are essential to test the Modbus protocol implementation and libmodbus behavior.
 
-* `bandwidth-server-one.rs`, `bandwidth-server-many-up.rs` and `bandwidth-client.rs` return very useful information about the performance of transfert rate between the server and the client. `bandwidth-server-one.rs` can only handles one connection at once with a client whereas `bandwidth-server-many-up.rs` opens a connection for each new clients (with a limit).
+* `bandwidth-server-one.rs`, `bandwidth-server-many-up.rs` and `bandwidth-client.rs` return very useful information about the performance of transfer rate between the server and the client. `bandwidth-server-one.rs` can only handles one connection at once with a client whereas `bandwidth-server-many-up.rs` opens a connection for each new clients (with a limit).
 
 To start, for example, the random test server/ client use the following commands
 
@@ -88,12 +101,6 @@ In another shell start the client after the server
 cargo run --example random-test-client
 ```
 
-
-```sh
-$ git clone https://github.com/zzeroo/libmodbus-rs
-$ cd libmodbus-rs
-$ cargo build
-```
 
 # License
 
@@ -111,10 +118,10 @@ This project hosts the original libmodbus documentation, used here, as well. Ple
 
 [homepage]: http://zzeroo.github.io/libmodbus-rs
 [repo]: https://github.com/zzeroo/libmodbus-rs
-[docu]: https://docs.rs/crate/libmodbus-rs
-[docu-master]: http://zzeroo.github.io/libmodbus-rs/libmodbus_rs/index.html
+[doc]: https://docs.rs/crate/libmodbus-rs
+[doc-master]: http://zzeroo.github.io/libmodbus-rs/libmodbus_rs/index.html
 [libmodbus]: http://libmodbus.org
 [libmodbus-repo]: https://github.com/stephane/libmodbus.git
-[libmodbus-docu]: http://zzeroo.github.io/libmodbus-rs/libmodbus/libmodbus.html
+[libmodbus-doc]: http://zzeroo.github.io/libmodbus-rs/libmodbus/libmodbus.html
 [bindgen]: https://github.com/servo/rust-bindgen
 [bindgen-reg]: https://servo.github.io/rust-bindgen/requirements.html

@@ -1,22 +1,30 @@
+sudo: false
 language: rust
+# Dependencies of kcov, used by coverage
 addons:
   apt:
-    sources:
-      - ubuntu-toolchain-r-test
     packages:
-      - gcc-5
-os:
-  - linux
-  # - osx
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
+      - binutils-dev
+      - cmake
+    sources:
+      - kalakris-cmake
 rust:
   - stable
   - beta
   - nightly
-env:
-  - LLVM_VERSION=4.0 CLANG_VERSION=clang_4_0
-sudo: false
-cache: cargo
-before_install: . ./ci/before_install.sh
+before_script:
+  - |
+      cargo install cargo-travis &&
+      export PATH=$HOME/.cargo/bin:$PATH
+
+# the main build
 script:
-  - cargo build
-  - cargo test
+  - |
+      cargo test
+
+after_success:
+# measure code coverage and upload to coveralls.io
+  - cargo coveralls
