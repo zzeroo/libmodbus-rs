@@ -1,6 +1,6 @@
 extern crate bindgen;
 extern crate pkg_config;
-extern crate gcc;
+extern crate cc;
 
 use std::env;
 use std::ffi::OsString;
@@ -26,9 +26,10 @@ fn main() {
     let host = env::var("HOST").unwrap();
 
     let build_dir = Path::new(LIBMODBUS_DIR);
-    let prefix    = Path::new(&dst).join("libmodbus-root");
-    let include   = Path::new(&prefix).join("include")
-                                      .join("modbus");
+    let prefix = Path::new(&dst).join("libmodbus-root");
+    let include = Path::new(&prefix)
+        .join("include")
+        .join("modbus");
 
     // if `pkg-config` is present and the libmodbus headers are found
     // we use `pkg-config` to find the include_path and call bindgen with it.
@@ -38,7 +39,7 @@ fn main() {
             run_bindgen(&include);
         }
 
-        return
+        return;
     }
 
     // pkg-config is not found. We build libmodbus from source (source are in a git submodule)
@@ -53,7 +54,7 @@ fn main() {
     let _ = fs::remove_dir_all(env::var("OUT_DIR").unwrap());
     t!(fs::create_dir_all(env::var("OUT_DIR").unwrap()));
 
-    let cfg = gcc::Build::new();
+    let cfg = cc::Build::new();
     let compiler = cfg.get_compiler();
     let mut flags = OsString::new();
     for (i, flag) in compiler.args().iter().enumerate() {
@@ -65,28 +66,28 @@ fn main() {
 
     // Generate configure, run configure, make, make install
     run_command("Generating configure",
-        Command::new("autoreconf")
-            .arg("--install")
-            .arg("--symlink")
-            .arg("--force")
-            .current_dir(&build_dir));
+                Command::new("autoreconf")
+                    .arg("--install")
+                    .arg("--symlink")
+                    .arg("--force")
+                    .current_dir(&build_dir));
 
     run_command("Configuring libmodbus",
-        Command::new("./configure")
-            .arg("--prefix")
-            .arg(&prefix)
-            .env("CC", compiler.path())
-            .env("CFLAGS", flags)
-            .arg("--with-pic")
-            .arg("--disable-shared")
-            .arg(format!("--target={}", target))
-            .arg(format!("--host={}", host))
-            .current_dir(&build_dir));
+                Command::new("./configure")
+                    .arg("--prefix")
+                    .arg(&prefix)
+                    .env("CC", compiler.path())
+                    .env("CFLAGS", flags)
+                    .arg("--with-pic")
+                    .arg("--disable-shared")
+                    .arg(format!("--target={}", target))
+                    .arg(format!("--host={}", host))
+                    .current_dir(&build_dir));
 
     run_command("Building libmodbus",
-        Command::new("make")
-            .arg("install")
-            .current_dir(&build_dir));
+                Command::new("make")
+                    .arg("install")
+                    .current_dir(&build_dir));
 
     println!("cargo:rustc-link-lib=static=modbus");
     println!("cargo:rustc-link-search=native={}/libmodbus-root/lib", dst);
@@ -102,10 +103,6 @@ fn run_bindgen(include: &PathBuf) {
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let bindings = bindgen::Builder::default()
-        // Do not generate unstable Rust code that
-        // requires a nightly rustc and enabling
-        // unstable features.
-        .unstable_rust(false)
         // The input header we would like to generate
         // bindings for.
         .header("wrapper.h")
@@ -118,8 +115,7 @@ fn run_bindgen(include: &PathBuf) {
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
-    bindings
-        .write_to_file(out_path.join("bindings.rs"))
+    bindings.write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
 }
 
