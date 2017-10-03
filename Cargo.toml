@@ -1,6 +1,6 @@
 [package]
 name = "libmodbus-rs"
-version = "0.4.5"
+version = "0.4.6"
 authors = ["Stefan Müller <co@zzeroo.com>"]
 readme = "README.md"
 keywords = ["modbus", "libmodbus"]
