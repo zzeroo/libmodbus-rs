@@ -201,11 +201,10 @@ impl ModbusClient for Modbus {
     /// description of the controller.
     ///
     /// The response stored in dest contains:
-    /// * the slave ID, this unique ID is in reality not unique at all so it's not possible to depend on it to know
-    /// how the
-    ///     information are packed in the response.
+    ///     * the slave ID, this unique ID is in reality not unique at all so it's not possible to depend on it to know
+    /// how the information are packed in the response.
     ///     * the run indicator status (0x00 = OFF, 0xFF = ON)
-    /// * additional data specific to each controller. For example, libmodbus returns the version of the library as
+    ///     * additional data specific to each controller. For example, libmodbus returns the version of the library as
     /// a string.
     ///
     /// # Return value

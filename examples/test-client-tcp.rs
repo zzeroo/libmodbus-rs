@@ -5,33 +5,33 @@ use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
 use libmodbus_rs::errors::*;
 
 
-fn test_read_bits(modbus: &Modbus) {
+fn _test_read_bits(modbus: &Modbus) {
     let address = 1;
     let mut dest = vec![0u8; 100];
 
     println!("{:?}", modbus.read_bits(address, 1, &mut dest));
 }
 
-fn test_reply_exception(modbus: &Modbus) {
+fn _test_reply_exception(modbus: &Modbus) {
     use libmodbus_rs::Exception;
 
     let request: Vec<u8> = vec![0x01];
     assert_eq!(modbus.reply_exception(&request, Exception::ACKNOWLEDGE as u32).unwrap(), 9);
 }
 
-fn test_write_and_read_registers(modbus: &Modbus) {
+fn _test_write_and_read_registers(modbus: &Modbus) {
     let address = 1;
     let request_bytes = vec![1337u16];
     let mut response_bytes = vec![0u16];
 
-    assert_eq!(modbus.write_and_read_registers(
-             address, 1, &request_bytes,
-             address, 1, &mut response_bytes).unwrap(), 1);
+    assert_eq!(modbus.write_and_read_registers(address, 1, &request_bytes, address, 1, &mut response_bytes)
+                   .unwrap(),
+               1);
 
     println!("reponse_bytes: {:?}", response_bytes);
 }
 
-fn test_raw_request(modbus: &Modbus) {
+fn _test_raw_request(modbus: &Modbus) {
     use libmodbus_rs::{FunctionCode, MODBUS_TCP_MAX_ADU_LENGTH};
 
     let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::READ_HOLDING_REGISTERS as u8, 0x00, 0x01, 0x0, 0x05];
