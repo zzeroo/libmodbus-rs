@@ -26,7 +26,7 @@ use std::io::Error;
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Exception {
     /// (1) Illegal Function - Function code received in the query is not recognized or allowed by slave
-    IllegalFunction = libmodbus_sys::_bindgen_ty_10::MODBUS_EXCEPTION_ILLEGAL_FUNCTION as isize,
+    IllegalFunction = 1,
     /// (2) Illegal Data Address - Data address of some or all the required entities are not allowed or do not exist in
     /// slave
     IllegalDataAddress,
