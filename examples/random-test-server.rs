@@ -1,6 +1,6 @@
 extern crate libmodbus_rs;
 
-use libmodbus_rs::{Modbus, ModbusServer, ModbusMapping, ModbusTCP, MODBUS_TCP_MAX_ADU_LENGTH};
+use libmodbus_rs::{Modbus, ModbusServer, ModbusMapping, ModbusTCP};
 use libmodbus_rs::errors::*;
 
 
@@ -15,15 +15,11 @@ fn run() -> Result<()> {
 
 
     loop {
-        let mut query = vec![0u8; MODBUS_TCP_MAX_ADU_LENGTH as usize];
+        let mut query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH as usize];
 
         match modbus.receive(&mut query) {
-            Ok(n) => {
-                modbus.reply(&query, n, &modbus_mapping)
-            }
-            Err(_) => {
-                break
-            }
+            Ok(n) => modbus.reply(&query, n, &modbus_mapping),
+            Err(_) => break,
         }?;
     }
     println!("Quit the loop: Connection reset by peer");

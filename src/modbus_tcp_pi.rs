@@ -74,7 +74,7 @@ impl ModbusTCPPI for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI, MODBUS_MAX_ADU_LENGTH};
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
     ///
     /// let mut modbus = Modbus::new_tcp_pi("::0", "1502").unwrap();
     /// let mut socket = modbus.tcp_pi_listen(1).unwrap();
@@ -108,7 +108,7 @@ impl ModbusTCPPI for Modbus {
     /// * bandwidth-server-many-up.rs   - handles several connection at once
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI, MODBUS_MAX_ADU_LENGTH};
+    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
     ///
     /// let mut modbus = Modbus::new_tcp_pi("::0", "1502").unwrap();
     /// let mut socket = modbus.tcp_pi_listen(1).unwrap();
@@ -116,7 +116,7 @@ impl ModbusTCPPI for Modbus {
     /// modbus.tcp_pi_accept(&mut socket);
     ///
     /// let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
-    /// let mut query = vec![0u8; MODBUS_MAX_ADU_LENGTH as usize];
+    /// let mut query = vec![0u8; Modbus::MAX_ADU_LENGTH as usize];
     ///
     /// loop {
     ///     let request_len = modbus.receive(&mut query).unwrap();

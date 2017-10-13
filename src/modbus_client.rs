@@ -226,11 +226,11 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, MODBUS_MAX_PDU_LENGTH};
+    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let mut tab_bytes = vec![0u8; MODBUS_MAX_PDU_LENGTH as usize];
+    /// let mut tab_bytes = vec![0u8; Modbus::MAX_PDU_LENGTH as usize];
     ///
-    /// let rc = modbus.report_slave_id(MODBUS_MAX_PDU_LENGTH as i32, &mut tab_bytes);
+    /// let rc = modbus.report_slave_id(Modbus::MAX_PDU_LENGTH as i32, &mut tab_bytes);
     /// match rc {
     ///     Ok(_) => println!("Run Status Indicator: {}", match tab_bytes[1] { 1 => "ON", _ => "OFF"} ),
     ///     Err(e) => println!("Modbus Error: {}", e),
@@ -468,10 +468,10 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, FunctionCode, MODBUS_TCP_MAX_ADU_LENGTH};
+    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, FunctionCode};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::READ_HOLDING_REGISTERS as u8, 0x00, 0x01, 0x0, 0x05];
-    /// let mut response: Vec<u8> = vec![0; MODBUS_TCP_MAX_ADU_LENGTH as usize];
+    /// let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::ReadHoldingRegisters as u8, 0x00, 0x01, 0x0, 0x05];
+    /// let mut response: Vec<u8> = vec![0];
     ///
     /// assert_eq!(modbus.send_raw_request(&mut raw_request).unwrap(), 12);
     /// assert_eq!(modbus.receive_confirmation(&mut response).unwrap(), 19);
@@ -515,10 +515,10 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, MODBUS_MAX_ADU_LENGTH};
+    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let mut response: Vec<u8> = vec![0; MODBUS_MAX_ADU_LENGTH as usize];
+    /// let mut response: Vec<u8> = vec![0; Modbus::MAX_ADU_LENGTH as usize];
     ///
     /// assert_eq!(modbus.receive_confirmation(&mut response).unwrap(), 1);
     /// ```
@@ -570,7 +570,7 @@ impl ModbusClient for Modbus {
     /// use libmodbus_rs::Exception;
     ///
     /// let request: Vec<u8> = vec![0x01];
-    /// assert_eq!(modbus.reply_exception(&request, Exception::ACKNOWLEDGE as u32).unwrap(), 9);
+    /// assert_eq!(modbus.reply_exception(&request, Exception::Acknowledge as u32).unwrap(), 9);
     /// ```
     fn reply_exception(&self, request: &[u8], exception_code: u32) -> Result<i32> {
         unsafe {

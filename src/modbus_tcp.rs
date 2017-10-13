@@ -1,5 +1,4 @@
 use errors::*;
-use libc::c_int;
 use libmodbus_sys;
 use modbus::Modbus;
 use std::ffi::CString;
@@ -13,7 +12,7 @@ use std::io::Error;
 ///     - [`new_tcp()`](struct.Modbus.html#method.new_tcp)
 ///
 pub trait ModbusTCP {
-    fn new_tcp(ip: &str, port: u32) -> Result<Modbus>;
+    fn new_tcp(ip: &str, port: i32) -> Result<Modbus>;
     fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32>;
     fn tcp_listen(&mut self, num_connection: i32) -> Result<i32>;
 }
@@ -32,20 +31,20 @@ impl ModbusTCP for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusTCP, MODBUS_TCP_DEFAULT_PORT};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let modbus = Modbus::new_tcp("127.0.0.1", MODBUS_TCP_DEFAULT_PORT).unwrap();
+    /// let modbus = Modbus::new_tcp("127.0.0.1", Modbus::TCP_DEFAULT_PORT as i32).unwrap();
     ///
     /// match modbus.connect() {
     ///     Ok(_) => {  }
     ///     Err(e) => println!("Error: {}", e),
     /// }
     /// ```
-    fn new_tcp(ip: &str, port: u32) -> Result<Modbus> {
+    fn new_tcp(ip: &str, port: i32) -> Result<Modbus> {
         unsafe {
             let ip = CString::new(ip).unwrap();
-            let ctx = libmodbus_sys::modbus_new_tcp(ip.as_ptr(), port as c_int);
+            let ctx = libmodbus_sys::modbus_new_tcp(ip.as_ptr(), port);
 
             if ctx.is_null() {
                 bail!(Error::last_os_error())
@@ -67,7 +66,7 @@ impl ModbusTCP for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusTCP, MODBUS_TCP_DEFAULT_PORT};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut socket = modbus.tcp_listen(1).unwrap();
@@ -97,7 +96,7 @@ impl ModbusTCP for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusTCP, MODBUS_TCP_DEFAULT_PORT};
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///

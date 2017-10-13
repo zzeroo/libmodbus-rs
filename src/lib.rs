@@ -96,17 +96,22 @@ html_root_url = "https://zzeroo.com/")]
 //!
 //! ### Common
 //!
-//! Common methods to modify or change the current modbus context. Some of these function are not nessesary in Rust (e.g. because the Drop trait and so on)
+//! Common methods to modify or change the current modbus context. Some of these function are not nessesary in Rust
+//! (e.g. because the Drop trait and so on)
 //!
 //! * Free libmodbus context
 //!     - [`free()`](struct.Modbus.html#method.free) **It should normaly not nessesary to call this function.**<br />
-//!     Memory handling under Rust controlls the [`Drop trait`](https://doc.rust-lang.org/std/ops/trait.Drop.html) in "the book" you find [more information about](https://doc.rust-lang.org/book/ffi.html#destructors).
+//! Memory handling under Rust controlls the [`Drop trait`](https://doc.rust-lang.org/std/ops/trait.Drop.html) in
+//! "the book" you find [more information about](https://doc.rust-lang.org/book/ffi.html#destructors).
 //! * Set slave ID
 //!     - [`set_slave()`](struct.Modbus.html#method.set_slave)
 //! * Enable debug mode
 //!     - [`set_debug()`](struct.Modbus.html#method.set_debug)
 //! * Timeout settings
-//!     - [`get_byte_timeout()`](struct.Modbus.html#method.get_byte_timeout) [`set_byte_timeout()`](struct.Modbus.html#method.set_byte_timeout) [`get_response_timeout()`](struct.Modbus.html#method.get_response_timeout) [`set_response_timeout()`](struct.Modbus.html#method.set_response_timeout)
+//! - [`get_byte_timeout()`](struct.Modbus.html#method.get_byte_timeout)
+//! [`set_byte_timeout()`](struct.Modbus.html#method.set_byte_timeout)
+//! [`get_response_timeout()`](struct.Modbus.html#method.get_response_timeout)
+//! [`set_response_timeout()`](struct.Modbus.html#method.set_response_timeout)
 //! * Error recovery mod
 //!     - [`set_error_recovery()`](struct.Modbus.html#method.set_error_recovery)
 //! * Setter/getter of internal socket
@@ -168,9 +173,9 @@ html_root_url = "https://zzeroo.com/")]
 
 extern crate libc;
 extern crate libmodbus_sys;
-#[macro_use] extern crate error_chain;
+#[macro_use]
+extern crate error_chain;
 
-mod enums;
 mod modbus_client;
 mod modbus_mapping;
 mod modbus_rtu;
@@ -180,24 +185,12 @@ mod modbus_tcp;
 mod modbus;
 pub mod errors;
 
-pub use self::enums::{ErrorRecoveryMode, Exception, FunctionCode};
 pub use self::modbus_client::ModbusClient;
 pub use self::modbus_mapping::ModbusMapping;
 pub use self::modbus_rtu::{ModbusRTU, RequestToSendMode, SerialMode};
 pub use self::modbus_server::ModbusServer;
 pub use self::modbus_tcp_pi::ModbusTCPPI;
 pub use self::modbus_tcp::ModbusTCP;
-pub use self::modbus::{Modbus, Timeout};
-pub use self::modbus::{set_bits_from_byte, set_bits_from_bytes, get_byte_from_bits,
-    get_float_abcd, set_float_abcd, get_float_badc, set_float_badc,
-    get_float_cdab, set_float_cdab, get_float_dcba, set_float_dcba,
-};
-
-
-pub use libmodbus_sys::MODBUS_MAX_PDU_LENGTH;
-pub use libmodbus_sys::MODBUS_MAX_ADU_LENGTH;
-pub use libmodbus_sys::MODBUS_ENOBASE;
-pub use libmodbus_sys::MODBUS_TCP_DEFAULT_PORT;
-pub use libmodbus_sys::MODBUS_TCP_SLAVE;
-pub use libmodbus_sys::MODBUS_TCP_MAX_ADU_LENGTH;
-pub use libmodbus_sys::MODBUS_RTU_MAX_ADU_LENGTH;
+pub use self::modbus::{Modbus, Timeout, ErrorRecoveryMode, Exception, FunctionCode};
+pub use self::modbus::{set_bits_from_byte, set_bits_from_bytes, get_byte_from_bits, get_float_abcd, set_float_abcd,
+                       get_float_badc, set_float_badc, get_float_cdab, set_float_cdab, get_float_dcba, set_float_dcba};
