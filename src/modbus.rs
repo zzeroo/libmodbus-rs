@@ -4,21 +4,6 @@ use libc::{c_int, c_uint};
 use libmodbus_sys;
 use std::io::Error;
 
-// pub enum _bindgen_ty_10 {
-//     MODBUS_EXCEPTION_ILLEGAL_FUNCTION = 1,
-//     MODBUS_EXCEPTION_ILLEGAL_DATA_ADDRESS = 2,
-//     MODBUS_EXCEPTION_ILLEGAL_DATA_VALUE = 3,
-//     MODBUS_EXCEPTION_SLAVE_OR_SERVER_FAILURE = 4,
-//     MODBUS_EXCEPTION_ACKNOWLEDGE = 5,
-//     MODBUS_EXCEPTION_SLAVE_OR_SERVER_BUSY = 6,
-//     MODBUS_EXCEPTION_NEGATIVE_ACKNOWLEDGE = 7,
-//     MODBUS_EXCEPTION_MEMORY_PARITY = 8,
-//     MODBUS_EXCEPTION_NOT_DEFINED = 9,
-//     MODBUS_EXCEPTION_GATEWAY_PATH = 10,
-//     MODBUS_EXCEPTION_GATEWAY_TARGET = 11,
-//     MODBUS_EXCEPTION_MAX = 12,
-// }
-
 /// Modbus protocol exceptions
 ///
 /// Documentation source: https://en.wikipedia.org/wiki/Modbus#Main_Modbus_exception_codes
@@ -29,29 +14,29 @@ pub enum Exception {
     IllegalFunction = 1,
     /// (2) Illegal Data Address - Data address of some or all the required entities are not allowed or do not exist in
     /// slave
-    IllegalDataAddress,
+    IllegalDataAddress = 2,
     /// (3) Illegal Data Value - Value is not accepted by slave
-    IllegalDataValue,
+    IllegalDataValue = 3,
     /// (4) Slave Device Failure - Unrecoverable error occurred while slave was attempting to perform requested action
-    SlaveOrServerFailure,
+    SlaveOrServerFailure = 4,
     /// (5) Acknowledge - Slave has accepted request and is processing it, but a long duration of time is required.
     /// This response is returned to prevent a timeout error from occurring in the master. Master can next issue a Poll
     /// Program Complete message to determine whether processing is completed
-    Acknowledge,
+    Acknowledge = 5,
     /// (6) Slave Device Busy - Slave is engaged in processing a long-duration command. Master should retry later
-    SlaveDeviceBusy,
+    SlaveDeviceBusy = 6,
     /// (7) Negative Acknowledge - Slave cannot perform the programming functions. Master should request diagnostic or
     /// error information from slave
-    NegativeAcknowledge,
+    NegativeAcknowledge = 7,
     /// (8) Memory Parity Error - Slave detected a parity error in memory. Master can retry the request, but service
     /// may be required on the slave device
-    MemoryParity,
+    MemoryParity = 8,
     /// (9) Not defined
-    NotDefined,
+    NotDefined = 9,
     /// (10) Gateway Path Unavailable - Specialized for Modbus gateways. Indicates a misconfigured gateway
-    GatewayPath,
+    GatewayPath = 10,
     /// (11) Gateway Target Device Failed to Respond - Specialized for Modbus gateways. Sent when slave fails to respond
-    GatewayTarget,
+    GatewayTarget = 11,
 }
 
 /// Modbus function codes

@@ -21,7 +21,7 @@ Include the dependencies into your `Cargo.toml` file.
 
 ```toml
 [dependencies]
-libmodbus-rs = "0.4"
+libmodbus-rs = "0.5"
 ```
 
 ### or development (github master)
@@ -37,7 +37,7 @@ For example if you what to build an modbus server, in the modbus tcp context, in
 ```rust
 extern crate libmodbus_rs;
 
-use libmodbus_rs::{Modbus, ModbusTCP, ModbusServer};
+use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};
 ```
 
 The examples in the examples directory show this.

@@ -59,10 +59,10 @@ pub trait ModbusRTU {
     fn rtu_get_serial_mode(&self) -> Result<SerialMode>;
     fn rtu_set_serial_mode(&mut self, mode: SerialMode) -> Result<()>;
     fn rtu_get_rts(&self) -> Result<RequestToSendMode>;
-    fn rtu_set_rts(&mut self, mode: RequestToSendMode) -> Result<RequestToSendMode>;
+    fn rtu_set_rts(&mut self, mode: RequestToSendMode) -> Result<()>;
     fn rtu_set_custom_rts(&mut self, _mode: RequestToSendMode) -> Result<i32>;
     fn rtu_get_rts_delay(&self) -> Result<i32>;
-    fn rtu_set_rts_delay(&mut self, us: i32) -> Result<i32>;
+    fn rtu_set_rts_delay(&mut self, us: i32) -> Result<()>;
 }
 
 impl ModbusRTU for Modbus {
@@ -229,14 +229,12 @@ impl ModbusRTU for Modbus {
     ///
     /// assert!(modbus.rtu_set_rts(RequestToSendMode::RtuRtsUp).is_ok());
     /// ```
-    fn rtu_set_rts(&mut self, mode: RequestToSendMode) -> Result<RequestToSendMode> {
+    fn rtu_set_rts(&mut self, mode: RequestToSendMode) -> Result<()> {
         unsafe {
-            let mode = libmodbus_sys::modbus_rtu_set_rts(self.ctx, mode as c_int) as u32;
-            match mode {
-                libmodbus_sys::MODBUS_RTU_RTS_NONE => Ok(RequestToSendMode::RtuRtsNone),
-                libmodbus_sys::MODBUS_RTU_RTS_UP => Ok(RequestToSendMode::RtuRtsUp),
-                libmodbus_sys::MODBUS_RTU_RTS_DOWN => Ok(RequestToSendMode::RtuRtsDown),
-                _ => bail!(Error::last_os_error()),
+            match libmodbus_sys::modbus_rtu_set_rts(self.ctx, mode as c_int) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
@@ -326,8 +324,8 @@ impl ModbusRTU for Modbus {
     ///
     /// # Return value
     ///
-    /// The [`rtu_set_rts_delay()`](#method.rtu_set_rts_delay) function shall return 0 if successful.
-    /// Otherwise it shall return `ModbusError::NotRTU`.
+    /// The [`rtu_set_rts_delay()`](#method.rtu_set_rts_delay) function return an OK Result if successful. Otherwise it
+    /// contains an Error.
     ///
     /// # Examples
     ///
@@ -335,13 +333,14 @@ impl ModbusRTU for Modbus {
     /// use libmodbus_rs::{Modbus, ModbusRTU};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
-    /// modbus.rtu_set_rts_delay(100);
+    /// let _ = modbus.rtu_set_rts_delay(100).unwrap();
     /// ```
-    fn rtu_set_rts_delay(&mut self, us: i32) -> Result<i32> {
+    fn rtu_set_rts_delay(&mut self, us: i32) -> Result<()> {
         unsafe {
             match libmodbus_sys::modbus_rtu_set_rts_delay(self.ctx, us as c_int) {
                 -1 => bail!(Error::last_os_error()),
-                _ => Ok(0),
+                0 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
