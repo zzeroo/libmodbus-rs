@@ -7,7 +7,6 @@ use std::io::Error;
 /// Modbus protocol exceptions
 ///
 /// Documentation source: https://en.wikipedia.org/wiki/Modbus#Main_Modbus_exception_codes
-#[repr(C)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum Exception {
     /// (1) Illegal Function - Function code received in the query is not recognized or allowed by slave
@@ -42,7 +41,6 @@ pub enum Exception {
 /// Modbus function codes
 ///
 /// Documentation source: https://en.wikipedia.org/wiki/Modbus#Supported_function_codes
-#[repr(C)]
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum FunctionCode {
     /// 0x01 Read Coils
@@ -71,7 +69,6 @@ pub enum FunctionCode {
     WriteAndReadRegisters = 23,
 }
 
-#[repr(u32)]
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum ErrorRecoveryMode {
     None = 0,
@@ -80,6 +77,8 @@ pub enum ErrorRecoveryMode {
 }
 
 /// Timeout struct
+///
+/// * The value of **usec** argument must be in the range 0 to 999999.
 // For use with timeout methods such as get_byte_timeout and set_byte_timeout
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Timeout {
@@ -123,11 +122,17 @@ impl Modbus {
     ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// assert!(modbus.connect().is_ok())
+    /// // create server
+    /// let mut server = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// // create client
+    /// let client = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// // start server in listen mode
+    /// let _ = server.tcp_listen(1).unwrap();
+    ///
+    /// assert!(client.connect().is_ok())
     /// ```
     pub fn connect(&self) -> Result<()> {
         unsafe {
@@ -140,6 +145,7 @@ impl Modbus {
     }
 
     /// `flush` - flush non-transmitted data
+    ///
     /// The [`flush()`](#method.flush) function shall discard data received but not read to the socket or file
     /// descriptor associated to the context ctx.
     ///
@@ -235,7 +241,7 @@ impl Modbus {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
@@ -254,20 +260,22 @@ impl Modbus {
 
     /// `get_byte_timeout` - get timeout between bytes
     ///
-    /// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a tupple with the timeout interval between
-    /// two consecutive bytes of the same message `Result<(timeout_sec, timeout_usec)>`.
+    /// [`get_byte_timeout()`](#method.get_byte_timeout) function returns a
+    /// [`Timeout`](struct.Timeout.html) with the timeout interval between
+    /// two consecutive bytes of the same message.
     ///
     /// # Return value
     ///
-    /// The function return a Result containing a `Timeout` if successful. Otherwise it contains an Error.
+    /// The function return a Result containing a [`Timeout`](struct.Timeout.html) if successful.
+    /// Otherwise it contains an Error.
     ///
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// assert!(modbus.get_byte_timeout().is_ok());
+    /// assert_eq!(modbus.get_byte_timeout().unwrap(), Timeout { sec: 0, usec: 500000 });
     /// ```
     pub fn get_byte_timeout(&self) -> Result<Timeout> {
         let mut timeout = Timeout { sec: 0, usec: 0 };
@@ -288,9 +296,9 @@ impl Modbus {
     /// longer than the defined timeout,
     /// an ETIMEDOUT error will be raised by the function waiting for a response.
     ///
-    /// The value of **timeout_usec** argument must be in the range 0 to 999999.
+    /// The value of **usec** argument must be in the range 0 to 999999.
     ///
-    /// If both **timeout_sec** and **timeout_usec** are zero, this timeout will not be used at all. In this case,
+    /// If both **sec** and **usec** are zero, this timeout will not be used at all. In this case,
     /// [`set_byte_timeout()`](#method.set_byte_timeout)
     /// governs the entire handling of the response, the full confirmation response must be received before expiration
     /// of the response timeout.
@@ -302,16 +310,14 @@ impl Modbus {
     ///
     /// # Parameters
     ///
-    /// * `timeout`  - Timeout struct with `timeout_sec` and `timeout_usec`
+    /// * `timeout`  - Timeout struct with `sec` and `usec`
     ///
     /// # Examples
     ///
     /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    ///
-    /// let timeout = Timeout { sec: 1, usec: 500 };
-    ///
+    /// let timeout = Timeout { sec: 1, usec: 500000 };
     /// assert!(modbus.set_byte_timeout(timeout).is_ok());
     /// ```
     pub fn set_byte_timeout(&mut self, timeout: Timeout) -> Result<()> {
@@ -328,19 +334,20 @@ impl Modbus {
     ///
     /// The [`get_response_timeout()`](#method.get_response_timeout) function shall return the timeout interval used to
     /// wait for a response
-    /// in the **timeout_sec** and **timeout_usec** arguments.
+    /// in the **sec** and **usec** arguments.
     ///
     /// # Return value
     ///
-    /// The function return a Result containing a `Timeout` if successful. Otherwise it contains an Error.
+    /// The function return a Result containing a [`Timeout`](struct.Timeout.html) if successful.
+    /// Otherwise it contains an Error.
     ///
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// assert!(modbus.get_response_timeout().is_ok());
+    /// assert_eq!(modbus.get_response_timeout().unwrap(), Timeout { sec: 0, usec: 500000 });
     /// ```
     pub fn get_response_timeout(&self) -> Result<Timeout> {
         let mut timeout = Timeout { sec: 0, usec: 0 };
@@ -361,10 +368,9 @@ impl Modbus {
     /// an ETIMEDOUT error will be raised by the function waiting for a response. When byte timeout is disabled,
     /// the full confirmation response must be received before expiration of the response timeout.
     ///
-    /// The value of **timeout_usec** argument must be in the range 0 to 999999.
     ///
-    /// If both **timeout_sec** and **timeout_usec** are zero, this timeout will not be used at all. In this case,
-    /// [`set_response_timeout()`](#method.set_response_timeout)
+    /// If the [`Timeout`](struct.Timeout.html) members are both **sec** and **usec** are zero,
+    /// this timeout will not be used at all. In this case, [`set_response_timeout()`](#method.set_response_timeout)
     /// governs the entire handling of the response, the full confirmation response must be received before expiration
     /// of the response timeout.
     /// When a byte timeout is set, the response timeout is only used to wait for until the first byte of the response.
@@ -375,17 +381,14 @@ impl Modbus {
     ///
     /// # Parameters
     ///
-    /// * `timeout_sec`  - timeout sec
-    /// * `timeout_usec` - timeout usec
+    /// * [`Timeout`](struct.Timeout.html)  - Timeout
     ///
     /// # Examples
     ///
     /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    ///
-    /// let timeout = Timeout { sec: 1, usec: 500 };
-    ///
+    /// let timeout = Timeout { sec: 1, usec: 500000 };
     /// assert!(modbus.set_response_timeout(timeout).is_ok());
     /// ```
     pub fn set_response_timeout(&mut self, timeout: Timeout) -> Result<()> {
@@ -401,15 +404,13 @@ impl Modbus {
     /// `set_error_recovery` - set the error recovery mode
     ///
     /// The [`set_error_recovery()`](#method.set_error_recovery) function shall set the error recovery mode to apply
-    /// when the connection fails or
-    /// the byte received is not expected. The argument error_recovery may be bitwise-or’ed with zero or more of the
-    /// following constants.
+    /// when the connection fails or the byte received is not expected.
+    /// The argument error_recovery may be bitwise-or’ed with zero or more of the following constants.
     ///
-    /// By default there is no error recovery (MODBUS_ERROR_RECOVERY_NONE) so the application is responsible for
-    /// controlling the error values
-    /// returned by libmodbus functions and for handling them if necessary.
+    /// By default there is no error recovery (Modbus::ERROR_RECOVERY_NONE) so the application is responsible for
+    /// controlling the error values returned by libmodbus functions and for handling them if necessary.
     ///
-    /// When MODBUS_ERROR_RECOVERY_LINK is set, the library will attempt an reconnection after a delay defined by
+    /// When Modbus::ERROR_RECOVERY_LINK is set, the library will attempt an reconnection after a delay defined by
     /// response timeout of the libmodbus context.
     /// This mode will try an infinite close/connect loop until success on send call and will just try one time to
     /// re-establish the connection on
@@ -419,7 +420,7 @@ impl Modbus {
     /// (eg. timeout of select call).
     /// The reconnection attempt can hang for several seconds if the network to the remote target unit is down.
     ///
-    /// When MODBUS_ERROR_RECOVERY_PROTOCOL is set, a sleep and flush sequence will be used to clean up the ongoing
+    /// When Modbus::ERROR_RECOVERY_PROTOCOL is set, a sleep and flush sequence will be used to clean up the ongoing
     /// communication, this can
     /// occurs when the message length is invalid, the TID is wrong or the received function code is not the expected
     /// one.
