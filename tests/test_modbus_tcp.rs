@@ -11,16 +11,19 @@ fn new_tcp() {
 #[test]
 #[ignore]
 fn tcp_accept() {
-    let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    match modbus.tcp_listen(1) {
-        Ok(mut socket) => assert_eq!(modbus.tcp_accept(&mut socket).unwrap(), 1),
+    let mut server = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    match server.tcp_listen(1) {
+        Ok(mut socket) => assert_eq!(server.tcp_accept(&mut socket).unwrap(), 1),
         _ => panic!("could not listen to socket"),
     }
 }
 
 #[test]
-#[ignore]
 fn tcp_listen() {
-    let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    assert!(modbus.tcp_listen(1).is_ok());
+    let mut server = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    let client = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    match server.tcp_listen(1) {
+        Ok(mut _socket) => assert!(client.connect().is_ok()),
+        _ => panic!("could not listen to socket"),
+    }
 }
