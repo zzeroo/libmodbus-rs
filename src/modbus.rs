@@ -441,7 +441,7 @@ impl Modbus {
     /// use libmodbus_rs::{Modbus, ModbusTCP, ErrorRecoveryMode};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// //assert!(modbus.set_error_recovery(ErrorRecoveryMode::LINK | ErrorRecoveryMode::PROTOCOL))
+    /// //assert!(modbus.set_error_recovery(ErrorRecoveryMode::LINK | ErrorRecoveryMode::PROTOCOL));
     /// ```
     pub fn set_error_recovery(&mut self, _error_recovery_mode: ErrorRecoveryMode) -> Result<i32> {
         unimplemented!()
@@ -496,11 +496,11 @@ impl Modbus {
     ///
     /// # Examples
     ///
-    /// ```rust,no_run
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    ///
-    /// let socket = modbus.get_socket().unwrap();
+    /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let _ = modbus.set_socket(1337).unwrap();
+    /// assert_eq!(modbus.get_socket().unwrap(), 1337);
     /// ```
     pub fn get_socket(&self) -> Result<i32> {
         unsafe {
@@ -543,16 +543,8 @@ impl Modbus {
     ///
     /// ```
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    ///
-    /// match modbus.connect() {
-    ///     Ok(_) => {  }
-    ///     Err(e) => println!("Error: {}", e),
-    /// }
-    ///
     /// modbus.close();
-    /// modbus.free();
     /// ```
     pub fn close(&self) {
         unsafe {
@@ -570,15 +562,7 @@ impl Modbus {
     ///
     /// ```
     /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    ///
-    /// match modbus.connect() {
-    ///     Ok(_) => {  }
-    ///     Err(e) => println!("Error: {}", e),
-    /// }
-    ///
-    /// modbus.close();
     /// modbus.free();
     /// ```
     pub fn free(&mut self) {

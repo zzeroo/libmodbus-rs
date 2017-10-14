@@ -105,41 +105,40 @@ fn set_response_timeout() {
 #[test]
 #[ignore]
 fn set_error_recovery() {
-    let _modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    // use libmodbus_rs::ErrorRecoveryMode;
+    // let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    // assert!(modbus.set_error_recovery(ErrorRecoveryMode::Link | ErrorRecoveryMode::Protocol).is_ok());
 }
 
 #[test]
-#[ignore]
-
 fn set_socket() {
-    let _modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    // (&mut self, socket: i32) -> Result<i32>
+    let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    assert_eq!(modbus.set_socket(1337).unwrap(), 0);
 }
 
 #[test]
-#[ignore]
 fn get_socket() {
-    let _modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    // (&self) -> Result<i32>
+    let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    let _ = modbus.set_socket(1337).unwrap();
+    assert_eq!(modbus.get_socket().unwrap(), 1337);
 }
 
 #[test]
-#[ignore]
 fn get_header_length() {
-    let _modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    // (&self) -> i32
+    let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    assert_eq!(modbus.get_header_length(), 7);
 }
 
 #[test]
 #[ignore]
 fn close() {
-    let _modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    // (&self)
+    let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    modbus.close();
 }
 
 #[test]
 #[ignore]
 fn free() {
-    let _modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    // (&mut self)
+    let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    modbus.free();
 }
