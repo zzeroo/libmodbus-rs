@@ -13,11 +13,11 @@
 /// - read_registers
 ///
 /// All these functions are called with random values on a address range defined by the following consts
-const LOOPS: i32            = 1;    // Number of loops
+const LOOPS: i32 = 1;    // Number of loops
 #[allow(dead_code)] // only used in RTU context
-const SERVER_ID: i32        = 17;   // Modbus ID Server
-const ADDRESS_START: usize  = 0;
-const ADDRESS_END: usize    = 99;
+const SERVER_ID: i32 = 17;   // Modbus ID Server
+const ADDRESS_START: usize = 0;
+const ADDRESS_END: usize = 99;
 
 extern crate rand;
 extern crate libmodbus_rs;
@@ -71,30 +71,37 @@ fn run() -> Result<()> {
             num_bit = ADDRESS_END - address;
 
             // WRITE BIT
-            let rc = modbus.write_bit(address as i32, match request_bits[0] { 0 => false, _ => true } );
+            let rc = modbus.write_bit(address as i32,
+                                      match request_bits[0] {
+                                          0 => false,
+                                          _ => true,
+                                      });
             match rc {
-                Err(_) => { // Error
+                Err(_) => {
+                    // Error
                     println!("ERROR could not write_bit ({:?})", rc);
                     println!("Address = {}, value = {}", address, request_bits[0]);
                     num_failures += 1;
-                }
+                },
                 Ok(_len) => {
-                    let rc = modbus.read_bits(address as i32, 1, &mut response_bits);
+                    // let rc = modbus.read_bits(address as i32, 1, &mut response_bits);
+                    // FIXME: refactor `read_` methods
+                    let rc = modbus.read_bits(address as i32, 1);
                     match rc {
                         Err(_) => {
                             println!("ERROR could not read_bits single ({:?})", rc);
                             println!("address = {}", address);
                             num_failures += 1;
-                        }
+                        },
                         Ok(_) => {
                             if request_bits[0] != response_bits[0] {
                                 println!("ERROR could not read_bits single ({:?})", rc);
                                 println!("address = {}", address);
                                 num_failures += 1;
                             }
-                        }
+                        },
                     }
-                }
+                },
             }
 
             // MULTIPLE BITS
@@ -104,22 +111,26 @@ fn run() -> Result<()> {
                     println!("ERROR modbus_write_bits ({:?})", rc);
                     println!("Address = {}, num_bit = {}", address, num_bit);
                     num_failures += 1;
-                }
+                },
                 Ok(len) => {
                     if len != num_bit as i32 {
                         println!("ERROR modbus_write_bits ({:?})", rc);
                         println!("Address = {}, num_bit = {}", address, num_bit);
                         num_failures += 1;
                     }
-                    let rc = modbus.read_bits(address as i32, num_bit as i32, &mut response_bits);
+                    // FIXME: refactor `read_` methods
+                    // let rc = modbus.read_bits(address as i32, num_bit as i32, &mut response_bits);
+                    let rc = modbus.read_bits(address as i32, num_bit as i32);
                     match rc {
                         Err(_) => {
                             println!("ERROR modbus_read_bits ({:?})", rc);
                             println!("Address = {}, num_bit = {}", address, num_bit);
                             num_failures += 1;
-                        }
+                        },
                         Ok(len) => {
-                            if len != num_bit as i32 {
+                            // FIXME: refactor `read_` methods
+                            // if len != num_bit as i32 {
+                            if len.len() == 0 {
                                 println!("ERROR modbus_read_bits");
                                 println!("Address = {}, num_bit = {}", address, num_bit);
                                 num_failures += 1;
@@ -127,14 +138,17 @@ fn run() -> Result<()> {
                             for i in 0..num_bit {
                                 if response_bits[i] != request_bits[i] {
                                     println!("ERROR modbus_read_bits");
-                                    println!("Address = {address}, value {request} (0x{request:X}) != {response} (0x{response:X})",
-                                        address=address, request=request_bits[i], response=response_bits[i]);
+                                    println!("Address = {address}, value {request} (0x{request:X}) != {response} \
+                                              (0x{response:X})",
+                                             address = address,
+                                             request = request_bits[i],
+                                             response = response_bits[i]);
                                     num_failures += 1;
                                 }
                             }
-                        }
+                        },
                     }
-                }
+                },
             }
 
             //  SINGLE REGISTER
@@ -143,9 +157,10 @@ fn run() -> Result<()> {
                 Err(_) => {
                     println!("ERROR modbus_write_register ({:?})", rc);
                     println!("Address = {}, value = {request} (0x{request:X})",
-                       address, request=request_registers[0]);
+                             address,
+                             request = request_registers[0]);
                     num_failures += 1;
-                }
+                },
                 Ok(_len) => {
                     let rc = modbus.read_registers(address as i32, 1, &mut response_registers);
                     match rc {
@@ -153,17 +168,20 @@ fn run() -> Result<()> {
                             println!("ERROR modbus_read_registers single ({:?})", rc);
                             println!("Address = {}", address);
                             num_failures += 1;
-                        }
+                        },
                         Ok(_len) => {
                             if request_registers[0] != response_registers[0] {
                                 println!("ERROR modbus_read_registers single");
-                                println!("Address = {}, value {request} (0x{request:X}) != {response} (0x{response:X})",
-                                       address, request=request_registers[0], response=response_registers[0]);
+                                println!("Address = {}, value {request} (0x{request:X}) != {response} \
+                                          (0x{response:X})",
+                                         address,
+                                         request = request_registers[0],
+                                         response = response_registers[0]);
                                 num_failures += 1;
                             }
-                        }
+                        },
                     }
-                }
+                },
             }
 
             // MULTIPLE REGISTERS
@@ -173,7 +191,7 @@ fn run() -> Result<()> {
                     println!("ERROR modbus_write_registers ({:?})", rc);
                     println!("Address = {}, num_bit = {}", address, num_bit);
                     num_failures += 1;
-                }
+                },
                 Ok(_len) => {
                     let rc = modbus.read_registers(address as i32, num_bit as i32, &mut response_registers);
                     match rc {
@@ -181,36 +199,45 @@ fn run() -> Result<()> {
                             println!("ERROR modbus_read_registers ({:?})", rc);
                             println!("Address = {}, num_bit = {}", address, num_bit);
                             num_failures += 1;
-                        }
+                        },
                         Ok(_len) => {
                             for i in 0..num_bit {
                                 if request_registers[i] != response_registers[i] {
                                     println!("ERROR modbus_read_registers");
-                                    println!("Address = {}, value {request} (0x{request:X}) != {response} (0x{response:X})",
-                                        address, request=request_registers[i], response=response_registers[i]);
+                                    println!("Address = {}, value {request} (0x{request:X}) != {response} \
+                                              (0x{response:X})",
+                                             address,
+                                             request = request_registers[i],
+                                             response = response_registers[i]);
                                     num_failures += 1;
                                 }
                             }
-                        }
+                        },
                     }
-                }
+                },
             }
 
             // R/W MULTIPLE REGISTERS
-            let rc = modbus.write_and_read_registers(address as i32, num_bit as i32, &mut rw_request_registers,
-                                                     address as i32, num_bit as i32, &mut response_registers);
+            let rc = modbus.write_and_read_registers(address as i32,
+                                                     num_bit as i32,
+                                                     &mut rw_request_registers,
+                                                     address as i32,
+                                                     num_bit as i32,
+                                                     &mut response_registers);
             match rc {
                 Err(_) => {
                     println!("ERROR modbus_read_and_write_registers ({:?})", rc);
                     println!("Address = {}, num_bit = {}", address, num_bit);
                     num_failures += 1;
-                }
+                },
                 Ok(_len) => {
                     for i in 0..num_bit {
                         if response_registers[i] != rw_request_registers[i] {
                             println!("ERROR modbus_read_and_write_registers READ");
                             println!("Address = {}, value {response} (0x{response:X}) != {request} (0x{request:X})",
-                                address, response=response_registers[i], request=rw_request_registers[i]);
+                                     address,
+                                     response = response_registers[i],
+                                     request = rw_request_registers[i]);
                             num_failures += 1;
                         }
                     }
@@ -221,19 +248,22 @@ fn run() -> Result<()> {
                             println!("ERROR modbus_read_registers ({:?})", rc);
                             println!("Address = {}, num_bit = {}", address, num_bit);
                             num_failures += 1;
-                        }
+                        },
                         Ok(_len) => {
                             for i in 0..num_bit {
                                 if rw_request_registers[i] != response_registers[i] {
                                     println!("ERROR modbus_read_and_write_registers WRITE");
-                                    println!("Address = {}, value {request} (0x{request:X}) != {response} (0x{response:X})",
-                                        address, request=rw_request_registers[i], response=response_registers[i]);
+                                    println!("Address = {}, value {request} (0x{request:X}) != {response} \
+                                              (0x{response:X})",
+                                             address,
+                                             request = rw_request_registers[i],
+                                             response = response_registers[i]);
                                     num_failures += 1;
                                 }
                             }
-                        }
+                        },
                     }
-                }
+                },
             }
         }
     }

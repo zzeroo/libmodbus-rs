@@ -96,20 +96,20 @@ pub struct Modbus {
 }
 
 impl Modbus {
+    // Constants
     pub const ENOBASE: u32 = libmodbus_sys::MODBUS_ENOBASE;
-    pub const MAX_ADU_LENGTH: u32 = libmodbus_sys::MODBUS_MAX_ADU_LENGTH;
-    pub const MAX_PDU_LENGTH: u32 = libmodbus_sys::MODBUS_MAX_PDU_LENGTH;
-    pub const MAX_READ_BITS: u32 = libmodbus_sys::MODBUS_MAX_READ_BITS;
-    pub const MAX_READ_REGISTERS: u32 = libmodbus_sys::MODBUS_MAX_READ_REGISTERS;
-    pub const MAX_WR_READ_REGISTERS: u32 = libmodbus_sys::MODBUS_MAX_WR_READ_REGISTERS;
-    pub const MAX_WR_WRITE_REGISTERS: u32 = libmodbus_sys::MODBUS_MAX_WR_WRITE_REGISTERS;
-    pub const MAX_WRITE_BITS: u32 = libmodbus_sys::MODBUS_MAX_WRITE_BITS;
-    pub const MAX_WRITE_REGISTERS: u32 = libmodbus_sys::MODBUS_MAX_WRITE_REGISTERS;
-    pub const RTU_MAX_ADU_LENGTH: u32 = libmodbus_sys::MODBUS_RTU_MAX_ADU_LENGTH;
+    pub const MAX_ADU_LENGTH: usize = libmodbus_sys::MODBUS_MAX_ADU_LENGTH as usize;
+    pub const MAX_PDU_LENGTH: usize = libmodbus_sys::MODBUS_MAX_PDU_LENGTH as usize;
+    pub const MAX_READ_BITS: usize = libmodbus_sys::MODBUS_MAX_READ_BITS as usize;
+    pub const MAX_READ_REGISTERS: usize = libmodbus_sys::MODBUS_MAX_READ_REGISTERS as usize;
+    pub const MAX_WR_READ_REGISTERS: usize = libmodbus_sys::MODBUS_MAX_WR_READ_REGISTERS as usize;
+    pub const MAX_WR_WRITE_REGISTERS: usize = libmodbus_sys::MODBUS_MAX_WR_WRITE_REGISTERS as usize;
+    pub const MAX_WRITE_BITS: usize = libmodbus_sys::MODBUS_MAX_WRITE_BITS as usize;
+    pub const MAX_WRITE_REGISTERS: usize = libmodbus_sys::MODBUS_MAX_WRITE_REGISTERS as usize;
+    pub const RTU_MAX_ADU_LENGTH: usize = libmodbus_sys::MODBUS_RTU_MAX_ADU_LENGTH as usize;
     pub const TCP_DEFAULT_PORT: u32 = libmodbus_sys::MODBUS_TCP_DEFAULT_PORT;
     pub const TCP_MAX_ADU_LENGTH: u32 = libmodbus_sys::MODBUS_TCP_MAX_ADU_LENGTH;
     pub const TCP_SLAVE: u32 = libmodbus_sys::MODBUS_TCP_SLAVE;
-
 
     /// `connect` - establish a Modbus connection
     ///

@@ -33,7 +33,6 @@ impl ModbusServer for Modbus {
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};
-    ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut query = vec![0; Modbus::MAX_ADU_LENGTH as usize];
     ///

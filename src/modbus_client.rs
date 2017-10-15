@@ -28,7 +28,7 @@ use std::io::Error;
 ///     - [`reply_exception()`](struct.Modbus.html#method.reply_exception)
 ///
 pub trait ModbusClient {
-    fn read_bits(&self, address: i32, num_bit: i32, dest: &mut [u8]) -> Result<i32>;
+    fn read_bits(&self, address: i32, num_bit: i32) -> Result<Vec<u8>>;
     fn read_input_bits(&self, address: i32, num_bit: i32, dest: &mut [u8]) -> Result<i32>;
     fn read_registers(&self, address: i32, num_bit: i32, dest: &mut [u16]) -> Result<i32>;
     fn read_input_registers(&self, address: i32, num_bit: i32, dest: &mut [u16]) -> Result<i32>;
@@ -70,16 +70,18 @@ impl ModbusClient for Modbus {
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let address = 1;
-    /// let mut dest = vec![0u8; 100];
     ///
-    /// assert_eq!(modbus.read_bits(address, 1, &mut dest).unwrap(), 1);
+    /// let result: Vec<u8> = modbus.read_bits(0, 1).unwrap();
     /// ```
-    fn read_bits(&self, address: i32, num_bit: i32, dest: &mut [u8]) -> Result<i32> {
+    fn read_bits(&self, address: i32, num_bit: i32) -> Result<Vec<u8>> {
         unsafe {
-            match libmodbus_sys::modbus_read_bits(self.ctx, address as c_int, num_bit, dest.as_mut_ptr()) {
+            let mut bits: Vec<u8> = vec![0; Modbus::MAX_READ_BITS];
+            match libmodbus_sys::modbus_read_bits(self.ctx, address as c_int, num_bit, bits.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
-                num => Ok(num),
+                len => {
+                    bits.truncate(len as usize);
+                    Ok(bits)
+                },
             }
         }
     }
