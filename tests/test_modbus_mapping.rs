@@ -1,3 +1,4 @@
+#![allow(unused_imports)]
 extern crate libmodbus_rs;
 
 use libmodbus_rs::{Modbus, Timeout, ModbusTCP};

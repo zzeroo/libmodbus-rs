@@ -532,6 +532,55 @@ impl Modbus {
         unsafe { libmodbus_sys::modbus_get_header_length(self.ctx) }
     }
 
+    /// `reply_exception` - send an exception reponse
+    ///
+    /// The modbus_reply_exception() function shall send an exception response based on the exception_code in argument.
+    ///
+    /// The libmodbus provides the following exception codes:
+    ///
+    /// * Modbus::Exception::IllegalFunction  (1)
+    /// * Modbus::Exception::IllegalDataAddress  (2)
+    /// * Modbus::Exception::IllegalDataValue  (3)
+    /// * Modbus::Exception::SlaveOrServerFailure  (4)
+    /// * Modbus::Exception::Acknowledge  (5)
+    /// * Modbus::Exception::SlaveDeviceBusy  (6)
+    /// * Modbus::Exception::NegativeAcknowledge  (7)
+    /// * Modbus::Exception::MemoryParity  (8)
+    /// * Modbus::Exception::NotDefined  (9)
+    /// * Modbus::Exception::GatewayPath (10)
+    /// * Modbus::Exception::GatewayTarget (11)
+    ///
+    /// The initial request `request` is required to build a valid response.
+    ///
+    /// # Return value
+    ///
+    /// The function returns the length of the response sent if successful, or an Error.
+    ///
+    /// # Parameters
+    ///
+    /// * `request`         - initial request, required to build a valid response
+    /// * `exception_code`  - Exception Code
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// use libmodbus_rs::Exception;
+    ///
+    /// let request: Vec<u8> = vec![0x01];
+    /// assert_eq!(modbus.reply_exception(&request, Exception::Acknowledge as u32).unwrap(), 9);
+    /// ```
+    pub fn reply_exception(&self, request: &[u8], exception_code: u32) -> Result<i32> {
+        unsafe {
+            match libmodbus_sys::modbus_reply_exception(self.ctx, request.as_ptr(), exception_code) {
+                -1 => bail!(Error::last_os_error()),
+                len => Ok(len),
+            }
+        }
+    }
+
+
     /// `close` - close a Modbus connection
     ///
     /// The [`close()`](#method.close) function shall close the connection established with the backend set in the

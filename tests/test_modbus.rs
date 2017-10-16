@@ -129,6 +129,25 @@ fn get_header_length() {
     assert_eq!(modbus.get_header_length(), 7);
 }
 
+
+#[test]
+#[ignore]
+fn reply_exception() {
+    // create server
+    match Modbus::new_tcp("127.0.0.1", 1502) {
+            Ok(mut server) => server.tcp_listen(1),
+            Err(err) => panic!("Could not create server: {}", err),
+        }
+        .unwrap();
+
+    // connect client
+    match Modbus::new_tcp("127.0.0.1", 1502) {
+        Ok(modbus) => assert!(modbus.connect().is_ok()),
+        _ => panic!("could not connect"),
+    }
+}
+
+
 #[test]
 #[ignore]
 fn close() {

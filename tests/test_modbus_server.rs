@@ -29,6 +29,6 @@ fn receive() {
 #[test]
 #[ignore]
 fn reply() {
-    let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    let _modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     // &self, request: &[u8], request_len: i32, modbus_mapping: &ModbusMapping) -> Result<i32>;
 }
