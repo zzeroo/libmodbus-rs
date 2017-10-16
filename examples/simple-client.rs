@@ -54,12 +54,11 @@ fn run(matches: &ArgMatches) -> Result<()> {
     modbus.set_debug(true).chain_err(|| "could not set modbus DEBUG mode")?;
     modbus.connect().chain_err(|| "could not connect")?;
 
-    let mut response_register = vec![0u16; Modbus::RTU_MAX_ADU_LENGTH as usize];
-    modbus.read_registers(0, 30, &mut response_register).chain_err(|| "could not read registers")?;
+    let registers = modbus.read_registers(0, 30).chain_err(|| "could not read registers")?;
 
-    println!(">> Registers: \n{:?}", &response_register);
+    println!(">> Registers: \n{:?}", &registers);
 
-    for (index, r) in response_register.iter().enumerate() {
+    for (index, r) in registers.iter().enumerate() {
         println!("{} {}", index, r);
     }
 
