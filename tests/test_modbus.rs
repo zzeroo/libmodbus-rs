@@ -113,13 +113,13 @@ fn set_error_recovery() {
 #[test]
 fn set_socket() {
     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    assert_eq!(modbus.set_socket(1337).unwrap(), 0);
+    assert!(modbus.set_socket(1337).is_ok());
 }
 
 #[test]
 fn get_socket() {
     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    let _ = modbus.set_socket(1337).unwrap();
+    modbus.set_socket(1337).expect("could not set socket");
     assert_eq!(modbus.get_socket().unwrap(), 1337);
 }
 

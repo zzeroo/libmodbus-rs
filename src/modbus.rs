@@ -464,7 +464,7 @@ impl Modbus {
     ///
     /// # Return values
     ///
-    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
+    /// The function return an OK Result if successful. Otherwise it contains an Error.
     ///
     /// # Examples
     ///
@@ -472,13 +472,13 @@ impl Modbus {
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// assert_eq!(modbus.set_socket(1337).unwrap(), 0);
+    /// assert!(modbus.set_socket(1337).is_ok());
     /// ```
-    pub fn set_socket(&mut self, socket: i32) -> Result<i32> {
+    pub fn set_socket(&mut self, socket: i32) -> Result<()> {
         unsafe {
             match libmodbus_sys::modbus_set_socket(self.ctx, socket) {
                 -1 => bail!(Error::last_os_error()),
-                0 => Ok(0),
+                0 => Ok(()),
                 _ => unreachable!(),
             }
         }
