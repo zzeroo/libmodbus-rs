@@ -33,9 +33,9 @@ pub trait ModbusClient {
     fn read_registers(&self, address: i32, num: i32) -> Result<Vec<u16>>;
     fn read_input_registers(&self, address: i32, num: i32) -> Result<Vec<u16>>;
     fn report_slave_id(&self) -> Result<Vec<u8>>;
-    fn write_bit(&self, address: i32, status: bool) -> Result<i32>;
+    fn write_bit(&self, address: i32, status: bool) -> Result<()>;
     fn write_bits(&self, address: i32, num: i32, src: &[u8]) -> Result<i32>;
-    fn write_register(&self, address: i32, value: i32) -> Result<i32>;
+    fn write_register(&self, address: i32, value: i32) -> Result<()>;
     fn write_registers(&self, address: i32, num: i32, src: &[u16]) -> Result<i32>;
     fn write_and_read_registers(&self, write_address: i32, write_num: i32, src: &[u16], read_address: i32,
                                 read_num: i32, dest: &mut [u16])
@@ -237,10 +237,9 @@ impl ModbusClient for Modbus {
         }
     }
 
-    /// `write_bit` - read many registers
+    /// `write_bit` - write a single bit
     ///
-    /// The [`write_bit()`](#method.write_bit) function shall write the status of status at the address addr of the
-    /// remote device.
+    /// The [`write_bit()`](#method.write_bit) function shall write the `status` at the `address` of the remote device.
     /// The value must be set to `true` of `false`.
     ///
     /// The function uses the Modbus function code 0x05 (force single coil).
@@ -261,13 +260,13 @@ impl ModbusClient for Modbus {
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let address = 1;
     ///
-    /// assert_eq!(modbus.write_bit(address, true).unwrap(), 1);
+    /// assert!(modbus.write_bit(address, true).is_ok());
     /// ```
-    fn write_bit(&self, address: i32, status: bool) -> Result<i32> {
+    fn write_bit(&self, address: i32, status: bool) -> Result<()> {
         unsafe {
             match libmodbus_sys::modbus_write_bit(self.ctx, address as c_int, status as c_int) {
                 -1 => bail!(Error::last_os_error()),
-                1 => Ok(1),
+                1 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
         }
@@ -297,13 +296,13 @@ impl ModbusClient for Modbus {
     /// let address = 1;
     /// let value = i32::max_value();
     ///
-    /// assert_eq!(modbus.write_register(address, value).unwrap(), 1);
+    /// assert!(modbus.write_register(address, value).is_ok());
     /// ```
-    fn write_register(&self, address: i32, value: i32) -> Result<i32> {
+    fn write_register(&self, address: i32, value: i32) -> Result<()> {
         unsafe {
             match libmodbus_sys::modbus_write_register(self.ctx, address as c_int, value as c_int) {
                 -1 => bail!(Error::last_os_error()),
-                1 => Ok(1),
+                1 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
         }

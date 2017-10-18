@@ -124,7 +124,7 @@ fn write_bit() {
     match Modbus::new_tcp("127.0.0.1", 1502) {
         Ok(client) => {
             client.connect().expect("could not connect");
-            assert_eq!(client.write_bit(0, true).unwrap(), 1);
+            assert!(client.write_bit(0, true).is_ok());
         },
         _ => panic!("could not connect"),
     }
@@ -159,7 +159,7 @@ fn write_register() {
             client.connect().expect("could not connect");
             let address = 1;
             let value = i32::max_value();
-            assert_eq!(client.write_register(address, value).unwrap(), 1);
+            assert!(client.write_register(address, value).is_ok());
         },
         _ => panic!("could not connect"),
     }
