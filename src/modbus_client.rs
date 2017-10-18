@@ -9,20 +9,20 @@ use std::io::Error;
 /// The following functions are used by the clients to send Modbus requests:
 ///
 /// * Read data
-/// - [`read_bits()`](struct.Modbus.html#method.read_bitsmode),
+///     - [`read_bits()`](struct.Modbus.html#method.read_bits),
 /// [`read_input_bits()`](struct.Modbus.html#method.read_input_bits),
 /// [`read_registers()`](struct.Modbus.html#method.read_registers),
 /// [`read_input_registers()`](struct.Modbus.html#method.read_input_registers),
 /// [`report_slave_id()`](struct.Modbus.html#method.report_slave_id)
 /// * Write data
-/// - [`write_bit()`](struct.Modbus.html#method.write_bit),
+///     - [`write_bit()`](struct.Modbus.html#method.write_bit),
 /// [`write_register()`](struct.Modbus.html#method.write_register),
 /// [`write_bits()`](struct.Modbus.html#method.write_bits),
 /// [`write_registers()`](struct.Modbus.html#method.write_registers)
 /// * Write and read data
 ///     - [`write_and_read_registers()`](struct.Modbus.html#method.write_and_read_registers)
 /// * Raw requests
-/// - [`send_raw_request()`](struct.Modbus.html#method.send_raw_request),
+///     - [`send_raw_request()`](struct.Modbus.html#method.send_raw_request),
 /// [`receive_confirmation()`](struct.Modbus.html#method.receive_confirmation)
 /// * Reply an exception
 ///     - [`reply_exception()`](struct.Modbus.html#method.reply_exception)
