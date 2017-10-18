@@ -69,7 +69,7 @@ html_root_url = "https://zzeroo.com/")]
 //!     - [`new_rtu()`](struct.Modbus.html#method.new_rtu)
 //!
 //! * Set the serial mode
-//! - [`rtu_get_serial_mode()`](struct.Modbus.html#method.rtu_get_serial_mode),
+//!     - [`rtu_get_serial_mode()`](struct.Modbus.html#method.rtu_get_serial_mode),
 //! [`rtu_set_serial_mode()`](struct.Modbus.html#method.rtu_set_serial_mode),
 //! [`rtu_get_rts()`](struct.Modbus.html#method.rtu_get_rts), [`rtu_set_rts()`](struct.Modbus.html#method.rtu_set_rts),
 //! [`rtu_set_custom_rts()`](struct.Modbus.html#method.rtu_set_custom_rts),
@@ -102,7 +102,8 @@ html_root_url = "https://zzeroo.com/")]
 //! * Free libmodbus context
 //!     - [`free()`](struct.Modbus.html#method.free) **It should normaly not nessesary to call this function.**<br />
 //! Memory handling under Rust controlls the [`Drop trait`](https://doc.rust-lang.org/std/ops/trait.Drop.html) in
-//! "the book" you find [more information about](https://doc.rust-lang.org/book/ffi.html#destructors).
+//! "the book" you'll find [more information
+//! about](https://doc.rust-lang.org/book/second-edition/ch15-03-drop.html#the-drop-trait-runs-code-on-cleanup).
 //! * Set slave ID
 //!     - [`set_slave()`](struct.Modbus.html#method.set_slave)
 //! * Enable debug mode
@@ -127,20 +128,20 @@ html_root_url = "https://zzeroo.com/")]
 //! The following functions are used by the clients to send Modbus requests:
 //!
 //! * Read data
-//! - [`read_bits()`](struct.Modbus.html#method.read_bits),
+//!     - [`read_bits()`](struct.Modbus.html#method.read_bits),
 //! [`read_input_bits()`](struct.Modbus.html#method.read_input_bits),
 //! [`read_registers()`](struct.Modbus.html#method.read_registers),
 //! [`read_input_registers()`](struct.Modbus.html#method.read_input_registers),
 //! [`report_slave_id()`](struct.Modbus.html#method.report_slave_id)
 //! * Write data
-//! - [`write_bit()`](struct.Modbus.html#method.write_bit),
+//!     - [`write_bit()`](struct.Modbus.html#method.write_bit),
 //! [`write_register()`](struct.Modbus.html#method.write_register),
 //! [`write_bits()`](struct.Modbus.html#method.write_bits),
 //! [`write_registers()`](struct.Modbus.html#method.write_registers)
 //! * Write and read data
 //!     - [`write_and_read_registers()`](struct.Modbus.html#method.write_and_read_registers)
 //! * Raw requests
-//! - [`send_raw_request()`](struct.Modbus.html#method.send_raw_request),
+//!     - [`send_raw_request()`](struct.Modbus.html#method.send_raw_request),
 //! [`receive_confirmation()`](struct.Modbus.html#method.receive_confirmation)
 //! * Reply an exception
 //!     - [`reply_exception()`](struct.Modbus.html#method.reply_exception)
