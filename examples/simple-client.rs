@@ -12,7 +12,7 @@ mod errors {
 }
 
 use errors::*;
-use libmodbus_rs::{Modbus, ModbusClient, ModbusRTU, ModbusTCP, ModbusTCPPI};
+use libmodbus_rs::{Modbus, ModbusRTU, ModbusTCP, ModbusTCPPI};
 use clap::{App, Arg, ArgMatches};
 
 
@@ -54,13 +54,7 @@ fn run(matches: &ArgMatches) -> Result<()> {
     modbus.set_debug(true).chain_err(|| "could not set modbus DEBUG mode")?;
     modbus.connect().chain_err(|| "could not connect")?;
 
-    let registers = modbus.read_registers(0, 30).chain_err(|| "could not read registers")?;
-
-    println!(">> Registers: \n{:?}", &registers);
-
-    for (index, r) in registers.iter().enumerate() {
-        println!("{} {}", index, r);
-    }
+    // Work HERE
 
     Ok(())
 }

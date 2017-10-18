@@ -82,16 +82,15 @@ fn run() -> Result<(), String> {
                     num_failures += 1;
                 },
                 Ok(_) => {
-                    match modbus.read_bits(address as i32, 1) {
+                    match modbus.read_bits(address as i32, 1, &mut response_bits) {
                         Err(err) => {
                             println!("ERROR read_bits single: '{}')", err);
                             println!("address = {}", address);
                             num_failures += 1;
                         },
-                        Ok(bits) => {
-                            response_bits[0] = bits.get(0).unwrap().clone();
+                        Ok(len) => {
                             if request_bits[0] != response_bits[0] {
-                                println!("ERROR read_bits single");
+                                println!("ERROR read_bits single ({})", len);
                                 println!("address = {}", address);
                                 num_failures += 1;
                             }
@@ -108,19 +107,18 @@ fn run() -> Result<(), String> {
                     num_failures += 1;
                 },
                 Ok(_) => {
-                    match modbus.read_bits(address as i32, num_bit as i32) {
+                    match modbus.read_bits(address as i32, num_bit as i32, &mut response_bits) {
                         Err(err) => {
                             println!("ERROR read_bits: '{}'", err);
                             num_failures += 1;
                         },
-                        Ok(bits) => {
-                            if bits.len() != num_bit {
+                        Ok(len) => {
+                            if len != num_bit as i32 {
                                 println!("ERROR read_bits");
                                 println!("Address = {}, num_bit = {}", address, num_bit);
                                 num_failures += 1;
                             } else {
                                 for i in 0..num_bit {
-                                    response_bits[i] = bits.get(i).unwrap().clone();
                                     if response_bits[i] != request_bits[i] {
                                         println!("ERROR modbus_read_bits");
                                         println!("Address = {address}, value {request} (0x{request:X}) != {response} \
@@ -147,14 +145,13 @@ fn run() -> Result<(), String> {
                     num_failures += 1;
                 },
                 Ok(_) => {
-                    match modbus.read_registers(address as i32, 1) {
+                    match modbus.read_registers(address as i32, 1, &mut response_registers) {
                         Err(err) => {
                             println!("ERROR read_registers single: '{}'", err);
                             println!("Address = {}", address);
                             num_failures += 1;
                         },
-                        Ok(registers) => {
-                            response_registers[0] = registers.get(0).unwrap().clone();
+                        Ok(_len) => {
                             if request_registers[0] != response_registers[0] {
                                 println!("ERROR read_registers single");
                                 println!("Address = {}, value {request} (0x{request:X}) != {response} \
@@ -182,20 +179,19 @@ fn run() -> Result<(), String> {
                         println!("Address = {}, num_bit = {}", address, num_bit);
                         num_failures += 1;
                     } else {
-                        match modbus.read_registers(address as i32, num_bit as i32) {
+                        match modbus.read_registers(address as i32, num_bit as i32, &mut response_registers) {
                             Err(err) => {
                                 println!("ERROR read_registers: '{}'", err);
                                 println!("Address = {}, num_bit = {}", address, num_bit);
                                 num_failures += 1;
                             },
-                            Ok(registers) => {
-                                if registers.len() != num_bit {
-                                    println!("ERROR read_registers: ({})", registers.len());
+                            Ok(len) => {
+                                if len != num_bit as i32 {
+                                    println!("ERROR read_registers: ({})", len);
                                     println!("Address = {}, num_bit = {}", address, num_bit);
                                     num_failures += 1;
                                 } else {
                                     for i in 0..num_bit {
-                                        response_registers[i] = registers.get(i).unwrap().clone();
                                         if request_registers[i] != response_registers[i] {
                                             println!("ERROR modbus_read_registers");
                                             println!("Address = {}, value {request} (0x{request:X}) != {response} \
@@ -244,13 +240,13 @@ fn run() -> Result<(), String> {
                         }
                     }
 
-                    match modbus.read_registers(address as i32, num_bit as i32) {
+                    match modbus.read_registers(address as i32, num_bit as i32, &mut response_registers) {
                         Err(err) => {
                             println!("ERROR modbus_read_registers ({:?})", err);
                             println!("Address = {}, num_bit = {}", address, num_bit);
                             num_failures += 1;
                         },
-                        Ok(response_registers) => {
+                        Ok(_len) => {
                             for i in 0..num_bit {
                                 if rw_request_registers[i] != response_registers[i] {
                                     println!("ERROR modbus_read_and_write_registers WRITE");

@@ -38,8 +38,27 @@ fn read_bits() {
     // connect client
     match Modbus::new_tcp("127.0.0.1", 1502) {
         Ok(client) => {
+            let mut dest = vec![0u8; 100];
             client.connect().expect("could not connect");
-            assert_eq!(client.read_bits(0, 1).unwrap(), vec![0u8]);
+            assert!(client.read_bits(0, 1, &mut dest).is_ok());
+        },
+        _ => panic!("could not connect"),
+    }
+}
+
+// FIXME: Find way to stop the server between the test
+#[test]
+#[ignore]
+fn read_bits_too_many() {
+    // Start modbus server
+    start_server();
+
+    // connect client
+    match Modbus::new_tcp("127.0.0.1", 1502) {
+        Ok(client) => {
+            let mut dest = vec![0u8; 100];
+            client.connect().expect("could not connect");
+            assert!(client.read_bits(0, 101, &mut dest).is_err()); // => ErrorKind::TooManyDataBits
         },
         _ => panic!("could not connect"),
     }
@@ -55,8 +74,9 @@ fn read_input_bits() {
     // connect client
     match Modbus::new_tcp("127.0.0.1", 1502) {
         Ok(client) => {
+            let mut dest = vec![0u8; 100];
             client.connect().expect("could not connect");
-            assert_eq!(client.read_input_bits(0, 1).unwrap(), vec![0u8]);
+            assert!(client.read_input_bits(0, 1, &mut dest).is_ok());
         },
         _ => panic!("could not connect"),
     }
@@ -72,8 +92,9 @@ fn read_registers() {
     // connect client
     match Modbus::new_tcp("127.0.0.1", 1502) {
         Ok(client) => {
+            let mut dest = vec![0u16; 100];
             client.connect().expect("could not connect");
-            assert_eq!(client.read_registers(0, 1).unwrap(), vec![0u16]);
+            assert!(client.read_registers(0, 1, &mut dest).is_ok());
         },
         _ => panic!("could not connect"),
     }
@@ -89,8 +110,9 @@ fn read_input_registers() {
     // connect client
     match Modbus::new_tcp("127.0.0.1", 1502) {
         Ok(client) => {
+            let mut dest = vec![0u16; 100];
             client.connect().expect("could not connect");
-            assert_eq!(client.read_input_registers(0, 1).unwrap(), vec![0u16]);
+            assert!(client.read_input_registers(0, 1, &mut dest).is_ok());
         },
         _ => panic!("could not connect"),
     }
@@ -106,9 +128,11 @@ fn report_slave_id() {
     // connect client
     match Modbus::new_tcp("127.0.0.1", 1502) {
         Ok(client) => {
+            let mut bytes = vec![0u8; Modbus::MAX_PDU_LENGTH];
             client.connect().expect("could not connect");
             // println!("{:?}", str::from_utf8(&client.report_slave_id[2..])) # => Ok("LMB3.1.4")
-            assert_eq!(client.report_slave_id().unwrap(), vec![180, 255, 76, 77, 66, 51, 46, 49, 46, 52]);
+            assert!(client.report_slave_id(Modbus::MAX_PDU_LENGTH, &mut bytes).is_ok());
+            // assert_eq!(client.report_slave_id().unwrap(), vec![180, 255, 76, 77, 66, 51, 46, 49, 46, 52]);
         },
         _ => panic!("could not connect"),
     }

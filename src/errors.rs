@@ -5,6 +5,10 @@ error_chain!{
     }
 
     errors {
+        TooManyData(desc: &'static str) {
+            description("Too many data")
+            display("Too many data: '{}'", desc)
+        }
         InvalidSlaveID(id: u8) {
             description("Invalid slave ID")
             display("Invalid slave ID: '{}'", id)
