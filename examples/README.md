@@ -4,14 +4,13 @@ These examples are provided under BSD license (see associated LICENSE file).
 
 # Usage
 
-All original libmodbus examples are reproduced in Rust. You can find them in the
-`examples` directory of this crate.
+All original libmodbus examples are reproduced in Rust. You can find them in the `examples` directory of this crate.
 
 * `random-test-server.rs` is necessary to launch a server before running `random-test-client.rs`. By default, it receives and replies to Modbus query on the localhost and port 1502.
 
 * `random-test-client.rs` sends many different queries to a large range of addresses and values to test the communication between the client and the server.
 
-* `unit-test-server.rs` and unit-test-client run a full unit test suite. These programs are essential to test the Modbus protocol implementation and libmodbus behavior.
+* `unit-test-server.rs` and `unit-test-client.rs` run a full unit test suite. These programs are essential to test the Modbus protocol implementation and libmodbus behavior.
 
 * `bandwidth-server-one.rs`, `bandwidth-server-many-up.rs` and `bandwidth-client.rs` return very useful information about the performance of transfert rate between the server and the client. `bandwidth-server-one.rs` can only handles one connection at once with a client whereas `bandwidth-server-many-up.rs` opens a connection for each new clients (with a limit).
 
@@ -21,9 +20,31 @@ To start, for example, the random test server/ client use the following commands
 cargo run --example random-test-server
 ```
 
-In another shell start the client after the server
+In another shell start the client after the server.
+
 ```sh
 cargo run --example random-test-client
+```
+
+**All examples (tests in libmodbus C) should be interchangeable. This means you can run the libmodbus C `random-test-server` and call the libmodbus-rs Rust `random-test-client` or vice-versa.**
+
+```bash
+# libmodbus `random-test-server` in C
+./libmodbus-sys/libmodbus/tests/random-test-server
+```
+
+an in another shell
+
+```bash
+# the Rust `random-test-client`
+cargo run --example random-test-client
+```
+
+or vice versa
+
+```bash
+cargo run --example random-test-server&
+./libmodbus-sys/libmodbus/tests/random-test-client
 ```
 
 ## simulate serial interface

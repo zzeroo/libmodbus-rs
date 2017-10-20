@@ -1,5 +1,4 @@
 use errors::*;
-use libc::{c_char, c_int};
 use libmodbus_sys;
 use modbus_mapping::ModbusMapping;
 use modbus::Modbus;
@@ -33,15 +32,14 @@ impl ModbusServer for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP, MODBUS_MAX_ADU_LENGTH};
-    ///
+    /// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let mut query = vec![0; MODBUS_MAX_ADU_LENGTH as usize];
+    /// let mut query = vec![0; Modbus::MAX_ADU_LENGTH as usize];
     ///
     /// assert!(modbus.receive(&mut query).is_ok());
     /// ```
     fn receive(&self, request: &mut [u8]) -> Result<i32> {
-        assert!(request.len() <= libmodbus_sys::MODBUS_MAX_ADU_LENGTH as usize);
+        assert!(request.len() <= Modbus::MAX_ADU_LENGTH as usize);
 
         unsafe {
             let len = libmodbus_sys::modbus_receive(self.ctx, request.as_mut_ptr());
@@ -65,10 +63,10 @@ impl ModbusServer for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP, MODBUS_MAX_ADU_LENGTH};
+    /// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let mut query = vec![0; MODBUS_MAX_ADU_LENGTH as usize];
+    /// let mut query = vec![0; Modbus::MAX_ADU_LENGTH as usize];
     ///
     /// assert!(modbus.receive(&mut query).is_ok());
     /// ```

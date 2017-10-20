@@ -1,11 +1,21 @@
+// `error_chain!` can recurse deeply
+#![recursion_limit = "1024"]
+
+#[macro_use]
+extern crate error_chain;
 extern crate clap;
 extern crate libmodbus_rs;
 
-use libmodbus_rs::{Modbus, ModbusClient, ModbusRTU, ModbusTCP, ModbusTCPPI};
-use libmodbus_rs::{MODBUS_RTU_MAX_ADU_LENGTH, MODBUS_TCP_MAX_ADU_LENGTH};
-use libmodbus_rs::errors::*; // for the `Result<T>` type
-use std::env;
+mod errors {
+    // Create the Error, ErrorKind, ResultExt, and Result types
+    error_chain!{}
+}
+
+use errors::*;
+use libmodbus_rs::{Modbus, ModbusRTU, ModbusTCP, ModbusTCPPI};
 use clap::{App, Arg, ArgMatches};
+
+
 
 #[derive(Debug, Eq, PartialEq)]
 enum Backend {
@@ -30,28 +40,21 @@ fn run(matches: &ArgMatches) -> Result<()> {
     match backend {
         Backend::RTU => {
             let serial_interface = matches.value_of("serial_interface").unwrap_or("/dev/ttyUSB1");
-            modbus = Modbus::new_rtu(&serial_interface, 9600, 'N', 8, 1)?;
-            modbus.set_slave(SERVER_ID)?;
-        }
+            modbus = Modbus::new_rtu(&serial_interface, 9600, 'N', 8, 1).chain_err(|| "unable to create modbus RTU context")?;
+            modbus.set_slave(SERVER_ID).chain_err(|| format!("could not set slave address {}", SERVER_ID))?;
+        },
         Backend::TCP => {
-            modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
-        }
+            modbus = Modbus::new_tcp("127.0.0.1", 1502).chain_err(|| "unable to create modbus TCP context")?;
+        },
         Backend::TCPPI => {
-            modbus = Modbus::new_tcp_pi("::1", "1502")?;
-        }
+            modbus = Modbus::new_tcp_pi("::1", "1502").chain_err(|| "unable to create modbus TCPv6 context")?;
+        },
     }
 
-    modbus.set_debug(true);
-    modbus.connect()?;
+    modbus.set_debug(true).chain_err(|| "could not set modbus DEBUG mode")?;
+    modbus.connect().chain_err(|| "could not connect")?;
 
-    let mut response_register = vec![0u16; MODBUS_RTU_MAX_ADU_LENGTH as usize];
-    modbus.read_registers(0, 30, &mut response_register)?;
-
-    println!(">> Registers: \n{:?}", &response_register);
-
-    for (index, r) in response_register.iter().enumerate() {
-        println!("{} {}", index, r);
-    }
+    // Work HERE
 
     Ok(())
 }

@@ -1,7 +1,3 @@
-#![allow(unused_variables)]
-#![allow(unused_assignments)]
-#![allow(dead_code)]
-// `error_chain!` can recurse deeply
 #![recursion_limit = "1024"]
 
 #[macro_use]
@@ -18,6 +14,8 @@ use unit_test_config::*;
 use errors::*;
 use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCP, ModbusTCPPI, ModbusRTU};
 use std::env;
+
+const EXCEPTION_RC: u32 = 2;
 
 
 fn run() -> Result<()> {
@@ -65,52 +63,6 @@ fn run() -> Result<()> {
 
     modbus.set_debug(true).expect("could not set modbus DEBUG mode");
 
-    let modbus_mapping =
-        ModbusMapping::new_start_address(BITS_ADDRESS,
-                                         BITS_NB,
-                                         INPUT_BITS_ADDRESS,
-                                         INPUT_BITS_NB,
-                                         REGISTERS_ADDRESS,
-                                         REGISTERS_NB,
-                                         INPUT_REGISTERS_ADDRESS,
-                                         INPUT_REGISTERS_NB).chain_err(|| "Failed to allocate the mapping")?;
-
-    // Examples from PI_MODBUS_300.pdf.
-    // Only the read-only input values are assigned.
-
-    // Initialize input values that's can be only done server side.
-    libmodbus_rs::set_bits_from_bytes(modbus_mapping.get_input_bits_mut(), 0, INPUT_BITS_NB, &INPUT_BITS_TAB);
-
-    //  Initialize values of INPUT REGISTERS
-    for i in 0..INPUT_REGISTERS_NB {
-        modbus_mapping.get_input_registers_mut()[i as usize] = INPUT_REGISTERS_TAB[i as usize];
-    }
-
-    match backend {
-        Backend::TCP => {
-            let mut socket = modbus.tcp_listen(1).chain_err(|| "could not listen to TCP socket")?;
-            modbus.tcp_accept(&mut socket).chain_err(|| "could not accept socket")?;
-        },
-        Backend::TCPPI => {
-            let mut socket = modbus.tcp_pi_listen(1).chain_err(|| "could not listen to TCPv6 socket")?;
-            modbus.tcp_pi_accept(&mut socket).chain_err(|| "could not accept socket")?;
-        },
-        Backend::RTU => {
-            modbus.connect().chain_err(|| "Unable to connect")?;
-        },
-    }
-
-    loop {
-        match modbus.receive(&mut query) {
-            Err(_err) => break,
-            Ok(_) => {
-                if query[header_length as usize] == 0x03 {
-                    // Read holding registers
-                    println!("read holding registers");
-                }
-            },
-        }
-    }
 
     Ok(())
 }
