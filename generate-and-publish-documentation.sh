@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+
 # Branch from which github create the projects page
 DOC_BRANCH="gh-pages"
 # Should the projects README.md converted into the index.html file?
@@ -26,7 +27,7 @@ msg "Cloning into a temporary directory..."
 # The second call is to support OSX.
 tmp="$(mktemp -d 2>/dev/null || mktemp -d -t 'tmp-rust-docs')"
 trap "cd \"$dir\"; rm -rf \"$tmp\"" EXIT
-git clone -qb master "$dir" "$tmp"
+git clone --quiet --branch master "$dir" "$tmp"
 
 cd "$tmp"
 ln -s "$dir/target" "$tmp/target"
@@ -54,12 +55,10 @@ Cargo.lock
 EOF
     git add .gitignore
     git commit -m "Initial commit."
+else
+  # Clean
+  git rm --quiet --ignore-unmatch -rf .
 fi
-
-
-# Clean
-git rm --quiet --ignore-unmatch -rf .
-
 
 # index.html patch.
 ## If a index.html exist, update it. Here i use `pandoc`, modify this for your needs.
@@ -87,6 +86,11 @@ if $BUILD_LIBMODBUS_DOC; then
   # Cleanup
   rm libmodbus-sys/libmodbus -rf
 fi
+
+
+# For test exit here and do nothing,  please delete this and the next line for production
+exit 1
+
 
 # Remove unneeded files
 rm target
