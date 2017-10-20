@@ -5,6 +5,10 @@ error_chain!{
     }
 
     errors {
+        IncompatibleAPI {
+            description("libmodbus API incompatible response")
+            display("libmodbus API incompatible response")
+        }
         TooManyData(desc: &'static str) {
             description("Too many data")
             display("Too many data: '{}'", desc)
