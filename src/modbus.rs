@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 use errors::*;
 use libc::{c_int, c_uint};
-use libmodbus_sys;
+use libmodbus_sys as ffi;
 use std::io::Error;
 
 /// Modbus protocol exceptions
@@ -69,13 +69,6 @@ pub enum FunctionCode {
     WriteAndReadRegisters = 23,
 }
 
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub enum ErrorRecoveryMode {
-    None = 0,
-    Link = 2,
-    Protocol = 4,
-}
-
 /// Timeout struct
 ///
 /// * The value of **usec** argument must be in the range 0 to 999999.
@@ -92,24 +85,24 @@ pub struct Timeout {
 /// traits and a implementation with a, hopefully safe, interface.
 ///
 pub struct Modbus {
-    pub ctx: *mut libmodbus_sys::modbus_t,
+    pub ctx: *mut ffi::modbus_t,
 }
 
 impl Modbus {
     // Constants
-    pub const ENOBASE: u32 = libmodbus_sys::MODBUS_ENOBASE;
-    pub const MAX_ADU_LENGTH: usize = libmodbus_sys::MODBUS_MAX_ADU_LENGTH as usize;
-    pub const MAX_PDU_LENGTH: usize = libmodbus_sys::MODBUS_MAX_PDU_LENGTH as usize;
-    pub const MAX_READ_BITS: usize = libmodbus_sys::MODBUS_MAX_READ_BITS as usize;
-    pub const MAX_READ_REGISTERS: usize = libmodbus_sys::MODBUS_MAX_READ_REGISTERS as usize;
-    pub const MAX_WR_READ_REGISTERS: usize = libmodbus_sys::MODBUS_MAX_WR_READ_REGISTERS as usize;
-    pub const MAX_WR_WRITE_REGISTERS: usize = libmodbus_sys::MODBUS_MAX_WR_WRITE_REGISTERS as usize;
-    pub const MAX_WRITE_BITS: usize = libmodbus_sys::MODBUS_MAX_WRITE_BITS as usize;
-    pub const MAX_WRITE_REGISTERS: usize = libmodbus_sys::MODBUS_MAX_WRITE_REGISTERS as usize;
-    pub const RTU_MAX_ADU_LENGTH: usize = libmodbus_sys::MODBUS_RTU_MAX_ADU_LENGTH as usize;
-    pub const TCP_DEFAULT_PORT: u32 = libmodbus_sys::MODBUS_TCP_DEFAULT_PORT;
-    pub const TCP_MAX_ADU_LENGTH: u32 = libmodbus_sys::MODBUS_TCP_MAX_ADU_LENGTH;
-    pub const TCP_SLAVE: u32 = libmodbus_sys::MODBUS_TCP_SLAVE;
+    pub const ENOBASE: u32 = ffi::MODBUS_ENOBASE;
+    pub const MAX_ADU_LENGTH: usize = ffi::MODBUS_MAX_ADU_LENGTH as usize;
+    pub const MAX_PDU_LENGTH: usize = ffi::MODBUS_MAX_PDU_LENGTH as usize;
+    pub const MAX_READ_BITS: usize = ffi::MODBUS_MAX_READ_BITS as usize;
+    pub const MAX_READ_REGISTERS: usize = ffi::MODBUS_MAX_READ_REGISTERS as usize;
+    pub const MAX_WR_READ_REGISTERS: usize = ffi::MODBUS_MAX_WR_READ_REGISTERS as usize;
+    pub const MAX_WR_WRITE_REGISTERS: usize = ffi::MODBUS_MAX_WR_WRITE_REGISTERS as usize;
+    pub const MAX_WRITE_BITS: usize = ffi::MODBUS_MAX_WRITE_BITS as usize;
+    pub const MAX_WRITE_REGISTERS: usize = ffi::MODBUS_MAX_WRITE_REGISTERS as usize;
+    pub const RTU_MAX_ADU_LENGTH: usize = ffi::MODBUS_RTU_MAX_ADU_LENGTH as usize;
+    pub const TCP_DEFAULT_PORT: u32 = ffi::MODBUS_TCP_DEFAULT_PORT;
+    pub const TCP_MAX_ADU_LENGTH: u32 = ffi::MODBUS_TCP_MAX_ADU_LENGTH;
+    pub const TCP_SLAVE: u32 = ffi::MODBUS_TCP_SLAVE;
 
     /// `connect` - establish a Modbus connection
     ///
@@ -136,7 +129,7 @@ impl Modbus {
     /// ```
     pub fn connect(&self) -> Result<()> {
         unsafe {
-            match libmodbus_sys::modbus_connect(self.ctx) {
+            match ffi::modbus_connect(self.ctx) {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
@@ -163,7 +156,7 @@ impl Modbus {
     /// ```
     pub fn flush(&self) -> Result<()> {
         unsafe {
-            match libmodbus_sys::modbus_flush(self.ctx) {
+            match ffi::modbus_flush(self.ctx) {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
@@ -209,7 +202,7 @@ impl Modbus {
     /// ```
     pub fn set_slave(&mut self, slave: u8) -> Result<()> {
         unsafe {
-            match libmodbus_sys::modbus_set_slave(self.ctx, slave as c_int) {
+            match ffi::modbus_set_slave(self.ctx, slave as c_int) {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
@@ -250,7 +243,7 @@ impl Modbus {
     /// ```
     pub fn set_debug(&mut self, flag: bool) -> Result<()> {
         unsafe {
-            match libmodbus_sys::modbus_set_debug(self.ctx, flag as c_int) {
+            match ffi::modbus_set_debug(self.ctx, flag as c_int) {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
@@ -280,7 +273,7 @@ impl Modbus {
     pub fn get_byte_timeout(&self) -> Result<Timeout> {
         let mut timeout = Timeout { sec: 0, usec: 0 };
         unsafe {
-            match libmodbus_sys::modbus_get_byte_timeout(self.ctx, &mut timeout.sec, &mut timeout.usec) {
+            match ffi::modbus_get_byte_timeout(self.ctx, &mut timeout.sec, &mut timeout.usec) {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(timeout),
                 _ => panic!("libmodbus API incompatible response"),
@@ -322,7 +315,7 @@ impl Modbus {
     /// ```
     pub fn set_byte_timeout(&mut self, timeout: Timeout) -> Result<()> {
         unsafe {
-            match libmodbus_sys::modbus_set_byte_timeout(self.ctx, timeout.sec, timeout.usec) {
+            match ffi::modbus_set_byte_timeout(self.ctx, timeout.sec, timeout.usec) {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
@@ -352,7 +345,7 @@ impl Modbus {
     pub fn get_response_timeout(&self) -> Result<Timeout> {
         let mut timeout = Timeout { sec: 0, usec: 0 };
         unsafe {
-            match libmodbus_sys::modbus_get_response_timeout(self.ctx, &mut timeout.sec, &mut timeout.usec) {
+            match ffi::modbus_get_response_timeout(self.ctx, &mut timeout.sec, &mut timeout.usec) {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(timeout),
                 _ => panic!("libmodbus API incompatible response"),
@@ -393,7 +386,7 @@ impl Modbus {
     /// ```
     pub fn set_response_timeout(&mut self, timeout: Timeout) -> Result<()> {
         unsafe {
-            match libmodbus_sys::modbus_set_response_timeout(self.ctx, timeout.sec, timeout.usec) {
+            match ffi::modbus_set_response_timeout(self.ctx, timeout.sec, timeout.usec) {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
@@ -432,27 +425,32 @@ impl Modbus {
     ///
     /// # Return value
     ///
-    /// The function return a Result containing a `0i32` if successful. Otherwise it contains an Error.
-    /// The C library sets errno to one of the values of [ErrorRecoveryMode]().
+    /// The function return an OK Result if successful. Otherwise it contains an Error.
     ///
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusTCP, ErrorRecoveryMode};
+    /// # extern crate libmodbus_rs;
+    /// # extern crate libmodbus_sys;
+    /// # fn main() {
+    /// use libmodbus_sys as ffi;
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// //assert!(modbus.set_error_recovery(ErrorRecoveryMode::LINK | ErrorRecoveryMode::PROTOCOL));
+    /// assert!(modbus.set_error_recovery(ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_LINK |
+    /// ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_PROTOCOL).is_ok());
+    /// # }
     /// ```
-    pub fn set_error_recovery(&mut self, _error_recovery_mode: ErrorRecoveryMode) -> Result<i32> {
-        unimplemented!()
-        // unsafe {
-        //     let error_recovery_mode = error_recovery_mode;
-        //     match libmodbus_sys::modbus_set_error_recovery(self.ctx, error_recovery_mode.into()) {
-        //         -1 => bail!(Error::last_os_error()),
-        //         0 => Ok(0),
-        //         _ => unreachable!(),
-        //     }
-        // }
+    pub fn set_error_recovery(&mut self, error_recovery_mode: ffi::modbus_error_recovery_mode) -> Result<()> {
+
+        unsafe {
+            match ffi::modbus_set_error_recovery(self.ctx, error_recovery_mode) {
+                -1 => bail!(Error::last_os_error()),
+                0 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
+            }
+        }
     }
 
     // TODO: Add examples from: http://zzeroo.github.io/libmodbus-rs/libmodbus/modbus_set_socket.html
@@ -475,8 +473,9 @@ impl Modbus {
     /// assert!(modbus.set_socket(1337).is_ok());
     /// ```
     pub fn set_socket(&mut self, socket: i32) -> Result<()> {
+
         unsafe {
-            match libmodbus_sys::modbus_set_socket(self.ctx, socket) {
+            match ffi::modbus_set_socket(self.ctx, socket) {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(()),
                 _ => unreachable!(),
@@ -504,7 +503,7 @@ impl Modbus {
     /// ```
     pub fn get_socket(&self) -> Result<i32> {
         unsafe {
-            match libmodbus_sys::modbus_get_socket(self.ctx) {
+            match ffi::modbus_get_socket(self.ctx) {
                 -1 => bail!(Error::last_os_error()),
                 socket => Ok(socket),
             }
@@ -529,7 +528,7 @@ impl Modbus {
     /// assert_eq!(modbus.get_header_length(), 7);
     /// ```
     pub fn get_header_length(&self) -> i32 {
-        unsafe { libmodbus_sys::modbus_get_header_length(self.ctx) }
+        unsafe { ffi::modbus_get_header_length(self.ctx) }
     }
 
     /// `reply_exception` - send an exception reponse
@@ -573,7 +572,7 @@ impl Modbus {
     /// ```
     pub fn reply_exception(&self, request: &[u8], exception_code: u32) -> Result<i32> {
         unsafe {
-            match libmodbus_sys::modbus_reply_exception(self.ctx, request.as_ptr(), exception_code) {
+            match ffi::modbus_reply_exception(self.ctx, request.as_ptr(), exception_code) {
                 -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }
@@ -597,7 +596,7 @@ impl Modbus {
     /// ```
     pub fn close(&self) {
         unsafe {
-            libmodbus_sys::modbus_close(self.ctx);
+            ffi::modbus_close(self.ctx);
         }
     }
 
@@ -616,7 +615,7 @@ impl Modbus {
     /// ```
     pub fn free(&mut self) {
         unsafe {
-            libmodbus_sys::modbus_free(self.ctx);
+            ffi::modbus_free(self.ctx);
         }
     }
 }
@@ -645,7 +644,7 @@ impl Modbus {
 /// assert_eq!(modbus_mapping.get_input_bits_mut(), [0u8, 0, 1, 1, 1]);
 /// ```
 pub fn set_bits_from_byte(dest: &mut [u8], index: u32, value: u8) {
-    unsafe { libmodbus_sys::modbus_set_bits_from_byte(dest.as_mut_ptr(), index as c_int, value) }
+    unsafe { ffi::modbus_set_bits_from_byte(dest.as_mut_ptr(), index as c_int, value) }
 }
 
 /// `set_bits_from_bytes` -  set many bits from an array of bytes
@@ -674,9 +673,7 @@ pub fn set_bits_from_byte(dest: &mut [u8], index: u32, value: u8) {
 /// assert_eq!(modbus_mapping.get_input_bits_mut(), [1u8, 1, 0, 0, 0]);
 /// ```
 pub fn set_bits_from_bytes(dest: &mut [u8], index: u32, num_bit: u16, bytes: &[u8]) {
-    unsafe {
-        libmodbus_sys::modbus_set_bits_from_bytes(dest.as_mut_ptr(), index as c_int, num_bit as c_uint, bytes.as_ptr())
-    }
+    unsafe { ffi::modbus_set_bits_from_bytes(dest.as_mut_ptr(), index as c_int, num_bit as c_uint, bytes.as_ptr()) }
 }
 
 /// `get_byte_from_bits` - get the value from many bit
@@ -705,7 +702,7 @@ pub fn set_bits_from_bytes(dest: &mut [u8], index: u32, num_bit: u16, bytes: &[u
 /// assert_eq!(libmodbus_rs::get_byte_from_bits(&[0b1111_1111], 0 ,8), 255);
 /// ```
 pub fn get_byte_from_bits(src: &[u8], index: u8, num_bit: u8) -> u8 {
-    unsafe { libmodbus_sys::modbus_get_byte_from_bits(src.as_ptr(), index as c_int, num_bit as c_uint) }
+    unsafe { ffi::modbus_get_byte_from_bits(src.as_ptr(), index as c_int, num_bit as c_uint) }
 }
 
 /// `get_float_abcd` - get a float value from 2 registers in ABCD byte order
@@ -728,7 +725,7 @@ pub fn get_byte_from_bits(src: &[u8], index: u8, num_bit: u8) -> u8 {
 /// assert_eq!(libmodbus_rs::get_float_abcd(&[0x0020, 0xF147]), 123456.0);
 /// ```
 pub fn get_float_abcd(src: &[u16; 2]) -> f32 {
-    unsafe { libmodbus_sys::modbus_get_float_abcd(src.as_ptr()) }
+    unsafe { ffi::modbus_get_float_abcd(src.as_ptr()) }
 }
 
 /// `set_float_abcd` - set a float value in 2 registers using ABCD byte order
@@ -750,7 +747,7 @@ pub fn get_float_abcd(src: &[u16; 2]) -> f32 {
 /// ```
 pub fn set_float_abcd(src: f32, dest: &mut [u16]) {
     // &mut [u16; 2] is not working here
-    unsafe { libmodbus_sys::modbus_set_float_abcd(src, dest.as_mut_ptr()) }
+    unsafe { ffi::modbus_set_float_abcd(src, dest.as_mut_ptr()) }
 }
 
 /// `get_float_badc` - get a float value from 2 registers in BADC byte order
@@ -775,7 +772,7 @@ pub fn set_float_abcd(src: f32, dest: &mut [u16]) {
 /// assert_eq!(libmodbus_rs::get_float_badc(&[0x2000, 0x47F1]), 123456.0);
 /// ```
 pub fn get_float_badc(src: &[u16; 2]) -> f32 {
-    unsafe { libmodbus_sys::modbus_get_float_badc(src.as_ptr()) }
+    unsafe { ffi::modbus_get_float_badc(src.as_ptr()) }
 }
 
 /// `set_float_badc` - set a float value in 2 registers using BADC byte order
@@ -798,7 +795,7 @@ pub fn get_float_badc(src: &[u16; 2]) -> f32 {
 /// ```
 pub fn set_float_badc(src: f32, dest: &mut [u16]) {
     // &mut [u16; 2] is not working here
-    unsafe { libmodbus_sys::modbus_set_float_badc(src, dest.as_mut_ptr()) }
+    unsafe { ffi::modbus_set_float_badc(src, dest.as_mut_ptr()) }
 }
 
 /// `get_float_cdab` - get a float value from 2 registers in CDAB byte order
@@ -823,7 +820,7 @@ pub fn set_float_badc(src: f32, dest: &mut [u16]) {
 /// assert_eq!(libmodbus_rs::get_float_cdab(&[0xF147, 0x0020]), 123456.0);
 /// ```
 pub fn get_float_cdab(src: &[u16; 2]) -> f32 {
-    unsafe { libmodbus_sys::modbus_get_float_cdab(src.as_ptr()) }
+    unsafe { ffi::modbus_get_float_cdab(src.as_ptr()) }
 }
 
 /// `set_float_cdab` - set a float value in 2 registers using CDAB byte order
@@ -846,7 +843,7 @@ pub fn get_float_cdab(src: &[u16; 2]) -> f32 {
 /// ```
 pub fn set_float_cdab(src: f32, dest: &mut [u16]) {
     // &mut [u16; 2] is not working here
-    unsafe { libmodbus_sys::modbus_set_float_cdab(src, dest.as_mut_ptr()) }
+    unsafe { ffi::modbus_set_float_cdab(src, dest.as_mut_ptr()) }
 }
 
 /// `get_float_dcba` - get a float value from 2 registers in DCBA byte order
@@ -871,7 +868,7 @@ pub fn set_float_cdab(src: f32, dest: &mut [u16]) {
 /// assert_eq!(libmodbus_rs::get_float_dcba(&[0x47F1, 0x2000]), 123456.0);
 /// ```
 pub fn get_float_dcba(src: &[u16; 2]) -> f32 {
-    unsafe { libmodbus_sys::modbus_get_float_dcba(src.as_ptr()) }
+    unsafe { ffi::modbus_get_float_dcba(src.as_ptr()) }
 }
 
 /// `set_float_dcba` - set a float value in 2 registers using DCBA byte order
@@ -894,7 +891,7 @@ pub fn get_float_dcba(src: &[u16; 2]) -> f32 {
 /// ```
 pub fn set_float_dcba(src: f32, dest: &mut [u16]) {
     // &mut [u16; 2] is not working here
-    unsafe { libmodbus_sys::modbus_set_float_dcba(src, dest.as_mut_ptr()) }
+    unsafe { ffi::modbus_set_float_dcba(src, dest.as_mut_ptr()) }
 }
 
 
