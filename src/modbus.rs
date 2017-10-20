@@ -69,6 +69,23 @@ pub enum FunctionCode {
     WriteAndReadRegisters = 23,
 }
 
+#[derive(Debug, Copy, Clone)]
+pub enum ErrorRecoveryMode {
+    Link,
+    Protocol,
+}
+
+impl ErrorRecoveryMode {
+    fn as_raw(&self) -> ffi::modbus_error_recovery_mode {
+        use ErrorRecoveryMode::*;
+
+        match *self {
+            Link => ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_LINK,
+            Protocol => ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_PROTOCOL,
+        }
+    }
+}
+
 /// Timeout struct
 ///
 /// * The value of **usec** argument must be in the range 0 to 999999.
@@ -398,25 +415,22 @@ impl Modbus {
     ///
     /// The [`set_error_recovery()`](#method.set_error_recovery) function shall set the error recovery mode to apply
     /// when the connection fails or the byte received is not expected.
-    /// The argument error_recovery may be bitwise-or’ed with zero or more of the following constants.
     ///
-    /// By default there is no error recovery (Modbus::ERROR_RECOVERY_NONE) so the application is responsible for
-    /// controlling the error values returned by libmodbus functions and for handling them if necessary.
+    /// By default there is no error recovery so the application is responsible for controlling the error values
+    /// returned by libmodbus functions and for handling them if necessary.
     ///
-    /// When Modbus::ERROR_RECOVERY_LINK is set, the library will attempt an reconnection after a delay defined by
-    /// response timeout of the libmodbus context.
+    /// When `ErrorRecoveryMode::Link` is set, the library will attempt an reconnection after a delay defined by
+    /// response timeout ([`set_response_timeout()`](#method.set_response_timeout)) of the libmodbus context.
     /// This mode will try an infinite close/connect loop until success on send call and will just try one time to
-    /// re-establish the connection on
-    /// select/read calls (if the connection was down, the values to read are certainly not available any more after
-    /// reconnection, except for slave/server).
+    /// re-establish the connection on select/read calls (if the connection was down, the values to read are certainly
+    /// not available any more after reconnection, except for slave/server).
     /// This mode will also run flush requests after a delay based on  the current response timeout in some situations
     /// (eg. timeout of select call).
     /// The reconnection attempt can hang for several seconds if the network to the remote target unit is down.
     ///
-    /// When Modbus::ERROR_RECOVERY_PROTOCOL is set, a sleep and flush sequence will be used to clean up the ongoing
-    /// communication, this can
-    /// occurs when the message length is invalid, the TID is wrong or the received function code is not the expected
-    /// one.
+    /// When `ErrorRecoveryMode::PROTOCOL` is set, a sleep and flush sequence will be used to clean up the ongoing
+    /// communication, this can occurs when the message length is invalid, the TID is wrong or the received function
+    /// code is not the expected one.
     /// The response timeout delay will be used to sleep.
     ///
     /// The modes are mask values and so they are complementary.
@@ -427,25 +441,25 @@ impl Modbus {
     ///
     /// The function return an OK Result if successful. Otherwise it contains an Error.
     ///
+    /// # Parameters
+    ///
+    /// * [`ErrorRecoveryMode`](struct.ErrorRecoveryMode.html)  - Timeout
+    ///
     /// # Examples
     ///
     /// ```rust,no_run
-    /// # extern crate libmodbus_rs;
-    /// # extern crate libmodbus_sys;
-    /// # fn main() {
-    /// use libmodbus_sys as ffi;
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
-    ///
+    /// use libmodbus_rs::{Modbus, ModbusTCP, ErrorRecoveryMode};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
-    /// assert!(modbus.set_error_recovery(ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_LINK |
-    /// ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_PROTOCOL).is_ok());
-    /// # }
+    /// assert!(modbus.set_error_recovery(Some(&[ErrorRecoveryMode::Link, ErrorRecoveryMode::Protocol])).is_ok());
     /// ```
-    pub fn set_error_recovery(&mut self, error_recovery_mode: ffi::modbus_error_recovery_mode) -> Result<()> {
+    pub fn set_error_recovery(&mut self, flags: Option<&[ErrorRecoveryMode]>) -> Result<()> {
+        let flags = flags.unwrap_or(&[])
+            .iter()
+            .fold(ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_NONE, |acc, v| acc | v.as_raw());
 
         unsafe {
-            match ffi::modbus_set_error_recovery(self.ctx, error_recovery_mode) {
+            match ffi::modbus_set_error_recovery(self.ctx, flags) {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),

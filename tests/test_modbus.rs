@@ -102,11 +102,16 @@ fn set_response_timeout() {
                });
 }
 
-// #[test]
-// fn set_error_recovery() {
-//     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-//     assert!(modbus.set_error_recovery(ErrorRecoveryMode::LINK | ErrorRecoveryMode::PROTOCOL).is_ok());
-// }
+#[test]
+fn set_error_recovery() {
+    use libmodbus_rs::ErrorRecoveryMode;
+    let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+
+    assert!(modbus.set_error_recovery(None).is_ok());
+    assert!(modbus.set_error_recovery(Some(&[ErrorRecoveryMode::Link])).is_ok());
+    assert!(modbus.set_error_recovery(Some(&[ErrorRecoveryMode::Protocol])).is_ok());
+    assert!(modbus.set_error_recovery(Some(&[ErrorRecoveryMode::Link, ErrorRecoveryMode::Protocol])).is_ok());
+}
 
 #[test]
 fn set_socket() {

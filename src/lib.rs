@@ -192,6 +192,6 @@ pub use self::modbus_rtu::{ModbusRTU, RequestToSendMode, SerialMode};
 pub use self::modbus_server::ModbusServer;
 pub use self::modbus_tcp_pi::ModbusTCPPI;
 pub use self::modbus_tcp::ModbusTCP;
-pub use self::modbus::{Modbus, Timeout, Exception, FunctionCode};
+pub use self::modbus::{Modbus, Timeout, ErrorRecoveryMode, Exception, FunctionCode};
 pub use self::modbus::{set_bits_from_byte, set_bits_from_bytes, get_byte_from_bits, get_float_abcd, set_float_abcd,
                        get_float_badc, set_float_badc, get_float_cdab, set_float_cdab, get_float_dcba, set_float_dcba};
