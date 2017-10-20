@@ -2,6 +2,7 @@ extern crate bindgen;
 extern crate pkg_config;
 extern crate cc;
 
+use bindgen::builder;
 use std::env;
 use std::ffi::OsString;
 use std::fs;
@@ -99,24 +100,16 @@ fn main() {
 
 
 fn run_bindgen(include: &PathBuf) {
-    let include_path = format!("-I{}", include.display());
-
-    // The bindgen::Builder is the main entry point
-    // to bindgen, and lets you build up options for
-    // the resulting bindings.
-    let bindings = bindgen::Builder::default()
-        // The input header we would like to generate
-        // bindings for.
+    let out_path = PathBuf::from(env::var("OUT_DIR").expect("can't access $OUT_DIR"));
+    // Configure and generate bindings.
+    let bindings = builder()
         .header("wrapper.h")
-        .clang_arg(include_path)
-        // Finish the builder and generate the bindings.
+        .clang_arg(format!("-I{}", include.display()))
+        .bitfield_enum("modbus_error_recovery_mode")
         .generate()
-        // Unwrap the Result and panic on failure.
-        .expect("Unable to generate bindings");
+        .expect("could not reate binding");
 
-
-    // Write the bindings to the $OUT_DIR/bindings.rs file.
-    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+    // Write the generated bindings to an output file.
     bindings.write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
 }
