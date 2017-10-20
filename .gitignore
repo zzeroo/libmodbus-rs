@@ -3,3 +3,6 @@ target/
 Cargo.lock
 
 .coveralls.yml
+
+examples/test.c
+examples/test.rs

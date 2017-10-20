@@ -9,188 +9,199 @@ use std::io::Error;
 /// The following functions are used by the clients to send Modbus requests:
 ///
 /// * Read data
-/// - [`read_bits()`](struct.Modbus.html#method.read_bitsmode),
+///     - [`read_bits()`](struct.Modbus.html#method.read_bits),
 /// [`read_input_bits()`](struct.Modbus.html#method.read_input_bits),
 /// [`read_registers()`](struct.Modbus.html#method.read_registers),
 /// [`read_input_registers()`](struct.Modbus.html#method.read_input_registers),
 /// [`report_slave_id()`](struct.Modbus.html#method.report_slave_id)
 /// * Write data
-/// - [`write_bit()`](struct.Modbus.html#method.write_bit),
+///     - [`write_bit()`](struct.Modbus.html#method.write_bit),
 /// [`write_register()`](struct.Modbus.html#method.write_register),
 /// [`write_bits()`](struct.Modbus.html#method.write_bits),
 /// [`write_registers()`](struct.Modbus.html#method.write_registers)
 /// * Write and read data
 ///     - [`write_and_read_registers()`](struct.Modbus.html#method.write_and_read_registers)
 /// * Raw requests
-/// - [`send_raw_request()`](struct.Modbus.html#method.send_raw_request),
+///     - [`send_raw_request()`](struct.Modbus.html#method.send_raw_request),
 /// [`receive_confirmation()`](struct.Modbus.html#method.receive_confirmation)
 /// * Reply an exception
 ///     - [`reply_exception()`](struct.Modbus.html#method.reply_exception)
 ///
 pub trait ModbusClient {
-    fn read_bits(&self, address: i32, num_bit: i32, dest: &mut [u8]) -> Result<i32>;
-    fn read_input_bits(&self, address: i32, num_bit: i32, dest: &mut [u8]) -> Result<i32>;
-    fn read_registers(&self, address: i32, num_bit: i32, dest: &mut [u16]) -> Result<i32>;
-    fn read_input_registers(&self, address: i32, num_bit: i32, dest: &mut [u16]) -> Result<i32>;
-    fn report_slave_id(&self, max_dest: i32, dest: &mut [u8]) -> Result<i32>;
-    fn write_bit(&self, address: i32, status: bool) -> Result<i32>;
-    fn write_bits(&self, address: i32, num_bit: i32, src: &[u8]) -> Result<i32>;
-    fn write_register(&self, address: i32, value: i32) -> Result<i32>;
-    fn write_registers(&self, address: i32, num_bit: i32, src: &[u16]) -> Result<i32>;
-    fn write_and_read_registers(&self, write_address: i32, write_num_bit: i32, src: &[u16], read_address: i32,
-                                read_num_bit: i32, dest: &mut [u16])
+    fn read_bits(&self, address: i32, num: i32, dest: &mut [u8]) -> Result<i32>;
+    fn read_input_bits(&self, address: i32, num: i32, dest: &mut [u8]) -> Result<i32>;
+    fn read_registers(&self, address: i32, num: i32, dest: &mut [u16]) -> Result<i32>;
+    fn read_input_registers(&self, address: i32, num: i32, dest: &mut [u16]) -> Result<i32>;
+    fn report_slave_id(&self, max_dest: usize, dest: &mut [u8]) -> Result<i32>;
+    fn write_bit(&self, address: i32, status: bool) -> Result<()>;
+    fn write_bits(&self, address: i32, num: i32, src: &[u8]) -> Result<i32>;
+    fn write_register(&self, address: i32, value: i32) -> Result<()>;
+    fn write_registers(&self, address: i32, num: i32, src: &[u16]) -> Result<i32>;
+    fn write_and_read_registers(&self, write_address: i32, write_num: i32, src: &[u16], read_address: i32,
+                                read_num: i32, dest: &mut [u16])
                                 -> Result<i32>;
     fn send_raw_request(&self, raw_request: &mut [u8]) -> Result<i32>;
-    fn receive_confirmation(&self, response: &mut [u8]) -> Result<i32>;
-    fn reply_exception(&self, request: &[u8], exception_code: u32) -> Result<i32>;
+    fn receive_confirmation(&self) -> Result<Vec<u8>>;
 }
 
 // TODO: add real, working examples
 impl ModbusClient for Modbus {
     /// `read_bits` - read many bits
     ///
-    /// The [`read_bits()`](#method.read_bits) function shall read the status of the nb bits (coils) to the address of
-    /// the remote device.
-    /// The result of reading is stored in `Result<Vec<u8>>`.
+    /// The [`read_bits()`](#method.read_bits) function shall read the status of the `num` bits (coils) to the
+    /// `address` of the remote device. The result of reading is stored in `dest` slice as unsigned bytes (8 bits) set
+    /// to TRUE or FALSE.
     ///
-    /// The function uses the Modbus function code 0x01 (read coil status).
+    /// The function uses the **Modbus function code 0x01** (read coil status).
     ///
     /// # Return value
     ///
-    /// The function shall return the number of read bits if successful. Otherwise it contains an Error.
+    /// The function returns a `Result` containing the number of read bits if successful. Otherwise it returns an Error.
     ///
     /// # Parameters
     ///
     /// * `address` - address of the remote device
-    /// * `num_bit` - number of coils to read
-    /// * `dest` - If successful the result of the reading is stored here
+    /// * `num`     - number of coils to read
+    /// * `dest`    - the result of the reading is stored here
     ///
     /// # Examples
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let address = 1;
     /// let mut dest = vec![0u8; 100];
     ///
-    /// assert_eq!(modbus.read_bits(address, 1, &mut dest).unwrap(), 1);
+    /// assert!(modbus.read_bits(0, 1, &mut dest).is_ok());
     /// ```
-    fn read_bits(&self, address: i32, num_bit: i32, dest: &mut [u8]) -> Result<i32> {
+    fn read_bits(&self, address: i32, num: i32, dest: &mut [u8]) -> Result<i32> {
+        if num > dest.len() as i32 {
+            bail!(ErrorKind::TooManyData("Too many bits requested"));
+        }
+
         unsafe {
-            match libmodbus_sys::modbus_read_bits(self.ctx, address as c_int, num_bit, dest.as_mut_ptr()) {
+            match libmodbus_sys::modbus_read_bits(self.ctx, address as c_int, num, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
-                num => Ok(num),
+                len => Ok(len),
             }
         }
     }
 
     /// `read_input_bits` - read many input bits
     ///
-    /// The [`read_input_bits()`](#method.read_input_bits) function shall read the content of the nb input bits to the
-    /// address addr of the remote device.
-    /// The result of reading is stored in dest array as unsigned bytes (8 bits) set to TRUE or FALSE.
+    /// The [`read_input_bits()`](#method.read_input_bits) function shall read the content of the `num` input bits to
+    /// the `address` of the remote device. The result of reading is stored in `dest` slice as unsigned bytes (8 bits)
+    /// set to TRUE or FALSE.
     ///
-    /// The function uses the Modbus function code 0x02 (read input status).
+    /// The function uses the **Modbus function code 0x02** (read input status).
     ///
     /// # Return value
     ///
-    /// The function shall return the number of read input status if successful. Otherwise it contains an Error.
+    /// The function returns a `Result` containing the number of read bits if successful. Otherwise it returns an Error.
     ///
     /// # Parameters
     ///
     /// * `address` - address of the remote device
-    /// * `num_bit` - number of input bits to read
-    /// * `dest` - If successful the result of the reading is stored here
+    /// * `num`     - number of input bits to read
+    /// * `dest`    - the result of the reading is stored here
     ///
     /// # Examples
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let address = 1;
-    /// let mut dest = vec![0u8];
+    /// let mut dest = vec![0u8; 100];
     ///
-    /// assert_eq!(modbus.read_input_bits(address, 1, &mut dest).unwrap(), 1);
+    /// assert!(modbus.read_input_bits(0, 1, &mut dest).is_ok());
     /// ```
-    fn read_input_bits(&self, address: i32, num_bit: i32, dest: &mut [u8]) -> Result<i32> {
+    fn read_input_bits(&self, address: i32, num: i32, dest: &mut [u8]) -> Result<i32> {
+        if num > dest.len() as i32 {
+            bail!(ErrorKind::TooManyData("Too many discrete inputs requested"));
+        }
+
         unsafe {
-            match libmodbus_sys::modbus_read_input_bits(self.ctx, address as c_int, num_bit, dest.as_mut_ptr()) {
+            match libmodbus_sys::modbus_read_input_bits(self.ctx, address as c_int, num, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
-                num => Ok(num),
+                len => Ok(len),
             }
         }
     }
 
     /// `read_registers` - read many registers
     ///
-    /// The [`read_registers()`](#method.read_registers) function shall read the content of the nb holding registers to
-    /// the address addr of the remote device.
+    /// The [`read_registers()`](#method.read_registers) function shall read the content of the `num` holding registers
+    /// to the `address` of the remote device. The result of reading is stored in `dest` slice as u16 word values.
     ///
-    /// The function uses the Modbus function code 0x03 (read holding registers).
+    /// The function uses the **Modbus function code 0x03** (read holding registers).
     ///
     /// # Return value
     ///
-    /// The function shall return the number of read registers if successful. Otherwise it contains an Error.
+    /// The function returns a `Result` containing the number of read bits if successful. Otherwise it returns an Error.
     ///
     /// # Parameters
     ///
     /// * `address` - address of the remote device
-    /// * `num_bit` - number of holding registers to read
-    /// * `dest` - If successful the result of the reading is stored here
+    /// * `num`     - number of holding registers to read
+    /// * `dest`    - the result of the reading is stored here
     ///
     /// # Examples
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let address = 1;
     /// let mut dest = vec![0u16; 100];
     ///
-    /// assert_eq!(modbus.read_registers(address, 1, &mut dest).unwrap(), 1);
+    /// assert!(modbus.read_registers(0, 1, &mut dest).is_ok());
     /// ```
-    fn read_registers(&self, address: i32, num_bit: i32, dest: &mut [u16]) -> Result<i32> {
+    fn read_registers(&self, address: i32, num: i32, dest: &mut [u16]) -> Result<i32> {
+        if num > dest.len() as i32 {
+            bail!(ErrorKind::TooManyData("Too many registers requested"));
+        }
+
         unsafe {
-            match libmodbus_sys::modbus_read_registers(self.ctx, address as c_int, num_bit, dest.as_mut_ptr()) {
+            match libmodbus_sys::modbus_read_registers(self.ctx, address as c_int, num, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
-                num => Ok(num),
+                len => Ok(len),
             }
         }
     }
 
     /// `read_input_registers` -  read many input registers
     ///
-    /// The [`read_input_registers()`](#method.read_input_registers) function shall read the content of the nb input
-    /// registers to address addr of the remote device.
+    /// The [`read_input_registers()`](#method.read_input_registers) function shall read the content of the `num`
+    /// holding registers to the `address` of the remote device. The result of reading is stored in `dest` slice as u16
+    /// word values.
     ///
-    /// The function uses the Modbus function code 0x04 (read input registers). The holding registers and input
-    /// registers have different historical meaning,
-    /// but nowadays it’s more common to use holding registers only.
+    /// The function uses the **Modbus function code 0x04** (read input registers). The holding registers and input
+    /// registers have different historical meaning, but nowadays it’s more common to use holding registers only.
     ///
     /// # Return value
     ///
-    /// The function shall return the number of read input registers if successful. Otherwise it contains an Error.
+    /// The function returns a `Result` containing the number of read bits if successful. Otherwise it returns an Error.
     ///
     /// # Parameters
     ///
     /// * `address` - address of the remote device
-    /// * `num_bit` - number of input registers to read
-    /// * `dest` - If successful the result of the reading is stored here
+    /// * `num`     - number of input registers to read
+    /// * `dest`    - the result of the reading is stored here
     ///
     /// # Examples
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let address = 1;
     /// let mut dest = vec![0u16; 100];
     ///
-    /// assert_eq!(modbus.read_registers(address, 1, &mut dest).unwrap(), 1);
+    /// assert!(modbus.read_input_registers(0, 1, &mut dest).is_ok());
     /// ```
-    fn read_input_registers(&self, address: i32, num_bit: i32, dest: &mut [u16]) -> Result<i32> {
+    fn read_input_registers(&self, address: i32, num: i32, dest: &mut [u16]) -> Result<i32> {
+        if num > dest.len() as i32 {
+            bail!(ErrorKind::TooManyData("Too many bits requested"));
+        }
+
         unsafe {
-            match libmodbus_sys::modbus_read_input_registers(self.ctx, address as c_int, num_bit, dest.as_mut_ptr()) {
+            match libmodbus_sys::modbus_read_input_registers(self.ctx, address as c_int, num, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
-                num => Ok(num),
+                len => Ok(len),
             }
         }
     }
@@ -198,65 +209,58 @@ impl ModbusClient for Modbus {
     /// `report_slave_id` - returns a description of the controller
     ///
     /// The [`report_slave_id()`](#method.report_slave_id) function shall send a request to the controller to obtain a
-    /// description of the controller.
-    ///
-    /// The response stored in dest contains:
-    /// * the slave ID, this unique ID is in reality not unique at all so it's not possible to depend on it to know
-    /// how the
-    ///     information are packed in the response.
+    /// description of the controller. The response stored in `dest` contains:
+    ///     * the slave ID, this unique ID is in reality not unique at all so it's not possible to depend on it to know
+    /// how the information are packed in the response.
     ///     * the run indicator status (0x00 = OFF, 0xFF = ON)
-    /// * additional data specific to each controller. For example, libmodbus returns the version of the library as
+    ///     * additional data specific to each controller. For example, libmodbus returns the version of the library as
     /// a string.
     ///
     /// # Return value
     ///
-    /// The function shall return the number of read data if successful.
-    ///
-    /// If the output was truncated due to the `max_dest` limit then the return value is the number of bytes which
-    /// would have been written
-    /// to `dest` if enough space had been available. Thus, a return value greater than `max_dest` means that the
-    /// response data was truncated.
-    ///
-    /// Otherwise it contains an Error.
+    /// The function returns a `Result` containing the number of read bits if successful. If the output was truncated
+    /// due the `max_dest` limit then the return value is the number of bytes which would have been written to `dest`.
+    /// Thus, a return value greater than the `max_dest` means that the resonse data was truncated.
+    /// Otherwise the Result contains an Error.
     ///
     /// # Parameters
     ///
-    /// * `max_dest` - limit the return value to max_dest bytes
-    /// * `dest` - the response is stored here
+    /// * `max_dest`    - limit, write `max_dest` bytes from the response to `dest`
+    /// * `dest`    - the result of the reading is stored here
     ///
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, MODBUS_MAX_PDU_LENGTH};
+    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let mut tab_bytes = vec![0u8; MODBUS_MAX_PDU_LENGTH as usize];
+    /// let mut bytes = vec![0u8; Modbus::MAX_PDU_LENGTH];
     ///
-    /// let rc = modbus.report_slave_id(MODBUS_MAX_PDU_LENGTH as i32, &mut tab_bytes);
-    /// match rc {
-    ///     Ok(_) => println!("Run Status Indicator: {}", match tab_bytes[1] { 1 => "ON", _ => "OFF"} ),
-    ///     Err(e) => println!("Modbus Error: {}", e),
-    /// }
+    /// assert!(modbus.report_slave_id(Modbus::MAX_PDU_LENGTH, &mut bytes).is_ok());
+    /// // assert_eq!(bytes, vec![180, 255, 76, 77, 66, 51, 46, 49, 46, 52]));
     /// ```
-    fn report_slave_id(&self, max_dest: i32, dest: &mut [u8]) -> Result<i32> {
+    fn report_slave_id(&self, max_dest: usize, dest: &mut [u8]) -> Result<i32> {
+        if max_dest > dest.len() {
+            bail!(ErrorKind::TooManyData("Too many bits requested"));
+        }
+
         unsafe {
-            match libmodbus_sys::modbus_report_slave_id(self.ctx, max_dest, dest.as_mut_ptr()) {
+            match libmodbus_sys::modbus_report_slave_id(self.ctx, Modbus::MAX_PDU_LENGTH as i32, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
-                num => Ok(num),
+                len => Ok(len),
             }
         }
     }
 
-    /// `write_bit` - read many registers
+    /// `write_bit` - write a single bit
     ///
-    /// The [`write_bit()`](#method.write_bit) function shall write the status of status at the address addr of the
-    /// remote device.
+    /// The [`write_bit()`](#method.write_bit) function shall write the `status` at the `address` of the remote device.
     /// The value must be set to `true` of `false`.
     ///
     /// The function uses the Modbus function code 0x05 (force single coil).
     ///
     /// # Return value
     ///
-    /// The function shall return 1 if successful. Otherwise it contains an Error.
+    /// The function return an OK Result, containing a one, if successful. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
@@ -270,13 +274,14 @@ impl ModbusClient for Modbus {
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let address = 1;
     ///
-    /// assert_eq!(modbus.write_bit(address, true).unwrap(), 1);
+    /// assert!(modbus.write_bit(address, true).is_ok());
     /// ```
-    fn write_bit(&self, address: i32, status: bool) -> Result<i32> {
+    fn write_bit(&self, address: i32, status: bool) -> Result<()> {
         unsafe {
             match libmodbus_sys::modbus_write_bit(self.ctx, address as c_int, status as c_int) {
                 -1 => bail!(Error::last_os_error()),
-                num => Ok(num),
+                1 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
@@ -290,7 +295,7 @@ impl ModbusClient for Modbus {
     ///
     /// # Return value
     ///
-    /// The function shall return 1 if successful. Otherwise it contains an Error.
+    /// The function return an OK Result, containing a one, if successful. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
@@ -305,33 +310,34 @@ impl ModbusClient for Modbus {
     /// let address = 1;
     /// let value = i32::max_value();
     ///
-    /// assert_eq!(modbus.write_register(address, value).unwrap(), 1);
+    /// assert!(modbus.write_register(address, value).is_ok());
     /// ```
-    fn write_register(&self, address: i32, value: i32) -> Result<i32> {
+    fn write_register(&self, address: i32, value: i32) -> Result<()> {
         unsafe {
             match libmodbus_sys::modbus_write_register(self.ctx, address as c_int, value as c_int) {
                 -1 => bail!(Error::last_os_error()),
-                num => Ok(num),
+                1 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
 
     /// `write_bits` - write many bits
     ///
-    /// The [`write_bits()`](#method.write_bits) function shall write the status of the nb bits (coils) from src at the
-    /// address addr of the remote device. The src array must contains bytes set to TRUE or FALSE.
+    /// The [`write_bits()`](#method.write_bits) function shall write the status of the bits (coils) from `src` at the
+    /// `address` of the remote device. The `src` array must contains bytes set to TRUE or FALSE.
     ///
     /// The function shall return the number of written bits if successful. Otherwise it contains an Error.
     ///
     /// # Return value
     ///
-    /// The function returns a Result containing a `1` if successful, or an Error.
+    /// The function returns a Ok Result containing the number of written bits. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
     /// * `address` - address of the remote device
-    /// * `num_bit` - status that should write at the address `addr`
-    /// * `src` - vec of `0` and `1` (true and false) values
+    /// * `num`     - number or bits that should be writen at the address `address`
+    /// * `src`     - vec of `0` and `1` (true and false) values
     ///
     /// # Examples
     ///
@@ -343,9 +349,9 @@ impl ModbusClient for Modbus {
     ///
     /// assert_eq!(modbus.write_bits(address, 1, &tab_bytes).unwrap(), 1);
     /// ```
-    fn write_bits(&self, address: i32, num_bit: i32, src: &[u8]) -> Result<i32> {
+    fn write_bits(&self, address: i32, num: i32, src: &[u8]) -> Result<i32> {
         unsafe {
-            match libmodbus_sys::modbus_write_bits(self.ctx, address as c_int, num_bit, src.as_ptr()) {
+            match libmodbus_sys::modbus_write_bits(self.ctx, address as c_int, num, src.as_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 num => Ok(num),
             }
@@ -354,20 +360,21 @@ impl ModbusClient for Modbus {
 
     /// `write_registers` - write many registers
     ///
-    /// The [`write_registers()`](#method.write_registers) function shall write the content of the nb holding registers
-    /// from the array src at address addr of the remote device.
+    /// The [`write_registers()`](#method.write_registers) function shall write the content of the `num` holding
+    /// registers
+    /// from the array `src` at `address` of the remote device.
     ///
     /// The function uses the Modbus function code 0x10 (preset multiple registers).
     ///
     /// # Return value
     ///
-    /// The function shall return the number of written registers if successful. Otherwise it contains an Error.
+    /// The function returns a Ok Result containing the number of written bytes. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
     /// * `address` - address of the remote device
-    /// * `num_bit` - number of holding registers that should write at the address `addr`
-    /// * `src` - holding register
+    /// * `num`     - number of holding registers that should write at the address `address`
+    /// * `src`     - holding register
     ///
     /// # Examples
     ///
@@ -379,9 +386,9 @@ impl ModbusClient for Modbus {
     ///
     /// assert_eq!(modbus.write_registers(address, 1, &tab_bytes).unwrap(), 1);
     /// ```
-    fn write_registers(&self, address: i32, num_bit: i32, src: &[u16]) -> Result<i32> {
+    fn write_registers(&self, address: i32, num: i32, src: &[u16]) -> Result<i32> {
         unsafe {
-            match libmodbus_sys::modbus_write_registers(self.ctx, address as c_int, num_bit, src.as_ptr()) {
+            match libmodbus_sys::modbus_write_registers(self.ctx, address as c_int, num, src.as_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 num => Ok(num),
             }
@@ -399,15 +406,15 @@ impl ModbusClient for Modbus {
     ///
     /// # Return value
     ///
-    /// The function shall return the number of read registers if successful. Otherwise it contains an Error.
+    /// The function returns a Ok Result containing the number of read registers. Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
     /// * `write_address`   - address of the remote device
-    /// * `write_num_bit`   - number of holding registers
+    /// * `write_num`       - number of holding registers
     /// * `src`             - holding register
     /// * `read_address`    - address of the remote device
-    /// * `read_num_bit`    - number of holding registers
+    /// * `read_num`        - number of holding registers
     /// * `dest`            - holding register
     ///
     /// # Examples
@@ -423,16 +430,16 @@ impl ModbusClient for Modbus {
     ///                 address, 1, &request_bytes,
     ///                 address, 1, &mut response_bytes).unwrap(), 1);
     /// ```
-    fn write_and_read_registers(&self, write_address: i32, write_num_bit: i32, src: &[u16], read_address: i32,
-                                read_num_bit: i32, dest: &mut [u16])
+    fn write_and_read_registers(&self, write_address: i32, write_num: i32, src: &[u16], read_address: i32,
+                                read_num: i32, dest: &mut [u16])
                                 -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_write_and_read_registers(self.ctx,
                                                                  write_address as c_int,
-                                                                 write_num_bit,
+                                                                 write_num,
                                                                  src.as_ptr(),
                                                                  read_address as c_int,
-                                                                 read_num_bit,
+                                                                 read_num,
                                                                  dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 num => Ok(num),
@@ -445,17 +452,13 @@ impl ModbusClient for Modbus {
     /// The [`send_raw_request()`](#method.send_raw_request) function shall send a request via the socket of the
     /// current modbus contest.
     /// This function must be used for debugging purposes because you have to take care to make a valid request by hand.
-    /// The function only adds to the message, the header or CRC of the selected backend, so `raw_req` must start and
+    /// The function only adds to the message, the header or CRC of the selected backend, so `raw_request` must start
+    /// and
     /// contain at least a slave/unit identifier and a function code.
     /// This function can be used to send request not handled by the library.
     ///
-    /// The public header of libmodbus provides a list of supported Modbus functions codes,
-    /// prefixed by MODBUS_FC_ (eg. MODBUS_FC_READ_HOLDING_REGISTERS), to help build of raw requests.
-    ///
-    /// # Return value
-    ///
-    /// The function returns a Result containing the full message length, counting the extra data relating to the
-    /// backend, if successful, or an Error.
+    /// The enum [`FunctionCode`](enum.FunctionCode.html) provides a list of supported Modbus functions codes, to help
+    /// build of raw requests.
     ///
     /// # Parameters
     ///
@@ -469,13 +472,12 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, FunctionCode, MODBUS_TCP_MAX_ADU_LENGTH};
+    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, FunctionCode};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::READ_HOLDING_REGISTERS as u8, 0x00, 0x01, 0x0, 0x05];
-    /// let mut response: Vec<u8> = vec![0; MODBUS_TCP_MAX_ADU_LENGTH as usize];
+    /// let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::ReadHoldingRegisters as u8, 0x00, 0x01, 0x0, 0x05];
     ///
     /// assert_eq!(modbus.send_raw_request(&mut raw_request).unwrap(), 12);
-    /// assert_eq!(modbus.receive_confirmation(&mut response).unwrap(), 19);
+    /// let response: Vec<u8> = modbus.receive_confirmation().unwrap();
     /// ```
     fn send_raw_request(&self, raw_request: &mut [u8]) -> Result<i32> {
         unsafe {
@@ -516,68 +518,20 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, MODBUS_MAX_ADU_LENGTH};
-    ///
+    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// let mut response: Vec<u8> = vec![0; MODBUS_MAX_ADU_LENGTH as usize];
     ///
-    /// assert_eq!(modbus.receive_confirmation(&mut response).unwrap(), 1);
+    /// let response: Vec<u8> = modbus.receive_confirmation().unwrap();
     /// ```
-    fn receive_confirmation(&self, response: &mut [u8]) -> Result<i32> {
+    fn receive_confirmation(&self) -> Result<Vec<u8>> {
+        let mut response: Vec<u8> = vec![0; Modbus::MAX_ADU_LENGTH];
         unsafe {
             match libmodbus_sys::modbus_receive_confirmation(self.ctx, response.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
-                len => Ok(len),
-            }
-        }
-    }
-
-    /// TODO: create an enum for the exception codes
-    ///
-    /// `reply_exception` - send an exception reponse
-    ///
-    /// The modbus_reply_exception() function shall send an exception response based on the exception_code in argument.
-    ///
-    /// The libmodbus provides the following exception codes:
-    ///
-    /// * MODBUS_EXCEPTION_ILLEGAL_FUNCTION (1)
-    /// * MODBUS_EXCEPTION_ILLEGAL_DATA_ADDRESS (2)
-    /// * MODBUS_EXCEPTION_ILLEGAL_DATA_VALUE (3)
-    /// * MODBUS_EXCEPTION_SLAVE_OR_SERVER_FAILURE (4)
-    /// * MODBUS_EXCEPTION_ACKNOWLEDGE (5)
-    /// * MODBUS_EXCEPTION_SLAVE_OR_SERVER_BUSY (6)
-    /// * MODBUS_EXCEPTION_NEGATIVE_ACKNOWLEDGE (7)
-    /// * MODBUS_EXCEPTION_MEMORY_PARITY (8)
-    /// * MODBUS_EXCEPTION_NOT_DEFINED (9)
-    /// * MODBUS_EXCEPTION_GATEWAY_PATH (10)
-    /// * MODBUS_EXCEPTION_GATEWAY_TARGET (11)
-    ///
-    /// The initial request req is required to build a valid response.
-    ///
-    /// # Return value
-    ///
-    /// The function returns the length of the response sent if successful, or an Error.
-    ///
-    /// # Parameters
-    ///
-    /// * `request`         - initial request, required to build a valid response
-    /// * `exception_code`  - Exception Code
-    ///
-    /// # Examples
-    ///
-    /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
-    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
-    /// use libmodbus_rs::Exception;
-    ///
-    /// let request: Vec<u8> = vec![0x01];
-    /// assert_eq!(modbus.reply_exception(&request, Exception::ACKNOWLEDGE as u32).unwrap(), 9);
-    /// ```
-    fn reply_exception(&self, request: &[u8], exception_code: u32) -> Result<i32> {
-        unsafe {
-            match libmodbus_sys::modbus_reply_exception(self.ctx, request.as_ptr(), exception_code) {
-                -1 => bail!(Error::last_os_error()),
-                len => Ok(len),
+                len => {
+                    response.truncate(len as usize);
+                    Ok(response)
+                },
             }
         }
     }

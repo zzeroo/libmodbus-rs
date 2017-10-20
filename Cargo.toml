@@ -1,33 +1,28 @@
 [package]
 name = "libmodbus-rs"
-version = "0.4.3"
+version = "0.5.8"
 authors = ["Stefan Müller <co@zzeroo.com>"]
 readme = "README.md"
 keywords = ["modbus", "libmodbus"]
 documentation = "http://zzeroo.github.io/libmodbus-rs/libmodbus_rs/index.html"
 repository = "https://github.com/zzeroo/libmodbus-rs.git"
 homepage = "http://zzeroo.github.io/libmodbus-rs"
-description = """
-Binding to libmodbus.
-Libmodbus is a free software library to send/receive data with a device which respects the Modbus protocol.
-This library can use a serial port or an Ethernet connection.
-http://libmodbus.org/
-"""
+description = "C bindings to libmodbus"
 license = "LGPL-2.1" # same as libmodbus
 categories = ["api-bindings"]
 
 [badges]
 travis-ci = { repository = "zzeroo/libmodbus-rs" }
-appveyor = { repository = "zzeroo/libmodbus-rs" }
+#appveyor = { repository = "zzeroo/libmodbus-rs" }
 
 [dependencies]
-error-chain = "0.10"
+error-chain = "0.11"
 libc = "0.2"
-libmodbus-sys = { path = "libmodbus-sys", version = "0.4.2" }
+libmodbus-sys = { path = "libmodbus-sys", version = "0.5.0" }
 rand = "0.3"
 
 [dependencies.clap]
-version = "~2.24"
+version = "2.24.2"
 default-features = false
  # Cherry-pick the features you'd like to use
 features = [ "color" ]

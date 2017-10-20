@@ -1,30 +1,29 @@
 extern crate libmodbus_rs;
 
-use libmodbus_rs::{Modbus, ModbusServer, ModbusMapping, ModbusTCP, MODBUS_TCP_MAX_ADU_LENGTH};
-use libmodbus_rs::errors::*;
+use libmodbus_rs::{Modbus, ModbusServer, ModbusMapping, ModbusTCP};
 
 
-fn run() -> Result<()> {
-    let mut modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
-    // modbus.set_debug(true)?;
+fn run() -> Result<(), String> {
+    let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).expect("could not create modbus TCP context");
+    // modbus.set_debug(true).expect("could not set DEBUG mode");
 
-    let modbus_mapping = ModbusMapping::new(500, 500, 500, 500)?;
+    let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).expect("could not create Modbus Mapping");
 
-    let mut socket = modbus.tcp_listen(1)?;
-    modbus.tcp_accept(&mut socket)?;
+    let mut socket = modbus.tcp_listen(1).expect("could not listen");
+    modbus.tcp_accept(&mut socket).expect("could not create socket");
 
 
     loop {
-        let mut query = vec![0u8; MODBUS_TCP_MAX_ADU_LENGTH as usize];
+        let mut query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH as usize];
 
         match modbus.receive(&mut query) {
-            Ok(n) => {
-                modbus.reply(&query, n, &modbus_mapping)
+                Ok(num) => modbus.reply(&query, num, &modbus_mapping),
+                Err(err) => {
+                    println!("ERROR while parsing: {}", err);
+                    break;
+                },
             }
-            Err(_) => {
-                break
-            }
-        }?;
+            .expect("could not receive message");
     }
     println!("Quit the loop: Connection reset by peer");
 
