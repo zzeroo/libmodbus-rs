@@ -316,7 +316,7 @@ This mode will also run flush requests after a delay based on  the current respo
 (eg. timeout of select call).
 The reconnection attempt can hang for several seconds if the network to the remote target unit is down.</p>
 
-<p>When <code>ErrorRecoveryMode::PROTOCOL</code> is set, a sleep and flush sequence will be used to clean up the ongoing
+<p>When <code>ErrorRecoveryMode::Protocol</code> is set, a sleep and flush sequence will be used to clean up the ongoing
 communication, this can occurs when the message length is invalid, the TID is wrong or the received function
 code is not the expected one.
 The response timeout delay will be used to sleep.</p>
