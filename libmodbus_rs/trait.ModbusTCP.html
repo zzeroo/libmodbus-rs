@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../libmodbus_rs/index.html'><img src='https://zzeroo.github.io/share/zzeroo-logo.png' alt='logo' width='100'></a>
-        <p class='location'><a href='index.html'>libmodbus_rs</a></p><script>window.sidebarCurrent = {name: 'ModbusTCP', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait ModbusTCP</p><div class="block items"><ul><li><a href="#required-methods">Required Methods</a></li><li><a href="#implementors">Implementors</a></li></ul></div><p class='location'><a href='index.html'>libmodbus_rs</a></p><script>window.sidebarCurrent = {name: 'ModbusTCP', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -48,11 +48,11 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/modbus_tcp.rs.html#15-19' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/libmodbus_rs/modbus_tcp.rs.html#14-18' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait ModbusTCP {
-    fn <a href='#tymethod.new_tcp' class='fnname'>new_tcp</a>(ip: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>, port: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a>&gt;;
-    fn <a href='#tymethod.tcp_accept' class='fnname'>tcp_accept</a>(&amp;mut self, socket: &amp;mut <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;;
-    fn <a href='#tymethod.tcp_listen' class='fnname'>tcp_listen</a>(&amp;mut self, num_connection: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;;
+    fn <a href='#tymethod.new_tcp' class='fnname'>new_tcp</a>(ip: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>, port: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a>&gt;;
+<div class='item-spacer'></div>    fn <a href='#tymethod.tcp_accept' class='fnname'>tcp_accept</a>(&amp;mut self, socket: &amp;mut <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;;
+<div class='item-spacer'></div>    fn <a href='#tymethod.tcp_listen' class='fnname'>tcp_listen</a>(&amp;mut self, num_connection: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;;
 }</pre><div class='docblock'><p>The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
 It does not require a checksum calculation as lower layer takes care of the same.</p>
 
@@ -64,12 +64,16 @@ It does not require a checksum calculation as lower layer takes care of the same
 </ul></li>
 </ul>
 </div>
-            <h2 id='required-methods'>Required Methods</h2>
+            <h2 id='required-methods' class='small-section-header'>
+              Required Methods<a href='#required-methods' class='anchor'></a>
+            </h2>
             <div class='methods'>
-        <h3 id='tymethod.new_tcp' class='method'><span id='new_tcp.v' class='invisible'><code>fn <a href='#tymethod.new_tcp' class='fnname'>new_tcp</a>(ip: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>, port: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a>&gt;</code></span></h3><h3 id='tymethod.tcp_accept' class='method'><span id='tcp_accept.v' class='invisible'><code>fn <a href='#tymethod.tcp_accept' class='fnname'>tcp_accept</a>(&amp;mut self, socket: &amp;mut <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h3><h3 id='tymethod.tcp_listen' class='method'><span id='tcp_listen.v' class='invisible'><code>fn <a href='#tymethod.tcp_listen' class='fnname'>tcp_listen</a>(&amp;mut self, num_connection: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h3></div>
-        <h2 id='implementors'>Implementors</h2>
+        <h3 id='tymethod.new_tcp' class='method'><span id='new_tcp.v' class='invisible'><code>fn <a href='#tymethod.new_tcp' class='fnname'>new_tcp</a>(ip: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>, port: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a>&gt;</code></span></h3><h3 id='tymethod.tcp_accept' class='method'><span id='tcp_accept.v' class='invisible'><code>fn <a href='#tymethod.tcp_accept' class='fnname'>tcp_accept</a>(&amp;mut self, socket: &amp;mut <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h3><h3 id='tymethod.tcp_listen' class='method'><span id='tcp_listen.v' class='invisible'><code>fn <a href='#tymethod.tcp_listen' class='fnname'>tcp_listen</a>(&amp;mut self, num_connection: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>) -&gt; <a class="type" href="../libmodbus_rs/errors/type.Result.html" title="type libmodbus_rs::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.i32.html">i32</a>&gt;</code></span></h3></div>
+        <h2 id='implementors' class='small-section-header'>
+          Implementors<a href='#implementors' class='anchor'></a>
+        </h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl ModbusTCP for <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></li>
+    <li><div class='out-of-band'><a class='srclink' href='../src/libmodbus_rs/modbus_tcp.rs.html#20-113' title='goto source code'>[src]</a></div><code>impl ModbusTCP for <a class="struct" href="../libmodbus_rs/struct.Modbus.html" title="struct libmodbus_rs::Modbus">Modbus</a></code></li>
 </ul><script type="text/javascript" async
                          src="../implementors/libmodbus_rs/trait.ModbusTCP.js">
                  </script></section>
@@ -129,7 +133,6 @@ It does not require a checksum calculation as lower layer takes care of the same
         window.rootPath = "../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>

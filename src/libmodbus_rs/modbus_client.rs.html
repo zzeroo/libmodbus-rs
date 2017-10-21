@@ -581,52 +581,6 @@
 <span id="536">536</span>
 <span id="537">537</span>
 <span id="538">538</span>
-<span id="539">539</span>
-<span id="540">540</span>
-<span id="541">541</span>
-<span id="542">542</span>
-<span id="543">543</span>
-<span id="544">544</span>
-<span id="545">545</span>
-<span id="546">546</span>
-<span id="547">547</span>
-<span id="548">548</span>
-<span id="549">549</span>
-<span id="550">550</span>
-<span id="551">551</span>
-<span id="552">552</span>
-<span id="553">553</span>
-<span id="554">554</span>
-<span id="555">555</span>
-<span id="556">556</span>
-<span id="557">557</span>
-<span id="558">558</span>
-<span id="559">559</span>
-<span id="560">560</span>
-<span id="561">561</span>
-<span id="562">562</span>
-<span id="563">563</span>
-<span id="564">564</span>
-<span id="565">565</span>
-<span id="566">566</span>
-<span id="567">567</span>
-<span id="568">568</span>
-<span id="569">569</span>
-<span id="570">570</span>
-<span id="571">571</span>
-<span id="572">572</span>
-<span id="573">573</span>
-<span id="574">574</span>
-<span id="575">575</span>
-<span id="576">576</span>
-<span id="577">577</span>
-<span id="578">578</span>
-<span id="579">579</span>
-<span id="580">580</span>
-<span id="581">581</span>
-<span id="582">582</span>
-<span id="583">583</span>
-<span id="584">584</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">errors</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">c_int</span>;
@@ -639,188 +593,199 @@
 <span class="doccomment">/// The following functions are used by the clients to send Modbus requests:</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// * Read data</span>
-<span class="doccomment">/// - [`read_bits()`](struct.Modbus.html#method.read_bitsmode),</span>
+<span class="doccomment">///     - [`read_bits()`](struct.Modbus.html#method.read_bits),</span>
 <span class="doccomment">/// [`read_input_bits()`](struct.Modbus.html#method.read_input_bits),</span>
 <span class="doccomment">/// [`read_registers()`](struct.Modbus.html#method.read_registers),</span>
 <span class="doccomment">/// [`read_input_registers()`](struct.Modbus.html#method.read_input_registers),</span>
 <span class="doccomment">/// [`report_slave_id()`](struct.Modbus.html#method.report_slave_id)</span>
 <span class="doccomment">/// * Write data</span>
-<span class="doccomment">/// - [`write_bit()`](struct.Modbus.html#method.write_bit),</span>
+<span class="doccomment">///     - [`write_bit()`](struct.Modbus.html#method.write_bit),</span>
 <span class="doccomment">/// [`write_register()`](struct.Modbus.html#method.write_register),</span>
 <span class="doccomment">/// [`write_bits()`](struct.Modbus.html#method.write_bits),</span>
 <span class="doccomment">/// [`write_registers()`](struct.Modbus.html#method.write_registers)</span>
 <span class="doccomment">/// * Write and read data</span>
 <span class="doccomment">///     - [`write_and_read_registers()`](struct.Modbus.html#method.write_and_read_registers)</span>
 <span class="doccomment">/// * Raw requests</span>
-<span class="doccomment">/// - [`send_raw_request()`](struct.Modbus.html#method.send_raw_request),</span>
+<span class="doccomment">///     - [`send_raw_request()`](struct.Modbus.html#method.send_raw_request),</span>
 <span class="doccomment">/// [`receive_confirmation()`](struct.Modbus.html#method.receive_confirmation)</span>
 <span class="doccomment">/// * Reply an exception</span>
 <span class="doccomment">///     - [`reply_exception()`](struct.Modbus.html#method.reply_exception)</span>
 <span class="doccomment">///</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ModbusClient</span> {
-    <span class="kw">fn</span> <span class="ident">read_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">read_input_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">read_input_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">report_slave_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">max_dest</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">write_bit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">status</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">write_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">value</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">write_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">write_and_read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">write_address</span>: <span class="ident">i32</span>, <span class="ident">write_num_bit</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>], <span class="ident">read_address</span>: <span class="ident">i32</span>,
-                                <span class="ident">read_num_bit</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>])
+    <span class="kw">fn</span> <span class="ident">read_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">read_input_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">read_input_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">report_slave_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">max_dest</span>: <span class="ident">usize</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">write_bit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">status</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">write_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">value</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">write_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">write_and_read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">write_address</span>: <span class="ident">i32</span>, <span class="ident">write_num</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>], <span class="ident">read_address</span>: <span class="ident">i32</span>,
+                                <span class="ident">read_num</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>])
                                 <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">send_raw_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">raw_request</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">receive_confirmation</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">reply_exception</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">exception_code</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">receive_confirmation</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span>;
 }
 
 <span class="comment">// TODO: add real, working examples</span>
 <span class="kw">impl</span> <span class="ident">ModbusClient</span> <span class="kw">for</span> <span class="ident">Modbus</span> {
     <span class="doccomment">/// `read_bits` - read many bits</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`read_bits()`](#method.read_bits) function shall read the status of the nb bits (coils) to the address of</span>
-    <span class="doccomment">/// the remote device.</span>
-    <span class="doccomment">/// The result of reading is stored in `Result&lt;Vec&lt;u8&gt;&gt;`.</span>
+    <span class="doccomment">/// The [`read_bits()`](#method.read_bits) function shall read the status of the `num` bits (coils) to the</span>
+    <span class="doccomment">/// `address` of the remote device. The result of reading is stored in `dest` slice as unsigned bytes (8 bits) set</span>
+    <span class="doccomment">/// to TRUE or FALSE.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function uses the Modbus function code 0x01 (read coil status).</span>
+    <span class="doccomment">/// The function uses the **Modbus function code 0x01** (read coil status).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return value</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function shall return the number of read bits if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The function returns a `Result` containing the number of read bits if successful. Otherwise it returns an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `address` - address of the remote device</span>
-    <span class="doccomment">/// * `num_bit` - number of coils to read</span>
-    <span class="doccomment">/// * `dest` - If successful the result of the reading is stored here</span>
+    <span class="doccomment">/// * `num`     - number of coils to read</span>
+    <span class="doccomment">/// * `dest`    - the result of the reading is stored here</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};</span>
     <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// let address = 1;</span>
     <span class="doccomment">/// let mut dest = vec![0u8; 100];</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// assert_eq!(modbus.read_bits(address, 1, &amp;mut dest).unwrap(), 1);</span>
+    <span class="doccomment">/// assert!(modbus.read_bits(0, 1, &amp;mut dest).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">read_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">read_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">num</span> <span class="op">&gt;</span> <span class="ident">dest</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span> {
+            <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">ErrorKind</span>::<span class="ident">TooManyData</span>(<span class="string">&quot;Too many bits requested&quot;</span>));
+        }
+
         <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_read_bits</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num_bit</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_read_bits</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
-                <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span>),
+                <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span>),
             }
         }
     }
 
     <span class="doccomment">/// `read_input_bits` - read many input bits</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`read_input_bits()`](#method.read_input_bits) function shall read the content of the nb input bits to the</span>
-    <span class="doccomment">/// address addr of the remote device.</span>
-    <span class="doccomment">/// The result of reading is stored in dest array as unsigned bytes (8 bits) set to TRUE or FALSE.</span>
+    <span class="doccomment">/// The [`read_input_bits()`](#method.read_input_bits) function shall read the content of the `num` input bits to</span>
+    <span class="doccomment">/// the `address` of the remote device. The result of reading is stored in `dest` slice as unsigned bytes (8 bits)</span>
+    <span class="doccomment">/// set to TRUE or FALSE.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function uses the Modbus function code 0x02 (read input status).</span>
+    <span class="doccomment">/// The function uses the **Modbus function code 0x02** (read input status).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return value</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function shall return the number of read input status if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The function returns a `Result` containing the number of read bits if successful. Otherwise it returns an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `address` - address of the remote device</span>
-    <span class="doccomment">/// * `num_bit` - number of input bits to read</span>
-    <span class="doccomment">/// * `dest` - If successful the result of the reading is stored here</span>
+    <span class="doccomment">/// * `num`     - number of input bits to read</span>
+    <span class="doccomment">/// * `dest`    - the result of the reading is stored here</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};</span>
     <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// let address = 1;</span>
-    <span class="doccomment">/// let mut dest = vec![0u8];</span>
+    <span class="doccomment">/// let mut dest = vec![0u8; 100];</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// assert_eq!(modbus.read_input_bits(address, 1, &amp;mut dest).unwrap(), 1);</span>
+    <span class="doccomment">/// assert!(modbus.read_input_bits(0, 1, &amp;mut dest).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">read_input_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">read_input_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">num</span> <span class="op">&gt;</span> <span class="ident">dest</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span> {
+            <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">ErrorKind</span>::<span class="ident">TooManyData</span>(<span class="string">&quot;Too many discrete inputs requested&quot;</span>));
+        }
+
         <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_read_input_bits</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num_bit</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_read_input_bits</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
-                <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span>),
+                <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span>),
             }
         }
     }
 
     <span class="doccomment">/// `read_registers` - read many registers</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`read_registers()`](#method.read_registers) function shall read the content of the nb holding registers to</span>
-    <span class="doccomment">/// the address addr of the remote device.</span>
+    <span class="doccomment">/// The [`read_registers()`](#method.read_registers) function shall read the content of the `num` holding registers</span>
+    <span class="doccomment">/// to the `address` of the remote device. The result of reading is stored in `dest` slice as u16 word values.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function uses the Modbus function code 0x03 (read holding registers).</span>
+    <span class="doccomment">/// The function uses the **Modbus function code 0x03** (read holding registers).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return value</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function shall return the number of read registers if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The function returns a `Result` containing the number of read bits if successful. Otherwise it returns an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `address` - address of the remote device</span>
-    <span class="doccomment">/// * `num_bit` - number of holding registers to read</span>
-    <span class="doccomment">/// * `dest` - If successful the result of the reading is stored here</span>
+    <span class="doccomment">/// * `num`     - number of holding registers to read</span>
+    <span class="doccomment">/// * `dest`    - the result of the reading is stored here</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};</span>
     <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// let address = 1;</span>
     <span class="doccomment">/// let mut dest = vec![0u16; 100];</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// assert_eq!(modbus.read_registers(address, 1, &amp;mut dest).unwrap(), 1);</span>
+    <span class="doccomment">/// assert!(modbus.read_registers(0, 1, &amp;mut dest).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">num</span> <span class="op">&gt;</span> <span class="ident">dest</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span> {
+            <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">ErrorKind</span>::<span class="ident">TooManyData</span>(<span class="string">&quot;Too many registers requested&quot;</span>));
+        }
+
         <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_read_registers</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num_bit</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_read_registers</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
-                <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span>),
+                <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span>),
             }
         }
     }
 
     <span class="doccomment">/// `read_input_registers` -  read many input registers</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`read_input_registers()`](#method.read_input_registers) function shall read the content of the nb input</span>
-    <span class="doccomment">/// registers to address addr of the remote device.</span>
+    <span class="doccomment">/// The [`read_input_registers()`](#method.read_input_registers) function shall read the content of the `num`</span>
+    <span class="doccomment">/// holding registers to the `address` of the remote device. The result of reading is stored in `dest` slice as u16</span>
+    <span class="doccomment">/// word values.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function uses the Modbus function code 0x04 (read input registers). The holding registers and input</span>
-    <span class="doccomment">/// registers have different historical meaning,</span>
-    <span class="doccomment">/// but nowadays it’s more common to use holding registers only.</span>
+    <span class="doccomment">/// The function uses the **Modbus function code 0x04** (read input registers). The holding registers and input</span>
+    <span class="doccomment">/// registers have different historical meaning, but nowadays it’s more common to use holding registers only.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return value</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function shall return the number of read input registers if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The function returns a `Result` containing the number of read bits if successful. Otherwise it returns an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `address` - address of the remote device</span>
-    <span class="doccomment">/// * `num_bit` - number of input registers to read</span>
-    <span class="doccomment">/// * `dest` - If successful the result of the reading is stored here</span>
+    <span class="doccomment">/// * `num`     - number of input registers to read</span>
+    <span class="doccomment">/// * `dest`    - the result of the reading is stored here</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};</span>
     <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// let address = 1;</span>
     <span class="doccomment">/// let mut dest = vec![0u16; 100];</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// assert_eq!(modbus.read_registers(address, 1, &amp;mut dest).unwrap(), 1);</span>
+    <span class="doccomment">/// assert!(modbus.read_input_registers(0, 1, &amp;mut dest).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">read_input_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">read_input_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">num</span> <span class="op">&gt;</span> <span class="ident">dest</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">i32</span> {
+            <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">ErrorKind</span>::<span class="ident">TooManyData</span>(<span class="string">&quot;Too many bits requested&quot;</span>));
+        }
+
         <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_read_input_registers</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num_bit</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_read_input_registers</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
-                <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span>),
+                <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span>),
             }
         }
     }
@@ -828,65 +793,58 @@
     <span class="doccomment">/// `report_slave_id` - returns a description of the controller</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The [`report_slave_id()`](#method.report_slave_id) function shall send a request to the controller to obtain a</span>
-    <span class="doccomment">/// description of the controller.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The response stored in dest contains:</span>
-    <span class="doccomment">/// * the slave ID, this unique ID is in reality not unique at all so it&#39;s not possible to depend on it to know</span>
-    <span class="doccomment">/// how the</span>
-    <span class="doccomment">///     information are packed in the response.</span>
+    <span class="doccomment">/// description of the controller. The response stored in `dest` contains:</span>
+    <span class="doccomment">///     * the slave ID, this unique ID is in reality not unique at all so it&#39;s not possible to depend on it to know</span>
+    <span class="doccomment">/// how the information are packed in the response.</span>
     <span class="doccomment">///     * the run indicator status (0x00 = OFF, 0xFF = ON)</span>
-    <span class="doccomment">/// * additional data specific to each controller. For example, libmodbus returns the version of the library as</span>
+    <span class="doccomment">///     * additional data specific to each controller. For example, libmodbus returns the version of the library as</span>
     <span class="doccomment">/// a string.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return value</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function shall return the number of read data if successful.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// If the output was truncated due to the `max_dest` limit then the return value is the number of bytes which</span>
-    <span class="doccomment">/// would have been written</span>
-    <span class="doccomment">/// to `dest` if enough space had been available. Thus, a return value greater than `max_dest` means that the</span>
-    <span class="doccomment">/// response data was truncated.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The function returns a `Result` containing the number of read bits if successful. If the output was truncated</span>
+    <span class="doccomment">/// due the `max_dest` limit then the return value is the number of bytes which would have been written to `dest`.</span>
+    <span class="doccomment">/// Thus, a return value greater than the `max_dest` means that the resonse data was truncated.</span>
+    <span class="doccomment">/// Otherwise the Result contains an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// * `max_dest` - limit the return value to max_dest bytes</span>
-    <span class="doccomment">/// * `dest` - the response is stored here</span>
+    <span class="doccomment">/// * `max_dest`    - limit, write `max_dest` bytes from the response to `dest`</span>
+    <span class="doccomment">/// * `dest`    - the result of the reading is stored here</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, MODBUS_MAX_PDU_LENGTH};</span>
+    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};</span>
     <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// let mut tab_bytes = vec![0u8; MODBUS_MAX_PDU_LENGTH as usize];</span>
+    <span class="doccomment">/// let mut bytes = vec![0u8; Modbus::MAX_PDU_LENGTH];</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// let rc = modbus.report_slave_id(MODBUS_MAX_PDU_LENGTH as i32, &amp;mut tab_bytes);</span>
-    <span class="doccomment">/// match rc {</span>
-    <span class="doccomment">///     Ok(_) =&gt; println!(&quot;Run Status Indicator: {}&quot;, match tab_bytes[1] { 1 =&gt; &quot;ON&quot;, _ =&gt; &quot;OFF&quot;} ),</span>
-    <span class="doccomment">///     Err(e) =&gt; println!(&quot;Modbus Error: {}&quot;, e),</span>
-    <span class="doccomment">/// }</span>
+    <span class="doccomment">/// assert!(modbus.report_slave_id(Modbus::MAX_PDU_LENGTH, &amp;mut bytes).is_ok());</span>
+    <span class="doccomment">/// // assert_eq!(bytes, vec![180, 255, 76, 77, 66, 51, 46, 49, 46, 52]));</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">report_slave_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">max_dest</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">report_slave_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">max_dest</span>: <span class="ident">usize</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">max_dest</span> <span class="op">&gt;</span> <span class="ident">dest</span>.<span class="ident">len</span>() {
+            <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">ErrorKind</span>::<span class="ident">TooManyData</span>(<span class="string">&quot;Too many bits requested&quot;</span>));
+        }
+
         <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_report_slave_id</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">max_dest</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_report_slave_id</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">Modbus</span>::<span class="ident">MAX_PDU_LENGTH</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
-                <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span>),
+                <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span>),
             }
         }
     }
 
-    <span class="doccomment">/// `write_bit` - read many registers</span>
+    <span class="doccomment">/// `write_bit` - write a single bit</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`write_bit()`](#method.write_bit) function shall write the status of status at the address addr of the</span>
-    <span class="doccomment">/// remote device.</span>
+    <span class="doccomment">/// The [`write_bit()`](#method.write_bit) function shall write the `status` at the `address` of the remote device.</span>
     <span class="doccomment">/// The value must be set to `true` of `false`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The function uses the Modbus function code 0x05 (force single coil).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return value</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function shall return 1 if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The function return an OK Result, containing a one, if successful. Otherwise it contains an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
@@ -900,13 +858,14 @@
     <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
     <span class="doccomment">/// let address = 1;</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// assert_eq!(modbus.write_bit(address, true).unwrap(), 1);</span>
+    <span class="doccomment">/// assert!(modbus.write_bit(address, true).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">write_bit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">status</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">write_bit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">status</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_write_bit</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">status</span> <span class="kw">as</span> <span class="ident">c_int</span>) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
-                <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span>),
+                <span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(()),
+                _ <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;libmodbus API incompatible response&quot;</span>),
             }
         }
     }
@@ -920,7 +879,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return value</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function shall return 1 if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The function return an OK Result, containing a one, if successful. Otherwise it contains an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
@@ -935,33 +894,34 @@
     <span class="doccomment">/// let address = 1;</span>
     <span class="doccomment">/// let value = i32::max_value();</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// assert_eq!(modbus.write_register(address, value).unwrap(), 1);</span>
+    <span class="doccomment">/// assert!(modbus.write_register(address, value).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">value</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">value</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_write_register</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">value</span> <span class="kw">as</span> <span class="ident">c_int</span>) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
-                <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span>),
+                <span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(()),
+                _ <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;libmodbus API incompatible response&quot;</span>),
             }
         }
     }
 
     <span class="doccomment">/// `write_bits` - write many bits</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`write_bits()`](#method.write_bits) function shall write the status of the nb bits (coils) from src at the</span>
-    <span class="doccomment">/// address addr of the remote device. The src array must contains bytes set to TRUE or FALSE.</span>
+    <span class="doccomment">/// The [`write_bits()`](#method.write_bits) function shall write the status of the bits (coils) from `src` at the</span>
+    <span class="doccomment">/// `address` of the remote device. The `src` array must contains bytes set to TRUE or FALSE.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The function shall return the number of written bits if successful. Otherwise it contains an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return value</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function returns a Result containing a `1` if successful, or an Error.</span>
+    <span class="doccomment">/// The function returns a Ok Result containing the number of written bits. Otherwise it contains an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `address` - address of the remote device</span>
-    <span class="doccomment">/// * `num_bit` - status that should write at the address `addr`</span>
-    <span class="doccomment">/// * `src` - vec of `0` and `1` (true and false) values</span>
+    <span class="doccomment">/// * `num`     - number or bits that should be writen at the address `address`</span>
+    <span class="doccomment">/// * `src`     - vec of `0` and `1` (true and false) values</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
@@ -973,9 +933,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(modbus.write_bits(address, 1, &amp;tab_bytes).unwrap(), 1);</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">write_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">write_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_write_bits</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num_bit</span>, <span class="ident">src</span>.<span class="ident">as_ptr</span>()) {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_write_bits</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span>, <span class="ident">src</span>.<span class="ident">as_ptr</span>()) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span>),
             }
@@ -984,20 +944,21 @@
 
     <span class="doccomment">/// `write_registers` - write many registers</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The [`write_registers()`](#method.write_registers) function shall write the content of the nb holding registers</span>
-    <span class="doccomment">/// from the array src at address addr of the remote device.</span>
+    <span class="doccomment">/// The [`write_registers()`](#method.write_registers) function shall write the content of the `num` holding</span>
+    <span class="doccomment">/// registers</span>
+    <span class="doccomment">/// from the array `src` at `address` of the remote device.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The function uses the Modbus function code 0x10 (preset multiple registers).</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return value</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function shall return the number of written registers if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The function returns a Ok Result containing the number of written bytes. Otherwise it contains an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `address` - address of the remote device</span>
-    <span class="doccomment">/// * `num_bit` - number of holding registers that should write at the address `addr`</span>
-    <span class="doccomment">/// * `src` - holding register</span>
+    <span class="doccomment">/// * `num`     - number of holding registers that should write at the address `address`</span>
+    <span class="doccomment">/// * `src`     - holding register</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
@@ -1009,9 +970,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(modbus.write_registers(address, 1, &amp;tab_bytes).unwrap(), 1);</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">write_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num_bit</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">write_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">i32</span>, <span class="ident">num</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_write_registers</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num_bit</span>, <span class="ident">src</span>.<span class="ident">as_ptr</span>()) {
+            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_write_registers</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span>, <span class="ident">src</span>.<span class="ident">as_ptr</span>()) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span>),
             }
@@ -1029,15 +990,15 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return value</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function shall return the number of read registers if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The function returns a Ok Result containing the number of read registers. Otherwise it contains an Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `write_address`   - address of the remote device</span>
-    <span class="doccomment">/// * `write_num_bit`   - number of holding registers</span>
+    <span class="doccomment">/// * `write_num`       - number of holding registers</span>
     <span class="doccomment">/// * `src`             - holding register</span>
     <span class="doccomment">/// * `read_address`    - address of the remote device</span>
-    <span class="doccomment">/// * `read_num_bit`    - number of holding registers</span>
+    <span class="doccomment">/// * `read_num`        - number of holding registers</span>
     <span class="doccomment">/// * `dest`            - holding register</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Examples</span>
@@ -1053,16 +1014,16 @@
     <span class="doccomment">///                 address, 1, &amp;request_bytes,</span>
     <span class="doccomment">///                 address, 1, &amp;mut response_bytes).unwrap(), 1);</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">write_and_read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">write_address</span>: <span class="ident">i32</span>, <span class="ident">write_num_bit</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>], <span class="ident">read_address</span>: <span class="ident">i32</span>,
-                                <span class="ident">read_num_bit</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>])
+    <span class="kw">fn</span> <span class="ident">write_and_read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">write_address</span>: <span class="ident">i32</span>, <span class="ident">write_num</span>: <span class="ident">i32</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>], <span class="ident">read_address</span>: <span class="ident">i32</span>,
+                                <span class="ident">read_num</span>: <span class="ident">i32</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>])
                                 <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_write_and_read_registers</span>(<span class="self">self</span>.<span class="ident">ctx</span>,
                                                                  <span class="ident">write_address</span> <span class="kw">as</span> <span class="ident">c_int</span>,
-                                                                 <span class="ident">write_num_bit</span>,
+                                                                 <span class="ident">write_num</span>,
                                                                  <span class="ident">src</span>.<span class="ident">as_ptr</span>(),
                                                                  <span class="ident">read_address</span> <span class="kw">as</span> <span class="ident">c_int</span>,
-                                                                 <span class="ident">read_num_bit</span>,
+                                                                 <span class="ident">read_num</span>,
                                                                  <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span>),
@@ -1075,17 +1036,13 @@
     <span class="doccomment">/// The [`send_raw_request()`](#method.send_raw_request) function shall send a request via the socket of the</span>
     <span class="doccomment">/// current modbus contest.</span>
     <span class="doccomment">/// This function must be used for debugging purposes because you have to take care to make a valid request by hand.</span>
-    <span class="doccomment">/// The function only adds to the message, the header or CRC of the selected backend, so `raw_req` must start and</span>
+    <span class="doccomment">/// The function only adds to the message, the header or CRC of the selected backend, so `raw_request` must start</span>
+    <span class="doccomment">/// and</span>
     <span class="doccomment">/// contain at least a slave/unit identifier and a function code.</span>
     <span class="doccomment">/// This function can be used to send request not handled by the library.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The public header of libmodbus provides a list of supported Modbus functions codes,</span>
-    <span class="doccomment">/// prefixed by MODBUS_FC_ (eg. MODBUS_FC_READ_HOLDING_REGISTERS), to help build of raw requests.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Return value</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The function returns a Result containing the full message length, counting the extra data relating to the</span>
-    <span class="doccomment">/// backend, if successful, or an Error.</span>
+    <span class="doccomment">/// The enum [`FunctionCode`](enum.FunctionCode.html) provides a list of supported Modbus functions codes, to help</span>
+    <span class="doccomment">/// build of raw requests.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
@@ -1099,13 +1056,12 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, FunctionCode, MODBUS_TCP_MAX_ADU_LENGTH};</span>
+    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, FunctionCode};</span>
     <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// let mut raw_request: Vec&lt;u8&gt; = vec![0xFF, FunctionCode::READ_HOLDING_REGISTERS as u8, 0x00, 0x01, 0x0, 0x05];</span>
-    <span class="doccomment">/// let mut response: Vec&lt;u8&gt; = vec![0; MODBUS_TCP_MAX_ADU_LENGTH as usize];</span>
+    <span class="doccomment">/// let mut raw_request: Vec&lt;u8&gt; = vec![0xFF, FunctionCode::ReadHoldingRegisters as u8, 0x00, 0x01, 0x0, 0x05];</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(modbus.send_raw_request(&amp;mut raw_request).unwrap(), 12);</span>
-    <span class="doccomment">/// assert_eq!(modbus.receive_confirmation(&amp;mut response).unwrap(), 19);</span>
+    <span class="doccomment">/// let response: Vec&lt;u8&gt; = modbus.receive_confirmation().unwrap();</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">fn</span> <span class="ident">send_raw_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">raw_request</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
@@ -1146,68 +1102,20 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, MODBUS_MAX_ADU_LENGTH};</span>
-    <span class="doccomment">///</span>
+    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};</span>
     <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// let mut response: Vec&lt;u8&gt; = vec![0; MODBUS_MAX_ADU_LENGTH as usize];</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// assert_eq!(modbus.receive_confirmation(&amp;mut response).unwrap(), 1);</span>
+    <span class="doccomment">/// let response: Vec&lt;u8&gt; = modbus.receive_confirmation().unwrap();</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">receive_confirmation</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">receive_confirmation</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">response</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">Modbus</span>::<span class="ident">MAX_ADU_LENGTH</span>];
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_receive_confirmation</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">response</span>.<span class="ident">as_mut_ptr</span>()) {
                 <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
-                <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span>),
-            }
-        }
-    }
-
-    <span class="doccomment">/// TODO: create an enum for the exception codes</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// `reply_exception` - send an exception reponse</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The modbus_reply_exception() function shall send an exception response based on the exception_code in argument.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The libmodbus provides the following exception codes:</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * MODBUS_EXCEPTION_ILLEGAL_FUNCTION (1)</span>
-    <span class="doccomment">/// * MODBUS_EXCEPTION_ILLEGAL_DATA_ADDRESS (2)</span>
-    <span class="doccomment">/// * MODBUS_EXCEPTION_ILLEGAL_DATA_VALUE (3)</span>
-    <span class="doccomment">/// * MODBUS_EXCEPTION_SLAVE_OR_SERVER_FAILURE (4)</span>
-    <span class="doccomment">/// * MODBUS_EXCEPTION_ACKNOWLEDGE (5)</span>
-    <span class="doccomment">/// * MODBUS_EXCEPTION_SLAVE_OR_SERVER_BUSY (6)</span>
-    <span class="doccomment">/// * MODBUS_EXCEPTION_NEGATIVE_ACKNOWLEDGE (7)</span>
-    <span class="doccomment">/// * MODBUS_EXCEPTION_MEMORY_PARITY (8)</span>
-    <span class="doccomment">/// * MODBUS_EXCEPTION_NOT_DEFINED (9)</span>
-    <span class="doccomment">/// * MODBUS_EXCEPTION_GATEWAY_PATH (10)</span>
-    <span class="doccomment">/// * MODBUS_EXCEPTION_GATEWAY_TARGET (11)</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The initial request req is required to build a valid response.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Return value</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// The function returns the length of the response sent if successful, or an Error.</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Parameters</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// * `request`         - initial request, required to build a valid response</span>
-    <span class="doccomment">/// * `exception_code`  - Exception Code</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// # Examples</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};</span>
-    <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// use libmodbus_rs::Exception;</span>
-    <span class="doccomment">///</span>
-    <span class="doccomment">/// let request: Vec&lt;u8&gt; = vec![0x01];</span>
-    <span class="doccomment">/// assert_eq!(modbus.reply_exception(&amp;request, Exception::ACKNOWLEDGE as u32).unwrap(), 9);</span>
-    <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">reply_exception</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">exception_code</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> {
-            <span class="kw">match</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_reply_exception</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">request</span>.<span class="ident">as_ptr</span>(), <span class="ident">exception_code</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
-                <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span>),
+                <span class="ident">len</span> <span class="op">=&gt;</span> {
+                    <span class="ident">response</span>.<span class="ident">truncate</span>(<span class="ident">len</span> <span class="kw">as</span> <span class="ident">usize</span>);
+                    <span class="prelude-val">Ok</span>(<span class="ident">response</span>)
+                },
             }
         }
     }
@@ -1270,7 +1178,6 @@
         window.rootPath = "../../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     <script defer src="../../search-index.js"></script>
 </body>

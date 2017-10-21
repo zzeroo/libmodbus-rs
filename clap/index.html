@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'></p><script>window.sidebarCurrent = {name: 'clap', ty: 'mod', relpath: '../'};</script>
+        <p class='location'>Crate clap</p><div class="block items"><ul><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'clap', ty: 'mod', relpath: '../'};</script>
     </nav>
 
     <nav class="sub">
@@ -224,7 +224,7 @@ compiled in by default and we need to enable a feature flag in Cargo.toml:</p>
 
 <p>At last we create our <code>main.rs</code> file just like we would have with the previous two examples:</p>
 
-<pre class="rust rust-example-rendered">
+<div class='information'><div class='tooltip ignore'>⚠<span class='tooltiptext'>Be careful when using this code, it's not being tested!</span></div></div><pre class="rust rust-example-rendered ignore">
 <span class="comment">// (Full example with detailed comments in examples/17_yaml.rs)</span>
 <span class="comment">//</span>
 <span class="comment">// This example demonstrates clap&#39;s building from YAML style of creating arguments which is far</span>
@@ -362,9 +362,9 @@ git = &quot;https://github.com/kbknapp/clap-rs.git&quot;
 <h3 id='optional-dependencies--features' class='section-header'><a href='#optional-dependencies--features'>Optional Dependencies / Features</a></h3>
 <h4 id='features-enabled-by-default' class='section-header'><a href='#features-enabled-by-default'>Features enabled by default</a></h4>
 <ul>
-<li><strong>&quot;suggestions&quot;</strong>: Turns on the <code>Did you mean &#39;--myoption&#39;?</code> feature for when users make typos. (builds dependency <code>strsim</code>)</li>
-<li><strong>&quot;color&quot;</strong>: Turns on colored error messages. This feature only works on non-Windows OSs. (builds dependency <code>ansi-term</code> and <code>atty</code>)</li>
-<li><strong>&quot;wrap_help&quot;</strong>: Wraps the help at the actual terminal width when available, instead of 120 chracters. (builds dependency <code>term_size</code>)</li>
+<li><code>suggestions</code>: Turns on the <code>Did you mean &#39;--myoption&#39;?</code> feature for when users make typos. (builds dependency <code>strsim</code>)</li>
+<li><code>color</code>: Turns on colored error messages. This feature only works on non-Windows OSs. (builds dependency <code>ansi-term</code> and <code>atty</code>)</li>
+<li><code>wrap_help</code>: Wraps the help at the actual terminal width when available, instead of 120 chracters. (builds dependency <code>term_size</code>)</li>
 </ul>
 
 <p>To disable these, add this to your <code>Cargo.toml</code>:</p>
@@ -511,7 +511,7 @@ is the star of the show</li>
 </ul>
 
 <h3 id='compatibility-policy' class='section-header'><a href='#compatibility-policy'>Compatibility Policy</a></h3>
-<p>Because <code>clap</code> takes SemVer and compatibility seriously, this is the official policy regarding
+<p>Because <code>clap</code> takes <code>SemVer</code> and compatibility seriously, this is the official policy regarding
 breaking changes and previous versions of Rust.</p>
 
 <p><code>clap</code> will pin the minimum required version of Rust to the CI builds. Bumping the minimum
@@ -602,7 +602,7 @@ compile time in the form:
                                   title='macro clap::crate_version'>crate_version</a></td>
                            <td class='docblock-short'>
                                 <p>Allows you to pull the version from your Cargo.toml at compile time as
-MAJOR.MINOR.PATCH_PKGVERSION_PRE</p>
+<code>MAJOR.MINOR.PATCH_PKGVERSION_PRE</code></p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
@@ -805,7 +805,6 @@ methods <a href="./struct.Arg.html#method.set"><code>Arg::set</code></a>, <a hre
         window.rootPath = "../";
         window.currentCrate = "clap";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>

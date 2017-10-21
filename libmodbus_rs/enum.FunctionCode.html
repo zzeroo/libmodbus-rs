@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../libmodbus_rs/index.html'><img src='https://zzeroo.github.io/share/zzeroo-logo.png' alt='logo' width='100'></a>
-        <p class='location'><a href='index.html'>libmodbus_rs</a></p><script>window.sidebarCurrent = {name: 'FunctionCode', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Enum FunctionCode</p><div class="block items"><ul><li><a href="#variants">Variants</a></li><li><a href="#implementations">Trait Implementations</a></li></ul></div><p class='location'><a href='index.html'>libmodbus_rs</a></p><script>window.sidebarCurrent = {name: 'FunctionCode', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -48,49 +48,53 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/enums.rs.html#44-69' title='goto source code'>[src]</a></span></h1>
-<pre class='rust enum'><div class="docblock attributes">#[repr(C)]
-</div>pub enum FunctionCode {
-    READ_COILS,
-    READ_DISCRETE_INPUTS,
-    READ_HOLDING_REGISTERS,
-    READ_INPUT_REGISTERS,
-    WRITE_SINGLE_COIL,
-    WRITE_SINGLE_REGISTER,
-    READ_EXCEPTION_STATUS,
-    WRITE_MULTIPLE_COILS,
-    WRITE_MULTIPLE_REGISTERS,
-    REPORT_SLAVE_ID,
-    MASK_WRITE_REGISTER,
-    WRITE_AND_READ_REGISTERS,
+               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#45-70' title='goto source code'>[src]</a></span></h1>
+<pre class='rust enum'>pub enum FunctionCode {
+    ReadCoils,
+    ReadDiscreteInputs,
+    ReadHoldingRegisters,
+    ReadInputRegisters,
+    WriteSingleCoil,
+    WriteSingleRegister,
+    ReadExceptionStatus,
+    WriteMultipleCoils,
+    WriteMultipleRegisters,
+    ReportSlaveId,
+    MaskWriteRegister,
+    WriteAndReadRegisters,
 }</pre><div class='docblock'><p>Modbus function codes</p>
 
 <p>Documentation source: <a href="https://en.wikipedia.org/wiki/Modbus#Supported_function_codes">https://en.wikipedia.org/wiki/Modbus#Supported_function_codes</a></p>
-</div><h2 class='variants'>Variants</h2>
-<span id='variant.READ_COILS' class='variant'><span id='READ_COILS.v' class='invisible'><code>READ_COILS</code></span></span><div class='docblock'><p>0x01 Read Coils</p>
-</div><span id='variant.READ_DISCRETE_INPUTS' class='variant'><span id='READ_DISCRETE_INPUTS.v' class='invisible'><code>READ_DISCRETE_INPUTS</code></span></span><div class='docblock'><p>0x02 Read Discrete Inputs</p>
-</div><span id='variant.READ_HOLDING_REGISTERS' class='variant'><span id='READ_HOLDING_REGISTERS.v' class='invisible'><code>READ_HOLDING_REGISTERS</code></span></span><div class='docblock'><p>0x03 Read Multiple Holding Registers</p>
-</div><span id='variant.READ_INPUT_REGISTERS' class='variant'><span id='READ_INPUT_REGISTERS.v' class='invisible'><code>READ_INPUT_REGISTERS</code></span></span><div class='docblock'><p>0x04 Read Input Registers</p>
-</div><span id='variant.WRITE_SINGLE_COIL' class='variant'><span id='WRITE_SINGLE_COIL.v' class='invisible'><code>WRITE_SINGLE_COIL</code></span></span><div class='docblock'><p>0x05 Write Single Coil</p>
-</div><span id='variant.WRITE_SINGLE_REGISTER' class='variant'><span id='WRITE_SINGLE_REGISTER.v' class='invisible'><code>WRITE_SINGLE_REGISTER</code></span></span><div class='docblock'><p>0x06 Write Single Holding Register</p>
-</div><span id='variant.READ_EXCEPTION_STATUS' class='variant'><span id='READ_EXCEPTION_STATUS.v' class='invisible'><code>READ_EXCEPTION_STATUS</code></span></span><div class='docblock'><p>0x07 Read Exception Status</p>
-</div><span id='variant.WRITE_MULTIPLE_COILS' class='variant'><span id='WRITE_MULTIPLE_COILS.v' class='invisible'><code>WRITE_MULTIPLE_COILS</code></span></span><div class='docblock'><p>0x15 Write Multiple Coils</p>
-</div><span id='variant.WRITE_MULTIPLE_REGISTERS' class='variant'><span id='WRITE_MULTIPLE_REGISTERS.v' class='invisible'><code>WRITE_MULTIPLE_REGISTERS</code></span></span><div class='docblock'><p>0x16 Write Multiple Holding Registers</p>
-</div><span id='variant.REPORT_SLAVE_ID' class='variant'><span id='REPORT_SLAVE_ID.v' class='invisible'><code>REPORT_SLAVE_ID</code></span></span><div class='docblock'><p>0x17 Report Slave ID</p>
-</div><span id='variant.MASK_WRITE_REGISTER' class='variant'><span id='MASK_WRITE_REGISTER.v' class='invisible'><code>MASK_WRITE_REGISTER</code></span></span><div class='docblock'><p>0x22 Mask Write Register</p>
-</div><span id='variant.WRITE_AND_READ_REGISTERS' class='variant'><span id='WRITE_AND_READ_REGISTERS.v' class='invisible'><code>WRITE_AND_READ_REGISTERS</code></span></span><div class='docblock'><p>0x23 Read/Write Multiple Registers</p>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/enums.rs.html#43' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a></code></span></h4>
+</div><h2 id='variants' class='variants small-section-header'>
+                   Variants<a href='#variants' class='anchor'></a></h2>
+<span id="variant.ReadCoils" class="variant small-section-header"><a href="#variant.ReadCoils" class="anchor field"></a><span id='ReadCoils.v' class='invisible'><code>ReadCoils</code></span></span><div class='docblock'><p>0x01 Read Coils</p>
+</div><span id="variant.ReadDiscreteInputs" class="variant small-section-header"><a href="#variant.ReadDiscreteInputs" class="anchor field"></a><span id='ReadDiscreteInputs.v' class='invisible'><code>ReadDiscreteInputs</code></span></span><div class='docblock'><p>0x02 Read Discrete Inputs</p>
+</div><span id="variant.ReadHoldingRegisters" class="variant small-section-header"><a href="#variant.ReadHoldingRegisters" class="anchor field"></a><span id='ReadHoldingRegisters.v' class='invisible'><code>ReadHoldingRegisters</code></span></span><div class='docblock'><p>0x03 Read Multiple Holding Registers</p>
+</div><span id="variant.ReadInputRegisters" class="variant small-section-header"><a href="#variant.ReadInputRegisters" class="anchor field"></a><span id='ReadInputRegisters.v' class='invisible'><code>ReadInputRegisters</code></span></span><div class='docblock'><p>0x04 Read Input Registers</p>
+</div><span id="variant.WriteSingleCoil" class="variant small-section-header"><a href="#variant.WriteSingleCoil" class="anchor field"></a><span id='WriteSingleCoil.v' class='invisible'><code>WriteSingleCoil</code></span></span><div class='docblock'><p>0x05 Write Single Coil</p>
+</div><span id="variant.WriteSingleRegister" class="variant small-section-header"><a href="#variant.WriteSingleRegister" class="anchor field"></a><span id='WriteSingleRegister.v' class='invisible'><code>WriteSingleRegister</code></span></span><div class='docblock'><p>0x06 Write Single Holding Register</p>
+</div><span id="variant.ReadExceptionStatus" class="variant small-section-header"><a href="#variant.ReadExceptionStatus" class="anchor field"></a><span id='ReadExceptionStatus.v' class='invisible'><code>ReadExceptionStatus</code></span></span><div class='docblock'><p>0x07 Read Exception Status</p>
+</div><span id="variant.WriteMultipleCoils" class="variant small-section-header"><a href="#variant.WriteMultipleCoils" class="anchor field"></a><span id='WriteMultipleCoils.v' class='invisible'><code>WriteMultipleCoils</code></span></span><div class='docblock'><p>0x15 Write Multiple Coils</p>
+</div><span id="variant.WriteMultipleRegisters" class="variant small-section-header"><a href="#variant.WriteMultipleRegisters" class="anchor field"></a><span id='WriteMultipleRegisters.v' class='invisible'><code>WriteMultipleRegisters</code></span></span><div class='docblock'><p>0x16 Write Multiple Holding Registers</p>
+</div><span id="variant.ReportSlaveId" class="variant small-section-header"><a href="#variant.ReportSlaveId" class="anchor field"></a><span id='ReportSlaveId.v' class='invisible'><code>ReportSlaveId</code></span></span><div class='docblock'><p>0x17 Report Slave ID</p>
+</div><span id="variant.MaskWriteRegister" class="variant small-section-header"><a href="#variant.MaskWriteRegister" class="anchor field"></a><span id='MaskWriteRegister.v' class='invisible'><code>MaskWriteRegister</code></span></span><div class='docblock'><p>0x22 Mask Write Register</p>
+</div><span id="variant.WriteAndReadRegisters" class="variant small-section-header"><a href="#variant.WriteAndReadRegisters" class="anchor field"></a><span id='WriteAndReadRegisters.v' class='invisible'><code>WriteAndReadRegisters</code></span></span><div class='docblock'><p>0x23 Read/Write Multiple Registers</p>
+</div>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+        <h3 id='impl-Clone' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a></code><a href='#impl-Clone' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#44' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#44' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
-</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self)</code></span><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/clone.rs.html#112-114' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a> for <a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/enums.rs.html#43' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html" title="trait core::cmp::PartialEq">PartialEq</a> for <a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/enums.rs.html#43' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.eq' class="method"><span id='eq.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></h4>
+</div></div><h3 id='impl-Copy' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a> for <a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a></code><a href='#impl-Copy' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#44' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 id='impl-PartialEq' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html" title="trait core::cmp::PartialEq">PartialEq</a> for <a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a></code><a href='#impl-PartialEq' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#44' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class="method"><span id='eq.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#44' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
-</div><h4 id='method.ne' class="method"><span id='ne.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+</div><h4 id='method.ne' class="method"><span id='ne.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Rhs) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/cmp.rs.html#121' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>This method tests for <code>!=</code>.</p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html" title="trait core::cmp::Eq">Eq</a> for <a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/enums.rs.html#43' title='goto source code'>[src]</a></span></h3>
+</div></div><h3 id='impl-Eq' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html" title="trait core::cmp::Eq">Eq</a> for <a class="enum" href="../libmodbus_rs/enum.FunctionCode.html" title="enum libmodbus_rs::FunctionCode">FunctionCode</a></code><a href='#impl-Eq' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#44' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'></div></section>
     <section id='search' class="content hidden"></section>
 
@@ -148,7 +152,6 @@
         window.rootPath = "../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>

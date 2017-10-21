@@ -240,15 +240,8 @@
 <span id="195">195</span>
 <span id="196">196</span>
 <span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
 </pre><pre class="rust ">
-<span class="attribute">#<span class="op">!</span>[<span class="ident">doc</span>(<span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://zzeroo.github.io/share/zzeroo-logo.png&quot;</span>,
+<span class="attribute">#![<span class="ident">doc</span>(<span class="ident">html_logo_url</span> <span class="op">=</span> <span class="string">&quot;https://zzeroo.github.io/share/zzeroo-logo.png&quot;</span>,
        <span class="ident">html_favicon_url</span> <span class="op">=</span> <span class="string">&quot;https://zzeroo.github.io/share/favicon.ico&quot;</span>,
 <span class="ident">html_root_url</span> <span class="op">=</span> <span class="string">&quot;https://zzeroo.com/&quot;</span>)]</span>
 <span class="doccomment">//! This is an &#39;hopefully&#39; safe Rust interface for the [libmodbus](http://libmodbus.org/) C library from</span>
@@ -319,7 +312,7 @@
 <span class="doccomment">//!     - [`new_rtu()`](struct.Modbus.html#method.new_rtu)</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! * Set the serial mode</span>
-<span class="doccomment">//! - [`rtu_get_serial_mode()`](struct.Modbus.html#method.rtu_get_serial_mode),</span>
+<span class="doccomment">//!     - [`rtu_get_serial_mode()`](struct.Modbus.html#method.rtu_get_serial_mode),</span>
 <span class="doccomment">//! [`rtu_set_serial_mode()`](struct.Modbus.html#method.rtu_set_serial_mode),</span>
 <span class="doccomment">//! [`rtu_get_rts()`](struct.Modbus.html#method.rtu_get_rts), [`rtu_set_rts()`](struct.Modbus.html#method.rtu_set_rts),</span>
 <span class="doccomment">//! [`rtu_set_custom_rts()`](struct.Modbus.html#method.rtu_set_custom_rts),</span>
@@ -346,17 +339,23 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ### Common</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! Common methods to modify or change the current modbus context. Some of these function are not nessesary in Rust (e.g. because the Drop trait and so on)</span>
+<span class="doccomment">//! Common methods to modify or change the current modbus context. Some of these function are not nessesary in Rust</span>
+<span class="doccomment">//! (e.g. because the Drop trait and so on)</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! * Free libmodbus context</span>
 <span class="doccomment">//!     - [`free()`](struct.Modbus.html#method.free) **It should normaly not nessesary to call this function.**&lt;br /&gt;</span>
-<span class="doccomment">//!     Memory handling under Rust controlls the [`Drop trait`](https://doc.rust-lang.org/std/ops/trait.Drop.html) in &quot;the book&quot; you find [more information about](https://doc.rust-lang.org/book/ffi.html#destructors).</span>
+<span class="doccomment">//! Memory handling under Rust controlls the [`Drop trait`](https://doc.rust-lang.org/std/ops/trait.Drop.html) in</span>
+<span class="doccomment">//! &quot;the book&quot; you&#39;ll find [more information</span>
+<span class="doccomment">//! about](https://doc.rust-lang.org/book/second-edition/ch15-03-drop.html#the-drop-trait-runs-code-on-cleanup).</span>
 <span class="doccomment">//! * Set slave ID</span>
 <span class="doccomment">//!     - [`set_slave()`](struct.Modbus.html#method.set_slave)</span>
 <span class="doccomment">//! * Enable debug mode</span>
 <span class="doccomment">//!     - [`set_debug()`](struct.Modbus.html#method.set_debug)</span>
 <span class="doccomment">//! * Timeout settings</span>
-<span class="doccomment">//!     - [`get_byte_timeout()`](struct.Modbus.html#method.get_byte_timeout) [`set_byte_timeout()`](struct.Modbus.html#method.set_byte_timeout) [`get_response_timeout()`](struct.Modbus.html#method.get_response_timeout) [`set_response_timeout()`](struct.Modbus.html#method.set_response_timeout)</span>
+<span class="doccomment">//! - [`get_byte_timeout()`](struct.Modbus.html#method.get_byte_timeout)</span>
+<span class="doccomment">//! [`set_byte_timeout()`](struct.Modbus.html#method.set_byte_timeout)</span>
+<span class="doccomment">//! [`get_response_timeout()`](struct.Modbus.html#method.get_response_timeout)</span>
+<span class="doccomment">//! [`set_response_timeout()`](struct.Modbus.html#method.set_response_timeout)</span>
 <span class="doccomment">//! * Error recovery mod</span>
 <span class="doccomment">//!     - [`set_error_recovery()`](struct.Modbus.html#method.set_error_recovery)</span>
 <span class="doccomment">//! * Setter/getter of internal socket</span>
@@ -372,20 +371,20 @@
 <span class="doccomment">//! The following functions are used by the clients to send Modbus requests:</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! * Read data</span>
-<span class="doccomment">//! - [`read_bits()`](struct.Modbus.html#method.read_bits),</span>
+<span class="doccomment">//!     - [`read_bits()`](struct.Modbus.html#method.read_bits),</span>
 <span class="doccomment">//! [`read_input_bits()`](struct.Modbus.html#method.read_input_bits),</span>
 <span class="doccomment">//! [`read_registers()`](struct.Modbus.html#method.read_registers),</span>
 <span class="doccomment">//! [`read_input_registers()`](struct.Modbus.html#method.read_input_registers),</span>
 <span class="doccomment">//! [`report_slave_id()`](struct.Modbus.html#method.report_slave_id)</span>
 <span class="doccomment">//! * Write data</span>
-<span class="doccomment">//! - [`write_bit()`](struct.Modbus.html#method.write_bit),</span>
+<span class="doccomment">//!     - [`write_bit()`](struct.Modbus.html#method.write_bit),</span>
 <span class="doccomment">//! [`write_register()`](struct.Modbus.html#method.write_register),</span>
 <span class="doccomment">//! [`write_bits()`](struct.Modbus.html#method.write_bits),</span>
 <span class="doccomment">//! [`write_registers()`](struct.Modbus.html#method.write_registers)</span>
 <span class="doccomment">//! * Write and read data</span>
 <span class="doccomment">//!     - [`write_and_read_registers()`](struct.Modbus.html#method.write_and_read_registers)</span>
 <span class="doccomment">//! * Raw requests</span>
-<span class="doccomment">//! - [`send_raw_request()`](struct.Modbus.html#method.send_raw_request),</span>
+<span class="doccomment">//!     - [`send_raw_request()`](struct.Modbus.html#method.send_raw_request),</span>
 <span class="doccomment">//! [`receive_confirmation()`](struct.Modbus.html#method.receive_confirmation)</span>
 <span class="doccomment">//! * Reply an exception</span>
 <span class="doccomment">//!     - [`reply_exception()`](struct.Modbus.html#method.reply_exception)</span>
@@ -414,14 +413,13 @@
 <span class="doccomment">//!</span>
 
 <span class="comment">// `error_chain!` can recurse deeply(3)</span>
-<span class="attribute">#<span class="op">!</span>[<span class="ident">recursion_limit</span> <span class="op">=</span> <span class="string">&quot;1024&quot;</span>]</span>
+<span class="attribute">#![<span class="ident">recursion_limit</span> <span class="op">=</span> <span class="string">&quot;1024&quot;</span>]</span>
 
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libc</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libmodbus_sys</span>;
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">error_chain</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libc</span>;
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libmodbus_sys</span>;
 
-<span class="kw">mod</span> <span class="ident">enums</span>;
 <span class="kw">mod</span> <span class="ident">modbus_client</span>;
 <span class="kw">mod</span> <span class="ident">modbus_mapping</span>;
 <span class="kw">mod</span> <span class="ident">modbus_rtu</span>;
@@ -431,27 +429,15 @@
 <span class="kw">mod</span> <span class="ident">modbus</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">errors</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">enums</span>::{<span class="ident">ErrorRecoveryMode</span>, <span class="ident">Exception</span>, <span class="ident">FunctionCode</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus_client</span>::<span class="ident">ModbusClient</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus_mapping</span>::<span class="ident">ModbusMapping</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus_rtu</span>::{<span class="ident">ModbusRTU</span>, <span class="ident">RequestToSendMode</span>, <span class="ident">SerialMode</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus_server</span>::<span class="ident">ModbusServer</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus_tcp_pi</span>::<span class="ident">ModbusTCPPI</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus_tcp</span>::<span class="ident">ModbusTCP</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus</span>::<span class="ident">Modbus</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus</span>::{<span class="ident">set_bits_from_byte</span>, <span class="ident">set_bits_from_bytes</span>, <span class="ident">get_byte_from_bits</span>,
-    <span class="ident">get_float_abcd</span>, <span class="ident">set_float_abcd</span>, <span class="ident">get_float_badc</span>, <span class="ident">set_float_badc</span>,
-    <span class="ident">get_float_cdab</span>, <span class="ident">set_float_cdab</span>, <span class="ident">get_float_dcba</span>, <span class="ident">set_float_dcba</span>,
-};
-
-
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_MAX_PDU_LENGTH</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_MAX_ADU_LENGTH</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_ENOBASE</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_TCP_DEFAULT_PORT</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_TCP_SLAVE</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_TCP_MAX_ADU_LENGTH</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_RTU_MAX_ADU_LENGTH</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus</span>::{<span class="ident">Modbus</span>, <span class="ident">Timeout</span>, <span class="ident">ErrorRecoveryMode</span>, <span class="ident">Exception</span>, <span class="ident">FunctionCode</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus</span>::{<span class="ident">set_bits_from_byte</span>, <span class="ident">set_bits_from_bytes</span>, <span class="ident">get_byte_from_bits</span>, <span class="ident">get_float_abcd</span>, <span class="ident">set_float_abcd</span>,
+                       <span class="ident">get_float_badc</span>, <span class="ident">set_float_badc</span>, <span class="ident">get_float_cdab</span>, <span class="ident">set_float_cdab</span>, <span class="ident">get_float_dcba</span>, <span class="ident">set_float_dcba</span>};
 </pre>
 </section>
     <section id='search' class="content hidden"></section>
@@ -510,7 +496,6 @@
         window.rootPath = "../../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     <script defer src="../../search-index.js"></script>
 </body>

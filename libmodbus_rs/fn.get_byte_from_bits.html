@@ -48,7 +48,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#591-595' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#718-720' title='goto source code'>[src]</a></span></h1>
 <pre class='rust fn'>pub fn get_byte_from_bits(src: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>, index: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>, num_bit: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a></pre><div class='docblock'><p><code>get_byte_from_bits</code> - get the value from many bit</p>
 
 <p>The <a href="#method.get_byte_from_bits"><code>get_byte_from_bits()</code></a> function shall extract a value from many bits.
@@ -60,7 +60,8 @@ All num_bit bits from src at position index will be read as a single value. To o
 <h1 id='parameters' class='section-header'><a href='#parameters'>Parameters</a></h1>
 <p><code>src</code>       - bits source
 <code>index</code>     - starting position where the bit will be read
-<code>num_bit</code>   - All <code>num_bit</code> bits from <code>src</code> at position <code>index</code> will be read as a single value. To obtain a full byte, set <code>num_bit</code> to 8.</p>
+<code>num_bit</code>   - All <code>num_bit</code> bits from <code>src</code> at position <code>index</code> will be read as a single value. To obtain a full
+byte, set <code>num_bit</code> to 8.</p>
 
 <h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
 <pre class="rust rust-example-rendered">
@@ -126,7 +127,6 @@ All num_bit bits from src at position index will be read as a single value. To o
         window.rootPath = "../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>

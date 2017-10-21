@@ -48,10 +48,11 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#735-739' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#858-861' title='goto source code'>[src]</a></span></h1>
 <pre class='rust fn'>pub fn set_float_cdab(src: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a>, dest: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>)</pre><div class='docblock'><p><code>set_float_cdab</code> - set a float value in 2 registers using CDAB byte order</p>
 
-<p>The <a href="#method.set_float_cdab"><code>set_float_cdab()</code></a> function shall set a float to 4 bytes in swapped bytes Modbus format (CDAB insted of ABCD).
+<p>The <a href="#method.set_float_cdab"><code>set_float_cdab()</code></a> function shall set a float to 4 bytes in swapped bytes Modbus
+format (CDAB insted of ABCD).
 The dest slice must contain two 16 bits values to be able to store the full result of the conversion.</p>
 
 <h1 id='parameters' class='section-header'><a href='#parameters'>Parameters</a></h1>
@@ -120,7 +121,6 @@ The dest slice must contain two 16 bits values to be able to store the full resu
         window.rootPath = "../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>

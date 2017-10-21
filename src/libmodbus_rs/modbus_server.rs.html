@@ -126,11 +126,8 @@
 <span id="81">81</span>
 <span id="82">82</span>
 <span id="83">83</span>
-<span id="84">84</span>
-<span id="85">85</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">errors</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_char</span>, <span class="ident">c_int</span>};
 <span class="kw">use</span> <span class="ident">libmodbus_sys</span>;
 <span class="kw">use</span> <span class="ident">modbus_mapping</span>::<span class="ident">ModbusMapping</span>;
 <span class="kw">use</span> <span class="ident">modbus</span>::<span class="ident">Modbus</span>;
@@ -164,15 +161,14 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP, MODBUS_MAX_ADU_LENGTH};</span>
-    <span class="doccomment">///</span>
+    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};</span>
     <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// let mut query = vec![0; MODBUS_MAX_ADU_LENGTH as usize];</span>
+    <span class="doccomment">/// let mut query = vec![0; Modbus::MAX_ADU_LENGTH as usize];</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(modbus.receive(&amp;mut query).is_ok());</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">fn</span> <span class="ident">receive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">request</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">request</span>.<span class="ident">len</span>() <span class="op">&lt;=</span> <span class="ident">libmodbus_sys</span>::<span class="ident">MODBUS_MAX_ADU_LENGTH</span> <span class="kw">as</span> <span class="ident">usize</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">request</span>.<span class="ident">len</span>() <span class="op">&lt;=</span> <span class="ident">Modbus</span>::<span class="ident">MAX_ADU_LENGTH</span> <span class="kw">as</span> <span class="ident">usize</span>);
 
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_receive</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">request</span>.<span class="ident">as_mut_ptr</span>());
@@ -196,10 +192,10 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP, MODBUS_MAX_ADU_LENGTH};</span>
+    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
-    <span class="doccomment">/// let mut query = vec![0; MODBUS_MAX_ADU_LENGTH as usize];</span>
+    <span class="doccomment">/// let mut query = vec![0; Modbus::MAX_ADU_LENGTH as usize];</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(modbus.receive(&amp;mut query).is_ok());</span>
     <span class="doccomment">/// ```</span>
@@ -272,7 +268,6 @@
         window.rootPath = "../../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     <script defer src="../../search-index.js"></script>
 </body>

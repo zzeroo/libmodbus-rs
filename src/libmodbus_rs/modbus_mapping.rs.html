@@ -362,6 +362,31 @@
 <span id="317">317</span>
 <span id="318">318</span>
 <span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">errors</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">c_uint</span>;
@@ -381,7 +406,8 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return values</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function returns a Result containing the new allocated structure if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The function returns a Result containing the new allocated structure if successful. Otherwise it contains an</span>
+    <span class="doccomment">/// Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
@@ -413,18 +439,25 @@
         }
     }
 
-    <span class="doccomment">/// `mapping_new_start_address` - allocate four arrays of bits and registers accessible from their starting addresses</span>
+    <span class="doccomment">/// `mapping_new_start_address` - allocate four arrays of bits and registers accessible from their starting</span>
+    <span class="doccomment">/// addresses</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The modbus_mapping_new_start_address() function shall allocate four arrays to store bits, input bits, registers and inputs registers. The pointers are stored in modbus_mapping_t structure. All values of the arrays are initialized to zero.</span>
-    <span class="doccomment">/// The different starting adresses make it possible to place the mapping at any address in each address space. This way, you can give access to values stored at high adresses without allocating memory from the address zero, for eg. to make available registers from 10000 to 10009, you can use:</span>
+    <span class="doccomment">/// The modbus_mapping_new_start_address() function shall allocate four arrays to store bits, input bits, registers</span>
+    <span class="doccomment">/// and inputs registers. The pointers are stored in modbus_mapping_t structure. All values of the arrays are</span>
+    <span class="doccomment">/// initialized to zero.</span>
+    <span class="doccomment">/// The different starting adresses make it possible to place the mapping at any address in each address space.</span>
+    <span class="doccomment">/// This way, you can give access to values stored at high adresses without allocating memory from the address</span>
+    <span class="doccomment">/// zero, for eg. to make available registers from 10000 to 10009, you can use:</span>
     <span class="doccomment">/// mb_mapping = modbus_mapping_offset_start_address(0, 0, 0, 0, 10000, 10, 0, 0);</span>
     <span class="doccomment">/// With this code, only 10 registers (uint16_t) are allocated.</span>
-    <span class="doccomment">/// If it isn’t necessary to allocate an array for a specific type of data, you can pass the zero value in argument, the associated pointer will be NULL.</span>
+    <span class="doccomment">/// If it isn’t necessary to allocate an array for a specific type of data, you can pass the zero value in</span>
+    <span class="doccomment">/// argument, the associated pointer will be NULL.</span>
     <span class="doccomment">/// This function is convenient to handle requests in a Modbus server/slave.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Return value</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// The function returns a Result containing the new allocated structure if successful. Otherwise it contains an Error.</span>
+    <span class="doccomment">/// The function returns a Result containing the new allocated structure if successful. Otherwise it contains an</span>
+    <span class="doccomment">/// Error.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Parameters</span>
     <span class="doccomment">///</span>
@@ -445,16 +478,19 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// let modbus_mapping = ModbusMapping::new_start_address(10, 500, 10, 500, 10, 500, 10, 500).unwrap();</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_start_address</span>(<span class="ident">start_bits</span>: <span class="ident">u16</span>, <span class="ident">number_bits</span>: <span class="ident">u16</span>,
-                             <span class="ident">start_input_bits</span>: <span class="ident">u16</span>, <span class="ident">number_input_bits</span>: <span class="ident">u16</span>,
-                             <span class="ident">start_registers</span>: <span class="ident">u16</span>, <span class="ident">number_registers</span>: <span class="ident">u16</span>,
-                             <span class="ident">start_input_registers</span>: <span class="ident">u16</span>, <span class="ident">number_input_registers</span>: <span class="ident">u16</span>)
-               <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ModbusMapping</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_start_address</span>(<span class="ident">start_bits</span>: <span class="ident">u16</span>, <span class="ident">number_bits</span>: <span class="ident">u16</span>, <span class="ident">start_input_bits</span>: <span class="ident">u16</span>, <span class="ident">number_input_bits</span>: <span class="ident">u16</span>,
+                             <span class="ident">start_registers</span>: <span class="ident">u16</span>, <span class="ident">number_registers</span>: <span class="ident">u16</span>, <span class="ident">start_input_registers</span>: <span class="ident">u16</span>,
+                             <span class="ident">number_input_registers</span>: <span class="ident">u16</span>)
+                             <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ModbusMapping</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_mapping_new_start_address</span>(<span class="ident">start_bits</span> <span class="kw">as</span> <span class="ident">c_uint</span>, <span class="ident">number_bits</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
-                                                                                 <span class="ident">start_input_bits</span> <span class="kw">as</span> <span class="ident">c_uint</span>, <span class="ident">number_input_bits</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
-                                                                                 <span class="ident">start_registers</span> <span class="kw">as</span> <span class="ident">c_uint</span>, <span class="ident">number_registers</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
-                                                                                 <span class="ident">start_input_registers</span> <span class="kw">as</span> <span class="ident">c_uint</span>, <span class="ident">number_input_registers</span> <span class="kw">as</span> <span class="ident">c_uint</span>);
+            <span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">libmodbus_sys</span>::<span class="ident">modbus_mapping_new_start_address</span>(<span class="ident">start_bits</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
+                                                                                 <span class="ident">number_bits</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
+                                                                                 <span class="ident">start_input_bits</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
+                                                                                 <span class="ident">number_input_bits</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
+                                                                                 <span class="ident">start_registers</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
+                                                                                 <span class="ident">number_registers</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
+                                                                                 <span class="ident">start_input_registers</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
+                                                                                 <span class="ident">number_input_registers</span> <span class="kw">as</span> <span class="ident">c_uint</span>);
             <span class="kw">if</span> <span class="ident">modbus_mapping</span>.<span class="ident">is_null</span>() {
                 <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())
             } <span class="kw">else</span> {
@@ -485,7 +521,8 @@
     }
 
     <span class="comment">// TODO: Add better documentation</span>
-    <span class="doccomment">/// `get_bits` - returns a slice constructed from the `tab_bits` and `nb_bits` member of the orig. modbus_mapping_t struct</span>
+    <span class="doccomment">/// `get_bits` - returns a slice constructed from the `tab_bits` and `nb_bits` member of the orig. modbus_mapping_t</span>
+    <span class="doccomment">/// struct</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `tab_bits` is an pointer, and this function returns a valid Rust slice to work with.</span>
     <span class="doccomment">///</span>
@@ -509,7 +546,8 @@
     }
 
     <span class="comment">// TODO: Add better documentation</span>
-    <span class="doccomment">/// `get_bits_mut` - returns a mutable slice constructed from the `tab_bits` and `nb_bits` member of the orig. modbus_mapping_t struct</span>
+    <span class="doccomment">/// `get_bits_mut` - returns a mutable slice constructed from the `tab_bits` and `nb_bits` member of the orig.</span>
+    <span class="doccomment">/// modbus_mapping_t struct</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `tab_bits` is an pointer, and this function returns a valid, mutable Rust slice to work with.</span>
     <span class="doccomment">///</span>
@@ -533,7 +571,8 @@
     }
 
     <span class="comment">// TODO: Add better documentation</span>
-    <span class="doccomment">/// `get_input_bits` - returns a slice constructed from the `tab_input_bits` and `nb_input_bits` member of the orig. modbus_mapping_t struct</span>
+    <span class="doccomment">/// `get_input_bits` - returns a slice constructed from the `tab_input_bits` and `nb_input_bits` member of the</span>
+    <span class="doccomment">/// orig. modbus_mapping_t struct</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `tab_input_bits` is an pointer, and this function returns a valid Rust slice to work with.</span>
     <span class="doccomment">///</span>
@@ -552,12 +591,14 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_input_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
         <span class="kw">unsafe</span> {
-            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_input_bits</span>, (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_input_bits</span> <span class="kw">as</span> <span class="ident">usize</span>)
+            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_input_bits</span>,
+                                         (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_input_bits</span> <span class="kw">as</span> <span class="ident">usize</span>)
         }
     }
 
     <span class="comment">// TODO: Add better documentation</span>
-    <span class="doccomment">/// `get_input_bits_mut` - returns a mutable slice constructed from the `tab_input_bits` and `nb_input_bits` member of the orig. modbus_mapping_t struct</span>
+    <span class="doccomment">/// `get_input_bits_mut` - returns a mutable slice constructed from the `tab_input_bits` and `nb_input_bits` member</span>
+    <span class="doccomment">/// of the orig. modbus_mapping_t struct</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `tab_bits` is an pointer, and this function returns a valid, mutable Rust slice to work with.</span>
     <span class="doccomment">///</span>
@@ -576,12 +617,14 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_input_bits_mut</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>] {
         <span class="kw">unsafe</span> {
-            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts_mut</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_input_bits</span>, (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_input_bits</span> <span class="kw">as</span> <span class="ident">usize</span>)
+            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts_mut</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_input_bits</span>,
+                                             (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_input_bits</span> <span class="kw">as</span> <span class="ident">usize</span>)
         }
     }
 
     <span class="comment">// TODO: Add better documentation</span>
-    <span class="doccomment">/// `get_input_registers` - returns a slice constructed from the `tab_input_registers` and `nb_input_registers` member of the orig. modbus_mapping_t struct</span>
+    <span class="doccomment">/// `get_input_registers` - returns a slice constructed from the `tab_input_registers` and `nb_input_registers`</span>
+    <span class="doccomment">/// member of the orig. modbus_mapping_t struct</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `tab_input_registers` is an pointer, and this function returns a valid Rust slice to work with.</span>
     <span class="doccomment">///</span>
@@ -600,12 +643,14 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_input_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span>[<span class="ident">u16</span>] {
         <span class="kw">unsafe</span> {
-            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_input_registers</span>, (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_input_registers</span> <span class="kw">as</span> <span class="ident">usize</span>)
+            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_input_registers</span>,
+                                         (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_input_registers</span> <span class="kw">as</span> <span class="ident">usize</span>)
         }
     }
 
     <span class="comment">// TODO: Add better documentation</span>
-    <span class="doccomment">/// `get_input_registers_mut` - returns a mutable slice constructed from the `tab_input_registers` and `nb_input_registers` member of the orig. modbus_mapping_t struct</span>
+    <span class="doccomment">/// `get_input_registers_mut` - returns a mutable slice constructed from the `tab_input_registers` and</span>
+    <span class="doccomment">/// `nb_input_registers` member of the orig. modbus_mapping_t struct</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `tab_input_registers` is an pointer, and this function returns a valid, mutable Rust slice to work with.</span>
     <span class="doccomment">///</span>
@@ -624,12 +669,14 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_input_registers_mut</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>] {
         <span class="kw">unsafe</span> {
-            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts_mut</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_input_registers</span>, (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_input_registers</span> <span class="kw">as</span> <span class="ident">usize</span>)
+            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts_mut</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_input_registers</span>,
+                                             (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_input_registers</span> <span class="kw">as</span> <span class="ident">usize</span>)
         }
     }
 
     <span class="comment">// TODO: Add better documentation</span>
-    <span class="doccomment">/// `get_registers` - returns a slice constructed from the `tab_registers` and `nb_registers` member of the orig. modbus_mapping_t struct</span>
+    <span class="doccomment">/// `get_registers` - returns a slice constructed from the `tab_registers` and `nb_registers` member of the orig.</span>
+    <span class="doccomment">/// modbus_mapping_t struct</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `tab_registers` is an pointer, and this function returns a valid Rust slice to work with.</span>
     <span class="doccomment">///</span>
@@ -648,12 +695,14 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span>[<span class="ident">u16</span>] {
         <span class="kw">unsafe</span> {
-            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_registers</span>, (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_registers</span> <span class="kw">as</span> <span class="ident">usize</span>)
+            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_registers</span>,
+                                         (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_registers</span> <span class="kw">as</span> <span class="ident">usize</span>)
         }
     }
 
     <span class="comment">// TODO: Add better documentation</span>
-    <span class="doccomment">/// `get_registers_mut` - returns a mutable slice constructed from the `tab_registers` and `nb_registers` member of the orig. modbus_mapping_t struct</span>
+    <span class="doccomment">/// `get_registers_mut` - returns a mutable slice constructed from the `tab_registers` and `nb_registers` member of</span>
+    <span class="doccomment">/// the orig. modbus_mapping_t struct</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `tab_registers` is an pointer, and this function returns a valid, mutable Rust slice to work with.</span>
     <span class="doccomment">///</span>
@@ -672,7 +721,8 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_registers_mut</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>] {
         <span class="kw">unsafe</span> {
-            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts_mut</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_registers</span>, (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_registers</span> <span class="kw">as</span> <span class="ident">usize</span>)
+            ::<span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">from_raw_parts_mut</span>((<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">tab_registers</span>,
+                                             (<span class="kw-2">*</span><span class="self">self</span>.<span class="ident">modbus_mapping</span>).<span class="ident">nb_registers</span> <span class="kw">as</span> <span class="ident">usize</span>)
         }
     }
 }
@@ -740,7 +790,6 @@
         window.rootPath = "../../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     <script defer src="../../search-index.js"></script>
 </body>

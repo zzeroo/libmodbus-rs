@@ -1,6 +1,4 @@
 (function() {var implementors = {};
-implementors["error_chain"] = [];
-implementors["libc"] = [];
 implementors["rand"] = [];
 
             if (window.register_implementors) {

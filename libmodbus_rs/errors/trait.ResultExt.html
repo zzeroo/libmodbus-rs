@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../../libmodbus_rs/index.html'><img src='https://zzeroo.github.io/share/zzeroo-logo.png' alt='logo' width='100'></a>
-        <p class='location'><a href='../index.html'>libmodbus_rs</a>::<wbr><a href='index.html'>errors</a></p><script>window.sidebarCurrent = {name: 'ResultExt', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Trait ResultExt</p><div class="block items"><ul><li><a href="#required-methods">Required Methods</a></li><li><a href="#foreign-impls">Implementations on Foreign Types</a></li><li><a href="#implementors">Implementors</a></li></ul></div><p class='location'><a href='../index.html'>libmodbus_rs</a>::<wbr><a href='index.html'>errors</a></p><script>window.sidebarCurrent = {name: 'ResultExt', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -49,21 +49,32 @@
                        [<span class='inner'>&#x2212;</span>]
                    </a>
                </span></span></h1>
-<pre class='rust trait'>pub trait ResultExt&lt;T, E&gt; {
-    fn <a href='#tymethod.chain_err' class='fnname'>chain_err</a>&lt;F, EK&gt;(self, callback: F) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, <a class="struct" href="../../libmodbus_rs/errors/struct.Error.html" title="struct libmodbus_rs::errors::Error">Error</a>&gt; <span class="where fmt-newline">where F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html" title="trait core::ops::FnOnce">FnOnce</a>() -&gt; EK, EK: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="../../libmodbus_rs/errors/enum.ErrorKind.html" title="enum libmodbus_rs::errors::ErrorKind">ErrorKind</a>&gt;</span>;
+<pre class='rust trait'>pub trait ResultExt&lt;T&gt; {
+    fn <a href='#tymethod.chain_err' class='fnname'>chain_err</a>&lt;F, EK&gt;(self, callback: F) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, <a class="struct" href="../../libmodbus_rs/errors/struct.Error.html" title="struct libmodbus_rs::errors::Error">Error</a>&gt;<br>&nbsp;&nbsp;&nbsp; <span class="where">where<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>() -&gt; EK,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EK: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="../../libmodbus_rs/errors/enum.ErrorKind.html" title="enum libmodbus_rs::errors::ErrorKind">ErrorKind</a>&gt;</span>;
 }</pre><div class='docblock'><p>Additional methods for <code>Result</code>, for easy interaction with this crate.</p>
 </div>
-            <h2 id='required-methods'>Required Methods</h2>
+            <h2 id='required-methods' class='small-section-header'>
+              Required Methods<a href='#required-methods' class='anchor'></a>
+            </h2>
             <div class='methods'>
-        <h3 id='tymethod.chain_err' class='method'><span id='chain_err.v' class='invisible'><code>fn <a href='#tymethod.chain_err' class='fnname'>chain_err</a>&lt;F, EK&gt;(self, callback: F) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, <a class="struct" href="../../libmodbus_rs/errors/struct.Error.html" title="struct libmodbus_rs::errors::Error">Error</a>&gt; <span class="where fmt-newline">where F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html" title="trait core::ops::FnOnce">FnOnce</a>() -&gt; EK, EK: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="../../libmodbus_rs/errors/enum.ErrorKind.html" title="enum libmodbus_rs::errors::ErrorKind">ErrorKind</a>&gt;</span></code></span></h3><div class='docblock'><p>If the <code>Result</code> is an <code>Err</code> then <code>chain_err</code> evaluates the closure,
+        <h3 id='tymethod.chain_err' class='method'><span id='chain_err.v' class='invisible'><code>fn <a href='#tymethod.chain_err' class='fnname'>chain_err</a>&lt;F, EK&gt;(self, callback: F) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, <a class="struct" href="../../libmodbus_rs/errors/struct.Error.html" title="struct libmodbus_rs::errors::Error">Error</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>() -&gt; EK,<br>&nbsp;&nbsp;&nbsp;&nbsp;EK: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="../../libmodbus_rs/errors/enum.ErrorKind.html" title="enum libmodbus_rs::errors::ErrorKind">ErrorKind</a>&gt;,&nbsp;</span></code></span></h3><div class='docblock'><p>If the <code>Result</code> is an <code>Err</code> then <code>chain_err</code> evaluates the closure,
 which returns <em>some type that can be converted to <code>ErrorKind</code></em>, boxes
 the original error to store as the cause, then returns a new error
 containing the original error.</p>
 </div></div>
-        <h2 id='implementors'>Implementors</h2>
+                <h2 id='foreign-impls' class='section-header'>
+                  Implementations on Foreign Types<a href='#foreign-impls' class='anchor'></a>
+                </h2>
+            <h3 id='impl-ResultExt&lt;T&gt;' class='impl'><span class='in-band'><code>impl&lt;T, E&gt; <a class="trait" href="../../libmodbus_rs/errors/trait.ResultExt.html" title="trait libmodbus_rs::errors::ResultExt">ResultExt</a>&lt;T&gt; for <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, E&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;E: <a class="trait" href="https://doc.rust-lang.org/nightly/std/error/trait.Error.html" title="trait std::error::Error">Error</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'static,&nbsp;</span></code><a href='#impl-ResultExt&lt;T&gt;' class='anchor'></a></span><span class='out-of-band'></span></h3>
+<span class='docblock autohide'><div class='impl-items'><h4 id='method.chain_err' class="method"><span id='chain_err.v-1' class='invisible'><code>fn <a href='#method.chain_err' class='fnname'>chain_err</a>&lt;F, EK&gt;(self, callback: F) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, <a class="struct" href="../../libmodbus_rs/errors/struct.Error.html" title="struct libmodbus_rs::errors::Error">Error</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>() -&gt; EK,<br>&nbsp;&nbsp;&nbsp;&nbsp;EK: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="../../libmodbus_rs/errors/enum.ErrorKind.html" title="enum libmodbus_rs::errors::ErrorKind">ErrorKind</a>&gt;,&nbsp;</span></code></span></h4>
+</div></span><h3 id='impl-ResultExt&lt;T&gt;-1' class='impl'><span class='in-band'><code>impl&lt;T&gt; <a class="trait" href="../../libmodbus_rs/errors/trait.ResultExt.html" title="trait libmodbus_rs::errors::ResultExt">ResultExt</a>&lt;T&gt; for <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;T&gt;</code><a href='#impl-ResultExt&lt;T&gt;-1' class='anchor'></a></span><span class='out-of-band'></span></h3>
+<span class='docblock autohide'><div class='impl-items'><h4 id='method.chain_err-1' class="method"><span id='chain_err.v-2' class='invisible'><code>fn <a href='#method.chain_err' class='fnname'>chain_err</a>&lt;F, EK&gt;(self, callback: F) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, <a class="struct" href="../../libmodbus_rs/errors/struct.Error.html" title="struct libmodbus_rs::errors::Error">Error</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;F: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/function/trait.FnOnce.html" title="trait core::ops::function::FnOnce">FnOnce</a>() -&gt; EK,<br>&nbsp;&nbsp;&nbsp;&nbsp;EK: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="enum" href="../../libmodbus_rs/errors/enum.ErrorKind.html" title="enum libmodbus_rs::errors::ErrorKind">ErrorKind</a>&gt;,&nbsp;</span></code></span></h4>
+</div></span>
+        <h2 id='implementors' class='small-section-header'>
+          Implementors<a href='#implementors' class='anchor'></a>
+        </h2>
         <ul class='item-list' id='implementors-list'>
-    <li><code>impl&lt;T, E&gt; ResultExt&lt;T, E&gt; for <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, E&gt; <span class="where fmt-newline">where E: <a class="trait" href="https://doc.rust-lang.org/nightly/std/error/trait.Error.html" title="trait std::error::Error">Error</a> + <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'static</span></code></li>
-</ul><script type="text/javascript" async
+    </ul><script type="text/javascript" async
                          src="../../implementors/libmodbus_rs/errors/trait.ResultExt.js">
                  </script></section>
     <section id='search' class="content hidden"></section>
@@ -122,7 +133,6 @@ containing the original error.</p>
         window.rootPath = "../../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     <script defer src="../../search-index.js"></script>
 </body>

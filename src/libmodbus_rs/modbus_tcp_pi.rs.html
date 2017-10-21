@@ -254,7 +254,7 @@
     <span class="doccomment">/// # Examples</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI, MODBUS_MAX_ADU_LENGTH};</span>
+    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut modbus = Modbus::new_tcp_pi(&quot;::0&quot;, &quot;1502&quot;).unwrap();</span>
     <span class="doccomment">/// let mut socket = modbus.tcp_pi_listen(1).unwrap();</span>
@@ -288,7 +288,7 @@
     <span class="doccomment">/// * bandwidth-server-many-up.rs   - handles several connection at once</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
-    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI, MODBUS_MAX_ADU_LENGTH};</span>
+    <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let mut modbus = Modbus::new_tcp_pi(&quot;::0&quot;, &quot;1502&quot;).unwrap();</span>
     <span class="doccomment">/// let mut socket = modbus.tcp_pi_listen(1).unwrap();</span>
@@ -296,7 +296,7 @@
     <span class="doccomment">/// modbus.tcp_pi_accept(&amp;mut socket);</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();</span>
-    <span class="doccomment">/// let mut query = vec![0u8; MODBUS_MAX_ADU_LENGTH as usize];</span>
+    <span class="doccomment">/// let mut query = vec![0u8; Modbus::MAX_ADU_LENGTH as usize];</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// loop {</span>
     <span class="doccomment">///     let request_len = modbus.receive(&amp;mut query).unwrap();</span>
@@ -370,7 +370,6 @@
         window.rootPath = "../../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     <script defer src="../../search-index.js"></script>
 </body>

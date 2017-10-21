@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../libmodbus_rs/index.html'><img src='https://zzeroo.github.io/share/zzeroo-logo.png' alt='logo' width='100'></a>
-        <p class='location'><a href='index.html'>libmodbus_rs</a></p><script>window.sidebarCurrent = {name: 'Exception', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Enum Exception</p><div class="block items"><ul><li><a href="#variants">Variants</a></li><li><a href="#implementations">Trait Implementations</a></li></ul></div><p class='location'><a href='index.html'>libmodbus_rs</a></p><script>window.sidebarCurrent = {name: 'Exception', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -48,53 +48,65 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/enums.rs.html#7-35' title='goto source code'>[src]</a></span></h1>
-<pre class='rust enum'><div class="docblock attributes">#[repr(C)]
-</div>pub enum Exception {
-    ILLEGAL_FUNCTION,
-    ILLEGAL_DATA_ADDRESS,
-    ILLEGAL_DATA_VALUE,
-    SLAVE_OR_SERVER_FAILURE,
-    ACKNOWLEDGE,
-    SLAVE_OR_SERVER_BUSY,
-    NEGATIVE_ACKNOWLEDGE,
-    MEMORY_PARITY,
-    NOT_DEFINED,
-    GATEWAY_PATH,
-    GATEWAY_TARGET,
+               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#11-39' title='goto source code'>[src]</a></span></h1>
+<pre class='rust enum'>pub enum Exception {
+    IllegalFunction,
+    IllegalDataAddress,
+    IllegalDataValue,
+    SlaveOrServerFailure,
+    Acknowledge,
+    SlaveDeviceBusy,
+    NegativeAcknowledge,
+    MemoryParity,
+    NotDefined,
+    GatewayPath,
+    GatewayTarget,
 }</pre><div class='docblock'><p>Modbus protocol exceptions</p>
 
 <p>Documentation source: <a href="https://en.wikipedia.org/wiki/Modbus#Main_Modbus_exception_codes">https://en.wikipedia.org/wiki/Modbus#Main_Modbus_exception_codes</a></p>
-</div><h2 class='variants'>Variants</h2>
-<span id='variant.ILLEGAL_FUNCTION' class='variant'><span id='ILLEGAL_FUNCTION.v' class='invisible'><code>ILLEGAL_FUNCTION</code></span></span><div class='docblock'><p>(1) Illegal Function - Function code received in the query is not recognized or allowed by slave</p>
-</div><span id='variant.ILLEGAL_DATA_ADDRESS' class='variant'><span id='ILLEGAL_DATA_ADDRESS.v' class='invisible'><code>ILLEGAL_DATA_ADDRESS</code></span></span><div class='docblock'><p>(2) Illegal Data Address - Data address of some or all the required entities are not allowed or do not exist in
+</div><h2 id='variants' class='variants small-section-header'>
+                   Variants<a href='#variants' class='anchor'></a></h2>
+<span id="variant.IllegalFunction" class="variant small-section-header"><a href="#variant.IllegalFunction" class="anchor field"></a><span id='IllegalFunction.v' class='invisible'><code>IllegalFunction</code></span></span><div class='docblock'><p>(1) Illegal Function - Function code received in the query is not recognized or allowed by slave</p>
+</div><span id="variant.IllegalDataAddress" class="variant small-section-header"><a href="#variant.IllegalDataAddress" class="anchor field"></a><span id='IllegalDataAddress.v' class='invisible'><code>IllegalDataAddress</code></span></span><div class='docblock'><p>(2) Illegal Data Address - Data address of some or all the required entities are not allowed or do not exist in
 slave</p>
-</div><span id='variant.ILLEGAL_DATA_VALUE' class='variant'><span id='ILLEGAL_DATA_VALUE.v' class='invisible'><code>ILLEGAL_DATA_VALUE</code></span></span><div class='docblock'><p>(3) Illegal Data Value - Value is not accepted by slave</p>
-</div><span id='variant.SLAVE_OR_SERVER_FAILURE' class='variant'><span id='SLAVE_OR_SERVER_FAILURE.v' class='invisible'><code>SLAVE_OR_SERVER_FAILURE</code></span></span><div class='docblock'><p>(4) Slave Device Failure - Unrecoverable error occurred while slave was attempting to perform requested action</p>
-</div><span id='variant.ACKNOWLEDGE' class='variant'><span id='ACKNOWLEDGE.v' class='invisible'><code>ACKNOWLEDGE</code></span></span><div class='docblock'><p>(5) Acknowledge - Slave has accepted request and is processing it, but a long duration of time is required.
+</div><span id="variant.IllegalDataValue" class="variant small-section-header"><a href="#variant.IllegalDataValue" class="anchor field"></a><span id='IllegalDataValue.v' class='invisible'><code>IllegalDataValue</code></span></span><div class='docblock'><p>(3) Illegal Data Value - Value is not accepted by slave</p>
+</div><span id="variant.SlaveOrServerFailure" class="variant small-section-header"><a href="#variant.SlaveOrServerFailure" class="anchor field"></a><span id='SlaveOrServerFailure.v' class='invisible'><code>SlaveOrServerFailure</code></span></span><div class='docblock'><p>(4) Slave Device Failure - Unrecoverable error occurred while slave was attempting to perform requested action</p>
+</div><span id="variant.Acknowledge" class="variant small-section-header"><a href="#variant.Acknowledge" class="anchor field"></a><span id='Acknowledge.v' class='invisible'><code>Acknowledge</code></span></span><div class='docblock'><p>(5) Acknowledge - Slave has accepted request and is processing it, but a long duration of time is required.
 This response is returned to prevent a timeout error from occurring in the master. Master can next issue a Poll
 Program Complete message to determine whether processing is completed</p>
-</div><span id='variant.SLAVE_OR_SERVER_BUSY' class='variant'><span id='SLAVE_OR_SERVER_BUSY.v' class='invisible'><code>SLAVE_OR_SERVER_BUSY</code></span></span><div class='docblock'><p>(6) Slave Device Busy - Slave is engaged in processing a long-duration command. Master should retry later</p>
-</div><span id='variant.NEGATIVE_ACKNOWLEDGE' class='variant'><span id='NEGATIVE_ACKNOWLEDGE.v' class='invisible'><code>NEGATIVE_ACKNOWLEDGE</code></span></span><div class='docblock'><p>(7) Negative Acknowledge - Slave cannot perform the programming functions. Master should request diagnostic or
+</div><span id="variant.SlaveDeviceBusy" class="variant small-section-header"><a href="#variant.SlaveDeviceBusy" class="anchor field"></a><span id='SlaveDeviceBusy.v' class='invisible'><code>SlaveDeviceBusy</code></span></span><div class='docblock'><p>(6) Slave Device Busy - Slave is engaged in processing a long-duration command. Master should retry later</p>
+</div><span id="variant.NegativeAcknowledge" class="variant small-section-header"><a href="#variant.NegativeAcknowledge" class="anchor field"></a><span id='NegativeAcknowledge.v' class='invisible'><code>NegativeAcknowledge</code></span></span><div class='docblock'><p>(7) Negative Acknowledge - Slave cannot perform the programming functions. Master should request diagnostic or
 error information from slave</p>
-</div><span id='variant.MEMORY_PARITY' class='variant'><span id='MEMORY_PARITY.v' class='invisible'><code>MEMORY_PARITY</code></span></span><div class='docblock'><p>(8) Memory Parity Error - Slave detected a parity error in memory. Master can retry the request, but service
+</div><span id="variant.MemoryParity" class="variant small-section-header"><a href="#variant.MemoryParity" class="anchor field"></a><span id='MemoryParity.v' class='invisible'><code>MemoryParity</code></span></span><div class='docblock'><p>(8) Memory Parity Error - Slave detected a parity error in memory. Master can retry the request, but service
 may be required on the slave device</p>
-</div><span id='variant.NOT_DEFINED' class='variant'><span id='NOT_DEFINED.v' class='invisible'><code>NOT_DEFINED</code></span></span><div class='docblock'><p>(9) Not defined</p>
-</div><span id='variant.GATEWAY_PATH' class='variant'><span id='GATEWAY_PATH.v' class='invisible'><code>GATEWAY_PATH</code></span></span><div class='docblock'><p>(10) Gateway Path Unavailable - Specialized for Modbus gateways. Indicates a misconfigured gateway</p>
-</div><span id='variant.GATEWAY_TARGET' class='variant'><span id='GATEWAY_TARGET.v' class='invisible'><code>GATEWAY_TARGET</code></span></span><div class='docblock'><p>(11) Gateway Target Device Failed to Respond - Specialized for Modbus gateways. Sent when slave fails to respond</p>
-</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/enums.rs.html#6' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code></span></h4>
+</div><span id="variant.NotDefined" class="variant small-section-header"><a href="#variant.NotDefined" class="anchor field"></a><span id='NotDefined.v' class='invisible'><code>NotDefined</code></span></span><div class='docblock'><p>(9) Not defined</p>
+</div><span id="variant.GatewayPath" class="variant small-section-header"><a href="#variant.GatewayPath" class="anchor field"></a><span id='GatewayPath.v' class='invisible'><code>GatewayPath</code></span></span><div class='docblock'><p>(10) Gateway Path Unavailable - Specialized for Modbus gateways. Indicates a misconfigured gateway</p>
+</div><span id="variant.GatewayTarget" class="variant small-section-header"><a href="#variant.GatewayTarget" class="anchor field"></a><span id='GatewayTarget.v' class='invisible'><code>GatewayTarget</code></span></span><div class='docblock'><p>(11) Gateway Target Device Failed to Respond - Specialized for Modbus gateways. Sent when slave fails to respond</p>
+</div>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+        <h3 id='impl-Debug' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code><a href='#impl-Debug' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#10' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class="method"><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/core/fmt/type.Result.html" title="type core::fmt::Result">Result</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#10' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 id='impl-Copy' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a> for <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code><a href='#impl-Copy' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#10' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 id='impl-Clone' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code><a href='#impl-Clone' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#10' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#10' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
-</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self)</code></span><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/clone.rs.html#112-114' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a> for <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/enums.rs.html#6' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html" title="trait core::cmp::PartialEq">PartialEq</a> for <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/enums.rs.html#6' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.eq' class="method"><span id='eq.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></h4>
+</div></div><h3 id='impl-PartialEq' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html" title="trait core::cmp::PartialEq">PartialEq</a> for <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code><a href='#impl-PartialEq' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#10' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class="method"><span id='eq.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#10' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
-</div><h4 id='method.ne' class="method"><span id='ne.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+</div><h4 id='method.ne' class="method"><span id='ne.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Rhs) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/cmp.rs.html#121' title='goto source code'>[src]</a></span></h4>
 <div class='docblock'><p>This method tests for <code>!=</code>.</p>
-</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html" title="trait core::cmp::Eq">Eq</a> for <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/enums.rs.html#6' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'></div></section>
+</div></div><h3 id='impl-Eq' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html" title="trait core::cmp::Eq">Eq</a> for <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code><a href='#impl-Eq' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#10' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 id='impl-Hash' class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html" title="trait core::hash::Hash">Hash</a> for <a class="enum" href="../libmodbus_rs/enum.Exception.html" title="enum libmodbus_rs::Exception">Exception</a></code><a href='#impl-Hash' class='anchor'></a></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#10' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.hash' class="method"><span id='hash.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#tymethod.hash' class='fnname'>hash</a>&lt;__H:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html" title="trait core::hash::Hasher">Hasher</a>&gt;(&amp;self, __arg_0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>__H)</code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#10' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Feeds this value into the given [<code>Hasher</code>]. <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#tymethod.hash">Read more</a></p>
+</div><h4 id='method.hash_slice' class="method"><span id='hash_slice.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#method.hash_slice' class='fnname'>hash_slice</a>&lt;H&gt;(data: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[Self]</a>, state: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>H) <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;H: <a class="trait" href="https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html" title="trait core::hash::Hasher">Hasher</a>,&nbsp;</span></code></span><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.3.0'>1.3.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/hash/mod.rs.html#202-208' title='goto source code'>[src]</a></span></h4>
+<div class='docblock'><p>Feeds a slice of this type into the given [<code>Hasher</code>]. <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#method.hash_slice">Read more</a></p>
+</div></div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -151,7 +163,6 @@ may be required on the slave device</p>
         window.rootPath = "../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>

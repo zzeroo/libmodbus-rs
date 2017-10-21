@@ -48,8 +48,8 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#561-565' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn set_bits_from_bytes(dest: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; index: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; num_bit: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bytes: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>)</pre><div class='docblock'><p><code>set_bits_from_bytes</code> -  set many bits from an array of bytes</p>
+               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#689-691' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn set_bits_from_bytes(<br>&nbsp;&nbsp;&nbsp;&nbsp;dest: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;mut [</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;index: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;num_bit: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u16.html">u16</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;bytes: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a><br>)</pre><div class='docblock'><p><code>set_bits_from_bytes</code> -  set many bits from an array of bytes</p>
 
 <p>The <a href="#method.set_bits_from_bytes"><code>set_bits_from_bytes()</code></a> function shall set many bits from a single byte.
 All 8 bits from the byte value will be written to dest array starting at index position.</p>
@@ -58,7 +58,8 @@ All 8 bits from the byte value will be written to dest array starting at index p
 <p><code>dest</code> - destination slice
 <code>index</code> - starting position where the bit should written
 <code>num_bit</code>   - how many bits should written
-<code>bytes</code> - All the bits of the <code>bytes</code> parameter, read from the first position of the vec <code>bytes</code> are written as bits in the <code>dest</code> vec,
+<code>bytes</code> - All the bits of the <code>bytes</code> parameter, read from the first position of the vec <code>bytes</code> are written as
+bits in the <code>dest</code> vec,
     starting at position <code>index</code></p>
 
 <h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
@@ -127,7 +128,6 @@ All 8 bits from the byte value will be written to dest array starting at index p
         window.rootPath = "../";
         window.currentCrate = "libmodbus_rs";
     </script>
-    <script src="../jquery.js"></script>
     <script src="../main.js"></script>
     <script defer src="../search-index.js"></script>
 </body>
