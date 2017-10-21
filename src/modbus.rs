@@ -428,7 +428,7 @@ impl Modbus {
     /// (eg. timeout of select call).
     /// The reconnection attempt can hang for several seconds if the network to the remote target unit is down.
     ///
-    /// When `ErrorRecoveryMode::PROTOCOL` is set, a sleep and flush sequence will be used to clean up the ongoing
+    /// When `ErrorRecoveryMode::Protocol` is set, a sleep and flush sequence will be used to clean up the ongoing
     /// communication, this can occurs when the message length is invalid, the TID is wrong or the received function
     /// code is not the expected one.
     /// The response timeout delay will be used to sleep.

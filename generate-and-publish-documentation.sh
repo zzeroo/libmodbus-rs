@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+#set -e
 
 
 # Branch from which github create the projects page
@@ -86,10 +86,6 @@ if $BUILD_LIBMODBUS_DOC; then
   # Cleanup
   rm libmodbus-sys/libmodbus -rf
 fi
-
-
-# For test exit here and do nothing,  please delete this and the next line for production
-exit 1
 
 
 # Remove unneeded files

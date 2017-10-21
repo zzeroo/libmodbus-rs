@@ -11,6 +11,16 @@ cd libmodbus
 make -j3 && make install
 ```
 
+### libmodbus documentation
+
+To build the documentation for the 3.1.4 branch you have to install `asciidoc` and `xmlto`.
+
+For arch install them via:
+
+```bash
+pacman -S asciidoc xmlto
+```
+
 ## libmodbus-rs
 
 ```bash
