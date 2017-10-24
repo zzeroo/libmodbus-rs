@@ -728,7 +728,7 @@ pub fn set_bits_from_bytes(dest: &mut [u8], index: u16, num_bit: u16, bytes: &[u
 ///
 /// assert_eq!(get_byte_from_bits(&[0b1111_1111], 0 ,8), 255);
 /// ```
-pub fn get_byte_from_bits(src: &[u8], index: u8, num_bit: u8) -> u8 {
+pub fn get_byte_from_bits(src: &[u8], index: u8, num_bit: u16) -> u8 {
     unsafe { ffi::modbus_get_byte_from_bits(src.as_ptr(), index as c_int, num_bit as c_uint) }
 }
 
