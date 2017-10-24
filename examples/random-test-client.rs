@@ -70,7 +70,7 @@ fn run() -> Result<(), String> {
             num_bit = ADDRESS_END - address;
 
             // WRITE BIT
-            match modbus.write_bit(address as i32,
+            match modbus.write_bit(address as u16,
                                    match request_bits[0] {
                                        0 => false,
                                        _ => true,
@@ -82,7 +82,7 @@ fn run() -> Result<(), String> {
                     num_failures += 1;
                 },
                 Ok(_) => {
-                    match modbus.read_bits(address as i32, 1, &mut response_bits) {
+                    match modbus.read_bits(address as u16, 1, &mut response_bits) {
                         Err(err) => {
                             println!("ERROR read_bits single: '{}')", err);
                             println!("address = {}", address);
@@ -107,7 +107,7 @@ fn run() -> Result<(), String> {
                     num_failures += 1;
                 },
                 Ok(_) => {
-                    match modbus.read_bits(address as i32, num_bit as i32, &mut response_bits) {
+                    match modbus.read_bits(address as u16, num_bit as u16, &mut response_bits) {
                         Err(err) => {
                             println!("ERROR read_bits: '{}'", err);
                             num_failures += 1;

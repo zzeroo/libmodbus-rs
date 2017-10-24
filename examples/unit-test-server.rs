@@ -17,6 +17,7 @@ mod unit_test_config;
 use unit_test_config::*;
 use errors::*;
 use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCP, ModbusTCPPI, ModbusRTU};
+use libmodbus_rs::prelude::*;
 use std::env;
 
 
@@ -79,7 +80,7 @@ fn run() -> Result<()> {
     // Only the read-only input values are assigned.
 
     // Initialize input values that's can be only done server side.
-    libmodbus_rs::set_bits_from_bytes(modbus_mapping.get_input_bits_mut(), 0, INPUT_BITS_NB, &INPUT_BITS_TAB);
+    set_bits_from_bytes(modbus_mapping.get_input_bits_mut(), 0, INPUT_BITS_NB, &INPUT_BITS_TAB);
 
     //  Initialize values of INPUT REGISTERS
     for i in 0..INPUT_REGISTERS_NB {
