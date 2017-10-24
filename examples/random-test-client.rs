@@ -167,7 +167,7 @@ fn run() -> Result<(), String> {
             }
 
             // MULTIPLE REGISTERS
-            match modbus.write_registers(address as i32, num_bit as i32, &request_registers) {
+            match modbus.write_registers(address as u16, num_bit as u16, &request_registers) {
                 Err(err) => {
                     println!("ERROR write_registers:('{}'", err);
                     println!("Address = {}, num_bit = {}", address, num_bit);
