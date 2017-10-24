@@ -34,7 +34,7 @@ pub trait ModbusClient {
     fn read_input_registers(&self, address: i32, num: i32, dest: &mut [u16]) -> Result<i32>;
     fn report_slave_id(&self, max_dest: usize, dest: &mut [u8]) -> Result<i32>;
     fn write_bit(&self, address: u16, status: bool) -> Result<()>;
-    fn write_bits(&self, address: i32, num: i32, src: &[u8]) -> Result<i32>;
+    fn write_bits(&self, address: u16, num: u16, src: &[u8]) -> Result<i32>;
     fn write_register(&self, address: i32, value: i32) -> Result<()>;
     fn write_registers(&self, address: i32, num: i32, src: &[u16]) -> Result<i32>;
     fn write_and_read_registers(&self, write_address: i32, write_num: i32, src: &[u16], read_address: i32,
@@ -350,9 +350,9 @@ impl ModbusClient for Modbus {
     ///
     /// assert_eq!(modbus.write_bits(address, 1, &tab_bytes).unwrap(), 1);
     /// ```
-    fn write_bits(&self, address: i32, num: i32, src: &[u8]) -> Result<i32> {
+    fn write_bits(&self, address: u16, num: u16, src: &[u8]) -> Result<i32> {
         unsafe {
-            match libmodbus_sys::modbus_write_bits(self.ctx, address as c_int, num, src.as_ptr()) {
+            match libmodbus_sys::modbus_write_bits(self.ctx, address as c_int, num as c_int, src.as_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 num => Ok(num),
             }

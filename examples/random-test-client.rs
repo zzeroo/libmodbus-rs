@@ -100,7 +100,7 @@ fn run() -> Result<(), String> {
             }
 
             // MULTIPLE BITS
-            match modbus.write_bits(address as i32, num_bit as i32, &request_bits) {
+            match modbus.write_bits(address as u16, num_bit as u16, &request_bits) {
                 Err(err) => {
                     println!("ERROR write_bits: '{}'", err);
                     println!("Address = {}, num_bit = {}", address, num_bit);
