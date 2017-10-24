@@ -30,7 +30,7 @@ use std::io::Error;
 pub trait ModbusClient {
     fn read_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<i32>;
     fn read_input_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<i32>;
-    fn read_registers(&self, address: i32, num: i32, dest: &mut [u16]) -> Result<i32>;
+    fn read_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32>;
     fn read_input_registers(&self, address: i32, num: i32, dest: &mut [u16]) -> Result<i32>;
     fn report_slave_id(&self, max_dest: usize, dest: &mut [u8]) -> Result<i32>;
     fn write_bit(&self, address: u16, status: bool) -> Result<()>;
@@ -152,13 +152,13 @@ impl ModbusClient for Modbus {
     ///
     /// assert!(modbus.read_registers(0, 1, &mut dest).is_ok());
     /// ```
-    fn read_registers(&self, address: i32, num: i32, dest: &mut [u16]) -> Result<i32> {
-        if num > dest.len() as i32 {
+    fn read_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32> {
+        if num > dest.len() as u16 {
             bail!(ErrorKind::TooManyData("Too many registers requested"));
         }
 
         unsafe {
-            match libmodbus_sys::modbus_read_registers(self.ctx, address as c_int, num, dest.as_mut_ptr()) {
+            match libmodbus_sys::modbus_read_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }

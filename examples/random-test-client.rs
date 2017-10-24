@@ -145,7 +145,7 @@ fn run() -> Result<(), String> {
                     num_failures += 1;
                 },
                 Ok(_) => {
-                    match modbus.read_registers(address as i32, 1, &mut response_registers) {
+                    match modbus.read_registers(address as u16, 1, &mut response_registers) {
                         Err(err) => {
                             println!("ERROR read_registers single: '{}'", err);
                             println!("Address = {}", address);
@@ -179,7 +179,7 @@ fn run() -> Result<(), String> {
                         println!("Address = {}, num_bit = {}", address, num_bit);
                         num_failures += 1;
                     } else {
-                        match modbus.read_registers(address as i32, num_bit as i32, &mut response_registers) {
+                        match modbus.read_registers(address as u16, num_bit as u16, &mut response_registers) {
                             Err(err) => {
                                 println!("ERROR read_registers: '{}'", err);
                                 println!("Address = {}, num_bit = {}", address, num_bit);
@@ -240,7 +240,7 @@ fn run() -> Result<(), String> {
                         }
                     }
 
-                    match modbus.read_registers(address as i32, num_bit as i32, &mut response_registers) {
+                    match modbus.read_registers(address as u16, num_bit as u16, &mut response_registers) {
                         Err(err) => {
                             println!("ERROR modbus_read_registers ({:?})", err);
                             println!("Address = {}, num_bit = {}", address, num_bit);
