@@ -1,6 +1,6 @@
 use errors::*;
 use libc::c_int;
-use libmodbus_sys;
+use libmodbus_sys as ffi;
 use modbus::Modbus;
 use std::io::Error;
 
@@ -40,6 +40,7 @@ pub trait ModbusClient {
     fn write_and_read_registers(&self, write_address: u16, write_num: u16, src: &[u16], read_address: u16,
                                 read_num: u16, dest: &mut [u16])
                                 -> Result<i32>;
+    fn mask_write_register(&self, address: u16, and_mask: u16, or_mask: u16) -> Result<()>;
     fn send_raw_request(&self, raw_request: &mut [u8]) -> Result<i32>;
     fn receive_confirmation(&self) -> Result<Vec<u8>>;
 }
@@ -79,7 +80,7 @@ impl ModbusClient for Modbus {
         }
 
         unsafe {
-            match libmodbus_sys::modbus_read_bits(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
+            match ffi::modbus_read_bits(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }
@@ -119,7 +120,7 @@ impl ModbusClient for Modbus {
         }
 
         unsafe {
-            match libmodbus_sys::modbus_read_input_bits(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
+            match ffi::modbus_read_input_bits(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }
@@ -160,7 +161,7 @@ impl ModbusClient for Modbus {
         }
 
         unsafe {
-            match libmodbus_sys::modbus_read_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
+            match ffi::modbus_read_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }
@@ -201,7 +202,7 @@ impl ModbusClient for Modbus {
         }
 
         unsafe {
-            match libmodbus_sys::modbus_read_input_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
+            match ffi::modbus_read_input_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }
@@ -246,7 +247,7 @@ impl ModbusClient for Modbus {
         }
 
         unsafe {
-            match libmodbus_sys::modbus_report_slave_id(self.ctx, Modbus::MAX_PDU_LENGTH as i32, dest.as_mut_ptr()) {
+            match ffi::modbus_report_slave_id(self.ctx, Modbus::MAX_PDU_LENGTH as i32, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }
@@ -281,7 +282,7 @@ impl ModbusClient for Modbus {
     fn write_bit(&self, address: u16, status: bool) -> Result<()> {
 
         unsafe {
-            match libmodbus_sys::modbus_write_bit(self.ctx, address as c_int, status as c_int) {
+            match ffi::modbus_write_bit(self.ctx, address as c_int, status as c_int) {
                 -1 => bail!(Error::last_os_error()),
                 1 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
@@ -317,7 +318,7 @@ impl ModbusClient for Modbus {
     /// ```
     fn write_register(&self, address: u16, value: u16) -> Result<()> {
         unsafe {
-            match libmodbus_sys::modbus_write_register(self.ctx, address as c_int, value as c_int) {
+            match ffi::modbus_write_register(self.ctx, address as c_int, value as c_int) {
                 -1 => bail!(Error::last_os_error()),
                 1 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
@@ -354,7 +355,7 @@ impl ModbusClient for Modbus {
     /// ```
     fn write_bits(&self, address: u16, num: u16, src: &[u8]) -> Result<i32> {
         unsafe {
-            match libmodbus_sys::modbus_write_bits(self.ctx, address as c_int, num as c_int, src.as_ptr()) {
+            match ffi::modbus_write_bits(self.ctx, address as c_int, num as c_int, src.as_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 num => Ok(num),
             }
@@ -391,7 +392,7 @@ impl ModbusClient for Modbus {
     /// ```
     fn write_registers(&self, address: u16, num: u16, src: &[u16]) -> Result<i32> {
         unsafe {
-            match libmodbus_sys::modbus_write_registers(self.ctx, address as c_int, num as c_int, src.as_ptr()) {
+            match ffi::modbus_write_registers(self.ctx, address as c_int, num as c_int, src.as_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 num => Ok(num),
             }
@@ -437,7 +438,7 @@ impl ModbusClient for Modbus {
                                 read_num: u16, dest: &mut [u16])
                                 -> Result<i32> {
         unsafe {
-            match libmodbus_sys::modbus_write_and_read_registers(self.ctx,
+            match ffi::modbus_write_and_read_registers(self.ctx,
                                                                  write_address as c_int,
                                                                  write_num as c_int,
                                                                  src.as_ptr(),
@@ -446,6 +447,45 @@ impl ModbusClient for Modbus {
                                                                  dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 num => Ok(num),
+            }
+        }
+    }
+
+    /// `mask_write_register` - mask a single register
+    ///
+    /// The [`mask_write_register()`](#method.mask_write_register) function shall modify the value of the
+    /// holding register at the address `address` of the remote device using the algorithm:
+    ///
+    /// ```bash,no_run
+    /// new value = (current value AND 'and') OR ('or' AND (NOT 'and'))
+    /// ```
+    ///
+    /// The function uses the **Modbus function code 0x16** (mask single register).
+    ///
+    /// # Return value
+    ///
+    /// The function returns a Ok Result if succesful. Otherwise it contains an Error.
+    ///
+    /// # Parameters
+    ///
+    /// * `address`    - address of the remote device
+    /// * `and_mask`   - AND mask
+    /// * `or_mask`    - OR mask
+    ///
+    /// # Examples
+    ///
+    /// ```rust,no_run
+    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
+    /// assert!(modbus.mask_write_register(1, 0xF2, 0x25).is_ok());
+    /// ```
+    fn mask_write_register(&self, address: u16, and_mask: u16, or_mask: u16) -> Result<()> {
+        unsafe {
+            match ffi::modbus_mask_write_register(self.ctx, address as c_int, and_mask, or_mask) {
+                -1 => bail!(Error::last_os_error()),
+                1 => Ok(()),
+                _ => panic!("libmodbus API incompatible response"),
             }
         }
     }
@@ -484,7 +524,7 @@ impl ModbusClient for Modbus {
     /// ```
     fn send_raw_request(&self, raw_request: &mut [u8]) -> Result<i32> {
         unsafe {
-            match libmodbus_sys::modbus_send_raw_request(self.ctx,
+            match ffi::modbus_send_raw_request(self.ctx,
                                                          raw_request.as_mut_ptr(),
                                                          raw_request.len() as c_int) {
                 -1 => bail!(Error::last_os_error()),
@@ -529,7 +569,7 @@ impl ModbusClient for Modbus {
     fn receive_confirmation(&self) -> Result<Vec<u8>> {
         let mut response: Vec<u8> = vec![0; Modbus::MAX_ADU_LENGTH];
         unsafe {
-            match libmodbus_sys::modbus_receive_confirmation(self.ctx, response.as_mut_ptr()) {
+            match ffi::modbus_receive_confirmation(self.ctx, response.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 len => {
                     response.truncate(len as usize);

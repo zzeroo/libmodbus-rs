@@ -39,8 +39,6 @@ macro_rules! assert_true {
 
 fn run() -> Result<()> {
     let backend;
-    let mut query;
-    let modbus: Modbus;
 
     let args: Vec<_> = env::args().collect();
     if args.len() > 1 {
@@ -62,15 +60,12 @@ fn run() -> Result<()> {
     // Setup modbus context
     let mut modbus = match backend {
             Backend::TCP => {
-                query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH as usize];
                 Modbus::new_tcp("127.0.0.1", 1502)
             }
             Backend::TCPPI => {
-                query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH as usize];
                 Modbus::new_tcp_pi("::0", "1502")
             }
             Backend::RTU => {
-                query = vec![0u8; Modbus::RTU_MAX_ADU_LENGTH as usize];
                 Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1)
             }
         }.chain_err(|| "could not select backend")?;
@@ -118,7 +113,7 @@ fn run() -> Result<()> {
 
     let rc = modbus.read_bits(BITS_ADDRESS, 1, &mut response_bits);
     print!("2/2 read_bits: ");
-    assert_true!(rc.is_ok(), "FAILED (nb points {})", rc.unwrap());
+    assert_true!(rc.is_ok(), "FAILED (nb_points {})", rc.unwrap());
     assert_true!(response_bits[0] == 1, "FAILED ({:0X} != {})",
                 &response_bits[0], true);
 
@@ -136,7 +131,7 @@ fn run() -> Result<()> {
 
     let rc = modbus.read_bits(BITS_ADDRESS, BITS_NB, &mut response_bits).unwrap();
     print!("2/2 read_bits: ");
-    assert_true!(rc == BITS_NB as i32, "FAILED (nb points {:?})", rc);
+    assert_true!(rc == BITS_NB as i32, "FAILED (nb_points {:?})", rc);
 
     let mut i: usize = 0;
     let mut nb_points = BITS_NB;
@@ -146,8 +141,8 @@ fn run() -> Result<()> {
         let value = get_byte_from_bits(&response_bits, i as u8 * 8, nb_bits);
         assert_true!(value == BITS_TAB[i], "FAILED ({:0X} != {:0X})", value, BITS_TAB[i]);
 
-        nb_points = nb_points - nb_bits;
-        i = i + 1;
+        nb_points -= nb_bits;
+        i += 1;
     }
     println!("OK");
     // End of multiple bits
@@ -158,7 +153,7 @@ fn run() -> Result<()> {
                                     INPUT_BITS_NB, &mut response_bits).unwrap();
 
     print!("1/1 modbus_read_input_bits: ");
-    assert_true!(rc == INPUT_BITS_NB as i32, "FAILED (nb points {})", rc);
+    assert_true!(rc == INPUT_BITS_NB as i32, "FAILED (nb_points {})", rc);
 
     let mut i = 0;
     let mut nb_points = INPUT_BITS_NB;
@@ -168,8 +163,8 @@ fn run() -> Result<()> {
         assert_true!(value == INPUT_BITS_TAB[i], "FAILED ({:0X} != {:0X})",
                     value, INPUT_BITS_TAB[i]);
 
-        nb_points = nb_points - nb_bits;
-        i = i + 1;
+        nb_points -= nb_bits;
+        i += 1;
     }
     println!("OK");
 
@@ -182,7 +177,7 @@ fn run() -> Result<()> {
 
     let rc = modbus.read_registers(REGISTERS_ADDRESS, 1, &mut response_registers).unwrap();
     print!("2/2 modbus_read_registers: ");
-    assert_true!(rc == 1, "FAILED (nb points {:?})", rc);
+    assert_true!(rc == 1, "FAILED (nb_points {:?})", rc);
     assert_true!(response_registers[0] == 0x1234, "FAILED ({:0x} != {:?})",
                 response_registers[0], 0x1234);
 
@@ -195,7 +190,108 @@ fn run() -> Result<()> {
 
     let rc = modbus.read_registers(REGISTERS_ADDRESS, REGISTERS_NB, &mut response_registers).unwrap();
     print!("2/5 modbus_read_registers: ");
-    assert_true!(rc == REGISTERS_NB as i32, "FAILED (nb points {:?}", rc);
+    assert_true!(rc == REGISTERS_NB as i32, "FAILED (nb_points {:?}", rc);
+
+    for i in 0..REGISTERS_NB as usize {
+        assert_true!(response_registers[i] == REGISTERS_TAB[i],
+                    "FAILED ({:?} != {:?})",
+                    response_registers[i], REGISTERS_TAB[i]);
+    }
+
+    let rc = modbus.read_registers(REGISTERS_ADDRESS, 0, &mut response_registers);
+    print!("3/5 modbus_read_registers (0): ");
+    assert_true!(rc.is_err(), "FAILED (nb_points {})", 0);
+
+    let nb_points = if REGISTERS_NB > INPUT_REGISTERS_NB { REGISTERS_NB } else { INPUT_REGISTERS_NB };
+    let mut response_registers = vec![0u16; nb_points as usize];
+
+    // write registers to zero from `response_registers` and store read registers
+    // into `response_registers`. So the read regiserts mut set to 0, except the
+    // first one because there is an offset of 1 register on write.
+    let rc = modbus.write_and_read_registers(REGISTERS_ADDRESS + 1,
+                                            REGISTERS_NB - 1,
+                                            &response_registers.clone(),
+                                            REGISTERS_ADDRESS,
+                                            REGISTERS_NB,
+                                            &mut response_registers).unwrap();
+
+    print!("4/5 modbus_write_and_read_registers: ");
+    assert_true!(rc == REGISTERS_NB as i32, "FAILED (nb_points {} != {})", rc, REGISTERS_NB);
+
+    assert_true!(response_registers[0] == REGISTERS_TAB[0],
+            "FAILED ({:?} != {:?})", response_registers[0], REGISTERS_TAB[0]);
+
+    for i in 1..REGISTERS_NB as usize {
+        assert_true!(response_registers[i] == 0,
+            "FAILED ({:0X} != {:0X})", response_registers[i], 0);
+    }
+
+    // End of many registers
+
+
+    // INPUT REGISTERS
+    let rc = modbus.read_input_registers(INPUT_REGISTERS_ADDRESS,
+        INPUT_REGISTERS_NB,
+        &mut response_registers).unwrap();
+
+    print!("1/1 modbus_read_input_registers: ");
+    assert_true!(rc == INPUT_REGISTERS_NB as i32, "FAILED (nb_points {})", rc);
+
+    for i in 0..INPUT_REGISTERS_NB as usize {
+         assert_true!(response_registers[i] == INPUT_REGISTERS_TAB[i],
+                     "FAILED ({:0X} != {:0X})",
+                     response_registers[i], INPUT_REGISTERS_TAB[i]);
+    }
+
+    // MASKS
+    print!("1/1 Write mask: ");
+    let rc = modbus.write_register(REGISTERS_ADDRESS, 0x12).unwrap();
+    let rc = modbus.mask_write_register(REGISTERS_ADDRESS, 0xF2, 0x25);
+    assert_true!(rc.is_err(), "FAILED ({:?} == -1)", rc);
+    let rc = modbus.read_registers(REGISTERS_ADDRESS, 1, &mut response_registers).unwrap();
+    assert_true!(response_registers[0] == 0x17,
+                "FAILED ({:0X} != {:0X})",
+                response_registers[0], 0x17);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
