@@ -17,6 +17,10 @@ error_chain!{
             description("Invalid slave ID")
             display("Invalid slave ID: '{}'", id)
         }
+        InvalidParameter(desc: &'static str) {
+            description("Invalid parameter given")
+            display("Invalid parameter given: '{}'", desc)
+        }
     }
 
 }

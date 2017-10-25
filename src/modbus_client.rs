@@ -155,6 +155,8 @@ impl ModbusClient for Modbus {
     fn read_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32> {
         if num > dest.len() as u16 {
             bail!(ErrorKind::TooManyData("Too many registers requested"));
+        } else if num == 0 {
+            bail!(ErrorKind::InvalidParameter("`num` must be greater then 0"))
         }
 
         unsafe {
