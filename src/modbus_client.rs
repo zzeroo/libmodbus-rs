@@ -31,14 +31,14 @@ pub trait ModbusClient {
     fn read_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<i32>;
     fn read_input_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<i32>;
     fn read_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32>;
-    fn read_input_registers(&self, address: i32, num: i32, dest: &mut [u16]) -> Result<i32>;
+    fn read_input_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32>;
     fn report_slave_id(&self, max_dest: usize, dest: &mut [u8]) -> Result<i32>;
     fn write_bit(&self, address: u16, status: bool) -> Result<()>;
     fn write_bits(&self, address: u16, num: u16, src: &[u8]) -> Result<i32>;
-    fn write_register(&self, address: i32, value: i32) -> Result<()>;
+    fn write_register(&self, address: u16, value: u16) -> Result<()>;
     fn write_registers(&self, address: u16, num: u16, src: &[u16]) -> Result<i32>;
-    fn write_and_read_registers(&self, write_address: i32, write_num: i32, src: &[u16], read_address: i32,
-                                read_num: i32, dest: &mut [u16])
+    fn write_and_read_registers(&self, write_address: u16, write_num: u16, src: &[u16], read_address: u16,
+                                read_num: u16, dest: &mut [u16])
                                 -> Result<i32>;
     fn send_raw_request(&self, raw_request: &mut [u8]) -> Result<i32>;
     fn receive_confirmation(&self) -> Result<Vec<u8>>;
@@ -193,13 +193,13 @@ impl ModbusClient for Modbus {
     ///
     /// assert!(modbus.read_input_registers(0, 1, &mut dest).is_ok());
     /// ```
-    fn read_input_registers(&self, address: i32, num: i32, dest: &mut [u16]) -> Result<i32> {
-        if num > dest.len() as i32 {
+    fn read_input_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32> {
+        if num > dest.len() as u16 {
             bail!(ErrorKind::TooManyData("Too many bits requested"));
         }
 
         unsafe {
-            match libmodbus_sys::modbus_read_input_registers(self.ctx, address as c_int, num, dest.as_mut_ptr()) {
+            match libmodbus_sys::modbus_read_input_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }
@@ -309,11 +309,11 @@ impl ModbusClient for Modbus {
     /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let address = 1;
-    /// let value = i32::max_value();
+    /// let value = u16::max_value();
     ///
     /// assert!(modbus.write_register(address, value).is_ok());
     /// ```
-    fn write_register(&self, address: i32, value: i32) -> Result<()> {
+    fn write_register(&self, address: u16, value: u16) -> Result<()> {
         unsafe {
             match libmodbus_sys::modbus_write_register(self.ctx, address as c_int, value as c_int) {
                 -1 => bail!(Error::last_os_error()),
@@ -431,16 +431,16 @@ impl ModbusClient for Modbus {
     ///                 address, 1, &request_bytes,
     ///                 address, 1, &mut response_bytes).unwrap(), 1);
     /// ```
-    fn write_and_read_registers(&self, write_address: i32, write_num: i32, src: &[u16], read_address: i32,
-                                read_num: i32, dest: &mut [u16])
+    fn write_and_read_registers(&self, write_address: u16, write_num: u16, src: &[u16], read_address: u16,
+                                read_num: u16, dest: &mut [u16])
                                 -> Result<i32> {
         unsafe {
             match libmodbus_sys::modbus_write_and_read_registers(self.ctx,
                                                                  write_address as c_int,
-                                                                 write_num,
+                                                                 write_num as c_int,
                                                                  src.as_ptr(),
                                                                  read_address as c_int,
-                                                                 read_num,
+                                                                 read_num as c_int,
                                                                  dest.as_mut_ptr()) {
                 -1 => bail!(Error::last_os_error()),
                 num => Ok(num),

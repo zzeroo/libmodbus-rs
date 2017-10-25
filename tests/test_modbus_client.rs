@@ -181,8 +181,8 @@ fn write_register() {
     match Modbus::new_tcp("127.0.0.1", 1502) {
         Ok(client) => {
             client.connect().expect("could not connect");
-            let address = 1;
-            let value = i32::max_value();
+            let address: u16 = 1;
+            let value = u16::max_value();
             assert!(client.write_register(address, value).is_ok());
         },
         _ => panic!("could not connect"),

@@ -12,7 +12,7 @@ mod unit_test_config;
 
 use unit_test_config::*;
 use errors::*;
-use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusClient, ModbusTCP, ModbusTCPPI, ModbusRTU,
+use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, ModbusTCPPI, ModbusRTU,
                    ErrorRecoveryMode};
 use libmodbus_rs::prelude::*;
 use std::env;
@@ -117,17 +117,90 @@ fn run() -> Result<()> {
     assert_true!(rc.is_ok(), "");
 
     let rc = modbus.read_bits(BITS_ADDRESS, 1, &mut response_bits);
-    print!("2/2 modbus_read_bits: ");
+    print!("2/2 read_bits: ");
     assert_true!(rc.is_ok(), "FAILED (nb points {})", rc.unwrap());
-    assert_true!(response_bits[0] == 1, "FAILED ({:0X} != {})", &response_bits[0], true);
+    assert_true!(response_bits[0] == 1, "FAILED ({:0X} != {})",
+                &response_bits[0], true);
 
     // End single
 
     // Multiple bits
-    let mut value = vec![0u8; BITS_NB as usize];
+    {
+        let mut tab_value = vec![0u8; BITS_NB as usize];
 
-    set_bits_from_bytes(&mut value, BITS_ADDRESS, BITS_NB, &response_bits);
-    print!("1/2 modbus_write_bits: ");
+        set_bits_from_bytes(&mut tab_value, 0, BITS_NB, BITS_TAB);
+        let rc = modbus.write_bits(BITS_ADDRESS, BITS_NB, &tab_value).unwrap();
+        print!("1/2 write_bits: ");
+        assert_true!(rc == BITS_NB as i32, "");
+    }
+
+    let rc = modbus.read_bits(BITS_ADDRESS, BITS_NB, &mut response_bits).unwrap();
+    print!("2/2 read_bits: ");
+    assert_true!(rc == BITS_NB as i32, "FAILED (nb points {:?})", rc);
+
+    let mut i: usize = 0;
+    let mut nb_points = BITS_NB;
+    while nb_points > 0 {
+        let nb_bits = if nb_points > 8 { 8 } else { nb_points };
+
+        let value = get_byte_from_bits(&response_bits, i as u8 * 8, nb_bits);
+        assert_true!(value == BITS_TAB[i], "FAILED ({:0X} != {:0X})", value, BITS_TAB[i]);
+
+        nb_points = nb_points - nb_bits;
+        i = i + 1;
+    }
+    println!("OK");
+    // End of multiple bits
+
+    // DISCRETE INPUTS
+
+    let rc = modbus.read_input_bits(INPUT_BITS_ADDRESS,
+                                    INPUT_BITS_NB, &mut response_bits).unwrap();
+
+    print!("1/1 modbus_read_input_bits: ");
+    assert_true!(rc == INPUT_BITS_NB as i32, "FAILED (nb points {})", rc);
+
+    let mut i = 0;
+    let mut nb_points = INPUT_BITS_NB;
+    while nb_points > 0 {
+        let nb_bits = if nb_points > 8 { 8 } else { nb_points };
+        let value = get_byte_from_bits(&response_bits, i as u8 * 8, nb_bits);
+        assert_true!(value == INPUT_BITS_TAB[i], "FAILED ({:0X} != {:0X})",
+                    value, INPUT_BITS_TAB[i]);
+
+        nb_points = nb_points - nb_bits;
+        i = i + 1;
+    }
+    println!("OK");
+
+    // HOLDING REGISTERS
+
+    // Single register
+    let rc = modbus.write_register(REGISTERS_ADDRESS, 0x1234);
+    print!("1/2 modbus_write_register: ");
+    assert_true!(rc.is_ok(), "");
+
+    let rc = modbus.read_registers(REGISTERS_ADDRESS, 1, &mut response_registers).unwrap();
+    print!("2/2 modbus_read_registers: ");
+    assert_true!(rc == 1, "FAILED (nb points {:?})", rc);
+    assert_true!(response_registers[0] == 0x1234, "FAILED ({:0x} != {:?})",
+                response_registers[0], 0x1234);
+
+    // End of single register
+
+    // Many registers
+    let rc = modbus.write_registers(REGISTERS_ADDRESS, REGISTERS_NB, REGISTERS_TAB).unwrap();
+    print!("1/5 modbus_write_registers: ");
+    assert_true!(rc == REGISTERS_NB as i32, "");
+
+    let rc = modbus.read_registers(REGISTERS_ADDRESS, REGISTERS_NB, &mut response_registers).unwrap();
+    print!("2/5 modbus_read_registers: ");
+    assert_true!(rc == REGISTERS_NB as i32, "FAILED (nb points {:?}", rc);
+
+
+
+
+
 
 
     Ok(())

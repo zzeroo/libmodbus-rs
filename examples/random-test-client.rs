@@ -136,7 +136,7 @@ fn run() -> Result<(), String> {
             }
 
             //  SINGLE REGISTER
-            match modbus.write_register(address as i32, request_registers[0] as i32) {
+            match modbus.write_register(address as u16, request_registers[0]) {
                 Err(err) => {
                     println!("ERROR write_register: '{}'", err);
                     println!("Address = {}, value = {request} (0x{request:X})",
@@ -210,11 +210,11 @@ fn run() -> Result<(), String> {
             }
 
             // R/W MULTIPLE REGISTERS
-            match modbus.write_and_read_registers(address as i32,
-                                                  num_bit as i32,
+            match modbus.write_and_read_registers(address as u16,
+                                                  num_bit as u16,
                                                   &mut rw_request_registers,
-                                                  address as i32,
-                                                  num_bit as i32,
+                                                  address as u16,
+                                                  num_bit as u16,
                                                   &mut response_registers) {
                 Err(err) => {
                     println!("ERROR read_and_write_registers: '{}'", err);
