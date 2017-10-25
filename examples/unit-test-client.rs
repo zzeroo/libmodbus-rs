@@ -37,6 +37,10 @@ macro_rules! assert_true {
     }
 }
 
+fn equal_dword(tab_reg: &[u16], value: u32) -> bool {
+    tab_reg[0] as u32 == (value >> 16) && tab_reg[1] as u32 == (value & 0xFFFF)
+}
+
 fn run() -> Result<()> {
     let backend;
 
@@ -245,15 +249,41 @@ fn run() -> Result<()> {
 
     // MASKS
     print!("1/1 Write mask: ");
-    let rc = modbus.write_register(REGISTERS_ADDRESS, 0x12).unwrap();
+    let _rc = modbus.write_register(REGISTERS_ADDRESS, 0x12).unwrap();
     let rc = modbus.mask_write_register(REGISTERS_ADDRESS, 0xF2, 0x25);
-    assert_true!(rc.is_err(), "FAILED ({:?} == -1)", rc);
+    assert_true!(rc.is_ok(), "FAILED ({:?} == -1)", rc);
     let rc = modbus.read_registers(REGISTERS_ADDRESS, 1, &mut response_registers).unwrap();
     assert_true!(response_registers[0] == 0x17,
                 "FAILED ({:0X} != {:0X})",
                 response_registers[0], 0x17);
 
+    print!("\nTEST FLOATS");
+    // FLOAT
+    print!("1/4 Set/get float ABCD: ");
+    set_float_abcd(REAL, &mut response_registers);
+    assert_true!(equal_dword(&response_registers, IREAL_ABCD), "FAILED Set float ABCD");
+    let real = get_float_abcd(&response_registers[0..2]);
+    assert_true!(real == REAL, "FAILED ({} != {})", real, REAL);
 
+    print!("2/4 Set/get float DCBA: ");
+    set_float_dcba(REAL, &mut response_registers);
+    assert_true!(equal_dword(&response_registers, IREAL_DCBA), "FAILED Set float DCBA");
+    let real = get_float_dcba(&response_registers[0..2]);
+    assert_true!(real == REAL, "FAILED ({} != {})", real, REAL);
+
+    print!("3/4 Set/get float BADC: ");
+    set_float_badc(REAL, &mut response_registers);
+    assert_true!(equal_dword(&response_registers, IREAL_BADC), "FAILED Set float BADC");
+    let real = get_float_badc(&response_registers[0..2]);
+    assert_true!(real == REAL, "FAILED ({} != {})", real, REAL);
+
+    print!("4/4 Set/get float CDAB: ");
+    set_float_cdab(REAL, &mut response_registers);
+    assert_true!(equal_dword(&response_registers, IREAL_CDAB), "FAILED Set float CDAB");
+    let real = get_float_cdab(&response_registers[0..2]);
+    assert_true!(real == REAL, "FAILED ({} != {})", real, REAL);
+
+    print!("\nAt this point, error messages doesn't mean the test has failed");
 
 
 

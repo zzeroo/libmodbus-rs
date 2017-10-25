@@ -752,7 +752,7 @@ pub fn get_byte_from_bits(src: &[u8], index: u8, num_bit: u16) -> u8 {
 /// use libmodbus_rs::prelude::*;
 /// assert_eq!(get_float_abcd(&[0x0020, 0xF147]), 123456.0);
 /// ```
-pub fn get_float_abcd(src: &[u16; 2]) -> f32 {
+pub fn get_float_abcd(src: &[u16]) -> f32 {
     unsafe { ffi::modbus_get_float_abcd(src.as_ptr()) }
 }
 
@@ -802,7 +802,7 @@ pub fn set_float_abcd(src: f32, dest: &mut [u16]) {
 ///
 /// assert_eq!(get_float_badc(&[0x2000, 0x47F1]), 123456.0);
 /// ```
-pub fn get_float_badc(src: &[u16; 2]) -> f32 {
+pub fn get_float_badc(src: &[u16]) -> f32 {
     unsafe { ffi::modbus_get_float_badc(src.as_ptr()) }
 }
 
@@ -853,7 +853,7 @@ pub fn set_float_badc(src: f32, dest: &mut [u16]) {
 ///
 /// assert_eq!(get_float_cdab(&[0xF147, 0x0020]), 123456.0);
 /// ```
-pub fn get_float_cdab(src: &[u16; 2]) -> f32 {
+pub fn get_float_cdab(src: &[u16]) -> f32 {
     unsafe { ffi::modbus_get_float_cdab(src.as_ptr()) }
 }
 
@@ -904,7 +904,7 @@ pub fn set_float_cdab(src: f32, dest: &mut [u16]) {
 ///
 /// assert_eq!(get_float_dcba(&[0x47F1, 0x2000]), 123456.0);
 /// ```
-pub fn get_float_dcba(src: &[u16; 2]) -> f32 {
+pub fn get_float_dcba(src: &[u16]) -> f32 {
     unsafe { ffi::modbus_get_float_dcba(src.as_ptr()) }
 }
 
