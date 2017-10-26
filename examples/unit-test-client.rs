@@ -1,21 +1,13 @@
-#![recursion_limit = "1024"]
-
-#[macro_use]
-extern crate error_chain;
 extern crate libmodbus_rs;
 
-mod errors {
-    // Create the Error, ErrorKind, ResultExt, and Result types
-    error_chain!{}
-}
 mod unit_test_config;
 
-use unit_test_config::*;
-use errors::*;
+use libmodbus_rs::errors::*;
+use libmodbus_rs::prelude::*;
 use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, ModbusTCPPI, ModbusRTU,
                    ErrorRecoveryMode};
-use libmodbus_rs::prelude::*;
 use std::env;
+use unit_test_config::*;
 
 const EXCEPTION_RC: u32 = 2;
 
@@ -284,6 +276,106 @@ fn run() -> Result<()> {
     assert_true!(real == REAL, "FAILED ({} != {})", real, REAL);
 
     print!("\nAt this point, error messages doesn't mean the test has failed");
+
+    // ILLEGAL DATA ADDRESS
+    print!("\nTEST ILLEGAL DATA ADDRESS:");
+
+    /* The mapping begins at the defined addresses and ends at address +
+    * nb_points so these addresses are not valid. */
+
+    let rc = modbus.read_bits(0, 1, &mut response_bits);
+    print!("* read_bits (0): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.read_bits(BITS_ADDRESS, BITS_NB + 1, &mut response_bits);
+    print!("* read_bits (max): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.read_input_bits(0, 1, &mut response_bits);
+    print!("* read_input_bits (0): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.read_input_bits(INPUT_BITS_ADDRESS,
+                                INPUT_BITS_NB + 1, &mut response_bits);
+    print!("* read_input_bits (max): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.read_registers(0, 1, &mut response_registers);
+    print!("* read_registers (0): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.read_registers(REGISTERS_ADDRESS,
+                               REGISTERS_NB_MAX + 1, &mut response_registers);
+    print!("* read_registers (max): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.read_input_registers(0, 1, &mut response_registers);
+    print!("* read_input_registers (0): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.read_input_registers(INPUT_REGISTERS_ADDRESS,
+                                     INPUT_REGISTERS_NB + 1,
+                                     &mut response_registers);
+    print!("* read_input_registers (max): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.write_bit(0, true);
+    print!("* write_bit (0): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.write_bit(BITS_ADDRESS + BITS_NB, true);
+    print!("* write_bit (max): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.write_bits(0, 1, &mut response_bits);
+    print!("* write_coils (0): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.write_bits(BITS_ADDRESS + BITS_NB,
+                           BITS_NB, &mut response_bits);
+    print!("* write_coils (max): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.write_register(0, response_registers[0]);
+    print!("* write_register (0): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.write_register(REGISTERS_ADDRESS + REGISTERS_NB_MAX,
+                                response_registers[0]);
+    print!("* write_register (max): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.write_registers(0, 1, &mut response_registers);
+    print!("* write_registers (0): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.write_registers(REGISTERS_ADDRESS + REGISTERS_NB_MAX,
+                                REGISTERS_NB, &mut response_registers);
+    print!("* write_registers (max): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.mask_write_register(0, 0xF2, 0x25);
+    print!("* mask_write_registers (0): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.mask_write_register(REGISTERS_ADDRESS + REGISTERS_NB_MAX,
+                                    0xF2, 0x25);
+    print!("* mask_write_registers (max): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.write_and_read_registers(0, 1, &response_registers.clone(), 0, 1, &mut response_registers);
+    print!("* write_and_read_registers (0): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    let rc = modbus.write_and_read_registers(REGISTERS_ADDRESS + REGISTERS_NB_MAX,
+                                         REGISTERS_NB, &response_registers.clone(),
+                                         REGISTERS_ADDRESS + REGISTERS_NB_MAX,
+                                         REGISTERS_NB, &mut response_registers);
+    print!("* write_and_read_registers (max): ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
+
+    // TOO MANY DATA
+
 
 
 
