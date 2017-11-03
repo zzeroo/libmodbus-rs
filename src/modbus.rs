@@ -96,6 +96,13 @@ pub struct Timeout {
     pub usec: u32,
 }
 
+/// Default `Iimeout`, all members set to zero
+impl Default for Timeout {
+    fn default() -> Timeout {
+        Timeout { sec: 0, usec: 0 }
+    }
+}
+
 /// Safe interface for [libmodbus](http://libmodbus.org)
 ///
 /// The different parts of libmodbus are implemented as traits. The modules of this crate contains these

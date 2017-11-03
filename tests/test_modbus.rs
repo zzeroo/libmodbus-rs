@@ -164,3 +164,9 @@ fn free() {
     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     modbus.free();
 }
+
+#[test]
+fn test_timeout_default() {
+    let timeout: Timeout = Default::default();
+    assert_eq!(timeout, Timeout { sec: 0, usec: 0});
+}
