@@ -233,9 +233,11 @@ fn send_raw_request() {
         Ok(client) => {
             client.connect().expect("could not connect");
             let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::ReadHoldingRegisters as u8, 0x00, 0x01, 0x0, 0x05];
-            assert_eq!(client.send_raw_request(&mut raw_request).unwrap(), 12);
-            assert_eq!(client.receive_confirmation().unwrap(),
-                       vec![0, 0, 0, 0, 0, 13, 255, 3, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            let mut response = vec![0u8; Modbus::MAX_ADU_LENGTH];
+            assert_eq!(client.send_raw_request(&mut raw_request, 12).unwrap(), 12);
+            assert!(client.receive_confirmation(&mut response).is_ok());
+            assert_eq!(response,
+                      vec![0, 0, 0, 0, 0, 13, 255, 3, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         },
         _ => panic!("could not connect"),
     }
@@ -252,9 +254,11 @@ fn receive_confirmation() {
         Ok(client) => {
             client.connect().expect("could not connect");
             let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::ReadHoldingRegisters as u8, 0x00, 0x01, 0x0, 0x05];
-            assert_eq!(client.send_raw_request(&mut raw_request).unwrap(), 12);
-            assert_eq!(client.receive_confirmation().unwrap(),
-                       vec![0, 0, 0, 0, 0, 13, 255, 3, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+            let mut response = vec![0u8; Modbus::MAX_ADU_LENGTH];
+            assert_eq!(client.send_raw_request(&mut raw_request, 12).unwrap(), 12);
+            assert!(client.receive_confirmation(&mut response).is_ok());
+            assert_eq!(response,
+                      vec![0, 0, 0, 0, 0, 13, 255, 3, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         },
         _ => panic!("could not connect"),
     }

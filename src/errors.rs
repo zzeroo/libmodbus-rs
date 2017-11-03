@@ -1,65 +1,34 @@
 error_chain!{
+
     foreign_links {
         Fmt(::std::fmt::Error);
         Io(::std::io::Error) #[cfg(unix)];
     }
 
     errors {
-        ILFU {
-            description("Illegal function")
+        IllegalFunction {
+            description("Function code received in the query is not recognized or allowed by slave")
             display("Illegal function")
         }
-        ILADD {
-            description("Illegal data address")
+        IllegalDataAddress {
+            description("Data address of some or all the required entities are not allowed or do not exist in slave")
             display("Illegal data address")
         }
-        ILVAL {
-            description("Illegal data value")
+        IllegalDataValue {
+            description("Value is not accepted by slave")
             display("Illegal data value")
         }
-        SFAIL {
-            description("Slave device or server failure")
+        SlaveFOrServerFailure {
+            description("Unrecoverable error occurred while slave was attempting to perform requested action")
             display("Slave device or server failure")
         }
-        ACK {
-            description("Acknowledge")
-            display("Acknowledge")
-        }
-        SBUSY {
-            description("Slave device or server is busy")
-            display("Slave device or server is busy")
-        }
-        NACK {
-            description("Negative acknowledge")
-            display("Negative acknowledge")
-        }
-        MEMPAR {
-            description("Memory parity error")
-            display("Memory parity error")
-        }
-        GPATH {
-            description("Gateway path unavailable")
-            display("Gateway path unavailable")
-        }
-        GTAR {
-            description("Target device failed to respond")
-            display("Target device failed to respond")
-        }
-        BADCRC {
-            description("Invalid CRC")
-            display("Invalid CRC")
-        }
-        BADDATA {
-            description("Invalid data")
-            display("Invalid data")
-        }
-        BADEXC {
-            description("Invalid exception code")
-            display("Invalid exception code")
-        }
-        MDATA {
-            description("Too many data")
+        TooManyData {
+            description("Too many data requested")
             display("Too many data")
+        }
+        TooManyData2(desc: &'static str) {
+            description("Too many data")
+            display("Too many data: '{}'", desc)
         }
         BADSLAVE {
             description("Response not from requested slave")
@@ -68,10 +37,6 @@ error_chain!{
         IncompatibleAPI {
             description("libmodbus API incompatible response")
             display("libmodbus API incompatible response")
-        }
-        TooManyData(desc: &'static str) {
-            description("Too many data")
-            display("Too many data: '{}'", desc)
         }
         InvalidSlaveID(id: u8) {
             description("Invalid slave ID")

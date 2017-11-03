@@ -118,7 +118,7 @@ impl Modbus {
     pub const MAX_WRITE_REGISTERS: usize = ffi::MODBUS_MAX_WRITE_REGISTERS as usize;
     pub const RTU_MAX_ADU_LENGTH: usize = ffi::MODBUS_RTU_MAX_ADU_LENGTH as usize;
     pub const TCP_DEFAULT_PORT: u32 = ffi::MODBUS_TCP_DEFAULT_PORT;
-    pub const TCP_MAX_ADU_LENGTH: u32 = ffi::MODBUS_TCP_MAX_ADU_LENGTH;
+    pub const TCP_MAX_ADU_LENGTH: usize = ffi::MODBUS_TCP_MAX_ADU_LENGTH as usize;
     pub const TCP_SLAVE: u32 = ffi::MODBUS_TCP_SLAVE;
 
     /// `connect` - establish a Modbus connection
@@ -186,14 +186,14 @@ impl Modbus {
     /// The [`set_slave()`](#method.set_slave) function shall set the slave number in the libmodbus context.
     /// The behavior depends of network and the role of the device:
     ///
-    /// RTU
-    ///     Define the slave ID of the remote device to talk in master mode or set the internal slave ID in slave mode.
+    /// * RTU
+    ///     - Define the slave ID of the remote device to talk in master mode or set the internal slave ID in slave mode.
     /// According to the protocol, a Modbus device must only accept message holding its slave number or the special
     /// broadcast number.
-    /// TCP
-    ///     The slave number is only required in TCP if the message must reach a device on a serial network.
+    /// * TCP
+    ///     - The slave number is only required in TCP if the message must reach a device on a serial network.
     ///     Some not compliant devices or software (such as modpoll) uses the slave ID as unit identifier,
-    ///     that’s incorrect (cf page 23 of Modbus Messaging Implementation Guide v1.0b) but without the slave value,
+    ///     that’s incorrect (see page 23 of Modbus Messaging Implementation Guide v1.0b) but without the slave value,
     ///     the faulty remote device or software drops the requests!
     ///     The special value MODBUS_TCP_SLAVE (0xFF) can be used in TCP mode to restore the default value.
     ///     The broadcast address is MODBUS_BROADCAST_ADDRESS.
@@ -223,6 +223,27 @@ impl Modbus {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
+            }
+        }
+    }
+
+    /// `get_slave` - get slave number from current context
+    ///
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use libmodbus_rs::{Modbus, ModbusRTU};
+    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
+    /// modbus.set_slave(10);
+    ///
+    /// assert_eq!(modbus.get_slave().unwrap(), 10);
+    /// ```
+    pub fn get_slave(&self) -> Result<i32> {
+        unsafe {
+            match ffi::modbus_get_slave(self.ctx) {
+                -1 => bail!(Error::last_os_error()),
+                num => Ok(num),
             }
         }
     }
@@ -592,6 +613,26 @@ impl Modbus {
             }
         }
     }
+
+
+    /// `strerror`  - return the error message
+    ///
+    /// The [`strerror()`](#method.strerror) function shall return a message `String` corresponding to the error number
+    /// specified by the `errnum` argument.
+    ///
+    /// ```rust
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// assert_eq!(Modbus::strerror(112345694), "Too many data");
+    /// ```
+    pub fn strerror(errnum: i32) -> String {
+
+        let c_str = unsafe {
+            ::std::ffi::CStr::from_ptr(ffi::modbus_strerror(errnum))
+        };
+        String::from_utf8_lossy(c_str.to_bytes()).into_owned()
+    }
+
 
 
     /// `close` - close a Modbus connection

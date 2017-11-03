@@ -41,8 +41,19 @@ pub trait ModbusClient {
                                 read_num: u16, dest: &mut [u16])
                                 -> Result<i32>;
     fn mask_write_register(&self, address: u16, and_mask: u16, or_mask: u16) -> Result<()>;
-    fn send_raw_request(&self, raw_request: &mut [u8]) -> Result<i32>;
-    fn receive_confirmation(&self) -> Result<Vec<u8>>;
+    fn send_raw_request(&self, raw_request: &mut [u8], lenght: i32) -> Result<i32>;
+    fn receive_confirmation(&self, response: &mut [u8]) -> Result<i32>;
+}
+
+// Convert the given Error (last_os_error()) to a libmodbus Error
+//
+// TODO: this looks ugly, is there a better way?
+fn get_error(error: Error) -> ::errors::Error {
+    match error.raw_os_error() {
+        Some(112345680) => ErrorKind::IllegalDataAddress.into(),
+        Some(112345694) => ErrorKind::TooManyData.into(),
+        _ => ErrorKind::IncompatibleAPI.into(),
+    }
 }
 
 // TODO: add real, working examples
@@ -75,13 +86,9 @@ impl ModbusClient for Modbus {
     /// assert!(modbus.read_bits(0, 1, &mut dest).is_ok());
     /// ```
     fn read_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<i32> {
-        if num > dest.len() as u16 {
-            bail!(ErrorKind::ILADD);
-        }
-
         unsafe {
             match ffi::modbus_read_bits(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
-                -1 => bail!(ErrorKind::ILADD),
+                -1 => Err(get_error(Error::last_os_error())),
                 len => Ok(len),
             }
         }
@@ -115,13 +122,9 @@ impl ModbusClient for Modbus {
     /// assert!(modbus.read_input_bits(0, 1, &mut dest).is_ok());
     /// ```
     fn read_input_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<i32> {
-        if num > dest.len() as u16 {
-            bail!(ErrorKind::TooManyData("Too many discrete inputs requested"));
-        }
-
         unsafe {
             match ffi::modbus_read_input_bits(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
-                -1 => bail!(ErrorKind::ILADD),
+                -1 => Err(get_error(Error::last_os_error())),
                 len => Ok(len),
             }
         }
@@ -154,13 +157,9 @@ impl ModbusClient for Modbus {
     /// assert!(modbus.read_registers(0, 1, &mut dest).is_ok());
     /// ```
     fn read_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32> {
-        if num > dest.len() as u16 || num == 0 {
-            bail!(ErrorKind::ILADD)
-        }
-
         unsafe {
             match ffi::modbus_read_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
-                -1 => bail!(ErrorKind::ILADD),
+                -1 => Err(get_error(Error::last_os_error())),
                 len => Ok(len),
             }
         }
@@ -195,13 +194,9 @@ impl ModbusClient for Modbus {
     /// assert!(modbus.read_input_registers(0, 1, &mut dest).is_ok());
     /// ```
     fn read_input_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32> {
-        if num > dest.len() as u16 {
-            bail!(ErrorKind::TooManyData("Too many bits requested"));
-        }
-
         unsafe {
             match ffi::modbus_read_input_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
-                -1 => bail!(ErrorKind::ILADD),
+                -1 => Err(get_error(Error::last_os_error())),
                 len => Ok(len),
             }
         }
@@ -240,13 +235,9 @@ impl ModbusClient for Modbus {
     /// // assert_eq!(bytes, vec![180, 255, 76, 77, 66, 51, 46, 49, 46, 52]));
     /// ```
     fn report_slave_id(&self, max_dest: usize, dest: &mut [u8]) -> Result<i32> {
-        if max_dest > dest.len() {
-            bail!(ErrorKind::TooManyData("Too many bits requested"));
-        }
-
         unsafe {
             match ffi::modbus_report_slave_id(self.ctx, Modbus::MAX_PDU_LENGTH as i32, dest.as_mut_ptr()) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => Err(get_error(Error::last_os_error())),
                 len => Ok(len),
             }
         }
@@ -278,10 +269,9 @@ impl ModbusClient for Modbus {
     /// assert!(modbus.write_bit(address, true).is_ok());
     /// ```
     fn write_bit(&self, address: u16, status: bool) -> Result<()> {
-
         unsafe {
             match ffi::modbus_write_bit(self.ctx, address as c_int, status as c_int) {
-                -1 => bail!(ErrorKind::ILADD),
+                -1 => Err(get_error(Error::last_os_error())),
                 1 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -317,7 +307,7 @@ impl ModbusClient for Modbus {
     fn write_register(&self, address: u16, value: u16) -> Result<()> {
         unsafe {
             match ffi::modbus_write_register(self.ctx, address as c_int, value as c_int) {
-                -1 => bail!(ErrorKind::ILADD),
+                -1 => Err(get_error(Error::last_os_error())),
                 1 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -354,7 +344,7 @@ impl ModbusClient for Modbus {
     fn write_bits(&self, address: u16, num: u16, src: &[u8]) -> Result<i32> {
         unsafe {
             match ffi::modbus_write_bits(self.ctx, address as c_int, num as c_int, src.as_ptr()) {
-                -1 => bail!(ErrorKind::ILADD),
+                -1 => Err(get_error(Error::last_os_error())),
                 num => Ok(num),
             }
         }
@@ -391,7 +381,7 @@ impl ModbusClient for Modbus {
     fn write_registers(&self, address: u16, num: u16, src: &[u16]) -> Result<i32> {
         unsafe {
             match ffi::modbus_write_registers(self.ctx, address as c_int, num as c_int, src.as_ptr()) {
-                -1 => bail!(ErrorKind::ILADD),
+                -1 => Err(get_error(Error::last_os_error())),
                 num => Ok(num),
             }
         }
@@ -443,7 +433,7 @@ impl ModbusClient for Modbus {
                                                                  read_address as c_int,
                                                                  read_num as c_int,
                                                                  dest.as_mut_ptr()) {
-                -1 => bail!(ErrorKind::ILADD),
+                                                                     -1 => Err(get_error(Error::last_os_error())),
                 num => Ok(num),
             }
         }
@@ -481,7 +471,7 @@ impl ModbusClient for Modbus {
     fn mask_write_register(&self, address: u16, and_mask: u16, or_mask: u16) -> Result<()> {
         unsafe {
             match ffi::modbus_mask_write_register(self.ctx, address as c_int, and_mask, or_mask) {
-                -1 => bail!(ErrorKind::ILADD),
+                -1 => Err(get_error(Error::last_os_error())),
                 1 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -494,8 +484,7 @@ impl ModbusClient for Modbus {
     /// current modbus contest.
     /// This function must be used for debugging purposes because you have to take care to make a valid request by hand.
     /// The function only adds to the message, the header or CRC of the selected backend, so `raw_request` must start
-    /// and
-    /// contain at least a slave/unit identifier and a function code.
+    /// and contain at least a slave/unit identifier and a function code.
     /// This function can be used to send request not handled by the library.
     ///
     /// The enum [`FunctionCode`](enum.FunctionCode.html) provides a list of supported Modbus functions codes, to help
@@ -503,12 +492,13 @@ impl ModbusClient for Modbus {
     ///
     /// # Parameters
     ///
-    /// * `raw_request`   - raw request to send
+    /// * `raw_request`     - raw request to send
+    /// * `length`          - raw request length
     ///
     /// # Return value
     ///
     /// The function returns a Result, containing the full message lenght,  counting the extra data relating to the
-    /// backend, if successful. Or an Error.
+    /// backend, if successful. Otherwise it contains an Error.
     ///
     /// # Examples
     ///
@@ -516,16 +506,17 @@ impl ModbusClient for Modbus {
     /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, FunctionCode};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::ReadHoldingRegisters as u8, 0x00, 0x01, 0x0, 0x05];
+    /// let mut response = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH];
     ///
-    /// assert_eq!(modbus.send_raw_request(&mut raw_request).unwrap(), 12);
-    /// let response: Vec<u8> = modbus.receive_confirmation().unwrap();
+    /// assert_eq!(modbus.send_raw_request(&mut raw_request, 6 * std::mem::size_of::<u8>() as i32).unwrap(), 12);
+    /// assert!(modbus.receive_confirmation(&mut response).is_ok());
     /// ```
-    fn send_raw_request(&self, raw_request: &mut [u8]) -> Result<i32> {
+    fn send_raw_request(&self, raw_request: &mut [u8], lenght: i32) -> Result<i32> {
         unsafe {
             match ffi::modbus_send_raw_request(self.ctx,
                                                          raw_request.as_mut_ptr(),
-                                                         raw_request.len() as c_int) {
-                -1 => bail!(Error::last_os_error()),
+                                                         lenght) {
+                -1 => Err(get_error(Error::last_os_error())),
                 num => Ok(num),
             }
         }
@@ -534,23 +525,23 @@ impl ModbusClient for Modbus {
     /// `receive_confirmation` - receive a confirmation request
     ///
     /// The [`receive_confirmation()`](#method.receive_confirmation) function shall receive a request via the socket of
-    /// the context ctx Member of the [Modbus struct](struct.Modbus.html).
+    /// the context `ctx` Member of the [Modbus struct](struct.Modbus.html).
     /// This function must be used for debugging purposes because the received response isn’t checked against the
     /// initial request.
     /// This function can be used to receive request not handled by the library.
     ///
     /// The maximum size of the response depends on the used backend,
-    /// in RTU the rsp array must be MODBUS_RTU_MAX_ADU_LENGTH bytes and in TCP it must be MODBUS_TCP_MAX_ADU_LENGTH
-    /// bytes.
+    /// in RTU the `response` array must be `Modbus::RTU_MAX_ADU_LENGTH` bytes and in TCP it must be
+    /// `Modbus::TCP_MAX_ADU_LENGTH` bytes.
     /// If you want to write code compatible with both, you can use the constant MODBUS_MAX_ADU_LENGTH (maximum value
     /// of all libmodbus backends).
     /// Take care to allocate enough memory to store responses to avoid crashes of your server.
     ///
     /// # Return value
     ///
-    /// The function returns a Result containing the response length if successful, or an Error.
-    /// The returned request length can be zero if the indication request is ignored (eg. a query for another slave in
-    /// RTU mode).
+    /// The function returns a Result containing the response length if successful. The returned request length can be
+    /// zero if the indication request is ignored (eg. a query for another slave in RTU mode).
+    /// Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
@@ -561,18 +552,15 @@ impl ModbusClient for Modbus {
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    /// let mut response = vec![0u8; Modbus::MAX_ADU_LENGTH];
     ///
-    /// let response: Vec<u8> = modbus.receive_confirmation().unwrap();
+    /// assert!(modbus.receive_confirmation(&mut response).is_ok());
     /// ```
-    fn receive_confirmation(&self) -> Result<Vec<u8>> {
-        let mut response: Vec<u8> = vec![0; Modbus::MAX_ADU_LENGTH];
+    fn receive_confirmation(&self, response: &mut [u8]) -> Result<i32> {
         unsafe {
             match ffi::modbus_receive_confirmation(self.ctx, response.as_mut_ptr()) {
-                -1 => bail!(Error::last_os_error()),
-                len => {
-                    response.truncate(len as usize);
-                    Ok(response)
-                },
+                -1 => Err(get_error(Error::last_os_error())),
+                len => Ok(len),
             }
         }
     }

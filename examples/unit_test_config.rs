@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 pub const SERVER_ID: u8 = 17;
-pub const INVALID_SERVER_ID: i32 = 18;
+pub const INVALID_SERVER_ID: u8 = 18;
 
 pub const BITS_ADDRESS: u16 = 0x130;
 pub const BITS_NB: u16 = 0x25;

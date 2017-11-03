@@ -375,10 +375,94 @@ fn run() -> Result<()> {
     assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Illegal data address", "");
 
     // TOO MANY DATA
+    print!("\nTOO MANY DATA ERROR:\n");
+
+    let rc = modbus.read_bits(BITS_ADDRESS,
+                          Modbus::MAX_READ_BITS as u16 + 1, &mut response_bits);
+    print!("* read_bits: ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Too many data", "");
+
+    let rc = modbus.read_input_bits(INPUT_BITS_ADDRESS,
+                                Modbus::MAX_READ_BITS as u16 + 1, &mut response_bits);
+    print!("* read_input_bits: ");
+    // assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Too many data", "");
+
+    let rc = modbus.read_registers(REGISTERS_ADDRESS,
+                               Modbus::MAX_READ_REGISTERS as u16 + 1,
+                               &mut response_registers);
+    print!("* read_registers: ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Too many data", "");
+
+    let rc = modbus.read_input_registers(INPUT_REGISTERS_ADDRESS,
+                                     Modbus::MAX_READ_REGISTERS as u16 + 1,
+                                     &mut response_registers);
+    print!("* read_input_registers: ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Too many data", "");
+
+    let rc = modbus.write_bits(BITS_ADDRESS,
+                           Modbus::MAX_WRITE_BITS as u16 + 1, &mut response_bits);
+    print!("* write_bits: ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Too many data", "");
+
+    let rc = modbus.write_registers(REGISTERS_ADDRESS,
+                                Modbus::MAX_WRITE_REGISTERS as u16 + 1,
+                                &mut response_registers);
+    print!("* write_registers: ");
+    assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Too many data", "");
+
+    // SLAVE REPLY
+    let old_slave = modbus.get_slave();
+
+    modbus.set_slave(INVALID_SERVER_ID);
+    let rc = modbus.read_registers(REGISTERS_ADDRESS,
+                                REGISTERS_NB, &mut response_registers);
+
+    if backend == Backend::RTU {
+        const RAW_REQ_LENGTH: i32 = 6;
+        let mut raw_req = vec![INVALID_SERVER_ID, 0x03, 0x00, 0x01, 0x01, 0x01];
+        /* Too many points */
+        let req_invalid_req = vec![INVALID_SERVER_ID, 0x03, 0x00, 0x01, 0xFF, 0xFF];
+        const RAW_RSP_LENGTH: i32 = 7;
+        let mut raw_rsp = vec![INVALID_SERVER_ID, 0x03, 0x04, 0, 0, 0, 0];
+        let mut rsp = vec![0; Modbus::RTU_MAX_ADU_LENGTH];
+
+        /* No response in RTU mode */
+        print!("1-A/3 No response from slave {}: ", INVALID_SERVER_ID);
+        assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Timeout", "");
+
+        /* The slave raises a timeout on a confirmation to ignore because if an
+         * indication for another slave is received, a confirmation must follow */
 
 
+        /* Send a pair of indication/confirmation to the slave with a different
+         * slave ID to simulate a communication on a RS485 bus. At first, the
+         * slave will see the indication message then the confirmation, and it must
+         * ignore both. */
+        modbus.send_raw_request(&mut raw_req, RAW_REQ_LENGTH * std::mem::size_of::<u8>() as i32);
+        modbus.send_raw_request(&mut raw_rsp, RAW_RSP_LENGTH * std::mem::size_of::<u8>() as i32);
+        let rc = modbus.receive_confirmation(&mut rsp);
 
+        print!("1-B/3 No response from slave {} on indication/confirmation messages: ",
+               INVALID_SERVER_ID);
+        assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Timeout", "");
 
+        // /* Send an INVALID request for another slave */
+        // modbus.send_raw_request(raw_invalid_req, RAW_REQ_LENGTH * sizeof(uint8_t));
+        // let rc = modbus.receive_confirmation(rsp);
+        //
+        // print!("1-C/3 No response from slave {} with invalid request: ",
+        //        INVALID_SERVER_ID);
+        // assert_true!(rc.is_err() && errno == ETIMEDOUT, "");
+        //
+        // let rc = modbus.set_slave(MODBUS_BROADCAST_ADDRESS);
+        // assert_true!(rc != -1, "Invalid broadcast address");
+        //
+        // let rc = modbus.read_registers(UT_REGISTERS_ADDRESS,
+        //                            UT_REGISTERS_NB, tab_rp_registers);
+        // print!("2/3 No reply after a broadcast query: ");
+        // assert_true!(rc.is_err() && errno == ETIMEDOUT, "");
+    } else {
+    }
 
 
 
