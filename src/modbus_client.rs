@@ -235,8 +235,9 @@ impl ModbusClient for Modbus {
     /// // assert_eq!(bytes, vec![180, 255, 76, 77, 66, 51, 46, 49, 46, 52]));
     /// ```
     fn report_slave_id(&self, max_dest: usize, dest: &mut [u8]) -> Result<u16> {
+
         unsafe {
-            match ffi::modbus_report_slave_id(self.ctx, Modbus::MAX_PDU_LENGTH as i32, dest.as_mut_ptr()) {
+            match ffi::modbus_report_slave_id(self.ctx, max_dest as c_int, dest.as_mut_ptr()) {
                 -1 => Err(get_error(Error::last_os_error())),
                 len => Ok(len as u16),
             }
