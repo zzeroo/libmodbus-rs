@@ -96,6 +96,71 @@ pub struct Timeout {
     pub usec: u32,
 }
 
+/// `Timeout` implementation
+impl Timeout {
+    /// Create a new `Timeout` struct from `sec` and `usec` parameters given
+    ///
+    /// # Parameters
+    ///
+    /// * `sec`     - `sec` part of `Timeout`
+    /// * `usec`     - `usec` part of `Timeout`
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use libmodbus_rs::{Modbus, Timeout};
+    ///
+    /// assert_eq!(Timeout::new(1, 2), Timeout { sec: 1, usec: 2 });
+    /// ```
+    pub fn new(sec: u32, usec: u32) -> Self {
+        Timeout {
+            sec, usec,
+        }
+    }
+
+    /// Create a new `Timeout` struct from `sec` parameter given
+    ///
+    ///  The `usec` parameter is set by the `Default` implementation of `Timeout`.
+    ///
+    /// # Parameters
+    ///
+    /// * `sec`     - `sec` part of `Timeout`
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use libmodbus_rs::{Modbus, Timeout};
+    ///
+    /// assert_eq!(Timeout::new_sec(1), Timeout { sec: 1, usec: 0 });
+    /// ```
+    pub fn new_sec(sec: u32) -> Self {
+        Timeout {
+            sec, ..Default::default()
+        }
+    }
+
+    /// Create a new `Timeout` struct from `usec` parameter given
+    ///
+    ///  The `sec` parameter is set by the `Default` implementation of `Timeout`.
+    ///
+    /// # Parameters
+    ///
+    /// * `usec`     - `usec` part of `Timeout`
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use libmodbus_rs::{Modbus, Timeout};
+    ///
+    /// assert_eq!(Timeout::new_usec(2), Timeout { sec: 0, usec: 2 });
+    /// ```
+    pub fn new_usec(usec: u32) -> Self {
+        Timeout {
+            usec, ..Default::default()
+        }
+    }
+}
+
 /// Default `Iimeout`, all members set to zero
 impl Default for Timeout {
     fn default() -> Timeout {
