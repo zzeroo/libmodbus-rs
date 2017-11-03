@@ -113,7 +113,7 @@ fn run() -> Result<(), String> {
                             num_failures += 1;
                         },
                         Ok(len) => {
-                            if len != num_bit as i32 {
+                            if len != num_bit as u16 {
                                 println!("ERROR read_bits");
                                 println!("Address = {}, num_bit = {}", address, num_bit);
                                 num_failures += 1;
@@ -174,7 +174,7 @@ fn run() -> Result<(), String> {
                     num_failures += 1;
                 },
                 Ok(len) => {
-                    if len != num_bit as i32 {
+                    if len != num_bit as u16 {
                         println!("ERROR write_registers: ({})", len);
                         println!("Address = {}, num_bit = {}", address, num_bit);
                         num_failures += 1;
@@ -186,7 +186,7 @@ fn run() -> Result<(), String> {
                                 num_failures += 1;
                             },
                             Ok(len) => {
-                                if len != num_bit as i32 {
+                                if len != num_bit as u16 {
                                     println!("ERROR read_registers: ({})", len);
                                     println!("Address = {}, num_bit = {}", address, num_bit);
                                     num_failures += 1;
@@ -222,7 +222,7 @@ fn run() -> Result<(), String> {
                     num_failures += 1;
                 },
                 Ok(len) => {
-                    if len != num_bit as i32 {
+                    if len != num_bit as u16 {
                         println!("ERROR read_and_write_registers: '{}'", len);
                         println!("Address = {}, num_bit = {}", address, num_bit);
                         num_failures += 1;

@@ -67,24 +67,24 @@ fn run() -> Result<()> {
     modbus.set_debug(true).expect("could not set modbus DEBUG mode");
 
     let modbus_mapping =
-        ModbusMapping::new_start_address(BITS_ADDRESS,
-                                         BITS_NB,
-                                         INPUT_BITS_ADDRESS,
-                                         INPUT_BITS_NB,
-                                         REGISTERS_ADDRESS,
-                                         REGISTERS_NB,
-                                         INPUT_REGISTERS_ADDRESS,
-                                         INPUT_REGISTERS_NB).chain_err(|| "Failed to allocate the mapping")?;
+        ModbusMapping::new_start_address(UT_BITS_ADDRESS,
+                                         UT_BITS_NB,
+                                         UT_INPUT_BITS_ADDRESS,
+                                         UT_INPUT_BITS_NB,
+                                         UT_REGISTERS_ADDRESS,
+                                         UT_REGISTERS_NB,
+                                         UT_INPUT_REGISTERS_ADDRESS,
+                                         UT_INPUT_REGISTERS_NB).chain_err(|| "Failed to allocate the mapping")?;
 
     // Examples from PI_MODBUS_300.pdf.
     // Only the read-only input values are assigned.
 
     // Initialize input values that's can be only done server side.
-    set_bits_from_bytes(modbus_mapping.get_input_bits_mut(), 0, INPUT_BITS_NB, &INPUT_BITS_TAB);
+    set_bits_from_bytes(modbus_mapping.get_input_bits_mut(), 0, UT_INPUT_BITS_NB, &UT_INPUT_BITS_TAB);
 
     //  Initialize values of INPUT REGISTERS
-    for i in 0..INPUT_REGISTERS_NB {
-        modbus_mapping.get_input_registers_mut()[i as usize] = INPUT_REGISTERS_TAB[i as usize];
+    for i in 0..UT_INPUT_REGISTERS_NB {
+        modbus_mapping.get_input_registers_mut()[i as usize] = UT_INPUT_REGISTERS_TAB[i as usize];
     }
 
     match backend {
