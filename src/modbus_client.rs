@@ -28,21 +28,21 @@ use std::io::Error;
 ///     - [`reply_exception()`](struct.Modbus.html#method.reply_exception)
 ///
 pub trait ModbusClient {
-    fn read_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<i32>;
-    fn read_input_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<i32>;
-    fn read_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32>;
-    fn read_input_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32>;
-    fn report_slave_id(&self, max_dest: usize, dest: &mut [u8]) -> Result<i32>;
+    fn read_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<u16>;
+    fn read_input_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<u16>;
+    fn read_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<u16>;
+    fn read_input_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<u16>;
+    fn report_slave_id(&self, max_dest: usize, dest: &mut [u8]) -> Result<u16>;
     fn write_bit(&self, address: u16, status: bool) -> Result<()>;
-    fn write_bits(&self, address: u16, num: u16, src: &[u8]) -> Result<i32>;
+    fn write_bits(&self, address: u16, num: u16, src: &[u8]) -> Result<u16>;
     fn write_register(&self, address: u16, value: u16) -> Result<()>;
-    fn write_registers(&self, address: u16, num: u16, src: &[u16]) -> Result<i32>;
+    fn write_registers(&self, address: u16, num: u16, src: &[u16]) -> Result<u16>;
     fn write_and_read_registers(&self, write_address: u16, write_num: u16, src: &[u16], read_address: u16,
                                 read_num: u16, dest: &mut [u16])
-                                -> Result<i32>;
+                                -> Result<u16>;
     fn mask_write_register(&self, address: u16, and_mask: u16, or_mask: u16) -> Result<()>;
-    fn send_raw_request(&self, raw_request: &mut [u8], lenght: i32) -> Result<i32>;
-    fn receive_confirmation(&self, response: &mut [u8]) -> Result<i32>;
+    fn send_raw_request(&self, raw_request: &mut [u8], lenght: i32) -> Result<u16>;
+    fn receive_confirmation(&self, response: &mut [u8]) -> Result<u16>;
 }
 
 // Convert the given Error (last_os_error()) to a libmodbus Error
@@ -85,11 +85,11 @@ impl ModbusClient for Modbus {
     ///
     /// assert!(modbus.read_bits(0, 1, &mut dest).is_ok());
     /// ```
-    fn read_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<i32> {
+    fn read_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<u16> {
         unsafe {
             match ffi::modbus_read_bits(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
                 -1 => Err(get_error(Error::last_os_error())),
-                len => Ok(len),
+                len => Ok(len as u16),
             }
         }
     }
@@ -121,11 +121,11 @@ impl ModbusClient for Modbus {
     ///
     /// assert!(modbus.read_input_bits(0, 1, &mut dest).is_ok());
     /// ```
-    fn read_input_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<i32> {
+    fn read_input_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<u16> {
         unsafe {
             match ffi::modbus_read_input_bits(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
                 -1 => Err(get_error(Error::last_os_error())),
-                len => Ok(len),
+                len => Ok(len as u16),
             }
         }
     }
@@ -156,11 +156,11 @@ impl ModbusClient for Modbus {
     ///
     /// assert!(modbus.read_registers(0, 1, &mut dest).is_ok());
     /// ```
-    fn read_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32> {
+    fn read_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<u16> {
         unsafe {
             match ffi::modbus_read_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
                 -1 => Err(get_error(Error::last_os_error())),
-                len => Ok(len),
+                len => Ok(len as u16),
             }
         }
     }
@@ -193,11 +193,11 @@ impl ModbusClient for Modbus {
     ///
     /// assert!(modbus.read_input_registers(0, 1, &mut dest).is_ok());
     /// ```
-    fn read_input_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<i32> {
+    fn read_input_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<u16> {
         unsafe {
             match ffi::modbus_read_input_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
                 -1 => Err(get_error(Error::last_os_error())),
-                len => Ok(len),
+                len => Ok(len as u16),
             }
         }
     }
@@ -234,11 +234,11 @@ impl ModbusClient for Modbus {
     /// assert!(modbus.report_slave_id(Modbus::MAX_PDU_LENGTH, &mut bytes).is_ok());
     /// // assert_eq!(bytes, vec![180, 255, 76, 77, 66, 51, 46, 49, 46, 52]));
     /// ```
-    fn report_slave_id(&self, max_dest: usize, dest: &mut [u8]) -> Result<i32> {
+    fn report_slave_id(&self, max_dest: usize, dest: &mut [u8]) -> Result<u16> {
         unsafe {
             match ffi::modbus_report_slave_id(self.ctx, Modbus::MAX_PDU_LENGTH as i32, dest.as_mut_ptr()) {
                 -1 => Err(get_error(Error::last_os_error())),
-                len => Ok(len),
+                len => Ok(len as u16),
             }
         }
     }
@@ -341,11 +341,11 @@ impl ModbusClient for Modbus {
     ///
     /// assert_eq!(modbus.write_bits(address, 1, &tab_bytes).unwrap(), 1);
     /// ```
-    fn write_bits(&self, address: u16, num: u16, src: &[u8]) -> Result<i32> {
+    fn write_bits(&self, address: u16, num: u16, src: &[u8]) -> Result<u16> {
         unsafe {
             match ffi::modbus_write_bits(self.ctx, address as c_int, num as c_int, src.as_ptr()) {
                 -1 => Err(get_error(Error::last_os_error())),
-                num => Ok(num),
+                num => Ok(num as u16),
             }
         }
     }
@@ -378,11 +378,11 @@ impl ModbusClient for Modbus {
     ///
     /// assert_eq!(modbus.write_registers(address, 1, &tab_bytes).unwrap(), 1);
     /// ```
-    fn write_registers(&self, address: u16, num: u16, src: &[u16]) -> Result<i32> {
+    fn write_registers(&self, address: u16, num: u16, src: &[u16]) -> Result<u16> {
         unsafe {
             match ffi::modbus_write_registers(self.ctx, address as c_int, num as c_int, src.as_ptr()) {
                 -1 => Err(get_error(Error::last_os_error())),
-                num => Ok(num),
+                num => Ok(num as u16),
             }
         }
     }
@@ -424,7 +424,7 @@ impl ModbusClient for Modbus {
     /// ```
     fn write_and_read_registers(&self, write_address: u16, write_num: u16, src: &[u16], read_address: u16,
                                 read_num: u16, dest: &mut [u16])
-                                -> Result<i32> {
+                                -> Result<u16> {
         unsafe {
             match ffi::modbus_write_and_read_registers(self.ctx,
                                                                  write_address as c_int,
@@ -434,7 +434,7 @@ impl ModbusClient for Modbus {
                                                                  read_num as c_int,
                                                                  dest.as_mut_ptr()) {
                                                                      -1 => Err(get_error(Error::last_os_error())),
-                num => Ok(num),
+                num => Ok(num as u16),
             }
         }
     }
@@ -511,13 +511,13 @@ impl ModbusClient for Modbus {
     /// assert_eq!(modbus.send_raw_request(&mut raw_request, 6 * std::mem::size_of::<u8>() as i32).unwrap(), 12);
     /// assert!(modbus.receive_confirmation(&mut response).is_ok());
     /// ```
-    fn send_raw_request(&self, raw_request: &mut [u8], lenght: i32) -> Result<i32> {
+    fn send_raw_request(&self, raw_request: &mut [u8], lenght: i32) -> Result<u16> {
         unsafe {
             match ffi::modbus_send_raw_request(self.ctx,
                                                          raw_request.as_mut_ptr(),
                                                          lenght) {
                 -1 => Err(get_error(Error::last_os_error())),
-                num => Ok(num),
+                num => Ok(num as u16),
             }
         }
     }
@@ -556,11 +556,11 @@ impl ModbusClient for Modbus {
     ///
     /// assert!(modbus.receive_confirmation(&mut response).is_ok());
     /// ```
-    fn receive_confirmation(&self, response: &mut [u8]) -> Result<i32> {
+    fn receive_confirmation(&self, response: &mut [u8]) -> Result<u16> {
         unsafe {
             match ffi::modbus_receive_confirmation(self.ctx, response.as_mut_ptr()) {
                 -1 => Err(get_error(Error::last_os_error())),
-                len => Ok(len),
+                len => Ok(len as u16),
             }
         }
     }
