@@ -120,6 +120,7 @@ impl Modbus {
     pub const TCP_DEFAULT_PORT: u32 = ffi::MODBUS_TCP_DEFAULT_PORT;
     pub const TCP_MAX_ADU_LENGTH: usize = ffi::MODBUS_TCP_MAX_ADU_LENGTH as usize;
     pub const TCP_SLAVE: u32 = ffi::MODBUS_TCP_SLAVE;
+    pub const BROADCAST_ADDRESS: u8 = ffi::MODBUS_BROADCAST_ADDRESS as u8;
 
     /// `connect` - establish a Modbus connection
     ///
@@ -239,11 +240,11 @@ impl Modbus {
     ///
     /// assert_eq!(modbus.get_slave().unwrap(), 10);
     /// ```
-    pub fn get_slave(&self) -> Result<i32> {
+    pub fn get_slave(&self) -> Result<u8> {
         unsafe {
             match ffi::modbus_get_slave(self.ctx) {
                 -1 => bail!(Error::last_os_error()),
-                num => Ok(num),
+                num => Ok(num as u8),
             }
         }
     }
