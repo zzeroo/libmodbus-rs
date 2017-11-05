@@ -18,17 +18,53 @@ error_chain!{
             description("Value is not accepted by slave")
             display("Illegal data value")
         }
-        SlaveFOrServerFailure {
+        SlaveDeviceOrServerFailure {
             description("Unrecoverable error occurred while slave was attempting to perform requested action")
             display("Slave device or server failure")
+        }
+        Acknowledge {
+            description("Acknowledge")
+            display("Acknowledge")
+        }
+        SlaveDeviceOrServerIsBusy {
+            description("Slave device or server is busy")
+            display("Slave device or server is busy")
+        }
+        NegativeAcknowledge {
+            description("Negative acknowledge")
+            display("Negative acknowledge")
+        }
+        MemoryParityError {
+            description("Memory parity error")
+            display("Memory parity error")
+        }
+        GatewayPathUnavailable {
+            description("Gateway path unavailable")
+            display("Gateway path unavailable")
+        }
+        TargetDeviceFailedToRespond {
+            description("Target device failed to respond")
+            display("Target device failed to respond")
+        }
+        InvalidCRC {
+            description("Invalid CRC")
+            display("Invalid CRC")
+        }
+        InvalidData {
+            description("Invalid data")
+            display("Invalid data")
+        }
+        InvalidExceptionCode {
+            description("Invalid exception code")
+            display("Invalid exception code")
         }
         TooManyData {
             description("Too many data requested")
             display("Too many data")
         }
-        TooManyData2(desc: &'static str) {
-            description("Too many data")
-            display("Too many data: '{}'", desc)
+        ResponseNotFromRequestedSlave {
+            description("Response not from requested slave")
+            display("Response not from requested slave")
         }
         BADSLAVE {
             description("Response not from requested slave")

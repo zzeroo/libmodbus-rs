@@ -1,3 +1,4 @@
+// TODO: remove dead_code
 #![allow(dead_code)]
 use errors::*;
 use libc::{c_int, c_uint};

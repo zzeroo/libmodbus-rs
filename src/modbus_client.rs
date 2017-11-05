@@ -48,11 +48,27 @@ pub trait ModbusClient {
 // Convert the given Error (last_os_error()) to a libmodbus Error
 //
 // TODO: this looks ugly, is there a better way?
+// FIXME: Yeah fix me!
 fn get_error(error: Error) -> ::errors::Error {
     match error.raw_os_error() {
-        Some(112345680) => ErrorKind::IllegalDataAddress.into(),
-        Some(112345694) => ErrorKind::TooManyData.into(),
-        _ => ErrorKind::IncompatibleAPI.into(),
+        Some(112345679) => ErrorKind::IllegalFunction.into(),           // Illegal function
+        Some(112345680) => ErrorKind::IllegalDataAddress.into(),        // Illegal data address
+        Some(112345681) => ErrorKind::IllegalDataValue.into(),          // Illegal data value
+        Some(112345682) => ErrorKind::SlaveDeviceOrServerFailure.into(),// Slave device or server failure
+        Some(112345683) => ErrorKind::Acknowledge.into(),               // Acknowledge
+        Some(112345684) => ErrorKind::SlaveDeviceOrServerIsBusy.into(), // Slave device or server is busy
+        Some(112345685) => ErrorKind::NegativeAcknowledge.into(),       // Negative acknowledge
+        Some(112345686) => ErrorKind::MemoryParityError.into(),         // Memory parity error
+                                                                        // Unknown error 112345687
+        Some(112345688) => ErrorKind::GatewayPathUnavailable.into(),        // Gateway path unavailable
+        Some(112345689) => ErrorKind::TargetDeviceFailedToRespond.into(),   // Target device failed to respond
+        Some(112345690) => ErrorKind::InvalidCRC.into(),                    // Invalid CRC
+        Some(112345691) => ErrorKind::InvalidData.into(),                   // Invalid data
+        Some(112345692) => ErrorKind::InvalidExceptionCode.into(),          // Invalid exception code
+                                                                            // Unknown error 112345693
+        Some(112345694) => ErrorKind::TooManyData.into(),                   // Too many data
+        Some(112345695) => ErrorKind::ResponseNotFromRequestedSlave.into(), // Response not from requested slave
+        _ => error.into(),
     }
 }
 
