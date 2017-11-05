@@ -82,6 +82,10 @@ error_chain!{
             description("Invalid parameter given")
             display("Invalid parameter given: '{}'", desc)
         }
+        UnitTestClientFailure {
+            description("Unit test client failed")
+            display("Unit test client failed")
+        }
     }
 
 }
