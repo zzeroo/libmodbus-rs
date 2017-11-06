@@ -1,3 +1,4 @@
+// TODO: remove dead_code
 #![allow(dead_code)]
 use errors::*;
 use libc::{c_int, c_uint};
@@ -96,11 +97,84 @@ pub struct Timeout {
     pub usec: u32,
 }
 
+/// `Timeout` implementation
+impl Timeout {
+    /// Create a new `Timeout` struct from `sec` and `usec` parameters given
+    ///
+    /// # Parameters
+    ///
+    /// * `sec`     - `sec` part of `Timeout`
+    /// * `usec`     - `usec` part of `Timeout`
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use libmodbus_rs::{Modbus, Timeout};
+    ///
+    /// assert_eq!(Timeout::new(1, 2), Timeout { sec: 1, usec: 2 });
+    /// ```
+    pub fn new(sec: u32, usec: u32) -> Self {
+        Timeout {
+            sec, usec,
+        }
+    }
+
+    /// Create a new `Timeout` struct from `sec` parameter given
+    ///
+    ///  The `usec` parameter is set by the `Default` implementation of `Timeout`.
+    ///
+    /// # Parameters
+    ///
+    /// * `sec`     - `sec` part of `Timeout`
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use libmodbus_rs::{Modbus, Timeout};
+    ///
+    /// assert_eq!(Timeout::new_sec(1), Timeout { sec: 1, usec: 0 });
+    /// ```
+    pub fn new_sec(sec: u32) -> Self {
+        Timeout {
+            sec, ..Default::default()
+        }
+    }
+
+    /// Create a new `Timeout` struct from `usec` parameter given
+    ///
+    ///  The `sec` parameter is set by the `Default` implementation of `Timeout`.
+    ///
+    /// # Parameters
+    ///
+    /// * `usec`     - `usec` part of `Timeout`
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use libmodbus_rs::{Modbus, Timeout};
+    ///
+    /// assert_eq!(Timeout::new_usec(2), Timeout { sec: 0, usec: 2 });
+    /// ```
+    pub fn new_usec(usec: u32) -> Self {
+        Timeout {
+            usec, ..Default::default()
+        }
+    }
+}
+
+/// Default `Iimeout`, all members set to zero
+impl Default for Timeout {
+    fn default() -> Timeout {
+        Timeout { sec: 0, usec: 0 }
+    }
+}
+
 /// Safe interface for [libmodbus](http://libmodbus.org)
 ///
 /// The different parts of libmodbus are implemented as traits. The modules of this crate contains these
 /// traits and a implementation with a, hopefully safe, interface.
 ///
+#[derive(Debug)]
 pub struct Modbus {
     pub ctx: *mut ffi::modbus_t,
 }
@@ -118,8 +192,9 @@ impl Modbus {
     pub const MAX_WRITE_REGISTERS: usize = ffi::MODBUS_MAX_WRITE_REGISTERS as usize;
     pub const RTU_MAX_ADU_LENGTH: usize = ffi::MODBUS_RTU_MAX_ADU_LENGTH as usize;
     pub const TCP_DEFAULT_PORT: u32 = ffi::MODBUS_TCP_DEFAULT_PORT;
-    pub const TCP_MAX_ADU_LENGTH: u32 = ffi::MODBUS_TCP_MAX_ADU_LENGTH;
-    pub const TCP_SLAVE: u32 = ffi::MODBUS_TCP_SLAVE;
+    pub const TCP_MAX_ADU_LENGTH: usize = ffi::MODBUS_TCP_MAX_ADU_LENGTH as usize;
+    pub const TCP_SLAVE: u8 = ffi::MODBUS_TCP_SLAVE as u8;
+    pub const BROADCAST_ADDRESS: u8 = ffi::MODBUS_BROADCAST_ADDRESS as u8;
 
     /// `connect` - establish a Modbus connection
     ///
@@ -186,14 +261,14 @@ impl Modbus {
     /// The [`set_slave()`](#method.set_slave) function shall set the slave number in the libmodbus context.
     /// The behavior depends of network and the role of the device:
     ///
-    /// RTU
-    ///     Define the slave ID of the remote device to talk in master mode or set the internal slave ID in slave mode.
+    /// * RTU
+    ///     - Define the slave ID of the remote device to talk in master mode or set the internal slave ID in slave mode.
     /// According to the protocol, a Modbus device must only accept message holding its slave number or the special
     /// broadcast number.
-    /// TCP
-    ///     The slave number is only required in TCP if the message must reach a device on a serial network.
+    /// * TCP
+    ///     - The slave number is only required in TCP if the message must reach a device on a serial network.
     ///     Some not compliant devices or software (such as modpoll) uses the slave ID as unit identifier,
-    ///     that’s incorrect (cf page 23 of Modbus Messaging Implementation Guide v1.0b) but without the slave value,
+    ///     that’s incorrect (see page 23 of Modbus Messaging Implementation Guide v1.0b) but without the slave value,
     ///     the faulty remote device or software drops the requests!
     ///     The special value MODBUS_TCP_SLAVE (0xFF) can be used in TCP mode to restore the default value.
     ///     The broadcast address is MODBUS_BROADCAST_ADDRESS.
@@ -223,6 +298,27 @@ impl Modbus {
                 -1 => bail!(Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
+            }
+        }
+    }
+
+    /// `get_slave` - get slave number from current context
+    ///
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use libmodbus_rs::{Modbus, ModbusRTU};
+    /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
+    /// modbus.set_slave(10);
+    ///
+    /// assert_eq!(modbus.get_slave().unwrap(), 10);
+    /// ```
+    pub fn get_slave(&self) -> Result<u8> {
+        unsafe {
+            match ffi::modbus_get_slave(self.ctx) {
+                -1 => bail!(Error::last_os_error()),
+                num => Ok(num as u8),
             }
         }
     }
@@ -582,16 +678,36 @@ impl Modbus {
     /// use libmodbus_rs::Exception;
     ///
     /// let request: Vec<u8> = vec![0x01];
-    /// assert_eq!(modbus.reply_exception(&request, Exception::Acknowledge as u32).unwrap(), 9);
+    /// assert_eq!(modbus.reply_exception(&request, Exception::Acknowledge).unwrap(), 9);
     /// ```
-    pub fn reply_exception(&self, request: &[u8], exception_code: u32) -> Result<i32> {
+    pub fn reply_exception(&self, request: &[u8], exception_code: Exception) -> Result<i32> {
         unsafe {
-            match ffi::modbus_reply_exception(self.ctx, request.as_ptr(), exception_code) {
+            match ffi::modbus_reply_exception(self.ctx, request.as_ptr(), exception_code as c_uint) {
                 -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }
         }
     }
+
+
+    /// `strerror`  - return the error message
+    ///
+    /// The [`strerror()`](#method.strerror) function shall return a message `String` corresponding to the error number
+    /// specified by the `errnum` argument.
+    ///
+    /// ```rust
+    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    ///
+    /// assert_eq!(Modbus::strerror(112345694), "Too many data");
+    /// ```
+    pub fn strerror(errnum: i32) -> String {
+
+        let c_str = unsafe {
+            ::std::ffi::CStr::from_ptr(ffi::modbus_strerror(errnum))
+        };
+        String::from_utf8_lossy(c_str.to_bytes()).into_owned()
+    }
+
 
 
     /// `close` - close a Modbus connection
@@ -637,24 +753,29 @@ impl Modbus {
 /// `set_bits_from_byte` - set many bits from a single byte value
 ///
 /// The [`set_bits_from_byte()`](#method.set_bits_from_byte) function shall set many bits from a single byte.
-/// All 8 bits from the byte value will be written to dest array starting at index position.
+/// All 8 bits from the byte value will be written to `dest` array starting at `index` position.
 ///
 /// # Parameters
 ///
-/// `dest` - destination slice
-/// `index` - starting position where the bit should written
-/// `value` - set many bits from a single byte. All 8 bits from the byte `value` will be written to `dest` slice
+/// * `dest` - destination slice
+/// * `index` - starting position where the bit should written
+/// * `value` - set many bits from a single byte. All 8 bits from the byte `value` will be written to `dest` slice
 /// starting at `index` position.
 ///
 /// # Examples
 ///
 /// ```rust
 /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+/// use libmodbus_rs::prelude::*;
+///
 /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
-///
+/// // before
 /// assert_eq!(modbus_mapping.get_input_bits_mut(), [0u8, 0, 0, 0, 0]);
-/// libmodbus_rs::set_bits_from_byte(modbus_mapping.get_input_bits_mut(), 2, 0b1111_1111);
+///
+/// set_bits_from_byte(modbus_mapping.get_input_bits_mut(), 2, 0b1111_1111);
+///
+/// // after
 /// assert_eq!(modbus_mapping.get_input_bits_mut(), [0u8, 0, 1, 1, 1]);
 /// ```
 pub fn set_bits_from_byte(dest: &mut [u8], index: u32, value: u8) {
@@ -664,14 +785,14 @@ pub fn set_bits_from_byte(dest: &mut [u8], index: u32, value: u8) {
 /// `set_bits_from_bytes` -  set many bits from an array of bytes
 ///
 /// The [`set_bits_from_bytes()`](#method.set_bits_from_bytes) function shall set many bits from a single byte.
-/// All 8 bits from the byte value will be written to dest array starting at index position.
+/// All 8 bits from the byte value will be written to `dest` array starting at index position.
 ///
 /// # Parameters
 ///
-/// `dest` - destination slice
-/// `index` - starting position where the bit should written
-/// `num_bit`   - how many bits should written
-/// `bytes` - All the bits of the `bytes` parameter, read from the first position of the vec `bytes` are written as
+/// * `dest` - destination slice
+/// * `index` - starting position where the bit should written
+/// * `num_bit`   - how many bits should written
+/// * `bytes` - All the bits of the `bytes` parameter, read from the first position of the vec `bytes` are written as
 /// bits in the `dest` vec,
 ///     starting at position `index`
 ///
@@ -679,21 +800,27 @@ pub fn set_bits_from_byte(dest: &mut [u8], index: u32, value: u8) {
 ///
 /// ```rust
 /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+/// use libmodbus_rs::prelude::*;
+///
 /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
 ///
+/// // before
 /// assert_eq!(modbus_mapping.get_input_bits_mut(), [0u8, 0, 0, 0, 0]);
-/// libmodbus_rs::set_bits_from_bytes(modbus_mapping.get_input_bits_mut(), 0, 2, &[0b0000_1111]);
+///
+/// set_bits_from_bytes(modbus_mapping.get_input_bits_mut(), 0, 2, &[0b0000_1111]);
+///
+/// // after
 /// assert_eq!(modbus_mapping.get_input_bits_mut(), [1u8, 1, 0, 0, 0]);
 /// ```
-pub fn set_bits_from_bytes(dest: &mut [u8], index: u32, num_bit: u16, bytes: &[u8]) {
+pub fn set_bits_from_bytes(dest: &mut [u8], index: u16, num_bit: u16, bytes: &[u8]) {
     unsafe { ffi::modbus_set_bits_from_bytes(dest.as_mut_ptr(), index as c_int, num_bit as c_uint, bytes.as_ptr()) }
 }
 
 /// `get_byte_from_bits` - get the value from many bit
 ///
 /// The [`get_byte_from_bits()`](#method.get_byte_from_bits) function shall extract a value from many bits.
-/// All num_bit bits from src at position index will be read as a single value. To obtain a full byte, set num_bit to 8.
+/// All `num_bit` bits from `src` at position `index` will be read as a single value. To obtain a full byte, set `num_bit` to 8.
 ///
 /// # Return value
 ///
@@ -701,29 +828,31 @@ pub fn set_bits_from_bytes(dest: &mut [u8], index: u32, num_bit: u16, bytes: &[u
 ///
 /// # Parameters
 ///
-/// `src`       - bits source
-/// `index`     - starting position where the bit will be read
-/// `num_bit`   - All `num_bit` bits from `src` at position `index` will be read as a single value. To obtain a full
+/// * `src`       - bits source
+/// * `index`     - starting position where the bit will be read
+/// * `num_bit`   - All `num_bit` bits from `src` at position `index` will be read as a single value. To obtain a full
 /// byte, set `num_bit` to 8.
 ///
 /// # Examples
 ///
 /// ```rust
 /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+/// use libmodbus_rs::prelude::*;
+///
 /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
 ///
-/// assert_eq!(libmodbus_rs::get_byte_from_bits(&[0b1111_1111], 0 ,8), 255);
+/// assert_eq!(get_byte_from_bits(&[0b1111_1111], 0 ,8), 255);
 /// ```
-pub fn get_byte_from_bits(src: &[u8], index: u8, num_bit: u8) -> u8 {
+pub fn get_byte_from_bits(src: &[u8], index: u8, num_bit: u16) -> u8 {
     unsafe { ffi::modbus_get_byte_from_bits(src.as_ptr(), index as c_int, num_bit as c_uint) }
 }
 
-/// `get_float_abcd` - get a float value from 2 registers in ABCD byte order
+/// `get_float_abcd` - get a float value from 2 registers in `ABCD` byte order
 ///
 /// The [`get_float_abcd()`](#method.get_float_abcd) function shall get a float from 4 bytes in usual Modbus format.
-/// The src slice mut contain two 16 bits values, for example, if the first word is set to 0x0020 and the
-/// second to 0xF147, the float value will be read as 123456.0.
+/// The `src` slice mut contain two `u16` values, for example, if the first word is set to `0x0020` and the
+/// second to `0xF147`, the float value will be read as `123456.0`.
 ///
 /// # Return value
 ///
@@ -731,32 +860,35 @@ pub fn get_byte_from_bits(src: &[u8], index: u8, num_bit: u8) -> u8 {
 ///
 /// # Parameters
 ///
-/// `src`   - slice of two 16 bits values
+/// * `src`   - slice of two `u16` values
 ///
 /// # Examples
 ///
 /// ```rust
-/// assert_eq!(libmodbus_rs::get_float_abcd(&[0x0020, 0xF147]), 123456.0);
+/// use libmodbus_rs::prelude::*;
+/// assert_eq!(get_float_abcd(&[0x0020, 0xF147]), 123456.0);
 /// ```
-pub fn get_float_abcd(src: &[u16; 2]) -> f32 {
+pub fn get_float_abcd(src: &[u16]) -> f32 {
     unsafe { ffi::modbus_get_float_abcd(src.as_ptr()) }
 }
 
-/// `set_float_abcd` - set a float value in 2 registers using ABCD byte order
+/// `set_float_abcd` - set a float value in 2 registers using `ABCD` byte order
 ///
 /// The [`set_float_abcd()`](#method.set_float_abcd) function shall set a float to 4 bytes in usual Modbus format.
-/// The dest slice must contain two 16 bits values to be able to store the full result of the conversion.
+/// The `dest` slice must contain two `u16` values to be able to store the full result of the conversion.
 ///
 /// # Parameters
 ///
-/// `src`   - float to 4 bytes (f32)
-/// `dest`  - slice must contain two 16 bits values
+/// * `src`   - float to 4 bytes (`f32`)
+/// * `dest`  - slice must contain two `u16` values
 ///
 /// # Examples
 ///
 /// ```rust
+/// use libmodbus_rs::prelude::*;
+///
 /// let mut dest = vec![0; 2];
-/// libmodbus_rs::set_float_abcd(123456.0, &mut dest);
+/// set_float_abcd(123456.0, &mut dest);
 /// assert_eq!(&dest, &[0x0020, 0xF147]);
 /// ```
 pub fn set_float_abcd(src: f32, dest: &mut [u16]) {
@@ -764,13 +896,12 @@ pub fn set_float_abcd(src: f32, dest: &mut [u16]) {
     unsafe { ffi::modbus_set_float_abcd(src, dest.as_mut_ptr()) }
 }
 
-/// `get_float_badc` - get a float value from 2 registers in BADC byte order
+/// `get_float_badc` - get a float value from 2 registers in `BADC` byte order
 ///
-/// The [`get_float_badc()`](#method.get_float_badc) function shall get a float from 4 bytes with swapped bytes (BADC
-/// instead of ABCD).
-/// The src slice mut contain two 16 bits values, for example, if the first word is set to 0x2000 and the second to
-/// 0x47F1,
-/// the float value will be read as 123456.0.
+/// The [`get_float_badc()`](#method.get_float_badc) function shall get a float from 4 bytes with swapped bytes (`BADC`
+/// instead of `ABCD`).
+/// The `src` slice mut contain two `u16` values, for example, if the first word is set to `0x2000` and the second to
+/// `0x47F1`, the float value will be read as `123456.0`.
 ///
 /// # Return value
 ///
@@ -778,33 +909,37 @@ pub fn set_float_abcd(src: f32, dest: &mut [u16]) {
 ///
 /// # Parameters
 ///
-/// `src`   - slice of two 16 bits values
+/// * `src`   - slice of two `u16` values
 ///
 /// # Examples
 ///
 /// ```rust
-/// assert_eq!(libmodbus_rs::get_float_badc(&[0x2000, 0x47F1]), 123456.0);
+/// use libmodbus_rs::prelude::*;
+///
+/// assert_eq!(get_float_badc(&[0x2000, 0x47F1]), 123456.0);
 /// ```
-pub fn get_float_badc(src: &[u16; 2]) -> f32 {
+pub fn get_float_badc(src: &[u16]) -> f32 {
     unsafe { ffi::modbus_get_float_badc(src.as_ptr()) }
 }
 
-/// `set_float_badc` - set a float value in 2 registers using BADC byte order
+/// `set_float_badc` - set a float value in 2 registers using `BADC` byte order
 ///
 /// The [`set_float_badc()`](#method.set_float_badc) function shall set a float to 4 bytes in swapped bytes Modbus
-/// format (BADC insted of ABCD).
-/// The dest slice must contain two 16 bits values to be able to store the full result of the conversion.
+/// format (`BADC` insted of `ABCD`).
+/// The dest slice must contain two `u16` values to be able to store the full result of the conversion.
 ///
 /// # Parameters
 ///
-/// `src`   - float to 4 bytes (f32)
-/// `dest`  - slice must contain two 16 bits values
+/// * `src`   - float to 4 bytes (`f32`)
+/// * `dest`  - slice must contain two `u16` values
 ///
 /// # Examples
 ///
 /// ```rust
+/// use libmodbus_rs::prelude::*;
+///
 /// let mut dest = vec![0; 2];
-/// libmodbus_rs::set_float_badc(123456.0, &mut dest);
+/// set_float_badc(123456.0, &mut dest);
 /// assert_eq!(&dest, &[0x2000, 0x47F1]);
 /// ```
 pub fn set_float_badc(src: f32, dest: &mut [u16]) {
@@ -812,13 +947,12 @@ pub fn set_float_badc(src: f32, dest: &mut [u16]) {
     unsafe { ffi::modbus_set_float_badc(src, dest.as_mut_ptr()) }
 }
 
-/// `get_float_cdab` - get a float value from 2 registers in CDAB byte order
+/// `get_float_cdab` - get a float value from 2 registers in `CDAB` byte order
 ///
-/// The [`get_float_cdab()`](#method.get_float_cdab) function shall get a float from 4 bytes with swapped bytes (CDAB
-/// instead of ABCD).
-/// The src slice mut contain two 16 bits values, for example, if the first word is set to 0x2000 and the second to
-/// 0x47F1,
-/// the float value will be read as 123456.0.
+/// The [`get_float_cdab()`](#method.get_float_cdab) function shall get a float from 4 bytes with swapped bytes (`CDAB`
+/// instead of `ABCD`).
+/// The `src` slice mut contain two `u16` values, for example, if the first word is set to `0x2000` and the second to
+/// `0x47F1`, the float value will be read as `123456.0`.
 ///
 /// # Return value
 ///
@@ -826,33 +960,37 @@ pub fn set_float_badc(src: f32, dest: &mut [u16]) {
 ///
 /// # Parameters
 ///
-/// `src`   - slice of two 16 bits values
+/// * `src`   - slice of two `u16` values
 ///
 /// # Examples
 ///
 /// ```rust
-/// assert_eq!(libmodbus_rs::get_float_cdab(&[0xF147, 0x0020]), 123456.0);
+/// use libmodbus_rs::prelude::*;
+///
+/// assert_eq!(get_float_cdab(&[0xF147, 0x0020]), 123456.0);
 /// ```
-pub fn get_float_cdab(src: &[u16; 2]) -> f32 {
+pub fn get_float_cdab(src: &[u16]) -> f32 {
     unsafe { ffi::modbus_get_float_cdab(src.as_ptr()) }
 }
 
-/// `set_float_cdab` - set a float value in 2 registers using CDAB byte order
+/// `set_float_cdab` - set a float value in 2 registers using `CDAB` byte order
 ///
 /// The [`set_float_cdab()`](#method.set_float_cdab) function shall set a float to 4 bytes in swapped bytes Modbus
-/// format (CDAB insted of ABCD).
-/// The dest slice must contain two 16 bits values to be able to store the full result of the conversion.
+/// format (`CDAB` insted of `ABCD`).
+/// The `dest` slice must contain two `u16` values to be able to store the full result of the conversion.
 ///
 /// # Parameters
 ///
-/// `src`   - float to 4 bytes (f32)
-/// `dest`  - slice must contain two 16 bits values
+/// * `src`   - float to 4 bytes (`f32`)
+/// * `dest`  - slice must contain two `u16` values
 ///
 /// # Examples
 ///
 /// ```rust
+/// use libmodbus_rs::prelude::*;
+///
 /// let mut dest = vec![0; 2];
-/// libmodbus_rs::set_float_cdab(123456.0, &mut dest);
+/// set_float_cdab(123456.0, &mut dest);
 /// assert_eq!(&dest, &[0xF147, 0x0020]);
 /// ```
 pub fn set_float_cdab(src: f32, dest: &mut [u16]) {
@@ -860,13 +998,12 @@ pub fn set_float_cdab(src: f32, dest: &mut [u16]) {
     unsafe { ffi::modbus_set_float_cdab(src, dest.as_mut_ptr()) }
 }
 
-/// `get_float_dcba` - get a float value from 2 registers in DCBA byte order
+/// `get_float_dcba` - get a float value from 2 registers in `DCBA` byte order
 ///
-/// The [`get_float_dcba()`](#method.get_float_dcba) function shall get a float from 4 bytes with swapped bytes (DCBA
-/// instead of ABCD).
-/// The src slice mut contain two 16 bits values, for example, if the first word is set to 0x2000 and the second to
-/// 0x47F1,
-/// the float value will be read as 123456.0.
+/// The [`get_float_dcba()`](#method.get_float_dcba) function shall get a float from 4 bytes with swapped bytes (`DCBA`
+/// instead of `ABCD`).
+/// The src slice mut contain two `u16` values, for example, if the first word is set to `0x2000` and the second to
+/// `0x47F1`, the float value will be read as `123456.0`.
 ///
 /// # Return value
 ///
@@ -874,33 +1011,37 @@ pub fn set_float_cdab(src: f32, dest: &mut [u16]) {
 ///
 /// # Parameters
 ///
-/// `src`   - slice of two 16 bits values
+/// * `src`   - slice of two `u16` values
 ///
 /// # Examples
 ///
 /// ```rust
-/// assert_eq!(libmodbus_rs::get_float_dcba(&[0x47F1, 0x2000]), 123456.0);
+/// use libmodbus_rs::prelude::*;
+///
+/// assert_eq!(get_float_dcba(&[0x47F1, 0x2000]), 123456.0);
 /// ```
-pub fn get_float_dcba(src: &[u16; 2]) -> f32 {
+pub fn get_float_dcba(src: &[u16]) -> f32 {
     unsafe { ffi::modbus_get_float_dcba(src.as_ptr()) }
 }
 
-/// `set_float_dcba` - set a float value in 2 registers using DCBA byte order
+/// `set_float_dcba` - set a float value in 2 registers using `DCBA` byte order
 ///
 /// The [`set_float_dcba()`](#method.set_float_dcba) function shall set a float to 4 bytes in swapped bytes Modbus
-/// format (DCBA insted of ABCD).
-/// The dest slice must contain two 16 bits values to be able to store the full result of the conversion.
+/// format (`DCBA` insted of `ABCD`).
+/// The `dest` slice must contain two `u16` values to be able to store the full result of the conversion.
 ///
 /// # Parameters
 ///
-/// `src`   - float to 4 bytes (f32)
-/// `dest`  - slice must contain two 16 bits values
+/// * `src`   - float to 4 bytes (`f32`)
+/// * `dest`  - slice must contain two `u16` values
 ///
 /// # Examples
 ///
 /// ```rust
+/// use libmodbus_rs::prelude::*;
+///
 /// let mut dest = vec![0; 2];
-/// libmodbus_rs::set_float_dcba(123456.0, &mut dest);
+/// set_float_dcba(123456.0, &mut dest);
 /// assert_eq!(&dest, &[0x47F1, 0x2000]);
 /// ```
 pub fn set_float_dcba(src: f32, dest: &mut [u16]) {
