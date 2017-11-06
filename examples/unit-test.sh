@@ -21,6 +21,7 @@ build_rust() {
 run_rust() {
   echo -e "\nTest Rust binaries"
   clean
+  build_rust
   ./target/debug/examples/unit-test-server >/dev/null 2>&1 &
   sleep 1
   ./target/debug/examples/unit-test-client
@@ -37,6 +38,7 @@ run_c() {
 run_c_server_rust_client() {
   echo -e "\nTest libmodbus C server and Rust client"
   clean
+  build_rust
   ./libmodbus-sys/libmodbus/tests/unit-test-server >/dev/null 2>&1 &
   sleep 1
   ./target/debug/examples/unit-test-client
@@ -45,6 +47,7 @@ run_c_server_rust_client() {
 run_rust_server_c_client() {
   echo -e "\nTest Rust server and libmodbus C client"
   clean
+  build_rust
   ./target/debug/examples/unit-test-server >/dev/null 2>&1 &
   sleep 1
   ./libmodbus-sys/libmodbus/tests/unit-test-client
@@ -79,12 +82,16 @@ while test $# -gt 0
 do
     case "$1" in
         --rust) run_rust
+        exit 0
         ;;
         --c) run_c
+        exit 0
         ;;
         --rust_server_c_client) run_rust_server_c_client
+        exit 0
         ;;
         --c_server_rust_client) run_c_server_rust_client
+        exit 0
         ;;
         --*) usage
         ;;
