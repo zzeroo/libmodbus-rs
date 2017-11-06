@@ -48,7 +48,8 @@ run_rust_server_c_client() {
   echo -e "\nTest Rust server and libmodbus C client"
   clean
   build_rust
-  ./target/debug/examples/unit-test-server >/dev/null 2>&1 &
+  # ./target/debug/examples/unit-test-server >/dev/null 2>&1 &
+  ./target/debug/examples/unit-test-server &
   sleep 1
   ./libmodbus-sys/libmodbus/tests/unit-test-client
 }

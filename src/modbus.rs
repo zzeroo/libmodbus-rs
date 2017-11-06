@@ -678,11 +678,11 @@ impl Modbus {
     /// use libmodbus_rs::Exception;
     ///
     /// let request: Vec<u8> = vec![0x01];
-    /// assert_eq!(modbus.reply_exception(&request, Exception::Acknowledge as u32).unwrap(), 9);
+    /// assert_eq!(modbus.reply_exception(&request, Exception::Acknowledge).unwrap(), 9);
     /// ```
-    pub fn reply_exception(&self, request: &[u8], exception_code: u32) -> Result<i32> {
+    pub fn reply_exception(&self, request: &[u8], exception_code: Exception) -> Result<i32> {
         unsafe {
-            match ffi::modbus_reply_exception(self.ctx, request.as_ptr(), exception_code) {
+            match ffi::modbus_reply_exception(self.ctx, request.as_ptr(), exception_code as c_uint) {
                 -1 => bail!(Error::last_os_error()),
                 len => Ok(len),
             }
