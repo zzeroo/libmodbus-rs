@@ -3,7 +3,7 @@ extern crate time;
 
 mod unit_test_config;
 
-use libmodbus_rs::errors::*;
+// use libmodbus_rs::errors::*;
 use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, ModbusRTU};
 use std::env;
 use std::io::Error;
@@ -15,7 +15,7 @@ use unit_test_config::*;
 
 const G_MSEC_PER_SEC: i64 = 1_000;
 
-fn run() -> Result<()> {
+fn run() -> Result<(), std::io::Error> {
     let args: Vec<_> = env::args().collect();
     let (backend, n_loop) = if args.len() > 1 {
         match args[1].to_lowercase().as_ref() {
@@ -32,10 +32,10 @@ fn run() -> Result<()> {
 
     let mut modbus;
     if backend == Backend::TCP {
-        modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
+        modbus = Modbus::new_tcp("127.0.0.1", 1502).expect("Could not create TCP context");
     } else {
-        modbus = Modbus::new_rtu("/dev/ttyUSB1", 115200, 'N', 8, 1)?;
-        modbus.set_slave(1)?;
+        modbus = Modbus::new_rtu("/dev/ttyUSB1", 115200, 'N', 8, 1).expect("Could not create RTU context");
+        modbus.set_slave(1).expect("Could not set slave id");
     }
 
     match modbus.connect() {
@@ -59,8 +59,7 @@ fn run() -> Result<()> {
     for _ in 0..n_loop {
         let rc = modbus.read_bits(0, nb_points, &mut tab_bit);
         if rc.is_err() {
-            println!("{}\n", Modbus::strerror(Error::last_os_error().raw_os_error().unwrap()));
-            exit(-1);
+            return Err(Error::last_os_error());
         }
     }
     let end = PreciseTime::now();
@@ -96,8 +95,7 @@ fn run() -> Result<()> {
     for _ in 0..n_loop {
         let rc = modbus.read_registers(0, nb_points, &mut tab_reg);
         if rc.is_err() {
-            println!("{}\n", Modbus::strerror(Error::last_os_error().raw_os_error().unwrap()));
-            exit(-1);
+            return Err(Error::last_os_error());
         }
     }
     let end = PreciseTime::now();
@@ -134,8 +132,7 @@ fn run() -> Result<()> {
         let rc = modbus.write_and_read_registers(0, nb_points, &tab_reg.clone(), // FIXME: this clone costs to much
                                                  0, nb_points, &mut tab_reg);
         if rc.is_err() {
-            println!("{}\n", Modbus::strerror(Error::last_os_error().raw_os_error().unwrap()));
-            exit(-1);
+            return Err(Error::last_os_error());
         }
     }
     let end = PreciseTime::now();
@@ -173,7 +170,7 @@ fn run() -> Result<()> {
 
 fn main() {
     if let Err(ref err) = run() {
-        println!("Error: {}", err);
+        println!("{}", Modbus::strerror(err.raw_os_error().unwrap()));
 
         std::process::exit(1)
     }
