@@ -20,6 +20,7 @@ error-chain = "0.11"
 libc = "0.2"
 libmodbus-sys = { path = "libmodbus-sys", version = "0.5" }
 rand = "0.3"
+time = "*"
 
 [dependencies.clap]
 version = "2.24.2"
