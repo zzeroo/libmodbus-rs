@@ -3,7 +3,6 @@ extern crate time;
 
 mod unit_test_config;
 
-// use libmodbus_rs::errors::*;
 use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, ModbusRTU};
 use std::env;
 use std::io::Error;
@@ -47,10 +46,10 @@ fn run() -> Result<(), std::io::Error> {
     }
 
     /* Allocate and initialize the memory to store the status */
-    let mut tab_bit = vec![0u8; Modbus::MAX_READ_BITS * size_of::<u8>()];
+    let mut tab_bit = vec![0u8; Modbus::MAX_READ_BITS as usize * size_of::<u8>()];
 
     /* Allocate and initialize the memory to store the registers */
-    let mut tab_reg = vec![0u16; Modbus::MAX_READ_REGISTERS * size_of::<u16>()];
+    let mut tab_reg = vec![0u16; Modbus::MAX_READ_REGISTERS as usize * size_of::<u16>()];
 
     println!("READ BITS\n");
 

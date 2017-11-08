@@ -10,8 +10,10 @@ fn start_server(port: i32) -> thread::JoinHandle<()> {
         let mut socket = modbus.tcp_listen(1).expect("Could not listen to TCP socket");
         modbus.tcp_accept(&mut socket).expect("Could not accept connection");
 
-        let mb_mapping = ModbusMapping::new(Modbus::MAX_READ_BITS as i32, Modbus::MAX_READ_BITS as i32,
-            Modbus::MAX_READ_REGISTERS as i32, Modbus::MAX_READ_REGISTERS as i32).expect("Failed to allocate the mapping");
+        let mb_mapping = ModbusMapping::new(Modbus::MAX_READ_BITS, 
+                                            Modbus::MAX_READ_BITS,
+                                            Modbus::MAX_READ_REGISTERS, 
+                                            Modbus::MAX_READ_REGISTERS).expect("Failed to allocate the mapping");
 
             loop {
                 let mut query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH];

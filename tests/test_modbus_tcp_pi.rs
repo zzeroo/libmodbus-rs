@@ -6,7 +6,6 @@ use libmodbus_rs::{Modbus, ModbusTCPPI};
 #[test]
 fn new_tcp_pi() {
     assert!(Modbus::new_tcp_pi("::1", "1502").is_ok());
-    // ip: &str, port: i32) -> Result<Modbus>;
 }
 
 #[test]

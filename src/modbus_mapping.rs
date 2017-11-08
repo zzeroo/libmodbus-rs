@@ -1,5 +1,5 @@
 use errors::*;
-use libc::c_uint;
+use libc::{c_int, c_uint};
 use libmodbus_sys as ffi;
 use std::io::Error;
 
@@ -40,11 +40,14 @@ impl ModbusMapping {
     ///
     /// let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
     /// ```
-    pub fn new(number_bits: i32, number_input_bits: i32, number_registers: i32, number_input_registers: i32)
+    pub fn new(number_bits: u32, number_input_bits: u32, number_registers: u32, number_input_registers: u32)
                -> Result<ModbusMapping> {
         unsafe {
             let modbus_mapping =
-                ffi::modbus_mapping_new(number_bits, number_input_bits, number_registers, number_input_registers);
+                ffi::modbus_mapping_new(number_bits as c_int,
+                                        number_input_bits as c_int,
+                                        number_registers as c_int,
+                                        number_input_registers as c_int);
             if modbus_mapping.is_null() {
                 bail!(Error::last_os_error())
             } else {
