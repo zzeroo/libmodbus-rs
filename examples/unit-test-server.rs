@@ -131,7 +131,7 @@ fn run() -> Result<()> {
                 query[header_length + 3] = (UT_REGISTERS_NB_SPECIAL - 1) as u8;
             } else if query[header_length + 1] as u16 == UT_REGISTERS_ADDRESS_SPECIAL {
                 println!("Reply to this special register address by an exception");
-                modbus.reply_exception(&query, Exception::SlaveDeviceBusy);
+                modbus.reply_exception(&query, Exception::SlaveDeviceBusy).unwrap();
                 continue;
             } else if query[header_length + 1] as u16 == UT_REGISTERS_ADDRESS_INVALID_TID_OR_SLAVE {
                 const RAW_REQ_LENGTH: usize = 5;
@@ -142,7 +142,7 @@ fn run() -> Result<()> {
                 ];
 
                 println!("Reply with an invalid TID or slave");
-                modbus.send_raw_request(&mut raw_req, (RAW_REQ_LENGTH * std::mem::size_of::<u8>()) as i32);
+                modbus.send_raw_request(&mut raw_req, (RAW_REQ_LENGTH * std::mem::size_of::<u8>()) as i32).unwrap();
                 continue;
             } else if query[header_length + 1] as u16 == UT_REGISTERS_ADDRESS_SLEEP_500_MS {
                 println!("Sleep 0.5 s before replying");

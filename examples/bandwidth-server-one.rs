@@ -4,8 +4,6 @@ mod unit_test_config;
 
 use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCP, ModbusRTU};
 use std::env;
-use std::io::Error;
-use std::mem::size_of;
 use unit_test_config::*;
 
 
@@ -29,11 +27,11 @@ fn run() -> Result<(), std::io::Error> {
     if backend == Backend::TCP {
         modbus = Modbus::new_tcp("127.0.0.1", 1502).expect("Could not create TCP context");
         socket = modbus.tcp_listen(1).expect("Could not listen to TCP socket");
-        modbus.tcp_accept(&mut socket);
+        modbus.tcp_accept(&mut socket).unwrap();
     } else {
         modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).expect("Could not create RTU context");
-        modbus.set_slave(1);
-        modbus.connect();
+        modbus.set_slave(1).unwrap();
+        modbus.connect().unwrap();
     }
 
     let mb_mapping = ModbusMapping::new(Modbus::MAX_READ_BITS, 0,
@@ -48,7 +46,7 @@ fn run() -> Result<(), std::io::Error> {
                 println!("Quit the loop: {}", err);
                 break;
             }
-        };
+        }.unwrap();
     }
 
 
