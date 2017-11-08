@@ -4,39 +4,36 @@ use libmodbus_rs::{Modbus, ModbusClient, ModbusServer, ModbusMapping, FunctionCo
 use std::thread;
 use std::time::Duration;
 
-fn start_server() {
+fn start_server(port: i32) -> thread::JoinHandle<()> {
     thread::spawn(move || {
-        match Modbus::new_tcp("127.0.0.1", 1502) {
-            Ok(mut server) => {
-                let mapping = ModbusMapping::new(10, 10, 10, 10).expect("could not create modbus mapping");
-                let mut socket = server.tcp_listen(1).expect("could not listen");
-                server.tcp_accept(&mut socket).expect("unable to accept TCP socket");
-                let mut query = vec![0; Modbus::MAX_ADU_LENGTH];
-                match server.receive(&mut query) {
-                    Ok(request) => {
-                        server.reply(&mut query, 1, &mapping).expect(&format!("could not reply requeset: {}", request));
-                        Ok(())
-                    },
-                    Err(err) => Err(err),
-                }
-            },
-            Err(err) => panic!("Could not create server: {}", err),
-        }
-    });
-    // give server some time to come up
-    thread::sleep(Duration::from_millis(100));
+        let mut modbus = Modbus::new_tcp("127.0.0.1", port).expect("Could not create TCP Server context");
+        let mut socket = modbus.tcp_listen(1).expect("Could not listen to TCP socket");
+        modbus.tcp_accept(&mut socket).expect("Could not accept connection");
+
+        let mb_mapping = ModbusMapping::new(Modbus::MAX_READ_BITS as i32, Modbus::MAX_READ_BITS as i32,
+            Modbus::MAX_READ_REGISTERS as i32, Modbus::MAX_READ_REGISTERS as i32).expect("Failed to allocate the mapping");
+
+            loop {
+                let mut query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH];
+
+                match modbus.receive(&mut query) {
+                    Ok(rc) => modbus.reply(&query, rc, &mb_mapping),
+                    Err(_err) => break,
+                }.expect("Could not receive");
+            }
+    })
 }
 
 
-// FIXME: Find way to stop the server between the test
 #[test]
-#[ignore]
 fn read_bits() {
+    let port = 1502;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             let mut dest = vec![0u8; 100];
             client.connect().expect("could not connect");
@@ -44,35 +41,19 @@ fn read_bits() {
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
 
-// FIXME: Find way to stop the server between the test
 #[test]
-#[ignore]
-fn read_bits_too_many() {
-    // Start modbus server
-    start_server();
-
-    // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
-        Ok(client) => {
-            let mut dest = vec![0u8; 100];
-            client.connect().expect("could not connect");
-            assert!(client.read_bits(0, 101, &mut dest).is_err()); // => ErrorKind::TooManyDataBits
-        },
-        _ => panic!("could not connect"),
-    }
-}
-
-// FIXME: Find way to stop the server between the test
-#[test]
-#[ignore]
 fn read_input_bits() {
+    let port = 1503;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             let mut dest = vec![0u8; 100];
             client.connect().expect("could not connect");
@@ -80,17 +61,19 @@ fn read_input_bits() {
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
 
-// FIXME: Find way to stop the server between the test
 #[test]
-#[ignore]
 fn read_registers() {
+    let port = 1504;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             let mut dest = vec![0u16; 100];
             client.connect().expect("could not connect");
@@ -98,17 +81,19 @@ fn read_registers() {
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
 
-// FIXME: Find way to stop the server between the test
 #[test]
-#[ignore]
 fn read_input_registers() {
+    let port = 1505;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             let mut dest = vec![0u16; 100];
             client.connect().expect("could not connect");
@@ -116,17 +101,19 @@ fn read_input_registers() {
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
 
-// FIXME: Find way to stop the server between the test
 #[test]
-#[ignore]
 fn report_slave_id() {
+    let port = 1506;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             let mut bytes = vec![0u8; Modbus::MAX_PDU_LENGTH];
             client.connect().expect("could not connect");
@@ -136,32 +123,38 @@ fn report_slave_id() {
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
 
 #[test]
-#[ignore]
 fn write_bit() {
+    let port = 1507;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             client.connect().expect("could not connect");
             assert!(client.write_bit(0, true).is_ok());
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
 
 #[test]
-#[ignore]
 fn write_bits() {
+    let port = 1508;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             client.connect().expect("could not connect");
             let src = vec![1u8];
@@ -169,16 +162,19 @@ fn write_bits() {
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
 
 #[test]
-#[ignore]
 fn write_register() {
+    let port = 1509;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             client.connect().expect("could not connect");
             let address: u16 = 1;
@@ -187,16 +183,19 @@ fn write_register() {
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
 
 #[test]
-#[ignore]
 fn write_registers() {
+    let port = 1510;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             client.connect().expect("could not connect");
             let address = 1;
@@ -205,61 +204,68 @@ fn write_registers() {
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
 
 #[test]
-#[ignore]
 fn write_and_read_registers() {
+    let port = 1511;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             client.connect().expect("could not connect");
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
 
 #[test]
-#[ignore]
 fn send_raw_request() {
+    let port = 1512;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             client.connect().expect("could not connect");
             let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::ReadHoldingRegisters as u8, 0x00, 0x01, 0x0, 0x05];
             let mut response = vec![0u8; Modbus::MAX_ADU_LENGTH];
-            assert_eq!(client.send_raw_request(&mut raw_request, 12).unwrap(), 12);
+            assert_eq!(client.send_raw_request(&mut raw_request, 12).unwrap(), 18);
             assert!(client.receive_confirmation(&mut response).is_ok());
-            assert_eq!(response,
-                      vec![0, 0, 0, 0, 0, 13, 255, 3, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
 
 #[test]
-#[ignore]
 fn receive_confirmation() {
+    let port = 1513;
     // Start modbus server
-    start_server();
+    let server_thread = start_server(port);
+    thread::sleep(Duration::from_millis(200));
 
     // connect client
-    match Modbus::new_tcp("127.0.0.1", 1502) {
+    match Modbus::new_tcp("127.0.0.1", port) {
         Ok(client) => {
             client.connect().expect("could not connect");
             let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::ReadHoldingRegisters as u8, 0x00, 0x01, 0x0, 0x05];
             let mut response = vec![0u8; Modbus::MAX_ADU_LENGTH];
-            assert_eq!(client.send_raw_request(&mut raw_request, 12).unwrap(), 12);
+            assert_eq!(client.send_raw_request(&mut raw_request, 12).unwrap(), 18);
             assert!(client.receive_confirmation(&mut response).is_ok());
-            assert_eq!(response,
-                      vec![0, 0, 0, 0, 0, 13, 255, 3, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         },
         _ => panic!("could not connect"),
     }
+
+    let _ = server_thread.join();
 }
