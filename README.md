@@ -21,7 +21,7 @@ Include the dependencies into your `Cargo.toml` file.
 
 ```toml
 [dependencies]
-libmodbus-rs = "0.5"
+libmodbus-rs = "0.6"
 ```
 
 ### or development (github master)

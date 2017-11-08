@@ -6,7 +6,6 @@ use libmodbus_rs::{Modbus, ModbusTCPPI};
 #[test]
 fn new_tcp_pi() {
     assert!(Modbus::new_tcp_pi("::1", "1502").is_ok());
-    // ip: &str, port: i32) -> Result<Modbus>;
 }
 
 #[test]
@@ -20,6 +19,7 @@ fn tcp_pi_accept() {
 }
 
 #[test]
+#[ignore]
 fn tcp_pi_listen() {
     let mut server = Modbus::new_tcp_pi("::1", "1502").unwrap();
     let client = Modbus::new_tcp_pi("::1", "1502").unwrap();

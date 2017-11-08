@@ -1,69 +1,78 @@
 #![allow(unused_imports)]
 extern crate libmodbus_rs;
 
-use libmodbus_rs::{Modbus, Timeout, ModbusTCP};
+use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
 
 
 #[test]
-#[ignore]
-fn new() {}
+fn new() {
+    assert!(ModbusMapping::new(500, 500, 500, 500).is_ok());
+}
 
 #[test]
-#[ignore]
-fn new_start_add() {
-    // ress(start_bits: u16,
+fn new_start_address() {
+    assert!(ModbusMapping::new_start_address(0, 0, 0, 0, 10000, 10, 0, 0).is_ok());
 }
 
 #[test]
 #[ignore]
 fn free() {
-    // f)
+    let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    modbus.free();
 }
 
 #[test]
-#[ignore]
 fn get_bits() {
-    // f) -> &[u8]
+    let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+
+    assert_eq!(modbus_mapping.get_bits(), [0u8, 0, 0, 0, 0]);
 }
 
 #[test]
-#[ignore]
 fn get_bits_mut() {
-    // &self) -> &mut [u8]
+    let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+
+    assert_eq!(modbus_mapping.get_bits_mut(), [0u8, 0, 0, 0, 0]);
 }
 
 #[test]
-#[ignore]
 fn get_input_bit() {
-    // s(&self) -> &[u8]
+    let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+
+    assert_eq!(modbus_mapping.get_input_bits(), [0u8, 0, 0, 0, 0])
 }
 
 #[test]
-#[ignore]
 fn get_input_bits_mut() {
-    // s_mut(&self) -> &mut [u8]
+    let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+
+    assert_eq!(modbus_mapping.get_input_bits_mut(), [0u8, 0, 0, 0, 0])
 }
 
 #[test]
-#[ignore]
 fn get_input_registers() {
-    // isters(&self) -> &[u16]
+    let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+
+    assert_eq!(modbus_mapping.get_input_registers(), [0u16, 0, 0, 0, 0])
 }
 
 #[test]
-#[ignore]
 fn get_input_registers_mut() {
-    // isters_mut(&self) -> &mut [u16]
+    let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+
+    assert_eq!(modbus_mapping.get_input_registers_mut(), [0u16, 0, 0, 0, 0])
 }
 
 #[test]
-#[ignore]
 fn get_registers() {
-    // (&self) -> &[u16]
+    let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+
+    assert_eq!(modbus_mapping.get_input_registers(), [0u16, 0, 0, 0, 0])
 }
 
 #[test]
-#[ignore]
 fn get_registers_mut() {
-    // _mut(&self) -> &mut [u16]}
+    let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+
+    assert_eq!(modbus_mapping.get_input_registers_mut(), [0u16, 0, 0, 0, 0])
 }

@@ -25,7 +25,7 @@ fn run() -> Result<(), String> {
             }
             .expect("could not receive message");
     }
-    println!("Quit the loop: Connection reset by peer");
+    println!("Quit the loop: ");
 
     // ModbusMapping and Modbus struct are dropped here, automatically by Rusts Drop trait.
     // Hence no manual `modbus_mapping_free(mb_mapping)`, `modbus_close(ctx)` nor `modbus_free(ctx)` needed, like in C.
