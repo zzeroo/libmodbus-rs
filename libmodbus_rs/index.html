@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../libmodbus_rs/index.html'><img src='https://zzeroo.github.io/share/zzeroo-logo.png' alt='logo' width='100'></a>
-        <p class='location'>Crate libmodbus_rs</p><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'libmodbus_rs', ty: 'mod', relpath: '../'};</script>
+        <p class='location'>Crate libmodbus_rs</p><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'libmodbus_rs', ty: 'mod', relpath: '../'};</script>
     </nav>
 
     <nav class="sub">
@@ -48,7 +48,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/lib.rs.html#1-197' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/libmodbus_rs/lib.rs.html#1-196' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>This is an &#39;hopefully&#39; safe Rust interface for the <a href="http://libmodbus.org/">libmodbus</a> C library from
 <a href="http://libmodbus.org/">http://libmodbus.org/</a>.</p>
 
@@ -279,6 +279,13 @@ but a pair of accept/listen calls</p>
                            <td class='docblock-short'>
                                 
                            </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="mod" href="prelude/index.html"
+                                  title='mod libmodbus_rs::prelude'>prelude</a></td>
+                           <td class='docblock-short'>
+                                <p>None type dependend tool function to work with the modbus data</p>
+                           </td>
                        </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
@@ -383,84 +390,6 @@ It does not require a checksum calculation as lower layer takes care of the same
                                 <p>The TCP PI (Protocol Independent) backend implements a Modbus variant used for communications over TCP IPv4 and
 IPv6 networks.
 It does not require a checksum calculation as lower layer takes care of the same.</p>
-                           </td>
-                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.get_byte_from_bits.html"
-                                  title='fn libmodbus_rs::get_byte_from_bits'>get_byte_from_bits</a></td>
-                           <td class='docblock-short'>
-                                <p><code>get_byte_from_bits</code> - get the value from many bit</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.get_float_abcd.html"
-                                  title='fn libmodbus_rs::get_float_abcd'>get_float_abcd</a></td>
-                           <td class='docblock-short'>
-                                <p><code>get_float_abcd</code> - get a float value from 2 registers in ABCD byte order</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.get_float_badc.html"
-                                  title='fn libmodbus_rs::get_float_badc'>get_float_badc</a></td>
-                           <td class='docblock-short'>
-                                <p><code>get_float_badc</code> - get a float value from 2 registers in BADC byte order</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.get_float_cdab.html"
-                                  title='fn libmodbus_rs::get_float_cdab'>get_float_cdab</a></td>
-                           <td class='docblock-short'>
-                                <p><code>get_float_cdab</code> - get a float value from 2 registers in CDAB byte order</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.get_float_dcba.html"
-                                  title='fn libmodbus_rs::get_float_dcba'>get_float_dcba</a></td>
-                           <td class='docblock-short'>
-                                <p><code>get_float_dcba</code> - get a float value from 2 registers in DCBA byte order</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.set_bits_from_byte.html"
-                                  title='fn libmodbus_rs::set_bits_from_byte'>set_bits_from_byte</a></td>
-                           <td class='docblock-short'>
-                                <p><code>set_bits_from_byte</code> - set many bits from a single byte value</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.set_bits_from_bytes.html"
-                                  title='fn libmodbus_rs::set_bits_from_bytes'>set_bits_from_bytes</a></td>
-                           <td class='docblock-short'>
-                                <p><code>set_bits_from_bytes</code> -  set many bits from an array of bytes</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.set_float_abcd.html"
-                                  title='fn libmodbus_rs::set_float_abcd'>set_float_abcd</a></td>
-                           <td class='docblock-short'>
-                                <p><code>set_float_abcd</code> - set a float value in 2 registers using ABCD byte order</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.set_float_badc.html"
-                                  title='fn libmodbus_rs::set_float_badc'>set_float_badc</a></td>
-                           <td class='docblock-short'>
-                                <p><code>set_float_badc</code> - set a float value in 2 registers using BADC byte order</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.set_float_cdab.html"
-                                  title='fn libmodbus_rs::set_float_cdab'>set_float_cdab</a></td>
-                           <td class='docblock-short'>
-                                <p><code>set_float_cdab</code> - set a float value in 2 registers using CDAB byte order</p>
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.set_float_dcba.html"
-                                  title='fn libmodbus_rs::set_float_dcba'>set_float_dcba</a></td>
-                           <td class='docblock-short'>
-                                <p><code>set_float_dcba</code> - set a float value in 2 registers using DCBA byte order</p>
                            </td>
                        </tr></table></section>
     <section id='search' class="content hidden"></section>

@@ -768,7 +768,7 @@ make available registers from 10000 to 10009, you can use:</p></div>
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
-<pre><tt>mb_mapping <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_mapping_offset_start_address</span></span><span style="color: #990000">(</span><span style="color: #993399">0</span><span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">,</span> <span style="color: #993399">10000</span><span style="color: #990000">,</span> <span style="color: #993399">10</span><span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">);</span></tt></pre></div></div>
+<pre><tt>mb_mapping <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_mapping_new_start_address</span></span><span style="color: #990000">(</span><span style="color: #993399">0</span><span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">,</span> <span style="color: #993399">10000</span><span style="color: #990000">,</span> <span style="color: #993399">10</span><span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">,</span> <span style="color: #993399">0</span><span style="color: #990000">);</span></tt></pre></div></div>
 <div class="paragraph"><p>With this code, only 10 registers (<code>uint16_t</code>) are allocated.</p></div>
 <div class="paragraph"><p>If it isn&#8217;t necessary to allocate an array for a specific type of data, you can
 pass the zero value in argument, the associated pointer will be NULL.</p></div>
@@ -778,7 +778,7 @@ pass the zero value in argument, the associated pointer will be NULL.</p></div>
 <div class="sect1">
 <h2 id="_return_value">RETURN VALUE</h2>
 <div class="sectionbody">
-<div class="paragraph"><p>The <em>modbus_mapping_offset_new()</em> function shall return the new allocated structure if
+<div class="paragraph"><p>The <em>modbus_mapping_new_start_address()</em> function shall return the new allocated structure if
 successful. Otherwise it shall return NULL and set errno.</p></div>
 </div>
 </div>
@@ -807,7 +807,7 @@ http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
 <pre><tt><span style="font-style: italic"><span style="color: #9A1900">/* The first value of each array is accessible at the defined address.</span></span>
 <span style="font-style: italic"><span style="color: #9A1900">   The end address is ADDRESS + NB - 1. */</span></span>
-mb_mapping <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_mapping_offset_start_address</span></span><span style="color: #990000">(</span>BITS_ADDRESS<span style="color: #990000">,</span> BITS_NB<span style="color: #990000">,</span>
+mb_mapping <span style="color: #990000">=</span> <span style="font-weight: bold"><span style="color: #000000">modbus_mapping_new_start_address</span></span><span style="color: #990000">(</span>BITS_ADDRESS<span style="color: #990000">,</span> BITS_NB<span style="color: #990000">,</span>
                                 INPUT_BITS_ADDRESS<span style="color: #990000">,</span> INPUT_BITS_NB<span style="color: #990000">,</span>
                                 REGISTERS_ADDRESS<span style="color: #990000">,</span> REGISTERS_NB<span style="color: #990000">,</span>
                                 INPUT_REGISTERS_ADDRESS<span style="color: #990000">,</span> INPUT_REGISTERS_NB<span style="color: #990000">);</span>
@@ -838,7 +838,7 @@ mb_mapping <span style="color: #990000">=</span> <span style="font-weight: bold"
 <div id="footer">
 <div id="footer-text">
 libmodbus 3.1.4<br />
-Last updated 2017-10-21 11:02:34 CEST
+Last updated 2017-11-08 14:26:16 CET
 </div>
 </div>
 </body>
