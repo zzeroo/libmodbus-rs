@@ -247,7 +247,7 @@ fn run() -> Result<()> {
     let _rc = modbus.write_register(UT_REGISTERS_ADDRESS, 0x12).unwrap();
     let rc = modbus.mask_write_register(UT_REGISTERS_ADDRESS, 0xF2, 0x25);
     assert_true!(rc.is_ok(), "FAILED ({:?} == -1)", rc);
-    let rc = modbus.read_registers(UT_REGISTERS_ADDRESS, 1, &mut tab_rp_registers).unwrap();
+    let _rc = modbus.read_registers(UT_REGISTERS_ADDRESS, 1, &mut tab_rp_registers).unwrap();
     assert_true!(tab_rp_registers[0] == 0x17,
                 "FAILED ({:0X} != {:0X})",
                 tab_rp_registers[0], 0x17);
@@ -385,7 +385,7 @@ fn run() -> Result<()> {
     print!("* read_bits: ");
     assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Too many data", "");
 
-    let rc = modbus.read_input_bits(UT_INPUT_BITS_ADDRESS,
+    let _rc = modbus.read_input_bits(UT_INPUT_BITS_ADDRESS,
                                 Modbus::MAX_READ_BITS as u16 + 1, &mut tab_rp_bits);
     print!("* read_input_bits: ");
     // assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Too many data", "");
@@ -416,7 +416,7 @@ fn run() -> Result<()> {
     // SLAVE REPLY
     let old_slave = modbus.get_slave().unwrap();
 
-    modbus.set_slave(INVALID_SERVER_ID);
+    modbus.set_slave(INVALID_SERVER_ID).expect("Could not set slave id");
     let rc = modbus.read_registers(UT_REGISTERS_ADDRESS,
                                 UT_REGISTERS_NB, &mut tab_rp_registers);
 
@@ -441,8 +441,8 @@ fn run() -> Result<()> {
          * slave ID to simulate a communication on a RS485 bus. At first, the
          * slave will see the indication message then the confirmation, and it must
          * ignore both. */
-        modbus.send_raw_request(&mut raw_req, RAW_REQ_LENGTH * std::mem::size_of::<u8>() as i32);
-        modbus.send_raw_request(&mut raw_rsp, RAW_RSP_LENGTH * std::mem::size_of::<u8>() as i32);
+        modbus.send_raw_request(&mut raw_req, RAW_REQ_LENGTH * std::mem::size_of::<u8>() as i32).expect("Could not send raw request");
+        modbus.send_raw_request(&mut raw_rsp, RAW_RSP_LENGTH * std::mem::size_of::<u8>() as i32).expect("Could not send raw request");
         let rc = modbus.receive_confirmation(&mut rsp);
 
         print!("1-B/3 No response from slave {} on indication/confirmation messages: ",
@@ -450,7 +450,7 @@ fn run() -> Result<()> {
         assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Timeout", "");
 
         /* Send an INVALID request for another slave */
-        modbus.send_raw_request(&mut raw_invalid_req, RAW_REQ_LENGTH * std::mem::size_of::<u8>() as i32);
+        modbus.send_raw_request(&mut raw_invalid_req, RAW_REQ_LENGTH * std::mem::size_of::<u8>() as i32).expect("Could not send raw request");
         let rc = modbus.receive_confirmation(&mut rsp);
 
         print!("1-C/3 No response from slave {} with invalid request: ",
@@ -480,7 +480,7 @@ fn run() -> Result<()> {
 
 
     /* Restore slave */
-    modbus.set_slave(old_slave);
+    modbus.set_slave(old_slave).expect("Could not set slave id");
 
     print!("3/3 Response with an invalid TID or slave: ");
     let rc = modbus.read_registers(UT_REGISTERS_ADDRESS_INVALID_TID_OR_SLAVE,
@@ -533,7 +533,7 @@ fn run() -> Result<()> {
     print!("3/6 Invalid byte timeout (too large us): ");
     assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Invalid argument (os error 22)", "");
 
-    modbus.set_response_timeout(Timeout::new_usec(1));
+    modbus.set_response_timeout(Timeout::new_usec(1)).expect("Could not set response timeout");
     let rc = modbus.read_registers(UT_REGISTERS_ADDRESS, UT_REGISTERS_NB, &mut tab_rp_registers);
     print!("4/6 1us response timeout: ");
     if rc.is_err() && rc.unwrap_err().to_string() == "Connection timed out (os error 110)" {
@@ -547,20 +547,20 @@ fn run() -> Result<()> {
     * so 0 can be too short!
     */
     sleep(Duration::new(old_response_timeout.sec as u64, old_response_timeout.usec * 1_000));
-    modbus.flush();
+    modbus.flush().unwrap();
 
     /* Trigger a special behaviour on server to wait for 0.5 second before
     * replying whereas allowed timeout is 0.2 second */
-    modbus.set_response_timeout(Timeout::new(0, 200));
+    modbus.set_response_timeout(Timeout::new(0, 200)).unwrap();
     let rc = modbus.read_registers(UT_REGISTERS_ADDRESS_SLEEP_500_MS, 1, &mut tab_rp_registers);
     print!("5/6 Too short response timeout (0.2s < 0.5s): ");
     assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Connection timed out (os error 110)", "");
 
     /* Wait for reply (0.2 + 0.4 > 0.5 s) and flush before continue */
     sleep(Duration::new(0, 400_000_000));
-    modbus.flush();
+    modbus.flush().unwrap();
 
-    modbus.set_response_timeout(Timeout::new(0, 600_000));
+    modbus.set_response_timeout(Timeout::new(0, 600_000)).unwrap();
     println!("{:?}", modbus.get_response_timeout());
     let rc = modbus.read_registers(UT_REGISTERS_ADDRESS_SLEEP_500_MS, 1, &mut tab_rp_registers);
     print!("6/6 Adequate response timeout (0.6s > 0.5s): ");
@@ -568,20 +568,20 @@ fn run() -> Result<()> {
 
     /* Disable the byte timeout.
     The full response must be available in the 600ms interval */
-    modbus.set_byte_timeout(Timeout::new(0, 0));
+    modbus.set_byte_timeout(Timeout::new(0, 0)).unwrap();
     let rc = modbus.read_registers(UT_REGISTERS_ADDRESS_SLEEP_500_MS, 1, &mut tab_rp_registers);
     print!("7/7 Disable byte timeout: ");
     assert_true!(rc.is_ok(), "");
 
     /* Restore original response timeout */
-    modbus.set_response_timeout(old_response_timeout);
+    modbus.set_response_timeout(old_response_timeout).unwrap();
 
     if backend == Backend::TCP {
         /* The test server is only able to test byte timeouts with the TCP
          * backend */
 
         /* Timeout of 3ms between bytes */
-        modbus.set_byte_timeout(Timeout::new(0, 3000));
+        modbus.set_byte_timeout(Timeout::new(0, 3000)).unwrap();
         let rc = modbus.read_registers(UT_REGISTERS_ADDRESS_BYTE_SLEEP_5_MS,
                                    1, &mut tab_rp_registers);
         print!("1/2 Too small byte timeout (3ms < 5ms): ");
@@ -589,10 +589,10 @@ fn run() -> Result<()> {
 
         /* Wait remaing bytes before flushing */
         sleep(Duration::from_millis(11 * 5));
-        modbus.flush();
+        modbus.flush().unwrap();
 
         /* Timeout of 7ms between bytes */
-        modbus.set_byte_timeout(Timeout::new(0, 7000));
+        modbus.set_byte_timeout(Timeout::new(0, 7000)).unwrap();
         let rc = modbus.read_registers(UT_REGISTERS_ADDRESS_BYTE_SLEEP_5_MS,
                                    1, &mut tab_rp_registers);
         print!("2/2 Adapted byte timeout (7ms > 5ms): ");
@@ -600,7 +600,7 @@ fn run() -> Result<()> {
     }
 
     /* Restore original byte timeout */
-    modbus.set_byte_timeout(old_byte_timeout);
+    modbus.set_byte_timeout(old_byte_timeout).unwrap();
 
     /** BAD RESPONSE **/
     println!("\nTEST BAD RESPONSE ERROR:");
@@ -631,13 +631,13 @@ fn run() -> Result<()> {
 
     /* Test init functions */
     println!("\nTEST INVALID INITIALIZATION:");
-    let mut modbus = Modbus::new_rtu("", 1, 'A', 0, 0);
+    let modbus = Modbus::new_rtu("", 1, 'A', 0, 0);
     assert_true!(modbus.is_err() && modbus.unwrap_err().to_string() == "Invalid argument (os error 22)", "");
 
-    let mut modbus = Modbus::new_rtu("/dev/dummy", 0, 'A', 0, 0);
+    let modbus = Modbus::new_rtu("/dev/dummy", 0, 'A', 0, 0);
     assert_true!(modbus.is_err() && modbus.unwrap_err().to_string() == "Invalid argument (os error 22)", "");
 
-    let mut modbus = Modbus::new_tcp_pi("", "");
+    let modbus = Modbus::new_tcp_pi("", "");
     assert_true!(modbus.is_err() && modbus.unwrap_err().to_string() == "Invalid argument (os error 22)", "");
 
     print!("\nALL TESTS PASS WITH SUCCESS.\n");
@@ -724,7 +724,7 @@ fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
      * The old timeouts are restored at the end.
      */
     let old_response_timeout = modbus.get_response_timeout().unwrap();
-    modbus.set_response_timeout(Timeout::new(0, 600000));
+    modbus.set_response_timeout(Timeout::new(0, 600000)).unwrap();
 
     let req_length = modbus.send_raw_request(&mut read_raw_req.clone(), READ_RAW_REQ_LEN).unwrap();
     print!("* modbus_send_raw_request: ");
@@ -742,7 +742,7 @@ fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
                                   tab_read_nb_max[i] as u16, 0,
                                   backend_length, backend_offset);
         if rc.is_err() {
-            modbus.set_response_timeout(old_response_timeout);
+            modbus.set_response_timeout(old_response_timeout).unwrap();
             std::process::exit(-1)
         }
     }
@@ -753,7 +753,7 @@ fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
                               (Modbus::MAX_WR_READ_REGISTERS + 1) as u16, 0,
                               backend_length, backend_offset);
     if rc.is_err() {
-        modbus.set_response_timeout(old_response_timeout);
+        modbus.set_response_timeout(old_response_timeout).unwrap();
         std::process::exit(-1)
     }
 
@@ -764,7 +764,7 @@ fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
                               (Modbus::MAX_WRITE_REGISTERS + 1) as u16, 6,
                               backend_length, backend_offset);
     if rc.is_err() {
-        modbus.set_response_timeout(old_response_timeout);
+        modbus.set_response_timeout(old_response_timeout).unwrap();
         std::process::exit(-1)
     }
 
@@ -773,17 +773,17 @@ fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
                               (Modbus::MAX_WRITE_BITS + 1) as u16, 6,
                               backend_length, backend_offset);
     if rc.is_err() {
-        modbus.set_response_timeout(old_response_timeout);
+        modbus.set_response_timeout(old_response_timeout).unwrap();
         std::process::exit(-1)
     }
 
     /* Test invalid function code */
-    modbus.send_raw_request(&mut invalid_fc_raw_req, INVALID_FC_REQ_LEN * std::mem::size_of::<u8>() as i32);
+    modbus.send_raw_request(&mut invalid_fc_raw_req, INVALID_FC_REQ_LEN * std::mem::size_of::<u8>() as i32).expect("Could not set raw request");
     let rc = modbus.receive_confirmation(&mut rsp).unwrap();
     print!("Return an exception on unknown function code: ");
     assert_true!(rc == (backend_length + EXCEPTION_RC) && rsp[backend_offset as usize] == (0x80 + INVALID_FC), "");
 
-    modbus.set_response_timeout(old_response_timeout);
+    modbus.set_response_timeout(old_response_timeout).unwrap();
 
     // // Err(ErrorKind::UnitTestClientFailure.into())
     Ok(())
@@ -816,7 +816,7 @@ fn send_crafted_request(modbus: &mut Modbus, function: FunctionCode,
             }
         }
 
-        modbus.send_raw_request(&mut req, req_len * std::mem::size_of::<u8>() as i32);
+        modbus.send_raw_request(&mut req, req_len * std::mem::size_of::<u8>() as i32).expect("Could not send raw request");
         if j == 0 {
             print!("* try function 0x{:X}: {} 0 values: ", function as u8, if bytes > 0 { "write" } else { "read" });
         } else {
