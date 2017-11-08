@@ -183,23 +183,23 @@ impl Modbus {
     // Constants
     /// Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 1 page 12)
     /// Quantity of Coils to read (2 bytes): 1 to 2000 (0x7D0)
-    pub const MAX_READ_BITS: usize = ffi::MODBUS_MAX_READ_BITS as usize;
+    pub const MAX_READ_BITS: u32 = ffi::MODBUS_MAX_READ_BITS;
     /// Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 11 page 29)
     /// Quantity of Coils to write (2 bytes): 1 to 1968 (0x7B0)
-    pub const MAX_WRITE_BITS: usize = ffi::MODBUS_MAX_WRITE_BITS as usize;
+    pub const MAX_WRITE_BITS: u32 = ffi::MODBUS_MAX_WRITE_BITS;
 
     /// Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 3 page 15)
     /// Quantity of Registers to read (2 bytes): 1 to 125 (0x7D)
-    pub const MAX_READ_REGISTERS: usize = ffi::MODBUS_MAX_READ_REGISTERS as usize;
+    pub const MAX_READ_REGISTERS: u32 = ffi::MODBUS_MAX_READ_REGISTERS;
     /// Modbus_Application_Protocol_V1_1b.pdf  (chapter 6 section 12 page 31)
     /// Quantity of Registers to write (2 bytes) 1 to 123 (0x7B)
-    pub const MAX_WRITE_REGISTERS: usize = ffi::MODBUS_MAX_WRITE_REGISTERS as usize;
+    pub const MAX_WRITE_REGISTERS: u32 = ffi::MODBUS_MAX_WRITE_REGISTERS;
     /// Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 17 page 38)
     /// Quantity of Registers to write in R/W registers (2 bytes) 1 to 121 (0x79)
-    pub const MAX_WR_WRITE_REGISTERS: usize = ffi::MODBUS_MAX_WR_WRITE_REGISTERS as usize;
+    pub const MAX_WR_WRITE_REGISTERS: u32 = ffi::MODBUS_MAX_WR_WRITE_REGISTERS;
     /// Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 3 page 15)
     /// Quantity of Registers to read (2 bytes): 1 to 125 (0x7D)
-    pub const MAX_WR_READ_REGISTERS: usize = ffi::MODBUS_MAX_WR_READ_REGISTERS as usize;
+    pub const MAX_WR_READ_REGISTERS: u32 = ffi::MODBUS_MAX_WR_READ_REGISTERS;
 
     /// The size of the MODBUS PDU is limited by the size constraint inherited from
     /// the first MODBUS implementation on Serial Line network (max. RS485 ADU = 256
