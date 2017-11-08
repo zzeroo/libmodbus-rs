@@ -46,7 +46,7 @@ pub const UT_IREAL_DCBA: u32 = 0x0020F147;
 pub const UT_IREAL_BADC: u32 = 0xF1470020;
 pub const UT_IREAL_CDAB: u32 = 0x200047F1;*/
 
-#[derive(Eq, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum Backend {
     TCP,
     TCPPI,

@@ -181,15 +181,44 @@ pub struct Modbus {
 
 impl Modbus {
     // Constants
-    pub const ENOBASE: u32 = ffi::MODBUS_ENOBASE;
-    pub const MAX_ADU_LENGTH: usize = ffi::MODBUS_MAX_ADU_LENGTH as usize;
-    pub const MAX_PDU_LENGTH: usize = ffi::MODBUS_MAX_PDU_LENGTH as usize;
+    /// Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 1 page 12)
+    /// Quantity of Coils to read (2 bytes): 1 to 2000 (0x7D0)
     pub const MAX_READ_BITS: usize = ffi::MODBUS_MAX_READ_BITS as usize;
-    pub const MAX_READ_REGISTERS: usize = ffi::MODBUS_MAX_READ_REGISTERS as usize;
-    pub const MAX_WR_READ_REGISTERS: usize = ffi::MODBUS_MAX_WR_READ_REGISTERS as usize;
-    pub const MAX_WR_WRITE_REGISTERS: usize = ffi::MODBUS_MAX_WR_WRITE_REGISTERS as usize;
+    /// Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 11 page 29)
+    /// Quantity of Coils to write (2 bytes): 1 to 1968 (0x7B0)
     pub const MAX_WRITE_BITS: usize = ffi::MODBUS_MAX_WRITE_BITS as usize;
+
+    /// Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 3 page 15)
+    /// Quantity of Registers to read (2 bytes): 1 to 125 (0x7D)
+    pub const MAX_READ_REGISTERS: usize = ffi::MODBUS_MAX_READ_REGISTERS as usize;
+    /// Modbus_Application_Protocol_V1_1b.pdf  (chapter 6 section 12 page 31)
+    /// Quantity of Registers to write (2 bytes) 1 to 123 (0x7B)
     pub const MAX_WRITE_REGISTERS: usize = ffi::MODBUS_MAX_WRITE_REGISTERS as usize;
+    /// Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 17 page 38)
+    /// Quantity of Registers to write in R/W registers (2 bytes) 1 to 121 (0x79)
+    pub const MAX_WR_WRITE_REGISTERS: usize = ffi::MODBUS_MAX_WR_WRITE_REGISTERS as usize;
+    /// Modbus_Application_Protocol_V1_1b.pdf (chapter 6 section 3 page 15)
+    /// Quantity of Registers to read (2 bytes): 1 to 125 (0x7D)
+    pub const MAX_WR_READ_REGISTERS: usize = ffi::MODBUS_MAX_WR_READ_REGISTERS as usize;
+
+    /// The size of the MODBUS PDU is limited by the size constraint inherited from
+    /// the first MODBUS implementation on Serial Line network (max. RS485 ADU = 256
+    /// bytes). Therefore, MODBUS PDU for serial line communication = 256 - Server
+    /// address (1 byte) - CRC (2 bytes) = 253 bytes.
+    pub const MAX_PDU_LENGTH: usize = ffi::MODBUS_MAX_PDU_LENGTH as usize;
+
+    /// Consequently:
+    /// - RTU MODBUS ADU = 253 bytes + Server address (1 byte) + CRC (2 bytes) = 256 bytes
+    /// - TCP MODBUS ADU = 253 bytes + MBAP (7 bytes) = 260 bytes
+    /// so the maximum of both backend in 260 bytes. This size can used to allocate
+    /// an array of bytes to store responses and it will be compatible with the two
+    /// backends.
+    pub const MAX_ADU_LENGTH: usize = ffi::MODBUS_MAX_ADU_LENGTH as usize;
+
+    /// Random number to avoid errno conflicts
+    pub const ENOBASE: u32 = ffi::MODBUS_ENOBASE;
+
+
     pub const RTU_MAX_ADU_LENGTH: usize = ffi::MODBUS_RTU_MAX_ADU_LENGTH as usize;
     pub const TCP_DEFAULT_PORT: u32 = ffi::MODBUS_TCP_DEFAULT_PORT;
     pub const TCP_MAX_ADU_LENGTH: usize = ffi::MODBUS_TCP_MAX_ADU_LENGTH as usize;
