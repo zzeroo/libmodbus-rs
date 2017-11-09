@@ -81,6 +81,7 @@ fn main() {
                     .env("CFLAGS", flags)
                     .arg("--with-pic")
                     .arg("--disable-shared")
+                    .arg("--disable-tests")
                     .arg(format!("--target={}", target))
                     .arg(format!("--host={}", host))
                     .current_dir(&build_dir));
