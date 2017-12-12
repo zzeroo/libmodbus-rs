@@ -1,24 +1,24 @@
-use errors::*;
+use error::*;
 use libc::{c_char, c_int};
-use libmodbus_sys;
+use libmodbus_sys as ffi;
 use modbus::Modbus;
 use std::ffi::CString;
-use std::io::Error;
 use std::str;
+use failure::Error;
 
 
 #[derive(Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 pub enum SerialMode {
-    RtuRS232 = libmodbus_sys::MODBUS_RTU_RS232 as isize,
-    RtuRS485 = libmodbus_sys::MODBUS_RTU_RS485 as isize,
+    RtuRS232 = ffi::MODBUS_RTU_RS232 as isize,
+    RtuRS485 = ffi::MODBUS_RTU_RS485 as isize,
 }
 
 #[derive(Debug, PartialEq)]
 pub enum RequestToSendMode {
-    RtuRtsNone = libmodbus_sys::MODBUS_RTU_RTS_NONE as isize,
-    RtuRtsUp = libmodbus_sys::MODBUS_RTU_RTS_UP as isize,
-    RtuRtsDown = libmodbus_sys::MODBUS_RTU_RTS_DOWN as isize,
+    RtuRtsNone = ffi::MODBUS_RTU_RTS_NONE as isize,
+    RtuRtsUp = ffi::MODBUS_RTU_RTS_UP as isize,
+    RtuRtsDown = ffi::MODBUS_RTU_RTS_DOWN as isize,
 }
 
 /// The RTU backend (Remote Terminal Unit) is used in serial communication and makes use of a compact, binary
@@ -55,14 +55,14 @@ pub enum RequestToSendMode {
 /// [`rtu_set_rts_delay()`](struct.Modbus.html#method.rtu_set_rts_delay)
 ///
 pub trait ModbusRTU {
-    fn new_rtu(device: &str, baud: i32, parity: char, data_bit: i32, stop_bit: i32) -> Result<Modbus>;
-    fn rtu_get_serial_mode(&self) -> Result<SerialMode>;
-    fn rtu_set_serial_mode(&mut self, mode: SerialMode) -> Result<()>;
-    fn rtu_get_rts(&self) -> Result<RequestToSendMode>;
-    fn rtu_set_rts(&mut self, mode: RequestToSendMode) -> Result<()>;
-    fn rtu_set_custom_rts(&mut self, _mode: RequestToSendMode) -> Result<i32>;
-    fn rtu_get_rts_delay(&self) -> Result<i32>;
-    fn rtu_set_rts_delay(&mut self, us: i32) -> Result<()>;
+    fn new_rtu(device: &str, baud: i32, parity: char, data_bit: i32, stop_bit: i32) -> Result<Modbus, Error>;
+    fn rtu_get_serial_mode(&self) -> Result<SerialMode, Error>;
+    fn rtu_set_serial_mode(&mut self, mode: SerialMode) -> Result<(), Error>;
+    fn rtu_get_rts(&self) -> Result<RequestToSendMode, Error>;
+    fn rtu_set_rts(&mut self, mode: RequestToSendMode) -> Result<(), Error>;
+    fn rtu_set_custom_rts(&mut self, _mode: RequestToSendMode) -> Result<i32, Error>;
+    fn rtu_get_rts_delay(&self) -> Result<i32, Error>;
+    fn rtu_set_rts_delay(&mut self, us: i32) -> Result<(), Error>;
 }
 
 impl ModbusRTU for Modbus {
@@ -101,17 +101,17 @@ impl ModbusRTU for Modbus {
     ///     Err(e) => println!("Error: {}", e),
     /// }
     /// ```
-    fn new_rtu(device: &str, baud: i32, parity: char, data_bit: i32, stop_bit: i32) -> Result<Modbus> {
+    fn new_rtu(device: &str, baud: i32, parity: char, data_bit: i32, stop_bit: i32) -> Result<Modbus, Error> {
         unsafe {
             let device = CString::new(device).unwrap();
-            let ctx = libmodbus_sys::modbus_new_rtu(device.as_ptr(),
+            let ctx = ffi::modbus_new_rtu(device.as_ptr(),
                                                     baud as c_int,
                                                     parity as c_char,
                                                     data_bit as c_int,
                                                     stop_bit as c_int);
 
             if ctx.is_null() {
-                bail!(Error::last_os_error())
+                bail!(::std::io::Error::last_os_error())
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -148,13 +148,13 @@ impl ModbusRTU for Modbus {
     ///
     /// assert_eq!(modbus.rtu_get_serial_mode().unwrap(), SerialMode::RtuRS232);
     /// ```
-    fn rtu_get_serial_mode(&self) -> Result<SerialMode> {
+    fn rtu_get_serial_mode(&self) -> Result<SerialMode, Error> {
         unsafe {
-            let mode = libmodbus_sys::modbus_rtu_get_serial_mode(self.ctx);
+            let mode = ffi::modbus_rtu_get_serial_mode(self.ctx);
             match mode {
                 mode if mode == SerialMode::RtuRS232 as i32 => Ok(SerialMode::RtuRS232),
                 mode if mode == SerialMode::RtuRS485 as i32 => Ok(SerialMode::RtuRS485),
-                _ => bail!(Error::last_os_error()),
+                _ => bail!(::std::io::Error::last_os_error()),
             }
         }
     }
@@ -191,11 +191,11 @@ impl ModbusRTU for Modbus {
     ///
     /// assert!(modbus.rtu_set_serial_mode(SerialMode::RtuRS232).is_ok());
     /// ```
-    fn rtu_set_serial_mode(&mut self, mode: SerialMode) -> Result<()> {
+    fn rtu_set_serial_mode(&mut self, mode: SerialMode) -> Result<(), Error> {
         unsafe {
-            let mode = libmodbus_sys::modbus_rtu_set_serial_mode(self.ctx, mode as c_int) as i32;
+            let mode = ffi::modbus_rtu_set_serial_mode(self.ctx, mode as c_int) as i32;
             match mode {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -229,10 +229,10 @@ impl ModbusRTU for Modbus {
     ///
     /// assert!(modbus.rtu_set_rts(RequestToSendMode::RtuRtsUp).is_ok());
     /// ```
-    fn rtu_set_rts(&mut self, mode: RequestToSendMode) -> Result<()> {
+    fn rtu_set_rts(&mut self, mode: RequestToSendMode) -> Result<(), Error> {
         unsafe {
-            match libmodbus_sys::modbus_rtu_set_rts(self.ctx, mode as c_int) {
-                -1 => bail!(Error::last_os_error()),
+            match ffi::modbus_rtu_set_rts(self.ctx, mode as c_int) {
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -257,14 +257,14 @@ impl ModbusRTU for Modbus {
     ///
     /// assert!(modbus.rtu_set_serial_mode(SerialMode::RtuRS485).is_ok());
     /// ```
-    fn rtu_get_rts(&self) -> Result<RequestToSendMode> {
+    fn rtu_get_rts(&self) -> Result<RequestToSendMode, Error> {
         unsafe {
-            let mode = libmodbus_sys::modbus_rtu_get_rts(self.ctx) as u32;
+            let mode = ffi::modbus_rtu_get_rts(self.ctx) as u32;
             match mode {
-                libmodbus_sys::MODBUS_RTU_RTS_NONE => Ok(RequestToSendMode::RtuRtsNone),
-                libmodbus_sys::MODBUS_RTU_RTS_UP => Ok(RequestToSendMode::RtuRtsUp),
-                libmodbus_sys::MODBUS_RTU_RTS_DOWN => Ok(RequestToSendMode::RtuRtsDown),
-                _ => bail!(Error::last_os_error()),
+                ffi::MODBUS_RTU_RTS_NONE => Ok(RequestToSendMode::RtuRtsNone),
+                ffi::MODBUS_RTU_RTS_UP => Ok(RequestToSendMode::RtuRtsUp),
+                ffi::MODBUS_RTU_RTS_DOWN => Ok(RequestToSendMode::RtuRtsDown),
+                _ => bail!(::std::io::Error::last_os_error()),
             }
         }
     }
@@ -281,7 +281,7 @@ impl ModbusRTU for Modbus {
     /// This function can only be used with a context using a RTU backend.
     ///
     /// TODO: implement rtu_set_custom_rts()!
-    fn rtu_set_custom_rts(&mut self, _mode: RequestToSendMode) -> Result<i32> {
+    fn rtu_set_custom_rts(&mut self, _mode: RequestToSendMode) -> Result<i32, Error> {
         unimplemented!()
     }
 
@@ -306,10 +306,10 @@ impl ModbusRTU for Modbus {
     ///
     /// modbus.rtu_get_rts_delay();
     /// ```
-    fn rtu_get_rts_delay(&self) -> Result<i32> {
+    fn rtu_get_rts_delay(&self) -> Result<i32, Error> {
         unsafe {
-            match libmodbus_sys::modbus_rtu_get_rts_delay(self.ctx) {
-                -1 => bail!(Error::last_os_error()),
+            match ffi::modbus_rtu_get_rts_delay(self.ctx) {
+                -1 => bail!(::std::io::Error::last_os_error()),
                 delay => Ok(delay),
             }
         }
@@ -335,10 +335,10 @@ impl ModbusRTU for Modbus {
     ///
     /// let _ = modbus.rtu_set_rts_delay(100).unwrap();
     /// ```
-    fn rtu_set_rts_delay(&mut self, us: i32) -> Result<()> {
+    fn rtu_set_rts_delay(&mut self, us: i32) -> Result<(), Error> {
         unsafe {
-            match libmodbus_sys::modbus_rtu_set_rts_delay(self.ctx, us as c_int) {
-                -1 => bail!(Error::last_os_error()),
+            match ffi::modbus_rtu_set_rts_delay(self.ctx, us as c_int) {
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }

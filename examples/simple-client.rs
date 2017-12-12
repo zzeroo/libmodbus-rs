@@ -1,19 +1,10 @@
-// `error_chain!` can recurse deeply
-#![recursion_limit = "1024"]
-
-#[macro_use]
-extern crate error_chain;
 extern crate clap;
+#[macro_use] extern crate failure;
 extern crate libmodbus_rs;
 
-mod errors {
-    // Create the Error, ErrorKind, ResultExt, and Result types
-    error_chain!{}
-}
-
-use errors::*;
-use libmodbus_rs::{Modbus, ModbusRTU, ModbusTCP, ModbusTCPPI};
 use clap::{App, Arg, ArgMatches};
+use failure::Error;
+use libmodbus_rs::{Modbus, ModbusRTU, ModbusTCP, ModbusTCPPI};
 
 
 
@@ -26,7 +17,7 @@ enum Backend {
 
 const SERVER_ID: u8 = 247;
 
-fn run(matches: &ArgMatches) -> Result<()> {
+fn run(matches: &ArgMatches) -> Result<(), Error> {
     let backend;
     let mut modbus: Modbus;
 
@@ -40,19 +31,19 @@ fn run(matches: &ArgMatches) -> Result<()> {
     match backend {
         Backend::RTU => {
             let serial_interface = matches.value_of("serial_interface").unwrap_or("/dev/ttyUSB1");
-            modbus = Modbus::new_rtu(&serial_interface, 9600, 'N', 8, 1).chain_err(|| "unable to create modbus RTU context")?;
-            modbus.set_slave(SERVER_ID).chain_err(|| format!("could not set slave address {}", SERVER_ID))?;
+            modbus = Modbus::new_rtu(&serial_interface, 9600, 'N', 8, 1)?;
+            modbus.set_slave(SERVER_ID)?;
         },
         Backend::TCP => {
-            modbus = Modbus::new_tcp("127.0.0.1", 1502).chain_err(|| "unable to create modbus TCP context")?;
+            modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
         },
         Backend::TCPPI => {
-            modbus = Modbus::new_tcp_pi("::1", "1502").chain_err(|| "unable to create modbus TCPv6 context")?;
+            modbus = Modbus::new_tcp_pi("::1", "1502")?;
         },
     }
 
-    modbus.set_debug(true).chain_err(|| "could not set modbus DEBUG mode")?;
-    modbus.connect().chain_err(|| "could not connect")?;
+    modbus.set_debug(true)?;
+    modbus.connect()?;
 
     // Work HERE
 

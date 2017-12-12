@@ -1,8 +1,9 @@
+#[macro_use] extern crate failure;
 extern crate libmodbus_rs;
 
 mod unit_test_config;
 
-use libmodbus_rs::errors::*;
+use failure::Error;
 use libmodbus_rs::prelude::*;
 use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, ModbusTCPPI, ModbusRTU,
                    Exception, FunctionCode, Timeout, ErrorRecoveryMode};
@@ -35,7 +36,7 @@ fn equal_dword(tab_reg: &[u16], value: u32) -> bool {
     tab_reg[0] as u32 == (value >> 16) && tab_reg[1] as u32 == (value & 0xFFFF)
 }
 
-fn run() -> Result<()> {
+fn run() -> Result<(), Error> {
     const NB_REPORT_SLAVE_ID: usize = 10;
     let backend;
 
@@ -67,15 +68,14 @@ fn run() -> Result<()> {
             Backend::RTU => {
                 Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1)
             }
-        }.chain_err(|| "could not select backend")?;
+        }?;
 
     modbus.set_debug(true).expect("could not set modbus DEBUG mode");
     modbus.set_error_recovery(Some(&[ErrorRecoveryMode::Link, ErrorRecoveryMode::Protocol]))
         .expect("could not set error recovery mode");
 
     if backend == Backend::RTU {
-        modbus.set_slave(SERVER_ID)
-            .chain_err(|| format!("could not set modbus slave address {}", SERVER_ID))?;
+        modbus.set_slave(SERVER_ID)?;
     }
 
     let old_response_timeout = modbus.get_response_timeout()
@@ -643,10 +643,10 @@ fn run() -> Result<()> {
     print!("\nALL TESTS PASS WITH SUCCESS.\n");
     let success = true;
 
-    if success { Ok(()) } else { Err(ErrorKind::UnitTestClientFailure.into()) }
+    if success { Ok(()) } else { Err(format_err!("Unit test client failure")) }
 }
 
-fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
+fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<(), Error> {
     /* Read requests */
     const READ_RAW_REQ_LEN: i32 = 6;
     let slave = match backend {
@@ -792,7 +792,7 @@ fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
 fn send_crafted_request(modbus: &mut Modbus, function: FunctionCode,
     mut req: &mut [u8], req_len: i32,
     max_value: u16, bytes: u16,
-    backend_length: u16, backend_offset: u16) -> Result<()>
+    backend_length: u16, backend_offset: u16) -> Result<(), Error>
 {
     let mut rsp = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH];
 
