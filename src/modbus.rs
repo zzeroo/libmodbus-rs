@@ -45,29 +45,31 @@ pub enum Exception {
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum FunctionCode {
     /// 0x01 Read Coils
-    ReadCoils = 1,
+    ReadCoils = 0x01,
     /// 0x02 Read Discrete Inputs
-    ReadDiscreteInputs = 2,
+    ReadDiscreteInputs = 0x02,
     /// 0x03 Read Multiple Holding Registers
-    ReadHoldingRegisters = 3,
+    ReadHoldingRegisters = 0x03,
     /// 0x04 Read Input Registers
-    ReadInputRegisters = 4,
+    ReadInputRegisters = 0x04,
     /// 0x05 Write Single Coil
-    WriteSingleCoil = 5,
+    WriteSingleCoil = 0x05,
     /// 0x06 Write Single Holding Register
-    WriteSingleRegister = 6,
+    WriteSingleRegister = 0x06,
     /// 0x07 Read Exception Status
-    ReadExceptionStatus = 7,
+    ReadExceptionStatus = 0x07,
+    /// 0x08 Diagnostic
+    Diagnostic = 0x08,
     /// 0x15 Write Multiple Coils
-    WriteMultipleCoils = 15,
+    WriteMultipleCoils = 0x15,
     /// 0x16 Write Multiple Holding Registers
-    WriteMultipleRegisters = 16,
+    WriteMultipleRegisters = 0x16,
     /// 0x17 Report Slave ID
-    ReportSlaveId = 17,
+    ReportSlaveId = 0x17,
     /// 0x22 Mask Write Register
-    MaskWriteRegister = 22,
+    MaskWriteRegister = 0x22,
     /// 0x23 Read/Write Multiple Registers
-    WriteAndReadRegisters = 23,
+    WriteAndReadRegisters = 0x23,
 }
 
 #[derive(Debug, Copy, Clone)]
