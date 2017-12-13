@@ -3,22 +3,13 @@
 // FIXME: check unused_variables
 #![allow(unused_variables)]
 
-// `error_chain!` can recurse deeply
-#![recursion_limit = "1024"]
-
-#[macro_use]
-extern crate error_chain;
 extern crate clap;
+#[macro_use] extern crate failure;
 extern crate libmodbus_rs;
 
-mod errors {
-    // Create the Error, ErrorKind, ResultExt, and Result types
-    error_chain!{}
-}
-
-use errors::*;
-use libmodbus_rs::{Modbus, ModbusRTU, ModbusTCP, ModbusTCPPI};
 use clap::{App, Arg, ArgMatches};
+use failure::Error;
+use libmodbus_rs::{Modbus, ModbusRTU, ModbusTCP, ModbusTCPPI};
 
 #[derive(Debug, Eq, PartialEq)]
 enum Backend {
@@ -27,7 +18,7 @@ enum Backend {
     RTU,
 }
 
-fn run(matches: &ArgMatches) -> Result<()> {
+fn run(matches: &ArgMatches) -> Result<(), Error> {
     let backend;
     let modbus: Modbus;
 
@@ -42,21 +33,21 @@ fn run(matches: &ArgMatches) -> Result<()> {
         Backend::RTU => {
             let mut _query = vec![0u8; Modbus::RTU_MAX_ADU_LENGTH as usize];
             let serial_interface = matches.value_of("serial_interface").unwrap_or("/dev/ttyUSB0");
-            let mut _modbus = Modbus::new_rtu(&serial_interface, 115200, 'N', 8, 1).chain_err(|| "could not create modbus RTU context")?;
+            let mut _modbus = Modbus::new_rtu(&serial_interface, 115200, 'N', 8, 1)?;
         },
         Backend::TCP => {
             let mut _query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH as usize];
-            let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).chain_err(|| "could not create modbus TCP context")?;
+            let mut modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
 
-            let mut socket = modbus.tcp_listen(1).chain_err(|| "could not listen")?;
-            modbus.tcp_accept(&mut socket).chain_err(|| "unable to accept TCP socket")?;
+            let mut socket = modbus.tcp_listen(1)?;
+            modbus.tcp_accept(&mut socket)?;
         },
         Backend::TCPPI => {
             let mut _query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH as usize];
-            let mut modbus = Modbus::new_tcp_pi("::0", "1502").chain_err(|| "could not create modbus TCPv6 context")?;
+            let mut modbus = Modbus::new_tcp_pi("::0", "1502")?;
 
-            let mut socket = modbus.tcp_listen(1).chain_err(|| "could not listen")?;
-            modbus.tcp_accept(&mut socket).chain_err(|| "unable to cccept TCP socket")?;
+            let mut socket = modbus.tcp_listen(1)?;
+            modbus.tcp_accept(&mut socket)?;
         },
     }
 

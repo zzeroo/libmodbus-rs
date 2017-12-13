@@ -1,8 +1,8 @@
-use errors::*;
-use libmodbus_sys;
+use error::*;
+use libmodbus_sys as ffi;
 use modbus_mapping::ModbusMapping;
 use modbus::Modbus;
-use std::io::Error;
+use failure::Error;
 
 
 /// The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus
@@ -14,8 +14,8 @@ use std::io::Error;
 ///     - [`reply()`](struct.Modbus.html#method.reply), [`reply_exception()`](struct.Modbus.html#method.reply_exception)
 ///
 pub trait ModbusServer {
-    fn receive(&self, request: &mut [u8]) -> Result<i32>;
-    fn reply(&self, request: &[u8], request_len: i32, modbus_mapping: &ModbusMapping) -> Result<i32>;
+    fn receive(&self, request: &mut [u8]) -> Result<i32, Error>;
+    fn reply(&self, request: &[u8], request_len: i32, modbus_mapping: &ModbusMapping) -> Result<i32, Error>;
 }
 
 impl ModbusServer for Modbus {
@@ -38,13 +38,13 @@ impl ModbusServer for Modbus {
     ///
     /// assert!(modbus.receive(&mut query).is_ok());
     /// ```
-    fn receive(&self, request: &mut [u8]) -> Result<i32> {
+    fn receive(&self, request: &mut [u8]) -> Result<i32, Error> {
         assert!(request.len() <= Modbus::MAX_ADU_LENGTH as usize);
 
         unsafe {
-            let len = libmodbus_sys::modbus_receive(self.ctx, request.as_mut_ptr());
+            let len = ffi::modbus_receive(self.ctx, request.as_mut_ptr());
             match len {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 len => Ok(len),
             }
         }
@@ -70,12 +70,12 @@ impl ModbusServer for Modbus {
     ///
     /// assert!(modbus.receive(&mut query).is_ok());
     /// ```
-    fn reply(&self, request: &[u8], request_len: i32, modbus_mapping: &ModbusMapping) -> Result<i32> {
+    fn reply(&self, request: &[u8], request_len: i32, modbus_mapping: &ModbusMapping) -> Result<i32, Error> {
         unsafe {
             let len =
-                libmodbus_sys::modbus_reply(self.ctx, request.as_ptr(), request_len, modbus_mapping.modbus_mapping);
+                ffi::modbus_reply(self.ctx, request.as_ptr(), request_len, modbus_mapping.modbus_mapping);
             match len {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 len => Ok(len),
             }
         }

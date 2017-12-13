@@ -1,8 +1,8 @@
-use errors::*;
-use libmodbus_sys;
+use error::*;
+use libmodbus_sys as ffi;
 use modbus::Modbus;
 use std::ffi::CString;
-use std::io::Error;
+use failure::Error;
 
 
 /// The TCP PI (Protocol Independent) backend implements a Modbus variant used for communications over TCP IPv4 and
@@ -16,9 +16,9 @@ use std::io::Error;
 ///     - [`new_tcp_pi()`](struct.Modbus.html#method.new_tcp_pi)
 ///
 pub trait ModbusTCPPI {
-    fn new_tcp_pi(node: &str, service: &str) -> Result<Modbus>;
-    fn tcp_pi_accept(&mut self, socket: &mut i32) -> Result<i32>;
-    fn tcp_pi_listen(&mut self, num_connection: i32) -> Result<i32>;
+    fn new_tcp_pi(node: &str, service: &str) -> Result<Modbus, Error>;
+    fn tcp_pi_accept(&mut self, socket: &mut i32) -> Result<i32, Error>;
+    fn tcp_pi_listen(&mut self, num_connection: i32) -> Result<i32, Error>;
 }
 
 impl ModbusTCPPI for Modbus {
@@ -48,14 +48,14 @@ impl ModbusTCPPI for Modbus {
     ///     Err(e) => println!("Error: {}", e),
     /// }
     /// ```
-    fn new_tcp_pi(node: &str, service: &str) -> Result<Modbus> {
+    fn new_tcp_pi(node: &str, service: &str) -> Result<Modbus, Error> {
         unsafe {
             let node = CString::new(node).unwrap();
             let service = CString::new(service).unwrap();
-            let ctx = libmodbus_sys::modbus_new_tcp_pi(node.as_ptr(), service.as_ptr());
+            let ctx = ffi::modbus_new_tcp_pi(node.as_ptr(), service.as_ptr());
 
             if ctx.is_null() {
-                bail!(Error::last_os_error())
+                bail!(::std::io::Error::last_os_error())
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -80,10 +80,10 @@ impl ModbusTCPPI for Modbus {
     /// let mut socket = modbus.tcp_pi_listen(1).unwrap();
     /// modbus.tcp_pi_accept(&mut socket).unwrap();
     /// ```
-    fn tcp_pi_accept(&mut self, socket: &mut i32) -> Result<i32> {
+    fn tcp_pi_accept(&mut self, socket: &mut i32) -> Result<i32, Error> {
         unsafe {
-            match libmodbus_sys::modbus_tcp_pi_accept(self.ctx, socket) {
-                -1 => bail!(Error::last_os_error()),
+            match ffi::modbus_tcp_pi_accept(self.ctx, socket) {
+                -1 => bail!(::std::io::Error::last_os_error()),
                 socket => Ok(socket),
             }
         }
@@ -123,10 +123,10 @@ impl ModbusTCPPI for Modbus {
     ///     modbus.reply(&query, request_len, &modbus_mapping);
     /// }
     /// ```
-    fn tcp_pi_listen(&mut self, num_connection: i32) -> Result<i32> {
+    fn tcp_pi_listen(&mut self, num_connection: i32) -> Result<i32, Error> {
         unsafe {
-            match libmodbus_sys::modbus_tcp_pi_listen(self.ctx, num_connection) {
-                -1 => bail!(Error::last_os_error()),
+            match ffi::modbus_tcp_pi_listen(self.ctx, num_connection) {
+                -1 => bail!(::std::io::Error::last_os_error()),
                 socket => Ok(socket),
             }
         }

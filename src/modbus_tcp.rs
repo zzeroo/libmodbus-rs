@@ -1,9 +1,8 @@
-use errors::*;
-use libmodbus_sys;
+use error::*;
+use libmodbus_sys as ffi;
 use modbus::Modbus;
 use std::ffi::CString;
-use std::io::Error;
-
+use failure::Error;
 
 /// The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
 /// It does not require a checksum calculation as lower layer takes care of the same.
@@ -12,9 +11,9 @@ use std::io::Error;
 ///     - [`new_tcp()`](struct.Modbus.html#method.new_tcp)
 ///
 pub trait ModbusTCP {
-    fn new_tcp(ip: &str, port: i32) -> Result<Modbus>;
-    fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32>;
-    fn tcp_listen(&mut self, num_connection: i32) -> Result<i32>;
+    fn new_tcp(ip: &str, port: i32) -> Result<Modbus, Error>;
+    fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32, Error>;
+    fn tcp_listen(&mut self, num_connection: i32) -> Result<i32, Error>;
 }
 
 impl ModbusTCP for Modbus {
@@ -41,13 +40,13 @@ impl ModbusTCP for Modbus {
     ///     Err(e) => println!("Error: {}", e),
     /// }
     /// ```
-    fn new_tcp(ip: &str, port: i32) -> Result<Modbus> {
+    fn new_tcp(ip: &str, port: i32) -> Result<Modbus, Error> {
         unsafe {
             let ip = CString::new(ip).unwrap();
-            let ctx = libmodbus_sys::modbus_new_tcp(ip.as_ptr(), port);
+            let ctx = ffi::modbus_new_tcp(ip.as_ptr(), port);
 
             if ctx.is_null() {
-                bail!(Error::last_os_error())
+                bail!(::std::io::Error::last_os_error())
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -73,10 +72,10 @@ impl ModbusTCP for Modbus {
     ///
     /// modbus.tcp_accept(&mut socket);
     /// ```
-    fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32> {
+    fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32, Error> {
         unsafe {
-            match libmodbus_sys::modbus_tcp_accept(self.ctx, socket) {
-                -1 => bail!(Error::last_os_error()),
+            match ffi::modbus_tcp_accept(self.ctx, socket) {
+                -1 => bail!(::std::io::Error::last_os_error()),
                 socket => Ok(socket),
             }
         }
@@ -102,10 +101,10 @@ impl ModbusTCP for Modbus {
     ///
     /// let socket = modbus.tcp_listen(1);
     /// ```
-    fn tcp_listen(&mut self, num_connection: i32) -> Result<i32> {
+    fn tcp_listen(&mut self, num_connection: i32) -> Result<i32, Error> {
         unsafe {
-            match libmodbus_sys::modbus_tcp_listen(self.ctx, num_connection) {
-                -1 => bail!(Error::last_os_error()),
+            match ffi::modbus_tcp_listen(self.ctx, num_connection) {
+                -1 => bail!(::std::io::Error::last_os_error()),
                 socket => Ok(socket),
             }
         }

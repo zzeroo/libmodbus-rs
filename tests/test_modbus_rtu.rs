@@ -16,7 +16,7 @@ fn rtu_get_serial_mode() {
 
 #[test]
 #[ignore]
-// FIXME: Why is serial mode RS485 not possible? See examples/test.c and examples/test.rs
+// FIXME: Why is serial mode RS485 not possible?
 fn rtu_set_serial_mode() {
     let modbus = Modbus::new_rtu("/dev/ttyS0", 115200, 'N', 8, 1).unwrap();
     assert_eq!(modbus.rtu_get_serial_mode().unwrap(), SerialMode::RtuRS232);
