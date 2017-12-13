@@ -134,7 +134,7 @@ fn run() -> Result<(), Error> {
                 ];
 
                 println!("Reply with an invalid TID or slave");
-                modbus.send_raw_request(&mut raw_req, (RAW_REQ_LENGTH * std::mem::size_of::<u8>()) as i32).unwrap();
+                modbus.send_raw_request(&mut raw_req, RAW_REQ_LENGTH).unwrap();
                 continue;
             } else if query[header_length + 1] as u16 == UT_REGISTERS_ADDRESS_SLEEP_500_MS {
                 println!("Sleep 0.5 s before replying");

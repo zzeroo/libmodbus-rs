@@ -40,7 +40,7 @@ pub trait ModbusClient {
                                 read_num: u16, dest: &mut [u16])
                                 -> Result<u16, Error>;
     fn mask_write_register(&self, address: u16, and_mask: u16, or_mask: u16) -> Result<(), Error>;
-    fn send_raw_request(&self, raw_request: &mut [u8], lenght: i32) -> Result<u16, Error>;
+    fn send_raw_request(&self, raw_request: &mut [u8], lenght: usize) -> Result<u16, Error>;
     fn receive_confirmation(&self, response: &mut [u8]) -> Result<u16, Error>;
 }
 
@@ -520,18 +520,20 @@ impl ModbusClient for Modbus {
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, FunctionCode};
+    ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::ReadHoldingRegisters as u8, 0x00, 0x01, 0x0, 0x05];
     /// let mut response = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH];
+    /// let request_len = raw_request.len();
     ///
-    /// assert_eq!(modbus.send_raw_request(&mut raw_request, 6 * std::mem::size_of::<u8>() as i32).unwrap(), 12);
+    /// assert_eq!(modbus.send_raw_request(&mut raw_request, request_len).unwrap(), 6);
     /// assert!(modbus.receive_confirmation(&mut response).is_ok());
     /// ```
-    fn send_raw_request(&self, raw_request: &mut [u8], lenght: i32) -> Result<u16, Error> {
+    fn send_raw_request(&self, raw_request: &mut [u8], lenght: usize) -> Result<u16, Error> {
         unsafe {
             match ffi::modbus_send_raw_request(self.ctx,
                                                          raw_request.as_mut_ptr(),
-                                                         lenght) {
+                                                         lenght as c_int) {
                 -1 => bail!(::std::io::Error::last_os_error()),
                 num => Ok(num as u16),
             }
