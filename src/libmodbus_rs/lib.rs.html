@@ -414,8 +414,7 @@
 <span class="comment">// `error_chain!` can recurse deeply(3)</span>
 <span class="attribute">#![<span class="ident">recursion_limit</span> <span class="op">=</span> <span class="string">&quot;1024&quot;</span>]</span>
 
-<span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">error_chain</span>;
+<span class="attribute">#[<span class="ident">macro_use</span>]</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">failure</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libc</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libmodbus_sys</span>;
 
@@ -426,9 +425,10 @@
 <span class="kw">mod</span> <span class="ident">modbus_tcp_pi</span>;
 <span class="kw">mod</span> <span class="ident">modbus_tcp</span>;
 <span class="kw">mod</span> <span class="ident">modbus</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">errors</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">error</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">prelude</span>;
 
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus_client</span>::<span class="ident">ModbusClient</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus_mapping</span>::<span class="ident">ModbusMapping</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">modbus_rtu</span>::{<span class="ident">ModbusRTU</span>, <span class="ident">RequestToSendMode</span>, <span class="ident">SerialMode</span>};
@@ -462,7 +462,7 @@
                     <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>

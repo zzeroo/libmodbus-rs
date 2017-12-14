@@ -402,10 +402,10 @@
 <span id="357">357</span>
 <span id="358">358</span>
 </pre><pre class="rust ">
-<span class="kw">use</span> <span class="ident">errors</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">error</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_int</span>, <span class="ident">c_uint</span>};
 <span class="kw">use</span> <span class="ident">libmodbus_sys</span> <span class="kw">as</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>;
+<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Error</span>;
 
 
 <span class="doccomment">/// To handle the mapping of your Modbus data, you must use this struct</span>
@@ -445,7 +445,7 @@
     <span class="doccomment">/// let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">number_bits</span>: <span class="ident">u32</span>, <span class="ident">number_input_bits</span>: <span class="ident">u32</span>, <span class="ident">number_registers</span>: <span class="ident">u32</span>, <span class="ident">number_input_registers</span>: <span class="ident">u32</span>)
-               <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ModbusMapping</span><span class="op">&gt;</span> {
+               <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ModbusMapping</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span>
                 <span class="ident">ffi</span>::<span class="ident">modbus_mapping_new</span>(<span class="ident">number_bits</span> <span class="kw">as</span> <span class="ident">c_int</span>,
@@ -453,7 +453,7 @@
                                         <span class="ident">number_registers</span> <span class="kw">as</span> <span class="ident">c_int</span>,
                                         <span class="ident">number_input_registers</span> <span class="kw">as</span> <span class="ident">c_int</span>);
             <span class="kw">if</span> <span class="ident">modbus_mapping</span>.<span class="ident">is_null</span>() {
-                <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())
+                <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>())
             } <span class="kw">else</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">ModbusMapping</span> { <span class="ident">modbus_mapping</span>: <span class="ident">modbus_mapping</span> })
             }
@@ -509,7 +509,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_start_address</span>(<span class="ident">start_bits</span>: <span class="ident">u16</span>, <span class="ident">number_bits</span>: <span class="ident">u16</span>, <span class="ident">start_input_bits</span>: <span class="ident">u16</span>, <span class="ident">number_input_bits</span>: <span class="ident">u16</span>,
                              <span class="ident">start_registers</span>: <span class="ident">u16</span>, <span class="ident">number_registers</span>: <span class="ident">u16</span>, <span class="ident">start_input_registers</span>: <span class="ident">u16</span>,
                              <span class="ident">number_input_registers</span>: <span class="ident">u16</span>)
-                             <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ModbusMapping</span><span class="op">&gt;</span> {
+                             <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">ModbusMapping</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">modbus_mapping</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">modbus_mapping_new_start_address</span>(<span class="ident">start_bits</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
                                                                        <span class="ident">number_bits</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
@@ -520,7 +520,7 @@
                                                                        <span class="ident">start_input_registers</span> <span class="kw">as</span> <span class="ident">c_uint</span>,
                                                                        <span class="ident">number_input_registers</span> <span class="kw">as</span> <span class="ident">c_uint</span>);
             <span class="kw">if</span> <span class="ident">modbus_mapping</span>.<span class="ident">is_null</span>() {
-                <span class="macro">bail</span><span class="macro">!</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())
+                <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>())
             } <span class="kw">else</span> {
                 <span class="prelude-val">Ok</span>(<span class="ident">ModbusMapping</span> { <span class="ident">modbus_mapping</span>: <span class="ident">modbus_mapping</span> })
             }
@@ -786,7 +786,7 @@
                     <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>

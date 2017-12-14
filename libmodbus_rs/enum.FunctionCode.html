@@ -29,7 +29,7 @@
 
     <nav class="sidebar">
         <a href='../libmodbus_rs/index.html'><img src='https://zzeroo.github.io/share/zzeroo-logo.png' alt='logo' width='100'></a>
-        <p class='location'>Enum FunctionCode</p><div class="block items"><li><a href="#variants">Variants</a></li><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Clone">Clone</a><a href="#impl-Copy">Copy</a><a href="#impl-PartialEq">PartialEq</a><a href="#impl-Eq">Eq</a></div></div><p class='location'><a href='index.html'>libmodbus_rs</a></p><script>window.sidebarCurrent = {name: 'FunctionCode', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'>Enum FunctionCode</p><div class="block items"><a class="sidebar-title" href="#variants">Variants</a><div class="sidebar-links"><a href="#variant.ReadCoils">ReadCoils</a><a href="#variant.ReadDiscreteInputs">ReadDiscreteInputs</a><a href="#variant.ReadHoldingRegisters">ReadHoldingRegisters</a><a href="#variant.ReadInputRegisters">ReadInputRegisters</a><a href="#variant.WriteSingleCoil">WriteSingleCoil</a><a href="#variant.WriteSingleRegister">WriteSingleRegister</a><a href="#variant.ReadExceptionStatus">ReadExceptionStatus</a><a href="#variant.Diagnostic">Diagnostic</a><a href="#variant.WriteMultipleCoils">WriteMultipleCoils</a><a href="#variant.WriteMultipleRegisters">WriteMultipleRegisters</a><a href="#variant.ReportSlaveId">ReportSlaveId</a><a href="#variant.MaskWriteRegister">MaskWriteRegister</a><a href="#variant.WriteAndReadRegisters">WriteAndReadRegisters</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Clone">Clone</a><a href="#impl-Copy">Copy</a><a href="#impl-PartialEq">PartialEq</a><a href="#impl-Eq">Eq</a></div></div><p class='location'><a href='index.html'>libmodbus_rs</a></p><script>window.sidebarCurrent = {name: 'FunctionCode', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -48,7 +48,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#46-71' title='goto source code'>[src]</a></span></h1>
+               </span><a class='srclink' href='../src/libmodbus_rs/modbus.rs.html#46-73' title='goto source code'>[src]</a></span></h1>
 <pre class='rust enum'>pub enum FunctionCode {
     ReadCoils,
     ReadDiscreteInputs,
@@ -57,6 +57,7 @@
     WriteSingleCoil,
     WriteSingleRegister,
     ReadExceptionStatus,
+    Diagnostic,
     WriteMultipleCoils,
     WriteMultipleRegisters,
     ReportSlaveId,
@@ -74,6 +75,7 @@
 </div><span id="variant.WriteSingleCoil" class="variant small-section-header"><a href="#variant.WriteSingleCoil" class="anchor field"></a><span id='WriteSingleCoil.v' class='invisible'><code>WriteSingleCoil</code></span></span><div class='docblock'><p>0x05 Write Single Coil</p>
 </div><span id="variant.WriteSingleRegister" class="variant small-section-header"><a href="#variant.WriteSingleRegister" class="anchor field"></a><span id='WriteSingleRegister.v' class='invisible'><code>WriteSingleRegister</code></span></span><div class='docblock'><p>0x06 Write Single Holding Register</p>
 </div><span id="variant.ReadExceptionStatus" class="variant small-section-header"><a href="#variant.ReadExceptionStatus" class="anchor field"></a><span id='ReadExceptionStatus.v' class='invisible'><code>ReadExceptionStatus</code></span></span><div class='docblock'><p>0x07 Read Exception Status</p>
+</div><span id="variant.Diagnostic" class="variant small-section-header"><a href="#variant.Diagnostic" class="anchor field"></a><span id='Diagnostic.v' class='invisible'><code>Diagnostic</code></span></span><div class='docblock'><p>0x08 Diagnostic</p>
 </div><span id="variant.WriteMultipleCoils" class="variant small-section-header"><a href="#variant.WriteMultipleCoils" class="anchor field"></a><span id='WriteMultipleCoils.v' class='invisible'><code>WriteMultipleCoils</code></span></span><div class='docblock'><p>0x15 Write Multiple Coils</p>
 </div><span id="variant.WriteMultipleRegisters" class="variant small-section-header"><a href="#variant.WriteMultipleRegisters" class="anchor field"></a><span id='WriteMultipleRegisters.v' class='invisible'><code>WriteMultipleRegisters</code></span></span><div class='docblock'><p>0x16 Write Multiple Holding Registers</p>
 </div><span id="variant.ReportSlaveId" class="variant small-section-header"><a href="#variant.ReportSlaveId" class="anchor field"></a><span id='ReportSlaveId.v' class='invisible'><code>ReportSlaveId</code></span></span><div class='docblock'><p>0x17 Report Slave ID</p>
@@ -120,7 +122,7 @@
                     <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>

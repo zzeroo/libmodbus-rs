@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/smueller/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.3/src/symbolize/mod.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/smueller/.cargo/registry/src/github.com-1ecc6299db9ec823/backtrace-0.3.4/src/symbolize/mod.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>mod.rs.html -- source</title>
@@ -332,6 +332,7 @@
 <span id="287">287</span>
 <span id="288">288</span>
 <span id="289">289</span>
+<span id="290">290</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cpp_demangle&quot;</span>))]</span>
@@ -598,6 +599,7 @@
         <span class="kw">use</span> <span class="self">self</span>::<span class="ident">gimli</span>::<span class="ident">Symbol</span> <span class="kw">as</span> <span class="ident">SymbolImp</span>;
     } <span class="kw">else</span> <span class="kw">if</span> <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;libbacktrace&quot;</span>,
                         <span class="ident">unix</span>,
+                        <span class="ident">not</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;fuchsia&quot;</span>),
                         <span class="ident">not</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;emscripten&quot;</span>),
                         <span class="ident">not</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;macos&quot;</span>),
                         <span class="ident">not</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;ios&quot;</span>)))]</span> {
@@ -648,7 +650,7 @@
                     <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>

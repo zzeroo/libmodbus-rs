@@ -47,11 +47,15 @@
 <span id="2">2</span>
 <span id="3">3</span>
 <span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
 </pre><pre class="rust ">
 <span class="doccomment">//! None type dependend tool function to work with the modbus data</span>
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">modbus</span>::{<span class="ident">set_bits_from_byte</span>, <span class="ident">set_bits_from_bytes</span>, <span class="ident">get_byte_from_bits</span>, <span class="ident">get_float_abcd</span>, <span class="ident">set_float_abcd</span>,
                        <span class="ident">get_float_badc</span>, <span class="ident">set_float_badc</span>, <span class="ident">get_float_cdab</span>, <span class="ident">set_float_cdab</span>, <span class="ident">get_float_dcba</span>, <span class="ident">set_float_dcba</span>};
+
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Error</span>;
 </pre>
 </section>
     <section id='search' class="content hidden"></section>
@@ -78,7 +82,7 @@
                     <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>

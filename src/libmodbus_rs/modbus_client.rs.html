@@ -627,12 +627,12 @@
 <span id="582">582</span>
 <span id="583">583</span>
 <span id="584">584</span>
+<span id="585">585</span>
 </pre><pre class="rust ">
-<span class="kw">use</span> <span class="ident">errors</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">c_int</span>;
 <span class="kw">use</span> <span class="ident">libmodbus_sys</span> <span class="kw">as</span> <span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="ident">modbus</span>::<span class="ident">Modbus</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>;
+<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Error</span>;
 
 
 <span class="doccomment">/// The Modbus protocol defines different data types and functions to read and write them from/to remote devices.</span>
@@ -658,46 +658,46 @@
 <span class="doccomment">///     - [`reply_exception()`](struct.Modbus.html#method.reply_exception)</span>
 <span class="doccomment">///</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ModbusClient</span> {
-    <span class="kw">fn</span> <span class="ident">read_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">read_input_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">read_input_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">report_slave_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">max_dest</span>: <span class="ident">usize</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">write_bit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">status</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">write_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">value</span>: <span class="ident">u16</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">write_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">read_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">read_input_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">read_input_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">report_slave_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">max_dest</span>: <span class="ident">usize</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">write_bit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">status</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">write_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">value</span>: <span class="ident">u16</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">write_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">write_and_read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">write_address</span>: <span class="ident">u16</span>, <span class="ident">write_num</span>: <span class="ident">u16</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>], <span class="ident">read_address</span>: <span class="ident">u16</span>,
                                 <span class="ident">read_num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>])
-                                <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">mask_write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">and_mask</span>: <span class="ident">u16</span>, <span class="ident">or_mask</span>: <span class="ident">u16</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">send_raw_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">raw_request</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>], <span class="ident">lenght</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">receive_confirmation</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>;
+                                <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">mask_write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">and_mask</span>: <span class="ident">u16</span>, <span class="ident">or_mask</span>: <span class="ident">u16</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">send_raw_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">raw_request</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>], <span class="ident">lenght</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">receive_confirmation</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 }
 
 <span class="comment">// Convert the given Error (last_os_error()) to a libmodbus Error</span>
 <span class="comment">//</span>
 <span class="comment">// TODO: this looks ugly, is there a better way?</span>
 <span class="comment">// FIXME: Yeah fix me!</span>
-<span class="kw">fn</span> <span class="ident">get_error</span>(<span class="ident">error</span>: <span class="ident">Error</span>) <span class="op">-&gt;</span> ::<span class="ident">errors</span>::<span class="ident">Error</span> {
-    <span class="kw">match</span> <span class="ident">error</span>.<span class="ident">raw_os_error</span>() {
-        <span class="prelude-val">Some</span>(<span class="number">112345679</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">IllegalFunction</span>.<span class="ident">into</span>(),           <span class="comment">// Illegal function</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345680</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">IllegalDataAddress</span>.<span class="ident">into</span>(),        <span class="comment">// Illegal data address</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345681</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">IllegalDataValue</span>.<span class="ident">into</span>(),          <span class="comment">// Illegal data value</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345682</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">SlaveDeviceOrServerFailure</span>.<span class="ident">into</span>(),<span class="comment">// Slave device or server failure</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345683</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">Acknowledge</span>.<span class="ident">into</span>(),               <span class="comment">// Acknowledge</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345684</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">SlaveDeviceOrServerIsBusy</span>.<span class="ident">into</span>(), <span class="comment">// Slave device or server is busy</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345685</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">NegativeAcknowledge</span>.<span class="ident">into</span>(),       <span class="comment">// Negative acknowledge</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345686</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">MemoryParityError</span>.<span class="ident">into</span>(),         <span class="comment">// Memory parity error</span>
-                                                                        <span class="comment">// Unknown error 112345687</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345688</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">GatewayPathUnavailable</span>.<span class="ident">into</span>(),        <span class="comment">// Gateway path unavailable</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345689</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">TargetDeviceFailedToRespond</span>.<span class="ident">into</span>(),   <span class="comment">// Target device failed to respond</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345690</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">InvalidCRC</span>.<span class="ident">into</span>(),                    <span class="comment">// Invalid CRC</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345691</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">InvalidData</span>.<span class="ident">into</span>(),                   <span class="comment">// Invalid data</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345692</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">InvalidExceptionCode</span>.<span class="ident">into</span>(),          <span class="comment">// Invalid exception code</span>
-                                                                            <span class="comment">// Unknown error 112345693</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345694</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">TooManyData</span>.<span class="ident">into</span>(),                   <span class="comment">// Too many data</span>
-        <span class="prelude-val">Some</span>(<span class="number">112345695</span>) <span class="op">=&gt;</span> <span class="ident">ErrorKind</span>::<span class="ident">ResponseNotFromRequestedSlave</span>.<span class="ident">into</span>(), <span class="comment">// Response not from requested slave</span>
+<span class="kw">fn</span> <span class="ident">get_error</span>(<span class="ident">error</span>: <span class="ident">Error</span>) <span class="op">-&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">match</span> <span class="ident">error</span> {
+        <span class="comment">// Some(112345679) =&gt; ErrorKind::IllegalFunction.into(),           // Illegal function</span>
+        <span class="comment">// Some(112345680) =&gt; ErrorKind::IllegalDataAddress.into(),        // Illegal data address</span>
+        <span class="comment">// Some(112345681) =&gt; ErrorKind::IllegalDataValue.into(),          // Illegal data value</span>
+        <span class="comment">// Some(112345682) =&gt; ErrorKind::SlaveDeviceOrServerFailure.into(),// Slave device or server failure</span>
+        <span class="comment">// Some(112345683) =&gt; ErrorKind::Acknowledge.into(),               // Acknowledge</span>
+        <span class="comment">// Some(112345684) =&gt; ErrorKind::SlaveDeviceOrServerIsBusy.into(), // Slave device or server is busy</span>
+        <span class="comment">// Some(112345685) =&gt; ErrorKind::NegativeAcknowledge.into(),       // Negative acknowledge</span>
+        <span class="comment">// Some(112345686) =&gt; ErrorKind::MemoryParityError.into(),         // Memory parity error</span>
+        <span class="comment">//                                                                 // Unknown error 112345687</span>
+        <span class="comment">// Some(112345688) =&gt; ErrorKind::GatewayPathUnavailable.into(),        // Gateway path unavailable</span>
+        <span class="comment">// Some(112345689) =&gt; ErrorKind::TargetDeviceFailedToRespond.into(),   // Target device failed to respond</span>
+        <span class="comment">// Some(112345690) =&gt; ErrorKind::InvalidCRC.into(),                    // Invalid CRC</span>
+        <span class="comment">// Some(112345691) =&gt; ErrorKind::InvalidData.into(),                   // Invalid data</span>
+        <span class="comment">// Some(112345692) =&gt; ErrorKind::InvalidExceptionCode.into(),          // Invalid exception code</span>
+        <span class="comment">//                                                                     // Unknown error 112345693</span>
+        <span class="comment">// Some(112345694) =&gt; ErrorKind::TooManyData.into(),                   // Too many data</span>
+        <span class="comment">// Some(112345695) =&gt; ErrorKind::ResponseNotFromRequestedSlave.into(), // Response not from requested slave</span>
         _ <span class="op">=&gt;</span> <span class="ident">error</span>.<span class="ident">into</span>(),
     }
 }
@@ -731,10 +731,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(modbus.read_bits(0, 1, &amp;mut dest).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">read_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">read_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_read_bits</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span> <span class="kw">as</span> <span class="ident">u16</span>),
             }
         }
@@ -767,10 +767,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(modbus.read_input_bits(0, 1, &amp;mut dest).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">read_input_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">read_input_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_read_input_bits</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span> <span class="kw">as</span> <span class="ident">u16</span>),
             }
         }
@@ -802,10 +802,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(modbus.read_registers(0, 1, &amp;mut dest).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_read_registers</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span> <span class="kw">as</span> <span class="ident">u16</span>),
             }
         }
@@ -839,10 +839,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(modbus.read_input_registers(0, 1, &amp;mut dest).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">read_input_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">read_input_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_read_input_registers</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span> <span class="kw">as</span> <span class="ident">u16</span>),
             }
         }
@@ -880,11 +880,11 @@
     <span class="doccomment">/// assert!(modbus.report_slave_id(Modbus::MAX_PDU_LENGTH, &amp;mut bytes).is_ok());</span>
     <span class="doccomment">/// // assert_eq!(bytes, vec![180, 255, 76, 77, 66, 51, 46, 49, 46, 52]));</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">report_slave_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">max_dest</span>: <span class="ident">usize</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">report_slave_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">max_dest</span>: <span class="ident">usize</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
 
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_report_slave_id</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">max_dest</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span> <span class="kw">as</span> <span class="ident">u16</span>),
             }
         }
@@ -915,10 +915,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(modbus.write_bit(address, true).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">write_bit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">status</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">write_bit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">status</span>: <span class="ident">bool</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_write_bit</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">status</span> <span class="kw">as</span> <span class="ident">c_int</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(()),
                 _ <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;libmodbus API incompatible response&quot;</span>),
             }
@@ -951,10 +951,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(modbus.write_register(address, value).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">value</span>: <span class="ident">u16</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">value</span>: <span class="ident">u16</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_write_register</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">value</span> <span class="kw">as</span> <span class="ident">c_int</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(()),
                 _ <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;libmodbus API incompatible response&quot;</span>),
             }
@@ -988,10 +988,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(modbus.write_bits(address, 1, &amp;tab_bytes).unwrap(), 1);</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">write_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">write_bits</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_write_bits</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">src</span>.<span class="ident">as_ptr</span>()) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span> <span class="kw">as</span> <span class="ident">u16</span>),
             }
         }
@@ -1025,10 +1025,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert_eq!(modbus.write_registers(address, 1, &amp;tab_bytes).unwrap(), 1);</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">write_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">write_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">num</span>: <span class="ident">u16</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_write_registers</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">num</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">src</span>.<span class="ident">as_ptr</span>()) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span> <span class="kw">as</span> <span class="ident">u16</span>),
             }
         }
@@ -1071,7 +1071,7 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">fn</span> <span class="ident">write_and_read_registers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">write_address</span>: <span class="ident">u16</span>, <span class="ident">write_num</span>: <span class="ident">u16</span>, <span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u16</span>], <span class="ident">read_address</span>: <span class="ident">u16</span>,
                                 <span class="ident">read_num</span>: <span class="ident">u16</span>, <span class="ident">dest</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u16</span>])
-                                <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
+                                <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_write_and_read_registers</span>(<span class="self">self</span>.<span class="ident">ctx</span>,
                                                                  <span class="ident">write_address</span> <span class="kw">as</span> <span class="ident">c_int</span>,
@@ -1080,7 +1080,7 @@
                                                                  <span class="ident">read_address</span> <span class="kw">as</span> <span class="ident">c_int</span>,
                                                                  <span class="ident">read_num</span> <span class="kw">as</span> <span class="ident">c_int</span>,
                                                                  <span class="ident">dest</span>.<span class="ident">as_mut_ptr</span>()) {
-                                                                     <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                                                                     <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span> <span class="kw">as</span> <span class="ident">u16</span>),
             }
         }
@@ -1115,10 +1115,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(modbus.mask_write_register(1, 0xF2, 0x25).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">mask_write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">and_mask</span>: <span class="ident">u16</span>, <span class="ident">or_mask</span>: <span class="ident">u16</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">mask_write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">and_mask</span>: <span class="ident">u16</span>, <span class="ident">or_mask</span>: <span class="ident">u16</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_mask_write_register</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">address</span> <span class="kw">as</span> <span class="ident">c_int</span>, <span class="ident">and_mask</span>, <span class="ident">or_mask</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(()),
                 _ <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;libmodbus API incompatible response&quot;</span>),
             }
@@ -1151,19 +1151,21 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// ```rust,no_run</span>
     <span class="doccomment">/// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, FunctionCode};</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// let modbus = Modbus::new_tcp(&quot;127.0.0.1&quot;, 1502).unwrap();</span>
     <span class="doccomment">/// let mut raw_request: Vec&lt;u8&gt; = vec![0xFF, FunctionCode::ReadHoldingRegisters as u8, 0x00, 0x01, 0x0, 0x05];</span>
     <span class="doccomment">/// let mut response = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH];</span>
+    <span class="doccomment">/// let request_len = raw_request.len();</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// assert_eq!(modbus.send_raw_request(&amp;mut raw_request, 6 * std::mem::size_of::&lt;u8&gt;() as i32).unwrap(), 12);</span>
+    <span class="doccomment">/// assert_eq!(modbus.send_raw_request(&amp;mut raw_request, request_len).unwrap(), 6);</span>
     <span class="doccomment">/// assert!(modbus.receive_confirmation(&amp;mut response).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">send_raw_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">raw_request</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>], <span class="ident">lenght</span>: <span class="ident">i32</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">send_raw_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">raw_request</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>], <span class="ident">lenght</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_send_raw_request</span>(<span class="self">self</span>.<span class="ident">ctx</span>,
                                                          <span class="ident">raw_request</span>.<span class="ident">as_mut_ptr</span>(),
-                                                         <span class="ident">lenght</span>) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                                                         <span class="ident">lenght</span> <span class="kw">as</span> <span class="ident">c_int</span>) {
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">num</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">num</span> <span class="kw">as</span> <span class="ident">u16</span>),
             }
         }
@@ -1203,10 +1205,10 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// assert!(modbus.receive_confirmation(&amp;mut response).is_ok());</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">fn</span> <span class="ident">receive_confirmation</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">receive_confirmation</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">match</span> <span class="ident">ffi</span>::<span class="ident">modbus_receive_confirmation</span>(<span class="self">self</span>.<span class="ident">ctx</span>, <span class="ident">response</span>.<span class="ident">as_mut_ptr</span>()) {
-                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">get_error</span>(<span class="ident">Error</span>::<span class="ident">last_os_error</span>())),
+                <span class="op">-</span><span class="number">1</span> <span class="op">=&gt;</span> <span class="macro">bail</span><span class="macro">!</span>(::<span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>()),
                 <span class="ident">len</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">len</span> <span class="kw">as</span> <span class="ident">u16</span>),
             }
         }
@@ -1238,7 +1240,7 @@
                     <dd>Switch tab</dd>
                     <dt>&#9166;</dt>
                     <dd>Go to active search result</dd>
-                    <dt>+</dt>
+                    <dt style="width:31px;">+ / -</dt>
                     <dd>Collapse/expand all sections</dd>
                 </dl>
             </div>
