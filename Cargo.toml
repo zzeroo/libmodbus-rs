@@ -1,13 +1,13 @@
 [package]
 name = "libmodbus-rs"
-version = "0.8.1"
+version = "0.8.2"
 authors = ["Stefan Müller <co@zzeroo.com>"]
 readme = "README.md"
 keywords = ["modbus", "libmodbus"]
 documentation = "http://zzeroo.github.io/libmodbus-rs/libmodbus_rs/index.html"
 repository = "https://github.com/zzeroo/libmodbus-rs.git"
 homepage = "http://zzeroo.github.io/libmodbus-rs"
-description = "C bindings to libmodbus"
+description = "libmodbus bindings for Rust"
 license = "LGPL-2.1" # same as libmodbus
 categories = ["api-bindings"]
 
