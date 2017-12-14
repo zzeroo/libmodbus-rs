@@ -3,12 +3,13 @@
 // It shows how to use the ModbusTCPPI context.
 //
 extern crate libmodbus_rs;
+extern crate failure;
 
+use failure::Error;
 use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCP};
-use libmodbus_rs::errors::*; // for the `Result<T>` type
 
 
-fn run() -> Result<()> {
+fn run() -> Result<(), Error> {
     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
     let mut socket = modbus.tcp_listen(1)?;
     modbus.tcp_accept(&mut socket)?;

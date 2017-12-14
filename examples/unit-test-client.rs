@@ -1,8 +1,9 @@
+#[macro_use] extern crate failure;
 extern crate libmodbus_rs;
 
 mod unit_test_config;
 
-use libmodbus_rs::errors::*;
+use failure::Error;
 use libmodbus_rs::prelude::*;
 use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, ModbusTCPPI, ModbusRTU,
                    Exception, FunctionCode, Timeout, ErrorRecoveryMode};
@@ -35,7 +36,7 @@ fn equal_dword(tab_reg: &[u16], value: u32) -> bool {
     tab_reg[0] as u32 == (value >> 16) && tab_reg[1] as u32 == (value & 0xFFFF)
 }
 
-fn run() -> Result<()> {
+fn run() -> Result<(), Error> {
     const NB_REPORT_SLAVE_ID: usize = 10;
     let backend;
 
@@ -67,15 +68,14 @@ fn run() -> Result<()> {
             Backend::RTU => {
                 Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1)
             }
-        }.chain_err(|| "could not select backend")?;
+        }?;
 
     modbus.set_debug(true).expect("could not set modbus DEBUG mode");
     modbus.set_error_recovery(Some(&[ErrorRecoveryMode::Link, ErrorRecoveryMode::Protocol]))
         .expect("could not set error recovery mode");
 
     if backend == Backend::RTU {
-        modbus.set_slave(SERVER_ID)
-            .chain_err(|| format!("could not set modbus slave address {}", SERVER_ID))?;
+        modbus.set_slave(SERVER_ID)?;
     }
 
     let old_response_timeout = modbus.get_response_timeout()
@@ -421,11 +421,11 @@ fn run() -> Result<()> {
                                 UT_REGISTERS_NB, &mut tab_rp_registers);
 
     if backend == Backend::RTU {
-        const RAW_REQ_LENGTH: i32 = 6;
+        const RAW_REQ_LENGTH: usize = 6;
         let mut raw_req = vec![INVALID_SERVER_ID, 0x03, 0x00, 0x01, 0x01, 0x01];
         /* Too many points */
         let mut raw_invalid_req = vec![INVALID_SERVER_ID, 0x03, 0x00, 0x01, 0xFF, 0xFF];
-        const RAW_RSP_LENGTH: i32 = 7;
+        const RAW_RSP_LENGTH: usize = 7;
         let mut raw_rsp = vec![INVALID_SERVER_ID, 0x03, 0x04, 0, 0, 0, 0];
         let mut rsp = vec![0; Modbus::RTU_MAX_ADU_LENGTH];
 
@@ -441,8 +441,8 @@ fn run() -> Result<()> {
          * slave ID to simulate a communication on a RS485 bus. At first, the
          * slave will see the indication message then the confirmation, and it must
          * ignore both. */
-        modbus.send_raw_request(&mut raw_req, RAW_REQ_LENGTH * std::mem::size_of::<u8>() as i32).expect("Could not send raw request");
-        modbus.send_raw_request(&mut raw_rsp, RAW_RSP_LENGTH * std::mem::size_of::<u8>() as i32).expect("Could not send raw request");
+        modbus.send_raw_request(&mut raw_req, RAW_REQ_LENGTH).expect("Could not send raw request");
+        modbus.send_raw_request(&mut raw_rsp, RAW_RSP_LENGTH).expect("Could not send raw request");
         let rc = modbus.receive_confirmation(&mut rsp);
 
         print!("1-B/3 No response from slave {} on indication/confirmation messages: ",
@@ -450,7 +450,7 @@ fn run() -> Result<()> {
         assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Timeout", "");
 
         /* Send an INVALID request for another slave */
-        modbus.send_raw_request(&mut raw_invalid_req, RAW_REQ_LENGTH * std::mem::size_of::<u8>() as i32).expect("Could not send raw request");
+        modbus.send_raw_request(&mut raw_invalid_req, RAW_REQ_LENGTH).expect("Could not send raw request");
         let rc = modbus.receive_confirmation(&mut rsp);
 
         print!("1-C/3 No response from slave {} with invalid request: ",
@@ -643,12 +643,12 @@ fn run() -> Result<()> {
     print!("\nALL TESTS PASS WITH SUCCESS.\n");
     let success = true;
 
-    if success { Ok(()) } else { Err(ErrorKind::UnitTestClientFailure.into()) }
+    if success { Ok(()) } else { Err(format_err!("Unit test client failure")) }
 }
 
-fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
+fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<(), Error> {
     /* Read requests */
-    const READ_RAW_REQ_LEN: i32 = 6;
+    const READ_RAW_REQ_LEN: usize = 6;
     let slave = match backend {
         Backend::RTU => SERVER_ID,
         _ => Modbus::TCP_SLAVE,
@@ -661,7 +661,7 @@ fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
         0x0, 0x05
     ];
     /* Write and read registers request */
-    const RW_RAW_REQ_LEN: i32 = 13;
+    const RW_RAW_REQ_LEN: usize = 13;
     let mut rw_raw_req = vec![
         slave,
         /* function, addr to read, nb to read */
@@ -678,7 +678,7 @@ fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
         /* One data to write... */
         0x12, 0x34
     ];
-    const WRITE_RAW_REQ_LEN: i32 = 13;
+    const WRITE_RAW_REQ_LEN: usize = 13;
     let mut write_raw_req = vec![
         slave,
         /* function will be set in the loop */
@@ -691,7 +691,7 @@ fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
         0x02, 0x2B, 0x00, 0x01, 0x00, 0x64
     ];
     const INVALID_FC: u8 = 0x42;
-    const INVALID_FC_REQ_LEN: i32 = 6;
+    const INVALID_FC_REQ_LEN: usize = 6;
     let mut invalid_fc_raw_req: Vec<u8> = vec![
         slave, 0x42, 0x00, 0x00, 0x00, 0x00
     ];
@@ -778,7 +778,7 @@ fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
     }
 
     /* Test invalid function code */
-    modbus.send_raw_request(&mut invalid_fc_raw_req, INVALID_FC_REQ_LEN * std::mem::size_of::<u8>() as i32).expect("Could not set raw request");
+    modbus.send_raw_request(&mut invalid_fc_raw_req, INVALID_FC_REQ_LEN).expect("Could not set raw request");
     let rc = modbus.receive_confirmation(&mut rsp).unwrap();
     print!("Return an exception on unknown function code: ");
     assert_true!(rc == (backend_length + EXCEPTION_RC) && rsp[backend_offset as usize] == (0x80 + INVALID_FC), "");
@@ -790,9 +790,9 @@ fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<()> {
 }
 
 fn send_crafted_request(modbus: &mut Modbus, function: FunctionCode,
-    mut req: &mut [u8], req_len: i32,
+    mut req: &mut [u8], req_len: usize,
     max_value: u16, bytes: u16,
-    backend_length: u16, backend_offset: u16) -> Result<()>
+    backend_length: u16, backend_offset: u16) -> Result<(), Error>
 {
     let mut rsp = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH];
 
@@ -816,7 +816,7 @@ fn send_crafted_request(modbus: &mut Modbus, function: FunctionCode,
             }
         }
 
-        modbus.send_raw_request(&mut req, req_len * std::mem::size_of::<u8>() as i32).expect("Could not send raw request");
+        modbus.send_raw_request(&mut req, req_len).expect("Could not send raw request");
         if j == 0 {
             print!("* try function 0x{:X}: {} 0 values: ", function as u8, if bytes > 0 { "write" } else { "read" });
         } else {

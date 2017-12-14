@@ -1,5 +1,12 @@
 # libmodbus-rs
 ## [libmodbus](http://libmodbus.org/) bindings for Rust &nbsp;
+
+**This crate is an reduced version without active bindgen! I need this because our build system can not deliver rust and libclang. Please don't use in production and expect odd behavior.**
+
+Libmodbus is a free software library to send and receive data with a device that respects the Modbus protocol. That crate contains the Rust bindings for the libmodbus library (written in C).
+Like libmodbus self, this crate supports serial port and Ethernet connections for Modbus server and clients.
+
+
 [![Crates.io version](https://img.shields.io/crates/v/libmodbus-rs.svg)](https://crates.io/crates/libmodbus-rs) &nbsp;
 [![Build Status](https://travis-ci.org/zzeroo/libmodbus-rs.svg?branch=master)](https://travis-ci.org/zzeroo/libmodbus-rs) &nbsp;
 [![Coverage Status](https://coveralls.io/repos/github/zzeroo/libmodbus-rs/badge.svg?branch=master)](https://coveralls.io/github/zzeroo/libmodbus-rs?branch=master)
@@ -9,7 +16,6 @@
 [Original libmodbus documentation |][libmodbus-doc] &nbsp;
 [Github repo |][repo]
 
-**This crate is in early beta state. Please don't use in production and expect odd behavior.**
 
 This crate based on the latest libmodbus git:master branch. I plan to support the different libmodbus version via cargo's `feature` feature.
 

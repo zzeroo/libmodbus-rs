@@ -1,9 +1,9 @@
 // TODO: remove dead_code
 #![allow(dead_code)]
-use errors::*;
+use error::*;
 use libc::{c_int, c_uint};
 use libmodbus_sys as ffi;
-use std::io::Error;
+use failure::Error;
 
 /// Modbus protocol exceptions
 ///
@@ -45,29 +45,31 @@ pub enum Exception {
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum FunctionCode {
     /// 0x01 Read Coils
-    ReadCoils = 1,
+    ReadCoils = 0x01,
     /// 0x02 Read Discrete Inputs
-    ReadDiscreteInputs = 2,
+    ReadDiscreteInputs = 0x02,
     /// 0x03 Read Multiple Holding Registers
-    ReadHoldingRegisters = 3,
+    ReadHoldingRegisters = 0x03,
     /// 0x04 Read Input Registers
-    ReadInputRegisters = 4,
+    ReadInputRegisters = 0x04,
     /// 0x05 Write Single Coil
-    WriteSingleCoil = 5,
+    WriteSingleCoil = 0x05,
     /// 0x06 Write Single Holding Register
-    WriteSingleRegister = 6,
+    WriteSingleRegister = 0x06,
     /// 0x07 Read Exception Status
-    ReadExceptionStatus = 7,
+    ReadExceptionStatus = 0x07,
+    /// 0x08 Diagnostic
+    Diagnostic = 0x08,
     /// 0x15 Write Multiple Coils
-    WriteMultipleCoils = 15,
+    WriteMultipleCoils = 0x15,
     /// 0x16 Write Multiple Holding Registers
-    WriteMultipleRegisters = 16,
+    WriteMultipleRegisters = 0x16,
     /// 0x17 Report Slave ID
-    ReportSlaveId = 17,
+    ReportSlaveId = 0x17,
     /// 0x22 Mask Write Register
-    MaskWriteRegister = 22,
+    MaskWriteRegister = 0x22,
     /// 0x23 Read/Write Multiple Registers
-    WriteAndReadRegisters = 23,
+    WriteAndReadRegisters = 0x23,
 }
 
 #[derive(Debug, Copy, Clone)]
@@ -248,10 +250,10 @@ impl Modbus {
     ///
     /// assert!(client.connect().is_ok())
     /// ```
-    pub fn connect(&self) -> Result<()> {
+    pub fn connect(&self) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_connect(self.ctx) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -275,10 +277,10 @@ impl Modbus {
     ///
     /// assert!(modbus.flush().is_ok());
     /// ```
-    pub fn flush(&self) -> Result<()> {
+    pub fn flush(&self) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_flush(self.ctx) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -321,10 +323,10 @@ impl Modbus {
     ///
     /// assert!(modbus.set_slave(YOUR_DEVICE_ID).is_ok());
     /// ```
-    pub fn set_slave(&mut self, slave: u8) -> Result<()> {
+    pub fn set_slave(&mut self, slave: u8) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_set_slave(self.ctx, slave as c_int) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -343,10 +345,10 @@ impl Modbus {
     ///
     /// assert_eq!(modbus.get_slave().unwrap(), 10);
     /// ```
-    pub fn get_slave(&self) -> Result<u8> {
+    pub fn get_slave(&self) -> Result<u8, Error> {
         unsafe {
             match ffi::modbus_get_slave(self.ctx) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 num => Ok(num as u8),
             }
         }
@@ -383,10 +385,10 @@ impl Modbus {
     ///
     /// assert!(modbus.set_debug(true).is_ok());
     /// ```
-    pub fn set_debug(&mut self, flag: bool) -> Result<()> {
+    pub fn set_debug(&mut self, flag: bool) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_set_debug(self.ctx, flag as c_int) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -412,11 +414,11 @@ impl Modbus {
     ///
     /// assert_eq!(modbus.get_byte_timeout().unwrap(), Timeout { sec: 0, usec: 500000 });
     /// ```
-    pub fn get_byte_timeout(&self) -> Result<Timeout> {
+    pub fn get_byte_timeout(&self) -> Result<Timeout, Error> {
         let mut timeout = Timeout { sec: 0, usec: 0 };
         unsafe {
             match ffi::modbus_get_byte_timeout(self.ctx, &mut timeout.sec, &mut timeout.usec) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(timeout),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -455,10 +457,10 @@ impl Modbus {
     /// let timeout = Timeout { sec: 1, usec: 500000 };
     /// assert!(modbus.set_byte_timeout(timeout).is_ok());
     /// ```
-    pub fn set_byte_timeout(&mut self, timeout: Timeout) -> Result<()> {
+    pub fn set_byte_timeout(&mut self, timeout: Timeout) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_set_byte_timeout(self.ctx, timeout.sec, timeout.usec) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -484,11 +486,11 @@ impl Modbus {
     ///
     /// assert_eq!(modbus.get_response_timeout().unwrap(), Timeout { sec: 0, usec: 500000 });
     /// ```
-    pub fn get_response_timeout(&self) -> Result<Timeout> {
+    pub fn get_response_timeout(&self) -> Result<Timeout, Error> {
         let mut timeout = Timeout { sec: 0, usec: 0 };
         unsafe {
             match ffi::modbus_get_response_timeout(self.ctx, &mut timeout.sec, &mut timeout.usec) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(timeout),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -526,10 +528,10 @@ impl Modbus {
     /// let timeout = Timeout { sec: 1, usec: 500000 };
     /// assert!(modbus.set_response_timeout(timeout).is_ok());
     /// ```
-    pub fn set_response_timeout(&mut self, timeout: Timeout) -> Result<()> {
+    pub fn set_response_timeout(&mut self, timeout: Timeout) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_set_response_timeout(self.ctx, timeout.sec, timeout.usec) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -578,14 +580,14 @@ impl Modbus {
     ///
     /// assert!(modbus.set_error_recovery(Some(&[ErrorRecoveryMode::Link, ErrorRecoveryMode::Protocol])).is_ok());
     /// ```
-    pub fn set_error_recovery(&mut self, flags: Option<&[ErrorRecoveryMode]>) -> Result<()> {
+    pub fn set_error_recovery(&mut self, flags: Option<&[ErrorRecoveryMode]>) -> Result<(), Error> {
         let flags = flags.unwrap_or(&[])
             .iter()
             .fold(ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_NONE, |acc, v| acc | v.as_raw());
 
         unsafe {
             match ffi::modbus_set_error_recovery(self.ctx, flags) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -611,11 +613,11 @@ impl Modbus {
     ///
     /// assert!(modbus.set_socket(1337).is_ok());
     /// ```
-    pub fn set_socket(&mut self, socket: i32) -> Result<()> {
+    pub fn set_socket(&mut self, socket: i32) -> Result<(), Error> {
 
         unsafe {
             match ffi::modbus_set_socket(self.ctx, socket) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 0 => Ok(()),
                 _ => unreachable!(),
             }
@@ -640,10 +642,10 @@ impl Modbus {
     /// let _ = modbus.set_socket(1337).unwrap();
     /// assert_eq!(modbus.get_socket().unwrap(), 1337);
     /// ```
-    pub fn get_socket(&self) -> Result<i32> {
+    pub fn get_socket(&self) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_get_socket(self.ctx) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 socket => Ok(socket),
             }
         }
@@ -709,10 +711,10 @@ impl Modbus {
     /// let request: Vec<u8> = vec![0x01];
     /// assert_eq!(modbus.reply_exception(&request, Exception::Acknowledge).unwrap(), 9);
     /// ```
-    pub fn reply_exception(&self, request: &[u8], exception_code: Exception) -> Result<i32> {
+    pub fn reply_exception(&self, request: &[u8], exception_code: Exception) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_reply_exception(self.ctx, request.as_ptr(), exception_code as c_uint) {
-                -1 => bail!(Error::last_os_error()),
+                -1 => bail!(::std::io::Error::last_os_error()),
                 len => Ok(len),
             }
         }

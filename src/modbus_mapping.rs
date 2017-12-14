@@ -1,7 +1,7 @@
-use errors::*;
+use error::*;
 use libc::{c_int, c_uint};
 use libmodbus_sys as ffi;
-use std::io::Error;
+use failure::Error;
 
 
 /// To handle the mapping of your Modbus data, you must use this struct
@@ -41,7 +41,7 @@ impl ModbusMapping {
     /// let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
     /// ```
     pub fn new(number_bits: u32, number_input_bits: u32, number_registers: u32, number_input_registers: u32)
-               -> Result<ModbusMapping> {
+               -> Result<ModbusMapping, Error> {
         unsafe {
             let modbus_mapping =
                 ffi::modbus_mapping_new(number_bits as c_int,
@@ -49,7 +49,7 @@ impl ModbusMapping {
                                         number_registers as c_int,
                                         number_input_registers as c_int);
             if modbus_mapping.is_null() {
-                bail!(Error::last_os_error())
+                bail!(::std::io::Error::last_os_error())
             } else {
                 Ok(ModbusMapping { modbus_mapping: modbus_mapping })
             }
@@ -105,7 +105,7 @@ impl ModbusMapping {
     pub fn new_start_address(start_bits: u16, number_bits: u16, start_input_bits: u16, number_input_bits: u16,
                              start_registers: u16, number_registers: u16, start_input_registers: u16,
                              number_input_registers: u16)
-                             -> Result<ModbusMapping> {
+                             -> Result<ModbusMapping, Error> {
         unsafe {
             let modbus_mapping = ffi::modbus_mapping_new_start_address(start_bits as c_uint,
                                                                        number_bits as c_uint,
@@ -116,7 +116,7 @@ impl ModbusMapping {
                                                                        start_input_registers as c_uint,
                                                                        number_input_registers as c_uint);
             if modbus_mapping.is_null() {
-                bail!(Error::last_os_error())
+                bail!(::std::io::Error::last_os_error())
             } else {
                 Ok(ModbusMapping { modbus_mapping: modbus_mapping })
             }

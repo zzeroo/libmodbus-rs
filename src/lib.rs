@@ -172,8 +172,7 @@ html_root_url = "https://zzeroo.com/")]
 // `error_chain!` can recurse deeply(3)
 #![recursion_limit = "1024"]
 
-#[macro_use]
-extern crate error_chain;
+#[macro_use] extern crate failure;
 extern crate libc;
 extern crate libmodbus_sys;
 
@@ -184,9 +183,10 @@ mod modbus_server;
 mod modbus_tcp_pi;
 mod modbus_tcp;
 mod modbus;
-pub mod errors;
+pub mod error;
 pub mod prelude;
 
+pub use self::error::*;
 pub use self::modbus_client::ModbusClient;
 pub use self::modbus_mapping::ModbusMapping;
 pub use self::modbus_rtu::{ModbusRTU, RequestToSendMode, SerialMode};

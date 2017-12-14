@@ -1,22 +1,14 @@
 #![allow(unused_variables)]
 #![allow(unused_assignments)]
 #![allow(dead_code)]
-// `error_chain!` can recurse deeply
-#![recursion_limit = "1024"]
 
-#[macro_use]
-extern crate error_chain;
+#[macro_use] extern crate failure;
 extern crate libmodbus_rs;
 
-// FIXME: Remove error_chain for examples
-mod errors {
-    // Create the Error, ErrorKind, ResultExt, and Result types
-    error_chain!{}
-}
 mod unit_test_config;
 
 use unit_test_config::*;
-use errors::*;
+use failure::Error;
 use libmodbus_rs::{Modbus, ModbusMapping, ModbusClient, ModbusServer, ModbusTCP, ModbusTCPPI, ModbusRTU};
 use libmodbus_rs::prelude::*;
 use libmodbus_rs::Exception;
@@ -25,7 +17,7 @@ use std::thread::sleep;
 use std::time::Duration;
 
 
-fn run() -> Result<()> {
+fn run() -> Result<(), Error> {
     let backend;
 
     let args: Vec<_> = env::args().collect();
@@ -61,7 +53,7 @@ fn run() -> Result<()> {
     };
 
     if backend == Backend::RTU {
-        modbus.set_slave(SERVER_ID).chain_err(|| format!("could not set modbus slave address {}", SERVER_ID))?;
+        modbus.set_slave(SERVER_ID)?;
     }
 
     let header_length = modbus.get_header_length() as usize;
@@ -76,7 +68,7 @@ fn run() -> Result<()> {
                                          UT_REGISTERS_ADDRESS,
                                          UT_REGISTERS_NB,
                                          UT_INPUT_REGISTERS_ADDRESS,
-                                         UT_INPUT_REGISTERS_NB).chain_err(|| "Failed to allocate the mapping")?;
+                                         UT_INPUT_REGISTERS_NB)?;
 
     /* Examples from PI_MODBUS_300.pdf.
        Only the read-only input values are assigned. */
@@ -92,20 +84,20 @@ fn run() -> Result<()> {
 
     match backend {
         Backend::TCP => {
-            let mut socket = modbus.tcp_listen(1).chain_err(|| "could not listen to TCP socket")?;
-            modbus.tcp_accept(&mut socket).chain_err(|| "could not accept socket")?;
+            let mut socket = modbus.tcp_listen(1)?;
+            modbus.tcp_accept(&mut socket)?;
         },
         Backend::TCPPI => {
-            let mut socket = modbus.tcp_pi_listen(1).chain_err(|| "could not listen to TCPv6 socket")?;
-            modbus.tcp_pi_accept(&mut socket).chain_err(|| "could not accept socket")?;
+            let mut socket = modbus.tcp_pi_listen(1)?;
+            modbus.tcp_pi_accept(&mut socket)?;
         },
         Backend::RTU => {
-            modbus.connect().chain_err(|| "Unable to connect")?;
+            modbus.connect()?;
         },
     }
 
     loop {
-        let mut rc: std::result::Result<i32, libmodbus_rs::errors::Error>;
+        let mut rc: std::result::Result<i32, Error>;
         loop {
             rc = modbus.receive(&mut query);
             /* Filtered queries return 0 */
@@ -142,7 +134,7 @@ fn run() -> Result<()> {
                 ];
 
                 println!("Reply with an invalid TID or slave");
-                modbus.send_raw_request(&mut raw_req, (RAW_REQ_LENGTH * std::mem::size_of::<u8>()) as i32).unwrap();
+                modbus.send_raw_request(&mut raw_req, RAW_REQ_LENGTH).unwrap();
                 continue;
             } else if query[header_length + 1] as u16 == UT_REGISTERS_ADDRESS_SLEEP_500_MS {
                 println!("Sleep 0.5 s before replying");
