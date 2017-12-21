@@ -601,33 +601,6 @@
 <span id="556">556</span>
 <span id="557">557</span>
 <span id="558">558</span>
-<span id="559">559</span>
-<span id="560">560</span>
-<span id="561">561</span>
-<span id="562">562</span>
-<span id="563">563</span>
-<span id="564">564</span>
-<span id="565">565</span>
-<span id="566">566</span>
-<span id="567">567</span>
-<span id="568">568</span>
-<span id="569">569</span>
-<span id="570">570</span>
-<span id="571">571</span>
-<span id="572">572</span>
-<span id="573">573</span>
-<span id="574">574</span>
-<span id="575">575</span>
-<span id="576">576</span>
-<span id="577">577</span>
-<span id="578">578</span>
-<span id="579">579</span>
-<span id="580">580</span>
-<span id="581">581</span>
-<span id="582">582</span>
-<span id="583">583</span>
-<span id="584">584</span>
-<span id="585">585</span>
 </pre><pre class="rust ">
 <span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">c_int</span>;
 <span class="kw">use</span> <span class="ident">libmodbus_sys</span> <span class="kw">as</span> <span class="ident">ffi</span>;
@@ -673,33 +646,6 @@
     <span class="kw">fn</span> <span class="ident">mask_write_register</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">address</span>: <span class="ident">u16</span>, <span class="ident">and_mask</span>: <span class="ident">u16</span>, <span class="ident">or_mask</span>: <span class="ident">u16</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">Error</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">send_raw_request</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">raw_request</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>], <span class="ident">lenght</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
     <span class="kw">fn</span> <span class="ident">receive_confirmation</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">response</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">u16</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
-}
-
-<span class="comment">// Convert the given Error (last_os_error()) to a libmodbus Error</span>
-<span class="comment">//</span>
-<span class="comment">// TODO: this looks ugly, is there a better way?</span>
-<span class="comment">// FIXME: Yeah fix me!</span>
-<span class="kw">fn</span> <span class="ident">get_error</span>(<span class="ident">error</span>: <span class="ident">Error</span>) <span class="op">-&gt;</span> <span class="ident">Error</span> {
-    <span class="kw">match</span> <span class="ident">error</span> {
-        <span class="comment">// Some(112345679) =&gt; ErrorKind::IllegalFunction.into(),           // Illegal function</span>
-        <span class="comment">// Some(112345680) =&gt; ErrorKind::IllegalDataAddress.into(),        // Illegal data address</span>
-        <span class="comment">// Some(112345681) =&gt; ErrorKind::IllegalDataValue.into(),          // Illegal data value</span>
-        <span class="comment">// Some(112345682) =&gt; ErrorKind::SlaveDeviceOrServerFailure.into(),// Slave device or server failure</span>
-        <span class="comment">// Some(112345683) =&gt; ErrorKind::Acknowledge.into(),               // Acknowledge</span>
-        <span class="comment">// Some(112345684) =&gt; ErrorKind::SlaveDeviceOrServerIsBusy.into(), // Slave device or server is busy</span>
-        <span class="comment">// Some(112345685) =&gt; ErrorKind::NegativeAcknowledge.into(),       // Negative acknowledge</span>
-        <span class="comment">// Some(112345686) =&gt; ErrorKind::MemoryParityError.into(),         // Memory parity error</span>
-        <span class="comment">//                                                                 // Unknown error 112345687</span>
-        <span class="comment">// Some(112345688) =&gt; ErrorKind::GatewayPathUnavailable.into(),        // Gateway path unavailable</span>
-        <span class="comment">// Some(112345689) =&gt; ErrorKind::TargetDeviceFailedToRespond.into(),   // Target device failed to respond</span>
-        <span class="comment">// Some(112345690) =&gt; ErrorKind::InvalidCRC.into(),                    // Invalid CRC</span>
-        <span class="comment">// Some(112345691) =&gt; ErrorKind::InvalidData.into(),                   // Invalid data</span>
-        <span class="comment">// Some(112345692) =&gt; ErrorKind::InvalidExceptionCode.into(),          // Invalid exception code</span>
-        <span class="comment">//                                                                     // Unknown error 112345693</span>
-        <span class="comment">// Some(112345694) =&gt; ErrorKind::TooManyData.into(),                   // Too many data</span>
-        <span class="comment">// Some(112345695) =&gt; ErrorKind::ResponseNotFromRequestedSlave.into(), // Response not from requested slave</span>
-        _ <span class="op">=&gt;</span> <span class="ident">error</span>.<span class="ident">into</span>(),
-    }
 }
 
 <span class="comment">// TODO: add real, working examples</span>

@@ -125,13 +125,11 @@
 <span id="80">80</span>
 <span id="81">81</span>
 <span id="82">82</span>
-<span id="83">83</span>
 </pre><pre class="rust ">
-<span class="kw">use</span> <span class="ident">error</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Error</span>;
 <span class="kw">use</span> <span class="ident">libmodbus_sys</span> <span class="kw">as</span> <span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="ident">modbus_mapping</span>::<span class="ident">ModbusMapping</span>;
 <span class="kw">use</span> <span class="ident">modbus</span>::<span class="ident">Modbus</span>;
-<span class="kw">use</span> <span class="ident">failure</span>::<span class="ident">Error</span>;
 
 
 <span class="doccomment">/// The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus</span>

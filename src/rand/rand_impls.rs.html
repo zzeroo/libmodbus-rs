@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/home/smueller/.cargo/registry/src/github.com-1ecc6299db9ec823/rand-0.3.18/src/rand_impls.rs`.">
+    <meta name="description" content="Source to the Rust file `/home/smueller/.cargo/registry/src/github.com-1ecc6299db9ec823/rand-0.4.1/src/rand_impls.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>rand_impls.rs.html -- source</title>
@@ -342,7 +342,6 @@
 <span id="297">297</span>
 <span id="298">298</span>
 <span id="299">299</span>
-<span id="300">300</span>
 </pre><pre class="rust ">
 <span class="comment">// Copyright 2013-2014 The Rust Project Developers. See the COPYRIGHT</span>
 <span class="comment">// file at the top-level directory of this distribution and at</span>
@@ -356,8 +355,7 @@
 
 <span class="doccomment">//! The implementations of `Rand` for the built-in types.</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">char</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
+<span class="kw">use</span> <span class="ident">core</span>::{<span class="ident">char</span>, <span class="ident">mem</span>};
 
 <span class="kw">use</span> {<span class="ident">Rand</span>,<span class="ident">Rng</span>};
 
