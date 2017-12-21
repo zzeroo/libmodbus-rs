@@ -2,19 +2,19 @@
 #![allow(unused_assignments)]
 #![allow(dead_code)]
 
-#[macro_use] extern crate failure;
+extern crate failure;
 extern crate libmodbus_rs;
 
 mod unit_test_config;
 
-use unit_test_config::*;
 use failure::Error;
 use libmodbus_rs::{Modbus, ModbusMapping, ModbusClient, ModbusServer, ModbusTCP, ModbusTCPPI, ModbusRTU};
-use libmodbus_rs::prelude::*;
 use libmodbus_rs::Exception;
+use libmodbus_rs::prelude::*;
 use std::env;
 use std::thread::sleep;
 use std::time::Duration;
+use unit_test_config::*;
 
 
 fn run() -> Result<(), Error> {

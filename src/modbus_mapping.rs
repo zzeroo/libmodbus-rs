@@ -1,7 +1,6 @@
-use error::*;
+use failure::Error;
 use libc::{c_int, c_uint};
 use libmodbus_sys as ffi;
-use failure::Error;
 
 
 /// To handle the mapping of your Modbus data, you must use this struct

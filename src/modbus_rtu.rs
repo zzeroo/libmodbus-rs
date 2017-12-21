@@ -1,10 +1,9 @@
-use error::*;
+use failure::Error;
 use libc::{c_char, c_int};
 use libmodbus_sys as ffi;
 use modbus::Modbus;
 use std::ffi::CString;
 use std::str;
-use failure::Error;
 
 
 #[derive(Debug, PartialEq)]

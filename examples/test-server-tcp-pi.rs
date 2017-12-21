@@ -1,5 +1,5 @@
 extern crate clap;
-#[macro_use] extern crate failure;
+extern crate failure;
 extern crate libmodbus_rs;
 
 use failure::Error;

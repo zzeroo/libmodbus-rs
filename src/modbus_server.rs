@@ -1,8 +1,7 @@
-use error::*;
+use failure::Error;
 use libmodbus_sys as ffi;
 use modbus_mapping::ModbusMapping;
 use modbus::Modbus;
-use failure::Error;
 
 
 /// The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus
