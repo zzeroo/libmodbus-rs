@@ -1,8 +1,8 @@
-use error::*;
+use failure::Error;
 use libmodbus_sys as ffi;
 use modbus::Modbus;
 use std::ffi::CString;
-use failure::Error;
+
 
 /// The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
 /// It does not require a checksum calculation as lower layer takes care of the same.

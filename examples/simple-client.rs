@@ -1,11 +1,10 @@
 extern crate clap;
-#[macro_use] extern crate failure;
+extern crate failure;
 extern crate libmodbus_rs;
 
 use clap::{App, Arg, ArgMatches};
 use failure::Error;
 use libmodbus_rs::{Modbus, ModbusRTU, ModbusTCP, ModbusTCPPI};
-
 
 
 #[derive(Debug, Eq, PartialEq)]

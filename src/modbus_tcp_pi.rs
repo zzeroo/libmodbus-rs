@@ -1,8 +1,7 @@
-use error::*;
+use failure::Error;
 use libmodbus_sys as ffi;
 use modbus::Modbus;
 use std::ffi::CString;
-use failure::Error;
 
 
 /// The TCP PI (Protocol Independent) backend implements a Modbus variant used for communications over TCP IPv4 and
