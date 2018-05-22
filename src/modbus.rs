@@ -453,6 +453,7 @@ impl Modbus {
     /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let timeout = Timeout { sec: 1, usec: 500000 };
+    ///
     /// assert!(modbus.set_byte_timeout(timeout).is_ok());
     /// ```
     pub fn set_byte_timeout(&mut self, timeout: Timeout) -> Result<(), Error> {
@@ -524,6 +525,7 @@ impl Modbus {
     /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let timeout = Timeout { sec: 1, usec: 500000 };
+    ///
     /// assert!(modbus.set_response_timeout(timeout).is_ok());
     /// ```
     pub fn set_response_timeout(&mut self, timeout: Timeout) -> Result<(), Error> {
@@ -664,6 +666,7 @@ impl Modbus {
     /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
     /// assert_eq!(modbus.get_header_length(), 7);
     /// ```
     pub fn get_header_length(&self) -> i32 {
@@ -703,10 +706,10 @@ impl Modbus {
     ///
     /// ```rust,no_run
     /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
-    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// use libmodbus_rs::Exception;
-    ///
+    /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let request: Vec<u8> = vec![0x01];
+    ///
     /// assert_eq!(modbus.reply_exception(&request, Exception::Acknowledge).unwrap(), 9);
     /// ```
     pub fn reply_exception(&self, request: &[u8], exception_code: Exception) -> Result<i32, Error> {
@@ -770,6 +773,7 @@ impl Modbus {
     /// ```
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
+    ///
     /// modbus.free();
     /// ```
     pub fn free(&mut self) {
@@ -796,9 +800,9 @@ impl Modbus {
 /// ```rust
 /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
 /// use libmodbus_rs::prelude::*;
-///
 /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
+///
 /// // before
 /// assert_eq!(modbus_mapping.get_input_bits_mut(), [0u8, 0, 0, 0, 0]);
 ///
@@ -830,7 +834,6 @@ pub fn set_bits_from_byte(dest: &mut [u8], index: u32, value: u8) {
 /// ```rust
 /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
 /// use libmodbus_rs::prelude::*;
-///
 /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
 ///
@@ -867,7 +870,6 @@ pub fn set_bits_from_bytes(dest: &mut [u8], index: u16, num_bit: u16, bytes: &[u
 /// ```rust
 /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
 /// use libmodbus_rs::prelude::*;
-///
 /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
 ///
@@ -895,6 +897,7 @@ pub fn get_byte_from_bits(src: &[u8], index: u8, num_bit: u16) -> u8 {
 ///
 /// ```rust
 /// use libmodbus_rs::prelude::*;
+///
 /// assert_eq!(get_float_abcd(&[0x0020, 0xF147]), 123456.0);
 /// ```
 pub fn get_float_abcd(src: &[u16]) -> f32 {
@@ -915,9 +918,9 @@ pub fn get_float_abcd(src: &[u16]) -> f32 {
 ///
 /// ```rust
 /// use libmodbus_rs::prelude::*;
-///
 /// let mut dest = vec![0; 2];
 /// set_float_abcd(123456.0, &mut dest);
+///
 /// assert_eq!(&dest, &[0x0020, 0xF147]);
 /// ```
 pub fn set_float_abcd(src: f32, dest: &mut [u16]) {
@@ -966,9 +969,9 @@ pub fn get_float_badc(src: &[u16]) -> f32 {
 ///
 /// ```rust
 /// use libmodbus_rs::prelude::*;
-///
 /// let mut dest = vec![0; 2];
 /// set_float_badc(123456.0, &mut dest);
+///
 /// assert_eq!(&dest, &[0x2000, 0x47F1]);
 /// ```
 pub fn set_float_badc(src: f32, dest: &mut [u16]) {
@@ -1017,9 +1020,9 @@ pub fn get_float_cdab(src: &[u16]) -> f32 {
 ///
 /// ```rust
 /// use libmodbus_rs::prelude::*;
-///
 /// let mut dest = vec![0; 2];
 /// set_float_cdab(123456.0, &mut dest);
+///
 /// assert_eq!(&dest, &[0xF147, 0x0020]);
 /// ```
 pub fn set_float_cdab(src: f32, dest: &mut [u16]) {
@@ -1068,9 +1071,9 @@ pub fn get_float_dcba(src: &[u16]) -> f32 {
 ///
 /// ```rust
 /// use libmodbus_rs::prelude::*;
-///
 /// let mut dest = vec![0; 2];
 /// set_float_dcba(123456.0, &mut dest);
+///
 /// assert_eq!(&dest, &[0x47F1, 0x2000]);
 /// ```
 pub fn set_float_dcba(src: f32, dest: &mut [u16]) {

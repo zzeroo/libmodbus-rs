@@ -237,7 +237,7 @@ impl ModbusClient for Modbus {
     /// The [`write_bit()`](#method.write_bit) function shall write the `status` at the `address` of the remote device.
     /// The value must be set to `true` of `false`.
     ///
-    /// The function uses the Modbus function code 0x05 (force single coil).
+    /// The function uses the **Modbus function code 0x05** (force single coil).
     ///
     /// # Return value
     ///
@@ -272,7 +272,7 @@ impl ModbusClient for Modbus {
     /// The [`write_register()`](#method.write_register) function shall write the value of value holding registers at
     /// the address addr of the remote device.
     ///
-    /// The function uses the Modbus function code 0x06 (preset single register).
+    /// The function uses the **Modbus function code 0x06** (preset single register).
     ///
     /// # Return value
     ///
@@ -345,7 +345,7 @@ impl ModbusClient for Modbus {
     /// registers
     /// from the array `src` at `address` of the remote device.
     ///
-    /// The function uses the Modbus function code 0x10 (preset multiple registers).
+    /// The function uses the **Modbus function code 0x10** (preset multiple registers).
     ///
     /// # Return value
     ///
@@ -383,7 +383,7 @@ impl ModbusClient for Modbus {
     /// the content of the read_nb holding registers to the address read_addr of the remote device. The result of
     /// reading is stored in dest array as word values (16 bits).
     ///
-    /// The function uses the Modbus function code 0x17 (write/read registers).
+    /// The function uses the **Modbus function code 0x17** (write/read registers).
     ///
     /// # Return value
     ///
@@ -471,6 +471,7 @@ impl ModbusClient for Modbus {
     ///
     /// The [`send_raw_request()`](#method.send_raw_request) function shall send a request via the socket of the
     /// current modbus contest.
+    ///
     /// This function must be used for debugging purposes because you have to take care to make a valid request by hand.
     /// The function only adds to the message, the header or CRC of the selected backend, so `raw_request` must start
     /// and contain at least a slave/unit identifier and a function code.
@@ -521,18 +522,16 @@ impl ModbusClient for Modbus {
     /// initial request.
     /// This function can be used to receive request not handled by the library.
     ///
-    /// The maximum size of the response depends on the used backend,
-    /// in RTU the `response` array must be `Modbus::RTU_MAX_ADU_LENGTH` bytes and in TCP it must be
-    /// `Modbus::TCP_MAX_ADU_LENGTH` bytes.
-    /// If you want to write code compatible with both, you can use the constant MODBUS_MAX_ADU_LENGTH (maximum value
-    /// of all libmodbus backends).
-    /// Take care to allocate enough memory to store responses to avoid crashes of your server.
+    /// The maximum size of the response depends on the used backend, in RTU the `response` array
+    /// must be `Modbus::RTU_MAX_ADU_LENGTH` bytes and in TCP it must be
+    /// `Modbus::TCP_MAX_ADU_LENGTH` bytes. If you want to write code compatible with both,
+    /// you can use the constant `Modbus::MAX_ADU_LENGTH` (maximum value of all libmodbus backends).
     ///
     /// # Return value
     ///
-    /// The function returns a Result containing the response length if successful. The returned request length can be
-    /// zero if the indication request is ignored (eg. a query for another slave in RTU mode).
-    /// Otherwise it contains an Error.
+    /// The function returns a Result containing the response length if successful.
+    /// The returned request length can be zero if the indication request is ignored
+    /// (eg. a query for another slave in RTU mode). Otherwise it contains an Error.
     ///
     /// # Parameters
     ///
