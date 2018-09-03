@@ -67,7 +67,7 @@ pacman -S autoconf clang39 git libtool make
 ### Dependencies Debian based (e.g. Ubuntu)
 
 ```sh
-apt-get install autoconf build-essential curl clang-3.9 git-core libtool
+apt install autoconf build-essential curl clang git-core libtool
 ```
 
 Look also at the local ci/ docker files under `./ci/docker-archlinux` and `.ci/docker-debian9` for a known working, minimal setup.
