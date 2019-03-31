@@ -81,8 +81,8 @@ impl ErrorRecoveryMode {
         use ErrorRecoveryMode::*;
 
         match *self {
-            Link => ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_LINK,
-            Protocol => ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_PROTOCOL,
+            Link => ffi::modbus_error_recovery_mode::MODBUS_ERROR_RECOVERY_LINK,
+            Protocol => ffi::modbus_error_recovery_mode::MODBUS_ERROR_RECOVERY_PROTOCOL,
         }
     }
 }
@@ -583,7 +583,7 @@ impl Modbus {
     pub fn set_error_recovery(&mut self, flags: Option<&[ErrorRecoveryMode]>) -> Result<(), Error> {
         let flags = flags.unwrap_or(&[])
             .iter()
-            .fold(ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_NONE, |acc, v| acc | v.as_raw());
+            .fold(ffi::modbus_error_recovery_mode::MODBUS_ERROR_RECOVERY_NONE, |acc, v| acc | v.as_raw());
 
         unsafe {
             match ffi::modbus_set_error_recovery(self.ctx, flags) {
@@ -779,6 +779,7 @@ impl Modbus {
     pub fn free(&mut self) {
         unsafe {
             ffi::modbus_free(self.ctx);
+            self.ctx = std::ptr::null_mut();
         }
     }
 }
