@@ -1,9 +1,6 @@
-/// This build.rs build script checks if pkg-config and libmodbus is present (normal desktop systems)
-/// if so, it calls bindgen on the installed libmodbus.
-/// If there is no pkg-config && libmodbus the libmodbus git submodule is checked out. Then libmodbus
+/// This build.rs build script checks if the libmodbus git submodule is checked out. Then libmodbus
 /// is build from source. Subsequently bindgen is called on top of the self builded libmodbus.
 extern crate bindgen;
-extern crate pkg_config;
 extern crate cc;
 
 use bindgen::builder;
@@ -31,27 +28,9 @@ fn main() {
 
     let build_dir = Path::new(LIBMODBUS_DIR);
     let prefix = Path::new(&dst).join("libmodbus-root");
-    // FIXME: bindgen disabled
-    #[allow(unused_variables)]
     let include = Path::new(&prefix)
         .join("include")
         .join("modbus");
-
-    // FIXME: bindgen disabled
-    // // if `pkg-config` is present and the libmodbus headers are found
-    // // we use `pkg-config` to find the include_path and call bindgen with it.
-    // //
-    // if let Ok(library) = pkg_config::probe_library("libmodbus") {
-    //     if let Some(include) = library.include_paths.get(0) {
-    //         run_bindgen(&include);
-    //     }
-    //
-    //     return;
-    // }
-
-    // pkg-config is not found. We build libmodbus from source (source are in a git submodule)
-    // and run bindgen with that folder as include path set.
-    //
 
     // If autogen.sh is not present, initalize git submodules
     if !Path::new("libmodbus/autogen.sh").exists() {
@@ -97,15 +76,14 @@ fn main() {
                     .arg("install")
                     .current_dir(&build_dir));
 
+    // Static link
     println!("cargo:rustc-link-lib=static=modbus");
     println!("cargo:rustc-link-search=native={}/libmodbus-root/lib", dst);
 
-    // FIXME: bindgen disabled
-    // run_bindgen(&include);
+    // Build Rust bindings
+    run_bindgen(&include);
 }
 
-// FIXME: bindgen disabled
-#[allow(dead_code)]
 fn run_bindgen(include: &PathBuf) {
     let out_path = PathBuf::from(env::var("OUT_DIR").expect("can't access $OUT_DIR"));
     // Configure and generate bindings.

@@ -140,6 +140,7 @@ impl ModbusMapping {
     pub fn free(&mut self) {
         unsafe {
             ffi::modbus_mapping_free(self.modbus_mapping);
+            self.modbus_mapping = std::ptr::null_mut();
         }
     }
 
