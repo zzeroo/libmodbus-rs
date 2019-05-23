@@ -770,7 +770,7 @@ impl Modbus {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```no_run
     /// use libmodbus_rs::{Modbus, ModbusTCP};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///

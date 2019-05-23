@@ -131,7 +131,7 @@ impl ModbusMapping {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```no_run
     /// use libmodbus_rs::ModbusMapping;
     /// let mut modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
     ///
