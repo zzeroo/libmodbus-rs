@@ -1,6 +1,6 @@
 [package]
 name = "libmodbus-rs"
-version = "0.8.3"
+version = "0.9.0"
 authors = ["Stefan Müller <co@zzeroo.com>"]
 readme = "README.md"
 keywords = ["modbus", "libmodbus"]
@@ -13,17 +13,15 @@ categories = ["api-bindings"]
 
 [badges]
 travis-ci = { repository = "zzeroo/libmodbus-rs" }
-#appveyor = { repository = "zzeroo/libmodbus-rs" }
 
 [dependencies]
 failure = "0.1.5"
 libc = "0.2.55"
-libmodbus-sys = { path = "libmodbus-sys", version = "0.8.1" }
+libmodbus-sys = { path = "libmodbus-sys", version = "0.9" }
 rand = "0.6.5"
 time = "0.1.42"
 
 [dependencies.clap]
 version = "2.33"
 default-features = false
- # Cherry-pick the features you'd like to use
 features = [ "color" ]

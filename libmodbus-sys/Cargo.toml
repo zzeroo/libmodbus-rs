@@ -1,6 +1,6 @@
 [package]
 name = "libmodbus-sys"
-version = "0.8.1"
+version = "0.9.0"
 authors = ["Stefan Müller <co@zzeroo.com>"]
 build = "build.rs"
 keywords = ["modbus", "libmodbus"]
