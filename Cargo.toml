@@ -16,14 +16,14 @@ travis-ci = { repository = "zzeroo/libmodbus-rs" }
 #appveyor = { repository = "zzeroo/libmodbus-rs" }
 
 [dependencies]
-failure = "0.1"
-libc = "0.2"
-libmodbus-sys = { path = "libmodbus-sys", version = "0.8" }
-rand = "0.4"
-time = "0.1"
+failure = "0.1.5"
+libc = "0.2.55"
+libmodbus-sys = { path = "libmodbus-sys", version = "0.8.1" }
+rand = "0.6.5"
+time = "0.1.42"
 
 [dependencies.clap]
-version = "2.24.2"
+version = "2.33"
 default-features = false
  # Cherry-pick the features you'd like to use
 features = [ "color" ]
