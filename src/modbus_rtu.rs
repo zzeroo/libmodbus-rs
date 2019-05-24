@@ -203,30 +203,27 @@ impl ModbusRTU for Modbus {
 
     /// `rtu_set_rts` - set the RTS mode in RTU
     ///
-    /// The [`rtu_set_rts()`](#method.rtu_set_rts) function shall set the Request To Send mode to communicate on a
-    /// RS485 serial bus.
-    /// By default, the mode is set to `RequestToSendMode::RtuRtsNone` and no signal is issued before writing
-    /// data on the wire.
+    /// The [`rtu_set_rts()`](#method.rtu_set_rts) function shall set the Request To Send mode
+    /// to communicate on a RS485 serial bus. By default, the mode is set to
+    /// `RequestToSendMode::RtuRtsNone` and no signal is issued before writing data on the wire.
     ///
     /// To enable the RTS mode, the values `RequestToSendMode::RtuRtsUp` or
-    /// `RequestToSendMode::RtuRtsDown` must be used,
-    /// these modes enable the RTS mode and set the polarity at the same time. When
-    /// `RequestToSendMode::RtuRtsUp` is used,
-    /// an ioctl call is made with RTS flag enabled then data is written on the bus after a delay of 1 ms,
-    /// then another ioctl call is made with the RTS flag disabled and again a delay of 1 ms occurs.
-    /// The `RequestToSendMode::RtuRtsDown` mode applies the same procedure but with an inverted RTS flag.
+    /// `RequestToSendMode::RtuRtsDown` must be used, these modes enable the RTS mode and set the
+    /// polarity at the same time. When `RequestToSendMode::RtuRtsUp` is used, an ioctl call is
+    /// made with RTS flag enabled then data is written on the bus after a delay of 1 ms, then
+    /// another ioctl call is made with the RTS flag disabled and again a delay of 1 ms occurs.
+    /// The `RequestToSendMode::RtuRtsDown` mode applies the same procedure
+    /// but with an inverted RTS flag.
     ///
-    /// This function can only be used with a context using a RTU backend.
+    /// **This function can only be used with a context using a RTU backend.**
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust
     /// use libmodbus_rs::{Modbus, ModbusRTU, SerialMode, RequestToSendMode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
-    /// let serial_mode = modbus.rtu_set_serial_mode(SerialMode::RtuRS485);
-    ///
-    /// assert!(modbus.rtu_set_rts(RequestToSendMode::RtuRtsUp).is_ok());
+    /// assert!(modbus.rtu_set_rts(RequestToSendMode::RtuRtsDown).is_ok());
     /// ```
     fn rtu_set_rts(&mut self, mode: RequestToSendMode) -> Result<(), Error> {
         unsafe {

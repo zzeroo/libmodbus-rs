@@ -602,7 +602,7 @@ fn run() -> Result<(), Error> {
     /* Restore original byte timeout */
     modbus.set_byte_timeout(old_byte_timeout).unwrap();
 
-    /** BAD RESPONSE **/
+    /*  BAD RESPONSE */
     println!("\nTEST BAD RESPONSE ERROR:");
 
     /* Allocate only the required space */
@@ -613,7 +613,7 @@ fn run() -> Result<(), Error> {
     print!("* modbus.read_registers: ");
     assert_true!(rc.is_err() && rc.unwrap_err().to_string() == "Invalid data", "");
 
-    /** MANUAL EXCEPTION **/
+    /* MANUAL EXCEPTION */
     println!("\nTEST MANUAL EXCEPTION:");
     let rc = modbus.read_registers(UT_REGISTERS_ADDRESS_SPECIAL,
                                UT_REGISTERS_NB, &mut tab_rp_registers);

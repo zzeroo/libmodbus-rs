@@ -1,10 +1,11 @@
-/// This build.rs build script checks if pkg-config and libmodbus is present (normal desktop systems)
-/// if so, it calls bindgen on the installed libmodbus.
-/// If there is no pkg-config && libmodbus the libmodbus git submodule is checked out. Then libmodbus
+/// This build.rs build script checks if libmodbus is present if so, it calls bindgen against
+/// the installed libmodbus.
+/// If there is no libmodbus present, the libmodbus git submodule is checked out. Then libmodbus
 /// is build from source. Subsequently bindgen is called on top of the self builded libmodbus.
+/// Another dependencie is `pkg-config`.
 extern crate bindgen;
-extern crate pkg_config;
 extern crate cc;
+extern crate pkg_config;
 
 use bindgen::builder;
 use std::env;
@@ -12,7 +13,6 @@ use std::ffi::OsString;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
-
 
 // stolen from: https://github.com/alexcrichton/backtrace-rs/blob/master/backtrace-sys/build.rs
 macro_rules! t {
@@ -22,47 +22,47 @@ macro_rules! t {
     })
 }
 
-
 const LIBMODBUS_DIR: &'static str = "libmodbus";
+
 fn main() {
     let dst = env::var("OUT_DIR").unwrap();
     let target = env::var("TARGET").unwrap();
     let host = env::var("HOST").unwrap();
-
     let build_dir = Path::new(LIBMODBUS_DIR);
     let prefix = Path::new(&dst).join("libmodbus-root");
-    // FIXME: bindgen disabled
-    #[allow(unused_variables)]
     let include = Path::new(&prefix)
         .join("include")
         .join("modbus");
 
-    // FIXME: bindgen disabled
-    // // if `pkg-config` is present and the libmodbus headers are found
-    // // we use `pkg-config` to find the include_path and call bindgen with it.
-    // //
-    // if let Ok(library) = pkg_config::probe_library("libmodbus") {
-    //     if let Some(include) = library.include_paths.get(0) {
-    //         run_bindgen(&include);
-    //     }
-    //
-    //     return;
-    // }
+    println!("target: {}", &target);
+    println!("host: {}", &host);
+    println!();
 
-    // pkg-config is not found. We build libmodbus from source (source are in a git submodule)
-    // and run bindgen with that folder as include path set.
-    //
+    // If `pkg-config` found libmodbus we use `pkg-config` to get
+    // the include_path and call bindgen with that.
+    if let Ok(library) = pkg_config::probe_library("libmodbus") {
+        if let Some(include) = library.include_paths.get(0) {
+            run_bindgen(&include);
+        }
+
+        return;
+    }
+
+    // `pkg-config` doesn't found libmodbus.
+    // So we have to compile libmodbus from source (source are in a git submodule)
+    // Then run bindgen with that folder as include path set.
 
     // If autogen.sh is not present, initalize git submodules
     if !Path::new("libmodbus/autogen.sh").exists() {
         run_command("", Command::new("git").args(&["submodule", "update", "--init"]));
     }
 
-    let _ = fs::remove_dir_all(env::var("OUT_DIR").unwrap());
+    t!(fs::remove_dir_all(env::var("OUT_DIR").unwrap()));
     t!(fs::create_dir_all(env::var("OUT_DIR").unwrap()));
 
     let cfg = cc::Build::new();
     let compiler = cfg.get_compiler();
+    println!(">>> compiler: {:?}", compiler);
     let mut flags = OsString::new();
     for (i, flag) in compiler.args().iter().enumerate() {
         if i > 0 {
@@ -100,12 +100,9 @@ fn main() {
     println!("cargo:rustc-link-lib=static=modbus");
     println!("cargo:rustc-link-search=native={}/libmodbus-root/lib", dst);
 
-    // FIXME: bindgen disabled
-    // run_bindgen(&include);
+    run_bindgen(&include);
 }
 
-// FIXME: bindgen disabled
-#[allow(dead_code)]
 fn run_bindgen(include: &PathBuf) {
     let out_path = PathBuf::from(env::var("OUT_DIR").expect("can't access $OUT_DIR"));
     // Configure and generate bindings.
