@@ -1,0 +1,4 @@
+- Rename module libmdbus_rs to libmodbus
+    - `extern crate libmodbus`
+    - `use libmodbus`
+- add serial::SerialPortSettings

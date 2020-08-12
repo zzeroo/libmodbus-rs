@@ -1,8 +1,8 @@
 /// This build.rs build script checks if libmodbus is present if so, it calls bindgen against
 /// the installed libmodbus.
 /// If there is no libmodbus present, the libmodbus git submodule is checked out. Then libmodbus
-/// is build from source. Subsequently bindgen is called on top of the self builded libmodbus.
-/// Another dependencie is `pkg-config`.
+/// is build from source. Subsequently bindgen is called then on top of libmodbus.
+/// Dependencie are `clang` and `pkg-config`.
 extern crate bindgen;
 extern crate cc;
 extern crate pkg_config;
@@ -34,10 +34,6 @@ fn main() {
         .join("include")
         .join("modbus");
 
-    println!("target: {}", &target);
-    println!("host: {}", &host);
-    println!();
-
     // If `pkg-config` found libmodbus we use `pkg-config` to get
     // the include_path and call bindgen with that.
     if let Ok(library) = pkg_config::probe_library("libmodbus") {
@@ -57,12 +53,12 @@ fn main() {
         run_command("", Command::new("git").args(&["submodule", "update", "--init"]));
     }
 
-    t!(fs::remove_dir_all(env::var("OUT_DIR").unwrap()));
-    t!(fs::create_dir_all(env::var("OUT_DIR").unwrap()));
+    // FIXME: Undocumented rmdir, I think this is not needed
+    // t!(fs::remove_dir_all(env::var("OUT_DIR").unwrap()));
+    // t!(fs::create_dir_all(env::var("OUT_DIR").unwrap()));
 
     let cfg = cc::Build::new();
     let compiler = cfg.get_compiler();
-    println!(">>> compiler: {:?}", compiler);
     let mut flags = OsString::new();
     for (i, flag) in compiler.args().iter().enumerate() {
         if i > 0 {
@@ -100,13 +96,16 @@ fn main() {
     println!("cargo:rustc-link-lib=static=modbus");
     println!("cargo:rustc-link-search=native={}/libmodbus-root/lib", dst);
 
+    // Tell cargo to invalidate the build crate whenever the wrapper changes
+    println!("cargo:rerun-if-changed=wrapper.h");
+
     run_bindgen(&include);
 }
 
 fn run_bindgen(include: &PathBuf) {
     let out_path = PathBuf::from(env::var("OUT_DIR").expect("can't access $OUT_DIR"));
     // Configure and generate bindings.
-    let bindings = builder()
+    let bindings = bindgen::Builder::default()
         .header("wrapper.h")
         .clang_arg(format!("-I{}", include.display()))
         .bitfield_enum("modbus_error_recovery_mode")
