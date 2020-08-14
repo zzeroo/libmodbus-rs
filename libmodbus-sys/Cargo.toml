@@ -2,6 +2,7 @@
 name = "libmodbus-sys"
 version = "0.9.1"
 authors = ["Stefan Müller <co@zzeroo.com>"]
+edition = "2018"
 build = "build.rs"
 keywords = ["modbus", "libmodbus"]
 documentation = "http://zzeroo.github.io/libmodbus-rs/libmodbus_rs/index.html"

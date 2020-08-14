@@ -7,14 +7,13 @@ extern crate bindgen;
 extern crate cc;
 extern crate pkg_config;
 
-use bindgen::builder;
 use std::env;
 use std::ffi::OsString;
-use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
 // stolen from: https://github.com/alexcrichton/backtrace-rs/blob/master/backtrace-sys/build.rs
+#[allow(unused_macros)]
 macro_rules! t {
     ($e:expr) => (match $e{
         Ok(e) => e,
@@ -69,10 +68,8 @@ fn main() {
 
     // Generate configure, run configure, make, make install
     run_command("Generating configure",
-                Command::new("autoreconf")
-                    .arg("--install")
-                    .arg("--symlink")
-                    .arg("--force")
+                Command::new("bash")
+                    .arg("autogen.sh")
                     .current_dir(&build_dir));
 
     run_command("Configuring libmodbus",
@@ -81,7 +78,6 @@ fn main() {
                     .arg(&prefix)
                     .env("CC", compiler.path())
                     .env("CFLAGS", flags)
-                    .arg("--with-pic")
                     .arg("--disable-shared")
                     .arg("--disable-tests")
                     .arg(format!("--target={}", target))
