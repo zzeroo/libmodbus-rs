@@ -1,6 +1,3 @@
-#![allow(unused_imports)]
-extern crate libmodbus_rs;
-
 use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
 
 

@@ -18,6 +18,7 @@ fn connect() {
 }
 
 #[test]
+#[ignore]
 fn flush() {
     let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     assert!(modbus.flush().is_ok());
@@ -42,7 +43,7 @@ fn set_debug() {
 fn get_byte_timeout() {
     let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     assert_eq!(modbus.get_byte_timeout().unwrap(),
-               libmodbus_rs::Timeout {
+               Timeout {
                    sec: 0,
                    usec: 500000,
                });

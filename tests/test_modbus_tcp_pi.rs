@@ -1,5 +1,3 @@
-extern crate libmodbus_rs;
-
 use libmodbus::{Modbus, ModbusTCPPI};
 
 
