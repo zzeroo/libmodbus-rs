@@ -1,14 +1,8 @@
-// https://github.com/withoutboats/failure/issues/110
-use failure;
 use std::io;
 
-
-#[derive(Debug, Fail)]
+#[derive(Debug)]
 pub enum Error {
-    #[fail(display = "IO Error {}", _0)]
-    IoError(#[cause] io::Error),
-    #[fail(display = "Error {}", _0)]
-    Custom(failure::Error),
+    IoError(io::Error),
 }
 
 impl From <io::Error> for Error {
@@ -17,8 +11,3 @@ impl From <io::Error> for Error {
     }
 }
 
-impl From<failure::Error> for Error {
-    fn from(err: failure::Error) -> Error {
-        Error::Custom(err)
-    }
-}

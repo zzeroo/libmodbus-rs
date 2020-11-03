@@ -1,4 +1,7 @@
-# libmodbus-rs
+# libmodbus
+
+> This crate was renamed to just *libmodbus*. Before version 1.0.0 the name of the crate was libmodbus-rs.
+
 ## [libmodbus](http://libmodbus.org/) bindings for Rust
 
 Libmodbus is a free software library to send and receive data with a device that respects the Modbus protocol. That crate contains the Rust bindings for the libmodbus library (written in C).
@@ -25,7 +28,7 @@ Include the dependencies into your `Cargo.toml` file.
 
 ```toml
 [dependencies]
-libmodbus-rs = "0.6"
+libmodbus-rs = "1"
 ```
 
 ### or development (github master)
