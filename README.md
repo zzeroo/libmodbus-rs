@@ -1,7 +1,5 @@
 # libmodbus-rs
-## [libmodbus](http://libmodbus.org/) bindings for Rust &nbsp;
-
-**This crate is an reduced version without active bindgen! I need this because our build system can not deliver rust and libclang. Please don't use in production and expect odd behavior.**
+## [libmodbus](http://libmodbus.org/) bindings for Rust
 
 Libmodbus is a free software library to send and receive data with a device that respects the Modbus protocol. That crate contains the Rust bindings for the libmodbus library (written in C).
 Like libmodbus self, this crate supports serial port and Ethernet connections for Modbus server and clients.
@@ -74,6 +72,28 @@ Look also at the local ci/ docker files under `./ci/docker-archlinux` and `.ci/d
 
 For more information about the bindgen requirements please visit [https://servo.github.io/rust-bindgen/requirements.html][bindgen-reg]
 
+## Dependencies Windows
+
+Follow the msys2 instructions <https://www.msys2.org>
+
+```sh
+pacman -Syu
+```
+
+Followed by the second update step
+
+```sh
+pacman -Su
+```
+
+Finally install clang
+
+```sh
+pacman -S  mingw64/mingw-w64-x86_64-clang
+```
+
+----
+
 If all dependencies are solved, compile with `cargo build` and/ or run the tests with `cargo test`.
 
 ```sh
@@ -82,11 +102,10 @@ cd libmodbus-rs
 cargo build
 ```
 
-
 ## Examples
 
-All original libmodbus examples are reproduced in Rust. You can find them in the
-`examples` directory of this crate.
+Most of the original libmodbus examples are reproduced in Rust.
+You can found them in the `examples` directory of this crate.
 
 **Please have look at the README.md in the examples directory for more information about the examples.**
 
@@ -97,15 +116,14 @@ cargo run --example random-test-server
 ```
 
 In another shell start the client after the server
+
 ```sh
 cargo run --example random-test-client
 ```
 
-
 # License
 
 `libmodbus-rs` is distributed under the terms of the LGPL-2.1 license, which is the same license, [libmodbus](http://libmodbus.org/) is using.
-
 
 # Links
 
