@@ -1,6 +1,6 @@
 use failure::Error;
 use libmodbus_sys as ffi;
-use modbus::Modbus;
+use crate::prelude::*;
 use std::ffi::CString;
 
 
@@ -30,7 +30,7 @@ impl ModbusTCP for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus = Modbus::new_tcp("127.0.0.1", Modbus::TCP_DEFAULT_PORT as i32).unwrap();
@@ -65,7 +65,7 @@ impl ModbusTCP for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut socket = modbus.tcp_listen(1).unwrap();
@@ -95,7 +95,7 @@ impl ModbusTCP for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///

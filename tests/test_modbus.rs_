@@ -1,6 +1,4 @@
-extern crate libmodbus_rs;
-
-use libmodbus_rs::{Modbus, Timeout, ModbusTCP};
+use libmodbus::{Modbus, Timeout, ModbusTCP};
 
 
 #[test]
@@ -104,7 +102,7 @@ fn set_response_timeout() {
 
 #[test]
 fn set_error_recovery() {
-    use libmodbus_rs::ErrorRecoveryMode;
+    use libmodbus::ErrorRecoveryMode;
     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 
     assert!(modbus.set_error_recovery(None).is_ok());

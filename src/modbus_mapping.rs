@@ -34,7 +34,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
@@ -66,8 +66,7 @@ impl ModbusMapping {
     /// zero, for eg. to make available registers from 10000 to 10009, you can use:
     ///
     /// ```rust
-    /// # extern crate libmodbus_rs;
-    /// # use libmodbus_rs::ModbusMapping;
+    /// # use libmodbus::ModbusMapping;
     /// # fn main() {
     /// let mapping = ModbusMapping::new_start_address(0, 0, 0, 0, 10000, 10, 0, 0);
     /// # }
@@ -96,7 +95,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// let modbus_mapping = ModbusMapping::new_start_address(0, 0, 0, 0, 10000, 10, 0, 0).unwrap();
@@ -132,7 +131,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```no_run
-    /// use libmodbus_rs::ModbusMapping;
+    /// use libmodbus::ModbusMapping;
     /// let mut modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
     ///
     /// modbus_mapping.free();
@@ -140,6 +139,7 @@ impl ModbusMapping {
     pub fn free(&mut self) {
         unsafe {
             ffi::modbus_mapping_free(self.modbus_mapping);
+            self.modbus_mapping = std::ptr::null_mut();
         }
     }
 
@@ -156,7 +156,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -181,7 +181,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -206,7 +206,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -232,7 +232,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -258,7 +258,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -284,7 +284,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -310,7 +310,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -336,7 +336,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///

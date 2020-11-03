@@ -1,6 +1,6 @@
 use failure::Error;
 use libmodbus_sys as ffi;
-use modbus::Modbus;
+use crate::prelude::*;
 use std::ffi::CString;
 
 
@@ -38,7 +38,7 @@ impl ModbusTCPPI for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusTCPPI};
+    /// use libmodbus::{Modbus, ModbusTCPPI};
     ///
     /// let modbus = Modbus::new_tcp_pi("::1", "1502").unwrap();
     ///
@@ -73,7 +73,7 @@ impl ModbusTCPPI for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
     ///
     /// let mut modbus = Modbus::new_tcp_pi("::0", "1502").unwrap();
     /// let mut socket = modbus.tcp_pi_listen(1).unwrap();
@@ -107,7 +107,7 @@ impl ModbusTCPPI for Modbus {
     /// * bandwidth-server-many-up.rs   - handles several connection at once
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
     ///
     /// let mut modbus = Modbus::new_tcp_pi("::0", "1502").unwrap();
     /// let mut socket = modbus.tcp_pi_listen(1).unwrap();

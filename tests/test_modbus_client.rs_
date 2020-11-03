@@ -1,6 +1,4 @@
-extern crate libmodbus_rs;
-
-use libmodbus_rs::{Modbus, ModbusClient, ModbusServer, ModbusMapping, FunctionCode, ModbusTCP};
+use libmodbus::{Modbus, ModbusClient, ModbusServer, ModbusMapping, FunctionCode, ModbusTCP};
 use std::thread;
 use std::time::Duration;
 
@@ -10,9 +8,9 @@ fn start_server(port: i32) -> thread::JoinHandle<()> {
         let mut socket = modbus.tcp_listen(1).expect("Could not listen to TCP socket");
         modbus.tcp_accept(&mut socket).expect("Could not accept connection");
 
-        let mb_mapping = ModbusMapping::new(Modbus::MAX_READ_BITS, 
+        let mb_mapping = ModbusMapping::new(Modbus::MAX_READ_BITS,
                                             Modbus::MAX_READ_BITS,
-                                            Modbus::MAX_READ_REGISTERS, 
+                                            Modbus::MAX_READ_REGISTERS,
                                             Modbus::MAX_READ_REGISTERS).expect("Failed to allocate the mapping");
 
             loop {

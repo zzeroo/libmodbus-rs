@@ -1,7 +1,6 @@
 use failure::Error;
 use libmodbus_sys as ffi;
-use modbus_mapping::ModbusMapping;
-use modbus::Modbus;
+use crate::prelude::*;
 
 
 /// The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus
@@ -31,7 +30,7 @@ impl ModbusServer for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusServer, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut query = vec![0; Modbus::MAX_ADU_LENGTH as usize];
     ///
@@ -62,7 +61,7 @@ impl ModbusServer for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusServer, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut query = vec![0; Modbus::MAX_ADU_LENGTH as usize];

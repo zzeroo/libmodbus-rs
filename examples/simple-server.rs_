@@ -1,11 +1,13 @@
-extern crate clap;
-extern crate failure;
-extern crate libmodbus_rs;
+// FIXME: check unused_imports
+#![allow(unused_imports)]
+// FIXME: check unused_variables
+#![allow(unused_variables)]
+
+#[macro_use] extern crate failure;
 
 use clap::{App, Arg, ArgMatches};
 use failure::Error;
-use libmodbus_rs::{Modbus, ModbusRTU, ModbusTCP, ModbusTCPPI};
-
+use libmodbus::{Modbus, ModbusRTU, ModbusTCP, ModbusTCPPI};
 
 #[derive(Debug, Eq, PartialEq)]
 enum Backend {
@@ -14,11 +16,9 @@ enum Backend {
     RTU,
 }
 
-const SERVER_ID: u8 = 247;
-
 fn run(matches: &ArgMatches) -> Result<(), Error> {
     let backend;
-    let mut modbus: Modbus;
+    let modbus: Modbus;
 
     match matches.value_of("backend").unwrap() {
         "tcp" => backend = Backend::TCP,
@@ -29,22 +29,25 @@ fn run(matches: &ArgMatches) -> Result<(), Error> {
 
     match backend {
         Backend::RTU => {
-            let serial_interface = matches.value_of("serial_interface").unwrap_or("/dev/ttyUSB1");
-            modbus = Modbus::new_rtu(&serial_interface, 9600, 'N', 8, 1)?;
-            modbus.set_slave(SERVER_ID)?;
+            let mut _query = vec![0u8; Modbus::RTU_MAX_ADU_LENGTH as usize];
+            let serial_interface = matches.value_of("serial_interface").unwrap_or("/dev/ttyUSB0");
+            let mut _modbus = Modbus::new_rtu(&serial_interface, 115200, 'N', 8, 1)?;
         },
         Backend::TCP => {
-            modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
+            let mut _query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH as usize];
+            let mut modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
+
+            let mut socket = modbus.tcp_listen(1)?;
+            modbus.tcp_accept(&mut socket)?;
         },
         Backend::TCPPI => {
-            modbus = Modbus::new_tcp_pi("::1", "1502")?;
+            let mut _query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH as usize];
+            let mut modbus = Modbus::new_tcp_pi("::0", "1502")?;
+
+            let mut socket = modbus.tcp_listen(1)?;
+            modbus.tcp_accept(&mut socket)?;
         },
     }
-
-    modbus.set_debug(true)?;
-    modbus.connect()?;
-
-    // Work HERE
 
     Ok(())
 }

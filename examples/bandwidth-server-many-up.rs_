@@ -1,8 +1,6 @@
-extern crate libmodbus_rs;
-
 mod unit_test_config;
 
-use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
 
 
 const NB_CONNECTION: i32 = 5;

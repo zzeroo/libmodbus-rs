@@ -1,6 +1,6 @@
 extern crate libmodbus_rs;
 
-use libmodbus_rs::{Modbus, ModbusRTU, SerialMode};
+use libmodbus::{Modbus, ModbusRTU, SerialMode};
 
 
 #[test]

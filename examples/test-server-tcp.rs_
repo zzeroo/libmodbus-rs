@@ -2,11 +2,8 @@
 //
 // It shows how to use the ModbusTCPPI context.
 //
-extern crate libmodbus_rs;
-extern crate failure;
-
 use failure::Error;
-use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCP};
+use libmodbus::{Modbus, ModbusMapping, ModbusServer, ModbusTCP};
 
 
 fn run() -> Result<(), Error> {

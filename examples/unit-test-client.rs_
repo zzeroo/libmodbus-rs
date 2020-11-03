@@ -1,11 +1,10 @@
 #[macro_use] extern crate failure;
-extern crate libmodbus_rs;
 
 mod unit_test_config;
 
 use failure::Error;
-use libmodbus_rs::prelude::*;
-use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, ModbusTCPPI, ModbusRTU,
+use libmodbus::prelude::*;
+use libmodbus::{Modbus, ModbusClient, ModbusTCP, ModbusTCPPI, ModbusRTU,
                    Exception, FunctionCode, Timeout, ErrorRecoveryMode};
 use std::env;
 use unit_test_config::*;
