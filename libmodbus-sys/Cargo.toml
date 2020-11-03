@@ -1,6 +1,6 @@
 [package]
 name = "libmodbus-sys"
-version = "0.9.5"
+version = "1.0.0"
 authors = ["Stefan Müller <co@zzeroo.com>"]
 build = "build.rs"
 keywords = ["modbus", "libmodbus"]
@@ -21,7 +21,6 @@ path = "lib.rs"
 libc = "0.2.80"
 
 [build-dependencies]
-autotools = "0.2"
 bindgen = "0.55.1"
 cc = "1.0"
 pkg-config = "0.3.19"

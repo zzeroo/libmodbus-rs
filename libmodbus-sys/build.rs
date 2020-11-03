@@ -1,7 +1,5 @@
 use std::{
-    env,
-    fs,
-    io,
+    env, fs, io,
     io::Write,
     path::{Path, PathBuf},
     process::Command,
@@ -37,13 +35,18 @@ fn main() {
     cp_r("libmodbus/src", &include);
 
     let mut config_h = fs::File::create(include.join("config.h")).unwrap();
-    write!(config_h, r#"
+    write!(
+        config_h,
+        r#"
         #define VERSION "3.1.6"
     "#
-    ).unwrap();
+    )
+    .unwrap();
 
     let mut modbus_version_h = fs::File::create(include.join("modbus-version.h")).unwrap();
-    write!(modbus_version_h, r#"
+    write!(
+        modbus_version_h,
+        r#"
         #define LIBMODBUS_VERSION_MAJOR (3)
         #define LIBMODBUS_VERSION_MINOR (1)
         #define LIBMODBUS_VERSION_MICRO (6)
@@ -60,7 +63,8 @@ fn main() {
             LIBMODBUS_VERSION_MINOR == (minor) &&             \
             LIBMODBUS_VERSION_MICRO >= (micro)))
     "#
-    ).unwrap();
+    )
+    .unwrap();
 
     cfg.include(&include)
         .include("libmodbus/src")
@@ -121,6 +125,7 @@ fn run_bindgen(include: &PathBuf) {
         .expect("could not reate binding");
 
     // Write the generated bindings to an output file.
-    bindings.write_to_file(out_path.join("bindings.rs"))
+    bindings
+        .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
 }
