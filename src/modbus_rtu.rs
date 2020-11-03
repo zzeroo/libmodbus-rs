@@ -140,7 +140,7 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust,no_run
     /// use libmodbus::{Modbus, ModbusRTU, SerialMode};
     ///
     /// let modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
@@ -184,7 +184,7 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust,no_run
     /// use libmodbus::{Modbus, ModbusRTU, SerialMode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
@@ -219,7 +219,7 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```rust
+    /// ```rust,no_run
     /// use libmodbus::{Modbus, ModbusRTU, SerialMode, RequestToSendMode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
@@ -247,7 +247,7 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```rust,no_run
     /// use libmodbus::{Modbus, ModbusRTU, SerialMode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
@@ -296,7 +296,7 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust,no_run
     /// use libmodbus::{Modbus, ModbusRTU};
     /// let modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
@@ -325,7 +325,7 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```rust,no_run
     /// use libmodbus::{Modbus, ModbusRTU};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
