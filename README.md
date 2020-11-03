@@ -54,7 +54,7 @@ The examples in the examples directory show this.
 
 ## Building libmodbus-rs
 
-The libmodbus ffi bindings (libmodbus-sys) are build using [bindgen][bindgen]. [Bindgen need Clang 3.9 or greater on your system.][bindgen-reg]
+The libmodbus ffi bindings (libmodbus-sys) are build using [bindgen][bindgen]. [Bindgen need Clang 3.9 or greater on your system.][bindgen-requirements]
 
 ### Dependencies Archlinux
 
@@ -70,7 +70,7 @@ apt install autoconf build-essential curl clang git-core libtool
 
 Look also at the local ci/ docker files under `./ci/docker-archlinux` and `.ci/docker-debian9` for a known working, minimal setup.
 
-For more information about the bindgen requirements please visit [https://servo.github.io/rust-bindgen/requirements.html][bindgen-reg]
+For more information about the bindgen requirements please visit [https://servo.github.io/rust-bindgen/requirements.html][bindgen-requirements]
 
 ## Dependencies Windows
 
@@ -142,4 +142,4 @@ This project hosts the original libmodbus documentation, used here, as well. Ple
 [libmodbus-repo]: https://github.com/stephane/libmodbus.git
 [libmodbus-doc]: http://zzeroo.github.io/libmodbus-rs/libmodbus/libmodbus.html
 [bindgen]: https://github.com/servo/rust-bindgen
-[bindgen-reg]: https://servo.github.io/rust-bindgen/requirements.html
+[bindgen-requirements]: https://servo.github.io/rust-bindgen/requirements.html
