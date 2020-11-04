@@ -10,6 +10,7 @@ Like libmodbus self, this crate supports serial port and Ethernet connections fo
 
 [![Crates.io version](https://img.shields.io/crates/v/libmodbus-rs.svg)](https://crates.io/crates/libmodbus-rs) &nbsp;
 [![Build Status](https://travis-ci.org/zzeroo/libmodbus-rs.svg?branch=master)](https://travis-ci.org/zzeroo/libmodbus-rs) &nbsp;
+[![Build status](https://ci.appveyor.com/api/projects/status/v24293bvng52ihn5/branch/master?svg=true)](https://ci.appveyor.com/project/zzeroo/libmodbus-rs/branch/master) &nbsp;
 [![Coverage Status](https://coveralls.io/repos/github/zzeroo/libmodbus-rs/badge.svg?branch=master)](https://coveralls.io/github/zzeroo/libmodbus-rs?branch=master)
 
 [Homepage |][homepage] &nbsp;
