@@ -12,16 +12,17 @@ rem     channel:    stable, beta, nightly
 rem This script based on the work of the libmypaint team.
 
 rem Download rust
-set RUSTUP_URL=https://win.rustup.rs/%MSYS2_ARCH%
-set RUSTUP_EXE=build\rustup-init-%MSYS2_ARCH%.exe
+set RUSTUP_URL=https://win.rustup.rs/rustup-init.exe
 echo Downloading %RUSTUP_URL%...
-powershell -Command "(New-Object Net.WebClient).DownloadFile('%RUSTUP_URL%', '%RUSTUP_EXE%')"
+powershell -Command "(New-Object Net.WebClient).DownloadFile('%RUSTUP_URL%', 'rustup-init.exe')"
 if %ERRORLEVEL% NEQ 0 (
   echo ...downloading rustup failed.
   exit 1
 )
-%RUSTUP_EXE% -yv --default-host %target% --default-toolchain %channel%
+rustup-init.exe -yv --default-toolchain %channel% --default-host %target%
 if %ERRORLEVEL% NEQ 0 exit 1
+rustc -vV
+cargo -vV
 
 rem Set the paths appropriately
 PATH C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%
