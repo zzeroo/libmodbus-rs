@@ -189,7 +189,7 @@ pub mod prelude;
 pub use self::error::*;
 pub use self::modbus_client::ModbusClient;
 pub use self::modbus_mapping::ModbusMapping;
-pub use self::modbus_rtu::{ModbusRTU, RequestToSendMode, SerialMode};
+pub use self::modbus_rtu::{ModbusRTU, ModbusRtuError, RequestToSendMode, SerialMode};
 pub use self::modbus_server::ModbusServer;
 pub use self::modbus_tcp_pi::ModbusTCPPI;
 pub use self::modbus_tcp::ModbusTCP;
