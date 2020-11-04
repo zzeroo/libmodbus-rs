@@ -121,6 +121,7 @@ fn run_bindgen(include: &PathBuf) {
         .header("wrapper.h")
         .clang_arg(format!("-I{}", include.display()))
         .bitfield_enum("modbus_error_recovery_mode")
+        .blacklist_type("_?P?IMAGE_TLS_DIRECTORY.*")
         .generate()
         .expect("could not reate binding");
 
