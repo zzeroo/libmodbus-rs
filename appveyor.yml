@@ -32,20 +32,6 @@ matrix:
   allow_failures:
     - channel: nightly
 
-# If you only care about stable channel build failures, uncomment the following line:
-    #- channel: beta
-
-## Install Script ##
-
-install:
-    - appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
-    - rustup-init -yv --default-toolchain %channel% --default-host %target%
-    - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
-    - rustc -vV
-    - cargo -vV
-
-## Build Script ##
-
 build_script:
   - '%APPVEYOR_BUILD_FOLDER%\appveyor.bat'
 

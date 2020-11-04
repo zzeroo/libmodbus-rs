@@ -1,10 +1,27 @@
+echo on
+SetLocal EnableDelayedExpansion
+
 rem Matrix-driven Appveyor CI script for libmodbus-rs
 rem Currently only does MSYS2 builds.
 rem https://www.appveyor.com/docs/installed-software#mingw-msys-cygwin
 rem Needs the following vars:
-rem    MSYS2_ARCH:  x86_64 or i686
-rem    MSYSTEM:  MINGW64 or MINGW32
+rem     MSYS2_ARCH: x86_64 or i686
+rem     MSYSTEM:    MINGW64 or MINGW32
+rem     target:     x86_64-pc-windows-gnu, i686-pc-windows-gnu
+rem     channel:    stable, beta, nightly
 rem This script based on the work of the libmypaint team.
+
+rem Download rust
+set RUSTUP_URL=https://win.rustup.rs/%MSYS2_ARCH%
+set RUSTUP_EXE=build\rustup-init-%MSYS2_ARCH%.exe
+echo Downloading %RUSTUP_URL%...
+powershell -Command "(New-Object Net.WebClient).DownloadFile('%RUSTUP_URL%', '%RUSTUP_EXE%')"
+if %ERRORLEVEL% NEQ 0 (
+  echo ...downloading rustup failed.
+  exit 1
+)
+%RUSTUP_EXE% -yv --default-host %target% --default-toolchain %channel%
+if %ERRORLEVEL% NEQ 0 exit 1
 
 rem Set the paths appropriately
 PATH C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%
