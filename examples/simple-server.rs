@@ -1,7 +1,5 @@
 use clap::{App, Arg, ArgMatches};
-use failure::Error;
-use libmodbus::{Modbus, ModbusRTU, ModbusTCP, ModbusTCPPI};
-
+use libmodbus::{Modbus, ModbusMapping, ModbusRTU, ModbusTCP, ModbusTCPPI, ModbusServer};
 
 #[derive(Debug, Eq, PartialEq)]
 enum Backend {
@@ -10,11 +8,10 @@ enum Backend {
     RTU,
 }
 
-const SERVER_ID: u8 = 247;
-
-fn run(matches: &ArgMatches) -> Result<(), Error> {
+fn run(matches: &ArgMatches) -> Result<(), Box<dyn std::error::Error>> {
     let backend;
-    let mut modbus: Modbus;
+    let mut modbus;
+    let mut query;
 
     match matches.value_of("backend").unwrap() {
         "tcp" => backend = Backend::TCP,
@@ -25,22 +22,43 @@ fn run(matches: &ArgMatches) -> Result<(), Error> {
 
     match backend {
         Backend::RTU => {
-            let serial_interface = matches.value_of("serial_interface").unwrap_or("/dev/ttyUSB1");
-            modbus = Modbus::new_rtu(&serial_interface, 9600, 'N', 8, 1)?;
-            modbus.set_slave(SERVER_ID)?;
+            query = vec![0u8; Modbus::RTU_MAX_ADU_LENGTH as usize];
+            let serial_interface = matches.value_of("serial_interface").unwrap_or("/dev/ttyUSB0");
+            modbus = Modbus::new_rtu(&serial_interface, 115200, 'N', 8, 1)?;
+            modbus.set_slave(247)?;
         },
         Backend::TCP => {
+            query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH as usize];
             modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
+
+            let mut socket = modbus.tcp_listen(1)?;
+            modbus.tcp_accept(&mut socket)?;
         },
         Backend::TCPPI => {
-            modbus = Modbus::new_tcp_pi("::1", "1502")?;
+            query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH as usize];
+            modbus = Modbus::new_tcp_pi("::0", "1502")?;
+
+            let mut socket = modbus.tcp_listen(1)?;
+            modbus.tcp_accept(&mut socket)?;
         },
     }
 
     modbus.set_debug(true)?;
     modbus.connect()?;
 
-    // Work HERE
+    let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
+
+    loop {
+        match modbus.receive(&mut query) {
+            Ok(num) => modbus.reply(&query, num, &modbus_mapping),
+            Err(err) => {
+                println!("ERROR while parsing: {}", err);
+                break;
+            },
+        }
+        .expect("could not receive message");
+    }
+    println!("Quit the loop: ");
 
     Ok(())
 }
