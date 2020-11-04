@@ -34,29 +34,16 @@ os: Visual Studio 2015
 # matrix entries to test different combinations of features.
 environment:
   matrix:
-
-### GNU Toolchains ###
-
-  # Stable 64-bit GNU
-    - channel: stable
-      target: x86_64-pc-windows-gnu
-  # Stable 32-bit GNU
-    - channel: stable
-      target: i686-pc-windows-gnu
-  # Beta 64-bit GNU
-    - channel: beta
-      target: x86_64-pc-windows-gnu
-  # Beta 32-bit GNU
-    - channel: beta
-      target: i686-pc-windows-gnu
-  # Nightly 64-bit GNU
-    - channel: nightly
-      target: x86_64-pc-windows-gnu
-      #cargoflags: --features "unstable"
-  # Nightly 32-bit GNU
-    - channel: nightly
-      target: i686-pc-windows-gnu
-      #cargoflags: --features "unstable"
+    - compiler: msys2
+      ARCH: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+    - compiler: msys2
+      ARCH: x86
+      MSYS2_ARCH: i686
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW32
 
 ### Allowed failures ###
 
@@ -95,4 +82,4 @@ build: false
 #directly or perform other testing commands. Rust will automatically be placed in the PATH
 # environment variable.
 test_script:
-  - cargo test --verbose %cargoflags%
+  - cargo test --verbose
