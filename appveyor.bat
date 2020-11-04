@@ -16,7 +16,7 @@ set RUSTUP_URL=https://win.rustup.rs/rustup-init.exe
 echo Downloading %RUSTUP_URL%...
 powershell -Command "appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe"
 if %ERRORLEVEL% NEQ 0 exit 1
-powershell -Command "rustup-init -yv --default-toolchain %channel% --default-host %target%"
+powershell -Command "rustup-init.exe -yv --default-toolchain %channel% --default-host %target%"
 if %ERRORLEVEL% NEQ 0 exit 1
 set PATH=%PATH%;%USERPROFILE%\.cargo\bin
 rustc -vV
