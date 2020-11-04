@@ -1,3 +1,5 @@
+echo on
+
 rem Matrix-driven Appveyor CI script for libmodbus-rs
 rem Currently only does MSYS2 builds.
 rem https://www.appveyor.com/docs/installed-software#mingw-msys-cygwin
