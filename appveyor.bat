@@ -43,3 +43,4 @@ bash -xlc "set pwd"
 bash -xlc "env"
 
 cargo build --verbose
+cargo test --verbose
