@@ -8,6 +8,7 @@ rem This script based on the work of the libmypaint team.
 
 rem Set the paths appropriately
 PATH C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%
+PATH %PATH%;%USERPROFILE%\.cargo\bin
 
 rem Upgrade the MSYS2 platform
 bash -lc "pacman --noconfirm --sync --refresh --refresh pacman"
@@ -26,3 +27,5 @@ set CHERE_INVOKING=yes
 rem Build/test scripting
 bash -xlc "set pwd"
 bash -xlc "env"
+
+cargo test --verbose
