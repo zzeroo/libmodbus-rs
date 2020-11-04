@@ -46,11 +46,6 @@ install:
 
 ## Build Script ##
 
-# 'cargo test' takes care of building for us, so disable Appveyor's build stage. This prevents
-# the "directory does not contain a project or solution file" error.
-build: false
-
-## Test Script ##
-
-test_script:
+build_script:
   - '%APPVEYOR_BUILD_FOLDER%\appveyor.bat'
+
