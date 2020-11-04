@@ -1,6 +1,6 @@
 use libc::c_int;
 use libmodbus_sys as ffi;
-use modbus::Modbus;
+use crate::prelude::*;
 use failure::Error;
 
 
@@ -67,7 +67,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut dest = vec![0u8; 100];
     ///
@@ -103,7 +103,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut dest = vec![0u8; 100];
     ///
@@ -138,7 +138,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut dest = vec![0u16; 100];
     ///
@@ -175,7 +175,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut dest = vec![0u16; 100];
     ///
@@ -215,7 +215,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut bytes = vec![0u8; Modbus::MAX_PDU_LENGTH];
     ///
@@ -251,7 +251,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let address = 1;
     ///
@@ -286,7 +286,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let address = 1;
     /// let value = u16::max_value();
@@ -295,7 +295,7 @@ impl ModbusClient for Modbus {
     /// ```
     fn write_register(&self, address: u16, value: u16) -> Result<(), Error> {
         unsafe {
-            match ffi::modbus_write_register(self.ctx, address as c_int, value as c_int) {
+            match ffi::modbus_write_register(self.ctx, address as c_int, value) {
                 -1 => bail!(::std::io::Error::last_os_error()),
                 1 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
@@ -323,7 +323,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let address = 1;
     /// let tab_bytes = vec![0u8];
@@ -360,7 +360,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let address = 1;
     /// let tab_bytes = vec![0u16];
@@ -401,7 +401,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let address = 1;
     /// let request_bytes = vec![1u16];
@@ -452,7 +452,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// assert!(modbus.mask_write_register(1, 0xF2, 0x25).is_ok());
@@ -493,7 +493,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, FunctionCode};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP, FunctionCode};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut raw_request: Vec<u8> = vec![0xFF, FunctionCode::ReadHoldingRegisters as u8, 0x00, 0x01, 0x0, 0x05];
@@ -540,7 +540,7 @@ impl ModbusClient for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut response = vec![0u8; Modbus::MAX_ADU_LENGTH];
     ///

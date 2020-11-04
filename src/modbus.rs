@@ -81,8 +81,8 @@ impl ErrorRecoveryMode {
         use ErrorRecoveryMode::*;
 
         match *self {
-            Link => ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_LINK,
-            Protocol => ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_PROTOCOL,
+            Link => ffi::modbus_error_recovery_mode::MODBUS_ERROR_RECOVERY_LINK,
+            Protocol => ffi::modbus_error_recovery_mode::MODBUS_ERROR_RECOVERY_PROTOCOL,
         }
     }
 }
@@ -109,7 +109,7 @@ impl Timeout {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, Timeout};
+    /// use libmodbus::{Modbus, Timeout};
     ///
     /// assert_eq!(Timeout::new(1, 2), Timeout { sec: 1, usec: 2 });
     /// ```
@@ -130,7 +130,7 @@ impl Timeout {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, Timeout};
+    /// use libmodbus::{Modbus, Timeout};
     ///
     /// assert_eq!(Timeout::new_sec(1), Timeout { sec: 1, usec: 0 });
     /// ```
@@ -151,7 +151,7 @@ impl Timeout {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, Timeout};
+    /// use libmodbus::{Modbus, Timeout};
     ///
     /// assert_eq!(Timeout::new_usec(2), Timeout { sec: 0, usec: 2 });
     /// ```
@@ -237,7 +237,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     ///
     /// // create server
     /// let mut server = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
@@ -269,8 +269,8 @@ impl Modbus {
     ///
     /// # Examples
     ///
-    /// ```
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// ```rust,no_run
+    /// use libmodbus::{Modbus, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// assert!(modbus.flush().is_ok());
@@ -314,7 +314,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusRTU};
+    /// use libmodbus::{Modbus, ModbusRTU};
     ///
     /// const YOUR_DEVICE_ID: u8 = 1;
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
@@ -337,7 +337,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusRTU};
+    /// use libmodbus::{Modbus, ModbusRTU};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     /// modbus.set_slave(10);
     ///
@@ -377,7 +377,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -407,7 +407,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
+    /// use libmodbus::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// assert_eq!(modbus.get_byte_timeout().unwrap(), Timeout { sec: 0, usec: 500000 });
@@ -450,7 +450,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
+    /// use libmodbus::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let timeout = Timeout { sec: 1, usec: 500000 };
     ///
@@ -480,7 +480,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
+    /// use libmodbus::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// assert_eq!(modbus.get_response_timeout().unwrap(), Timeout { sec: 0, usec: 500000 });
@@ -522,7 +522,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP, Timeout};
+    /// use libmodbus::{Modbus, ModbusTCP, Timeout};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let timeout = Timeout { sec: 1, usec: 500000 };
     ///
@@ -575,7 +575,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusTCP, ErrorRecoveryMode};
+    /// use libmodbus::{Modbus, ModbusTCP, ErrorRecoveryMode};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// assert!(modbus.set_error_recovery(Some(&[ErrorRecoveryMode::Link, ErrorRecoveryMode::Protocol])).is_ok());
@@ -583,7 +583,7 @@ impl Modbus {
     pub fn set_error_recovery(&mut self, flags: Option<&[ErrorRecoveryMode]>) -> Result<(), Error> {
         let flags = flags.unwrap_or(&[])
             .iter()
-            .fold(ffi::modbus_error_recovery_mode_MODBUS_ERROR_RECOVERY_NONE, |acc, v| acc | v.as_raw());
+            .fold(ffi::modbus_error_recovery_mode::MODBUS_ERROR_RECOVERY_NONE, |acc, v| acc | v.as_raw());
 
         unsafe {
             match ffi::modbus_set_error_recovery(self.ctx, flags) {
@@ -608,7 +608,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// assert!(modbus.set_socket(1337).is_ok());
@@ -637,7 +637,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let _ = modbus.set_socket(1337).unwrap();
     /// assert_eq!(modbus.get_socket().unwrap(), 1337);
@@ -664,7 +664,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// assert_eq!(modbus.get_header_length(), 7);
@@ -705,8 +705,8 @@ impl Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP};
-    /// use libmodbus_rs::Exception;
+    /// use libmodbus::{Modbus, ModbusClient, ModbusTCP};
+    /// use libmodbus::Exception;
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let request: Vec<u8> = vec![0x01];
     ///
@@ -728,7 +728,7 @@ impl Modbus {
     /// specified by the `errnum` argument.
     ///
     /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     ///
     /// assert_eq!(Modbus::strerror(112345694), "Too many data");
     /// ```
@@ -752,7 +752,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// modbus.close();
     /// ```
@@ -771,7 +771,7 @@ impl Modbus {
     /// # Examples
     ///
     /// ```no_run
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// modbus.free();
@@ -779,6 +779,7 @@ impl Modbus {
     pub fn free(&mut self) {
         unsafe {
             ffi::modbus_free(self.ctx);
+            self.ctx = std::ptr::null_mut();
         }
     }
 }
@@ -798,8 +799,8 @@ impl Modbus {
 /// # Examples
 ///
 /// ```rust
-/// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
-/// use libmodbus_rs::prelude::*;
+/// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
+/// use libmodbus::prelude::*;
 /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
 ///
@@ -832,8 +833,8 @@ pub fn set_bits_from_byte(dest: &mut [u8], index: u32, value: u8) {
 /// # Examples
 ///
 /// ```rust
-/// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
-/// use libmodbus_rs::prelude::*;
+/// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
+/// use libmodbus::prelude::*;
 /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
 ///
@@ -868,8 +869,8 @@ pub fn set_bits_from_bytes(dest: &mut [u8], index: u16, num_bit: u16, bytes: &[u
 /// # Examples
 ///
 /// ```rust
-/// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
-/// use libmodbus_rs::prelude::*;
+/// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
+/// use libmodbus::prelude::*;
 /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
 ///
@@ -896,7 +897,7 @@ pub fn get_byte_from_bits(src: &[u8], index: u8, num_bit: u16) -> u8 {
 /// # Examples
 ///
 /// ```rust
-/// use libmodbus_rs::prelude::*;
+/// use libmodbus::prelude::*;
 ///
 /// assert_eq!(get_float_abcd(&[0x0020, 0xF147]), 123456.0);
 /// ```
@@ -917,7 +918,7 @@ pub fn get_float_abcd(src: &[u16]) -> f32 {
 /// # Examples
 ///
 /// ```rust
-/// use libmodbus_rs::prelude::*;
+/// use libmodbus::prelude::*;
 /// let mut dest = vec![0; 2];
 /// set_float_abcd(123456.0, &mut dest);
 ///
@@ -946,7 +947,7 @@ pub fn set_float_abcd(src: f32, dest: &mut [u16]) {
 /// # Examples
 ///
 /// ```rust
-/// use libmodbus_rs::prelude::*;
+/// use libmodbus::prelude::*;
 ///
 /// assert_eq!(get_float_badc(&[0x2000, 0x47F1]), 123456.0);
 /// ```
@@ -968,7 +969,7 @@ pub fn get_float_badc(src: &[u16]) -> f32 {
 /// # Examples
 ///
 /// ```rust
-/// use libmodbus_rs::prelude::*;
+/// use libmodbus::prelude::*;
 /// let mut dest = vec![0; 2];
 /// set_float_badc(123456.0, &mut dest);
 ///
@@ -997,7 +998,7 @@ pub fn set_float_badc(src: f32, dest: &mut [u16]) {
 /// # Examples
 ///
 /// ```rust
-/// use libmodbus_rs::prelude::*;
+/// use libmodbus::prelude::*;
 ///
 /// assert_eq!(get_float_cdab(&[0xF147, 0x0020]), 123456.0);
 /// ```
@@ -1019,7 +1020,7 @@ pub fn get_float_cdab(src: &[u16]) -> f32 {
 /// # Examples
 ///
 /// ```rust
-/// use libmodbus_rs::prelude::*;
+/// use libmodbus::prelude::*;
 /// let mut dest = vec![0; 2];
 /// set_float_cdab(123456.0, &mut dest);
 ///
@@ -1048,7 +1049,7 @@ pub fn set_float_cdab(src: f32, dest: &mut [u16]) {
 /// # Examples
 ///
 /// ```rust
-/// use libmodbus_rs::prelude::*;
+/// use libmodbus::prelude::*;
 ///
 /// assert_eq!(get_float_dcba(&[0x47F1, 0x2000]), 123456.0);
 /// ```
@@ -1070,7 +1071,7 @@ pub fn get_float_dcba(src: &[u16]) -> f32 {
 /// # Examples
 ///
 /// ```rust
-/// use libmodbus_rs::prelude::*;
+/// use libmodbus::prelude::*;
 /// let mut dest = vec![0; 2];
 /// set_float_dcba(123456.0, &mut dest);
 ///

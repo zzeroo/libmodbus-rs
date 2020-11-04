@@ -1,7 +1,4 @@
-extern crate rand;
-extern crate libmodbus_rs;
-
-use libmodbus_rs::{Modbus, ModbusClient};
+use libmodbus::{Modbus, ModbusClient};
 use rand::Rng;
 
 
@@ -33,12 +30,12 @@ fn run() -> Result<(), String> {
     let mut rng = rand::thread_rng();
 
     // // RTU
-    // use libmodbus_rs::ModbusRTU;
+    // use libmodbus::ModbusRTU;
     // let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 19200, 'N', 8, 1).expect("could not create RTU context");
     // modbus.set_slave(SERVER_ID).expect("could not set slave ID");
 
     // TCP
-    use libmodbus_rs::ModbusTCP;
+    use libmodbus::ModbusTCP;
     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).expect("could not create TCP context");
 
     modbus.set_debug(true).expect("could not set DEBUG mode");

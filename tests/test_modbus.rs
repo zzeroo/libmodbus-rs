@@ -1,6 +1,4 @@
-extern crate libmodbus_rs;
-
-use libmodbus_rs::{Modbus, Timeout, ModbusTCP};
+use libmodbus::{Modbus, Timeout, ModbusTCP};
 
 
 #[test]
@@ -20,6 +18,7 @@ fn connect() {
 }
 
 #[test]
+#[ignore]
 fn flush() {
     let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     assert!(modbus.flush().is_ok());
@@ -44,7 +43,7 @@ fn set_debug() {
 fn get_byte_timeout() {
     let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     assert_eq!(modbus.get_byte_timeout().unwrap(),
-               libmodbus_rs::Timeout {
+               Timeout {
                    sec: 0,
                    usec: 500000,
                });
@@ -104,7 +103,7 @@ fn set_response_timeout() {
 
 #[test]
 fn set_error_recovery() {
-    use libmodbus_rs::ErrorRecoveryMode;
+    use libmodbus::ErrorRecoveryMode;
     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
 
     assert!(modbus.set_error_recovery(None).is_ok());

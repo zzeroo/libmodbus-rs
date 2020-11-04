@@ -1,6 +1,4 @@
-extern crate libmodbus_rs;
-
-use libmodbus_rs::{Modbus, ModbusServer, ModbusMapping, ModbusTCP};
+use libmodbus::{Modbus, ModbusServer, ModbusMapping, ModbusTCP};
 
 
 fn run() -> Result<(), String> {

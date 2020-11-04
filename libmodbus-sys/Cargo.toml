@@ -1,6 +1,6 @@
 [package]
 name = "libmodbus-sys"
-version = "0.9.1"
+version = "1.0.0"
 authors = ["Stefan Müller <co@zzeroo.com>"]
 build = "build.rs"
 keywords = ["modbus", "libmodbus"]
@@ -11,15 +11,16 @@ description = """
 FFI bindings to the libmodbus C library.
 """
 license = "LGPL-2.1" # same as libmodbus
+edition = "2018"
 
 [lib]
 name = "libmodbus_sys"
 path = "lib.rs"
 
 [dependencies]
-libc = "0.2.74"
+libc = "0.2.80"
 
 [build-dependencies]
-bindgen = "0.54.1"
+bindgen = "0.55.1"
 cc = "1.0"
-pkg-config = "0.3.18"
+pkg-config = "0.3.19"

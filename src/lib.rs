@@ -193,4 +193,4 @@ pub use self::modbus_rtu::{ModbusRTU, RequestToSendMode, SerialMode};
 pub use self::modbus_server::ModbusServer;
 pub use self::modbus_tcp_pi::ModbusTCPPI;
 pub use self::modbus_tcp::ModbusTCP;
-pub use self::modbus::{Modbus, Timeout, ErrorRecoveryMode, Exception, FunctionCode};
+pub use self::modbus::{*, Modbus, Timeout, ErrorRecoveryMode, Exception, FunctionCode};

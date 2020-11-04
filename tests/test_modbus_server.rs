@@ -1,6 +1,4 @@
-extern crate libmodbus_rs;
-
-use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};
+use libmodbus::{Modbus, ModbusServer, ModbusTCP};
 
 
 #[test]
