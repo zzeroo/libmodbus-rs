@@ -42,4 +42,4 @@ rem Build/test scripting
 bash -xlc "set pwd"
 bash -xlc "env"
 
-cargo test --verbose
+cargo build --verbose
