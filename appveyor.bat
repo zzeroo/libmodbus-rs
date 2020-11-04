@@ -1,4 +1,5 @@
 echo on
+SetLocal EnableDelayedExpansion
 
 rem Matrix-driven Appveyor CI script for libmodbus-rs
 rem Currently only does MSYS2 builds.
@@ -11,14 +12,19 @@ rem     channel:    stable, beta, nightly
 rem This script based on the work of the libmypaint team.
 
 rem Download rust
-appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
-rustup-init -yv --default-toolchain %channel% --default-host %target%
+set RUSTUP_URL=https://win.rustup.rs/rustup-init.exe
+echo Downloading %RUSTUP_URL%...
+powershell -Command "appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe"
+if %ERRORLEVEL% NEQ 0 exit 1
+powershell -Command "rustup-init -yv --default-toolchain %channel% --default-host %target%"
+if %ERRORLEVEL% NEQ 0 exit 1
 set PATH=%PATH%;%USERPROFILE%\.cargo\bin
 rustc -vV
 cargo -vV
 
 rem Set the paths appropriately
 PATH C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%
+PATH %PATH%;%USERPROFILE%\.cargo\bin
 
 rem Upgrade the MSYS2 platform
 bash -lc "pacman --noconfirm --sync --refresh --refresh pacman"
