@@ -173,7 +173,7 @@ impl Default for Timeout {
 /// The different parts of libmodbus are implemented as traits. The modules of this crate contains these
 /// traits and a implementation with a, hopefully safe, interface.
 ///
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Modbus {
     pub ctx: *mut ffi::modbus_t,
 }
