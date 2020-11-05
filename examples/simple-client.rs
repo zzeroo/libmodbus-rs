@@ -8,7 +8,7 @@ enum Backend {
     RTU,
 }
 
-const SERVER_ID: u8 = 247;
+const CLIENT_ID: u8 = 1;
 
 fn run(matches: &ArgMatches) -> Result<(), Box<dyn std::error::Error>> {
     let backend;
@@ -25,7 +25,7 @@ fn run(matches: &ArgMatches) -> Result<(), Box<dyn std::error::Error>> {
         Backend::RTU => {
             let serial_interface = matches.value_of("serial_interface").unwrap_or("/dev/ttyUSB1");
             modbus = Modbus::new_rtu(&serial_interface, 9600, 'N', 8, 1)?;
-            modbus.set_slave(SERVER_ID)?;
+            modbus.set_slave(CLIENT_ID)?;
         },
         Backend::TCP => {
             modbus = Modbus::new_tcp("127.0.0.1", 1502)?;

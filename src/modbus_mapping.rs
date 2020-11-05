@@ -1,7 +1,6 @@
-use failure::Error;
 use libc::{c_int, c_uint};
 use libmodbus_sys as ffi;
-
+use crate::prelude::*;
 
 /// To handle the mapping of your Modbus data, you must use this struct
 ///
@@ -48,7 +47,7 @@ impl ModbusMapping {
                                         number_registers as c_int,
                                         number_input_registers as c_int);
             if modbus_mapping.is_null() {
-                bail!(::std::io::Error::last_os_error())
+                Err(Error::Mapping { msg: "".to_owned(), source: ::std::io::Error::last_os_error() })
             } else {
                 Ok(ModbusMapping { modbus_mapping: modbus_mapping })
             }
@@ -114,7 +113,7 @@ impl ModbusMapping {
                                                                        start_input_registers as c_uint,
                                                                        number_input_registers as c_uint);
             if modbus_mapping.is_null() {
-                bail!(::std::io::Error::last_os_error())
+                Err(Error::Mapping { msg: "".to_owned(), source: ::std::io::Error::last_os_error() })
             } else {
                 Ok(ModbusMapping { modbus_mapping: modbus_mapping })
             }

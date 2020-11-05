@@ -1,7 +1,6 @@
-use failure::Error;
 use libmodbus_sys as ffi;
-use crate::prelude::*;
 use std::ffi::CString;
+use crate::prelude::*;
 
 
 /// The TCP PI (Protocol Independent) backend implements a Modbus variant used for communications over TCP IPv4 and
@@ -54,7 +53,7 @@ impl ModbusTCPPI for Modbus {
             let ctx = ffi::modbus_new_tcp_pi(node.as_ptr(), service.as_ptr());
 
             if ctx.is_null() {
-                bail!(::std::io::Error::last_os_error())
+                Err(Error::TcpPi { msg: "".to_owned(), source: ::std::io::Error::last_os_error() })
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -82,7 +81,7 @@ impl ModbusTCPPI for Modbus {
     fn tcp_pi_accept(&mut self, socket: &mut i32) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_tcp_pi_accept(self.ctx, socket) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::TcpPi { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 socket => Ok(socket),
             }
         }
@@ -125,7 +124,7 @@ impl ModbusTCPPI for Modbus {
     fn tcp_pi_listen(&mut self, num_connection: i32) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_tcp_pi_listen(self.ctx, num_connection) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::TcpPi { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 socket => Ok(socket),
             }
         }

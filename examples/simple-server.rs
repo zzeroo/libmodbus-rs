@@ -8,6 +8,8 @@ enum Backend {
     RTU,
 }
 
+const SERVER_ID: u8 = 247;
+
 fn run(matches: &ArgMatches) -> Result<(), Box<dyn std::error::Error>> {
     let backend;
     let mut modbus;
@@ -24,8 +26,8 @@ fn run(matches: &ArgMatches) -> Result<(), Box<dyn std::error::Error>> {
         Backend::RTU => {
             query = vec![0u8; Modbus::RTU_MAX_ADU_LENGTH as usize];
             let serial_interface = matches.value_of("serial_interface").unwrap_or("/dev/ttyUSB0");
-            modbus = Modbus::new_rtu(&serial_interface, 115200, 'N', 8, 1)?;
-            modbus.set_slave(247)?;
+            modbus = Modbus::new_rtu(&serial_interface, 9600, 'N', 8, 1)?;
+            modbus.set_slave(SERVER_ID)?;
         },
         Backend::TCP => {
             query = vec![0u8; Modbus::TCP_MAX_ADU_LENGTH as usize];

@@ -1,7 +1,6 @@
-use failure::Error;
 use libmodbus_sys as ffi;
-use crate::prelude::*;
 use std::ffi::CString;
+use crate::prelude::*;
 
 
 /// The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
@@ -46,7 +45,7 @@ impl ModbusTCP for Modbus {
             let ctx = ffi::modbus_new_tcp(ip.as_ptr(), port);
 
             if ctx.is_null() {
-                bail!(::std::io::Error::last_os_error())
+                Err(Error::Tcp { msg: "".to_owned(), source: ::std::io::Error::last_os_error() })
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -75,7 +74,7 @@ impl ModbusTCP for Modbus {
     fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_tcp_accept(self.ctx, socket) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Tcp { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 socket => Ok(socket),
             }
         }
@@ -104,7 +103,7 @@ impl ModbusTCP for Modbus {
     fn tcp_listen(&mut self, num_connection: i32) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_tcp_listen(self.ctx, num_connection) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Tcp { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 socket => Ok(socket),
             }
         }

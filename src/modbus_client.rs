@@ -1,7 +1,6 @@
 use libc::c_int;
 use libmodbus_sys as ffi;
 use crate::prelude::*;
-use failure::Error;
 
 
 /// The Modbus protocol defines different data types and functions to read and write them from/to remote devices.
@@ -76,7 +75,7 @@ impl ModbusClient for Modbus {
     fn read_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<u16, Error> {
         unsafe {
             match ffi::modbus_read_bits(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "read_bits failure".to_owned(), source: ::std::io::Error::last_os_error() }),
                 len => Ok(len as u16),
             }
         }
@@ -112,7 +111,7 @@ impl ModbusClient for Modbus {
     fn read_input_bits(&self, address: u16, num: u16, dest: &mut [u8]) -> Result<u16, Error> {
         unsafe {
             match ffi::modbus_read_input_bits(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 len => Ok(len as u16),
             }
         }
@@ -147,7 +146,7 @@ impl ModbusClient for Modbus {
     fn read_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<u16, Error> {
         unsafe {
             match ffi::modbus_read_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 len => Ok(len as u16),
             }
         }
@@ -184,7 +183,7 @@ impl ModbusClient for Modbus {
     fn read_input_registers(&self, address: u16, num: u16, dest: &mut [u16]) -> Result<u16, Error> {
         unsafe {
             match ffi::modbus_read_input_registers(self.ctx, address as c_int, num as c_int, dest.as_mut_ptr()) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 len => Ok(len as u16),
             }
         }
@@ -226,7 +225,7 @@ impl ModbusClient for Modbus {
 
         unsafe {
             match ffi::modbus_report_slave_id(self.ctx, max_dest as c_int, dest.as_mut_ptr()) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 len => Ok(len as u16),
             }
         }
@@ -260,7 +259,7 @@ impl ModbusClient for Modbus {
     fn write_bit(&self, address: u16, status: bool) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_write_bit(self.ctx, address as c_int, status as c_int) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 1 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -296,7 +295,7 @@ impl ModbusClient for Modbus {
     fn write_register(&self, address: u16, value: u16) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_write_register(self.ctx, address as c_int, value) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 1 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -333,7 +332,7 @@ impl ModbusClient for Modbus {
     fn write_bits(&self, address: u16, num: u16, src: &[u8]) -> Result<u16, Error> {
         unsafe {
             match ffi::modbus_write_bits(self.ctx, address as c_int, num as c_int, src.as_ptr()) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 num => Ok(num as u16),
             }
         }
@@ -370,7 +369,7 @@ impl ModbusClient for Modbus {
     fn write_registers(&self, address: u16, num: u16, src: &[u16]) -> Result<u16, Error> {
         unsafe {
             match ffi::modbus_write_registers(self.ctx, address as c_int, num as c_int, src.as_ptr()) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 num => Ok(num as u16),
             }
         }
@@ -422,7 +421,7 @@ impl ModbusClient for Modbus {
                                                                  read_address as c_int,
                                                                  read_num as c_int,
                                                                  dest.as_mut_ptr()) {
-                                                                     -1 => bail!(::std::io::Error::last_os_error()),
+                                                                     -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 num => Ok(num as u16),
             }
         }
@@ -460,7 +459,7 @@ impl ModbusClient for Modbus {
     fn mask_write_register(&self, address: u16, and_mask: u16, or_mask: u16) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_mask_write_register(self.ctx, address as c_int, and_mask, or_mask) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 1 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -508,7 +507,7 @@ impl ModbusClient for Modbus {
             match ffi::modbus_send_raw_request(self.ctx,
                                                          raw_request.as_mut_ptr(),
                                                          lenght as c_int) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 num => Ok(num as u16),
             }
         }
@@ -549,7 +548,7 @@ impl ModbusClient for Modbus {
     fn receive_confirmation(&self, response: &mut [u8]) -> Result<u16, Error> {
         unsafe {
             match ffi::modbus_receive_confirmation(self.ctx, response.as_mut_ptr()) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Client { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 len => Ok(len as u16),
             }
         }

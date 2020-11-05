@@ -1,4 +1,3 @@
-use failure::Error;
 use libmodbus_sys as ffi;
 use crate::prelude::*;
 
@@ -42,7 +41,7 @@ impl ModbusServer for Modbus {
         unsafe {
             let len = ffi::modbus_receive(self.ctx, request.as_mut_ptr());
             match len {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Server { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 len => Ok(len),
             }
         }
@@ -73,7 +72,7 @@ impl ModbusServer for Modbus {
             let len =
                 ffi::modbus_reply(self.ctx, request.as_ptr(), request_len, modbus_mapping.modbus_mapping);
             match len {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Server { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
                 len => Ok(len),
             }
         }

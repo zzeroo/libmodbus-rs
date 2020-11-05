@@ -16,7 +16,6 @@ edition = "2018"
 travis-ci = { repository = "zzeroo/libmodbus-rs" }
 
 [dependencies]
-failure = "0.1.8"
 libc = "0.2.80"
 libmodbus-sys = { path = "libmodbus-sys", version = "1" }
 rand = "0.7.3"
