@@ -1,5 +1,3 @@
-extern crate time;
-
 mod unit_test_config;
 
 use libmodbus::{Modbus, ModbusClient, ModbusTCP, ModbusRTU};
@@ -7,7 +5,7 @@ use std::env;
 use std::io::Error;
 use std::mem::size_of;
 use std::process::exit;
-use time::PreciseTime;
+use std::time::{Instant};
 use unit_test_config::*;
 
 
@@ -53,26 +51,25 @@ fn run() -> Result<(), std::io::Error> {
     println!("READ BITS\n");
 
     let nb_points = Modbus::MAX_READ_BITS as u16;
-    let start = PreciseTime::now();
+    let start = Instant::now();
     for _ in 0..n_loop {
         let rc = modbus.read_bits(0, nb_points, &mut tab_bit);
         if rc.is_err() {
             return Err(Error::last_os_error());
         }
     }
-    let end = PreciseTime::now();
-    let elapsed = start.to(end).num_milliseconds();
+    let elapsed = start.elapsed();
 
-    let rate = (n_loop * nb_points as i64) * G_MSEC_PER_SEC / elapsed;
+    let rate = (n_loop * nb_points as u128) * G_MSEC_PER_SEC as u128 / elapsed.as_millis();
     println!("Transfert rate in points/seconds:");
     println!("* {} points/s", rate);
     println!();
 
-    let bytes = n_loop * (nb_points as i64 / 8) + ( if nb_points % 8 == 0 { 1 } else { 0 } );
-    let rate = bytes / 1024 * G_MSEC_PER_SEC / elapsed;
+    let bytes = n_loop * (nb_points as u128 / 8) + ( if nb_points % 8 == 0 { 1 } else { 0 } );
+    let rate = bytes / 1024 * G_MSEC_PER_SEC as u128 / elapsed.as_millis();
     println!("Values:");
     println!("* {} x {} values", n_loop, nb_points);
-    println!("* {:.3} ms for {} bytes", elapsed, bytes);
+    println!("* {:.3} ms for {} bytes", elapsed.as_millis(), bytes);
     println!("* {} KiB/s", rate);
     println!();
 
@@ -80,35 +77,34 @@ fn run() -> Result<(), std::io::Error> {
     let bytes = 12 + 9 + (nb_points as i64 / 8) + ( if nb_points % 8 == 0 { 1 } else { 0 } );
     println!("Values and TCP Modbus overhead:");
     println!("* {} x {} bytes", n_loop, bytes);
-    let bytes = n_loop * bytes;
-    let rate = bytes / 1024 * G_MSEC_PER_SEC / elapsed;
-    println!("* {:.3} ms for {} bytes", elapsed, bytes);
+    let bytes = n_loop * bytes as u128;
+    let rate = bytes / 1024 * G_MSEC_PER_SEC as u128/ elapsed.as_millis();
+    println!("* {:.3} ms for {} bytes", elapsed.as_millis(), bytes);
     println!("* {} KiB/s", rate);
     println!("\n");
 
     println!("READ REGISTERS\n");
 
     let nb_points = Modbus::MAX_READ_REGISTERS as u16;
-    let start = PreciseTime::now();
+    let start = Instant::now();
     for _ in 0..n_loop {
         let rc = modbus.read_registers(0, nb_points, &mut tab_reg);
         if rc.is_err() {
             return Err(Error::last_os_error());
         }
     }
-    let end = PreciseTime::now();
-    let elapsed = start.to(end).num_milliseconds();
+    let elapsed = start.elapsed();
 
-    let rate = (n_loop * nb_points as i64) * G_MSEC_PER_SEC / elapsed;
+    let rate = (n_loop * nb_points as u128) * G_MSEC_PER_SEC as u128/ elapsed.as_millis();
     println!("Transfert rate in points/seconds:");
     println!("* {} registers/s", rate);
     println!();
 
-    let bytes = n_loop * nb_points as i64 * size_of::<u16>() as i64;
-    let rate = bytes / 1024 * G_MSEC_PER_SEC / elapsed;
+    let bytes = n_loop * nb_points as u128 * size_of::<u16>() as u128;
+    let rate = bytes / 1024 * G_MSEC_PER_SEC as u128/ elapsed.as_millis();
     println!("Values:");
     println!("* {} x {} values", n_loop, nb_points);
-    println!("* {:.3} ms for {} bytes", elapsed, bytes);
+    println!("* {:.3} ms for {} bytes", elapsed.as_millis(), bytes);
     println!("* {} KiB/s", rate);
     println!("");
 
@@ -116,16 +112,16 @@ fn run() -> Result<(), std::io::Error> {
     let bytes = 12 + 9 + (nb_points as i64 * size_of::<u16>() as i64);
     println!("Values and TCP Modbus overhead:");
     println!("* {} x {} bytes", n_loop, bytes);
-    let bytes = n_loop * bytes;
-    let rate = bytes / 1024 * G_MSEC_PER_SEC / elapsed;
-    println!("* {:.3} ms for {} bytes", elapsed, bytes);
+    let bytes = n_loop * bytes as u128;
+    let rate = bytes / 1024 * G_MSEC_PER_SEC as u128/ elapsed.as_millis();
+    println!("* {:.3} ms for {} bytes", elapsed.as_millis(), bytes);
     println!("* {} KiB/s", rate);
     println!("\n");
 
     println!("WRITE AND READ REGISTERS\n");
 
     let nb_points = Modbus::MAX_WR_WRITE_REGISTERS as u16;
-    let start = PreciseTime::now();
+    let start = Instant::now();
     for _ in 0..n_loop {
         let rc = modbus.write_and_read_registers(0, nb_points, &tab_reg.clone(), // FIXME: this clone costs to much
                                                  0, nb_points, &mut tab_reg);
@@ -133,19 +129,18 @@ fn run() -> Result<(), std::io::Error> {
             return Err(Error::last_os_error());
         }
     }
-    let end = PreciseTime::now();
-    let elapsed = start.to(end).num_milliseconds();
+    let elapsed = start.elapsed();
 
-    let rate = (n_loop * nb_points as i64) * G_MSEC_PER_SEC / elapsed;
+    let rate = (n_loop * nb_points as u128) * G_MSEC_PER_SEC as u128/ elapsed.as_millis();
     println!("Transfert rate in points/seconds:");
     println!("* {} registers/s", rate);
     println!("");
 
-    let bytes = n_loop * nb_points as i64 * size_of::<u16>() as i64;
-    let rate = bytes / 1024 * G_MSEC_PER_SEC / elapsed;
+    let bytes = n_loop * nb_points as u128 * size_of::<u16>() as u128;
+    let rate = bytes / 1024 * G_MSEC_PER_SEC as u128/ elapsed.as_millis();
     println!("Values:");
     println!("* {} x {} values", n_loop, nb_points);
-    println!("* {:.3} ms for {} bytes", elapsed, bytes);
+    println!("* {:.3} ms for {} bytes", elapsed.as_millis(), bytes);
     println!("* {} KiB/s", rate);
     println!("");
 
@@ -153,9 +148,9 @@ fn run() -> Result<(), std::io::Error> {
     let bytes = 12 + 9 + (nb_points as i64 * size_of::<u16>() as i64);
     println!("Values and TCP Modbus overhead:");
     println!("* {} x {} bytes", n_loop, bytes);
-    let bytes = n_loop * bytes;
-    let rate = bytes / 1024 * G_MSEC_PER_SEC / elapsed;
-    println!("* {:.3} ms for {} bytes", elapsed, bytes);
+    let bytes = n_loop * bytes as u128;
+    let rate = bytes / 1024 * G_MSEC_PER_SEC as u128/ elapsed.as_millis();
+    println!("* {:.3} ms for {} bytes", elapsed.as_millis(), bytes);
     println!("* {} KiB/s", rate);
     println!("");
 

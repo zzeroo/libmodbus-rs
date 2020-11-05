@@ -4,7 +4,7 @@ These examples are provided under BSD license (see associated LICENSE file).
 
 # Usage
 
-All original libmodbus examples are reproduced in Rust. You can find them in the `examples` directory of this crate.
+Most of the original libmodbus examples are reproduced in Rust. You can find them in the `examples` directory of this crate.
 
 * `random-test-server.rs` is necessary to launch a server before running `random-test-client.rs`. By default, it receives and replies to Modbus query on the localhost and port 1502.
 

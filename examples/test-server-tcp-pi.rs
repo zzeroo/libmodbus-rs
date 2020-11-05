@@ -1,8 +1,7 @@
-use failure::Error;
 use libmodbus::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
 
 
-fn run() -> Result<(), Error> {
+fn run() -> Result<(), Box<dyn std::error::Error>> {
     let mut modbus = Modbus::new_tcp_pi("::0", "1502")?;
     let mut socket = modbus.tcp_pi_listen(1)?;
     modbus.tcp_pi_accept(&mut socket)?;

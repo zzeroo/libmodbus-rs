@@ -4,7 +4,6 @@
 
 mod unit_test_config;
 
-use failure::Error;
 use libmodbus::{Modbus, ModbusMapping, ModbusClient, ModbusServer, ModbusTCP, ModbusTCPPI, ModbusRTU};
 use libmodbus::Exception;
 use libmodbus::prelude::*;
@@ -14,7 +13,7 @@ use std::time::Duration;
 use unit_test_config::*;
 
 
-fn run() -> Result<(), Error> {
+fn run() -> Result<(), Box<dyn std::error::Error>> {
     let backend;
 
     let args: Vec<_> = env::args().collect();

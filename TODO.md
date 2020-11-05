@@ -1,5 +1,8 @@
 # TODOs
 
+## Easy
+[] remove usage of 'clap' crate, way to much dependencies!
+
 ## Urgend
 
 - Error Handling

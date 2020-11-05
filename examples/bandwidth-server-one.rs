@@ -47,7 +47,6 @@ fn run() -> Result<(), std::io::Error> {
         }.unwrap();
     }
 
-
     Ok(())
 }
 

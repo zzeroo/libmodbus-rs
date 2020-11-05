@@ -1,8 +1,5 @@
-#[macro_use] extern crate failure;
-
 mod unit_test_config;
 
-use failure::Error;
 use libmodbus::prelude::*;
 use libmodbus::{Modbus, ModbusClient, ModbusTCP, ModbusTCPPI, ModbusRTU,
                    Exception, FunctionCode, Timeout, ErrorRecoveryMode};
@@ -35,7 +32,7 @@ fn equal_dword(tab_reg: &[u16], value: u32) -> bool {
     tab_reg[0] as u32 == (value >> 16) && tab_reg[1] as u32 == (value & 0xFFFF)
 }
 
-fn run() -> Result<(), Error> {
+fn run() -> Result<(), Box<dyn std::error::Error>> {
     const NB_REPORT_SLAVE_ID: usize = 10;
     let backend;
 
@@ -642,7 +639,7 @@ fn run() -> Result<(), Error> {
     print!("\nALL TESTS PASS WITH SUCCESS.\n");
     let success = true;
 
-    if success { Ok(()) } else { Err(format_err!("Unit test client failure")) }
+    if success { Ok(()) } else { Err("Unit test client failure".into()) }
 }
 
 fn test_server(modbus: &mut Modbus, backend: Backend) -> Result<(), Error> {
