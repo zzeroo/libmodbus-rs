@@ -1,7 +1,6 @@
-use failure::Error;
+use crate::prelude::*;
 use libc::{c_int, c_uint};
 use libmodbus_sys as ffi;
-
 
 /// To handle the mapping of your Modbus data, you must use this struct
 ///
@@ -34,23 +33,33 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
     /// ```
-    pub fn new(number_bits: u32, number_input_bits: u32, number_registers: u32, number_input_registers: u32)
-               -> Result<ModbusMapping, Error> {
+    pub fn new(
+        number_bits: u32,
+        number_input_bits: u32,
+        number_registers: u32,
+        number_input_registers: u32,
+    ) -> Result<ModbusMapping, Error> {
         unsafe {
-            let modbus_mapping =
-                ffi::modbus_mapping_new(number_bits as c_int,
-                                        number_input_bits as c_int,
-                                        number_registers as c_int,
-                                        number_input_registers as c_int);
+            let modbus_mapping = ffi::modbus_mapping_new(
+                number_bits as c_int,
+                number_input_bits as c_int,
+                number_registers as c_int,
+                number_input_registers as c_int,
+            );
             if modbus_mapping.is_null() {
-                bail!(::std::io::Error::last_os_error())
+                Err(Error::Mapping {
+                    msg: "new".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                })
             } else {
-                Ok(ModbusMapping { modbus_mapping: modbus_mapping })
+                Ok(ModbusMapping {
+                    modbus_mapping: modbus_mapping,
+                })
             }
         }
     }
@@ -66,8 +75,7 @@ impl ModbusMapping {
     /// zero, for eg. to make available registers from 10000 to 10009, you can use:
     ///
     /// ```rust
-    /// # extern crate libmodbus_rs;
-    /// # use libmodbus_rs::ModbusMapping;
+    /// # use libmodbus::ModbusMapping;
     /// # fn main() {
     /// let mapping = ModbusMapping::new_start_address(0, 0, 0, 0, 10000, 10, 0, 0);
     /// # }
@@ -96,28 +104,41 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
     /// let modbus_mapping = ModbusMapping::new_start_address(0, 0, 0, 0, 10000, 10, 0, 0).unwrap();
     /// ```
-    pub fn new_start_address(start_bits: u16, number_bits: u16, start_input_bits: u16, number_input_bits: u16,
-                             start_registers: u16, number_registers: u16, start_input_registers: u16,
-                             number_input_registers: u16)
-                             -> Result<ModbusMapping, Error> {
+    pub fn new_start_address(
+        start_bits: u16,
+        number_bits: u16,
+        start_input_bits: u16,
+        number_input_bits: u16,
+        start_registers: u16,
+        number_registers: u16,
+        start_input_registers: u16,
+        number_input_registers: u16,
+    ) -> Result<ModbusMapping, Error> {
         unsafe {
-            let modbus_mapping = ffi::modbus_mapping_new_start_address(start_bits as c_uint,
-                                                                       number_bits as c_uint,
-                                                                       start_input_bits as c_uint,
-                                                                       number_input_bits as c_uint,
-                                                                       start_registers as c_uint,
-                                                                       number_registers as c_uint,
-                                                                       start_input_registers as c_uint,
-                                                                       number_input_registers as c_uint);
+            let modbus_mapping = ffi::modbus_mapping_new_start_address(
+                start_bits as c_uint,
+                number_bits as c_uint,
+                start_input_bits as c_uint,
+                number_input_bits as c_uint,
+                start_registers as c_uint,
+                number_registers as c_uint,
+                start_input_registers as c_uint,
+                number_input_registers as c_uint,
+            );
             if modbus_mapping.is_null() {
-                bail!(::std::io::Error::last_os_error())
+                Err(Error::Mapping {
+                    msg: "new_start_address".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                })
             } else {
-                Ok(ModbusMapping { modbus_mapping: modbus_mapping })
+                Ok(ModbusMapping {
+                    modbus_mapping: modbus_mapping,
+                })
             }
         }
     }
@@ -132,7 +153,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```no_run
-    /// use libmodbus_rs::ModbusMapping;
+    /// use libmodbus::ModbusMapping;
     /// let mut modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
     ///
     /// modbus_mapping.free();
@@ -140,6 +161,7 @@ impl ModbusMapping {
     pub fn free(&mut self) {
         unsafe {
             ffi::modbus_mapping_free(self.modbus_mapping);
+            self.modbus_mapping = std::ptr::null_mut();
         }
     }
 
@@ -156,7 +178,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -164,7 +186,10 @@ impl ModbusMapping {
     /// ```
     pub fn get_bits(&self) -> &[u8] {
         unsafe {
-            ::std::slice::from_raw_parts((*self.modbus_mapping).tab_bits, (*self.modbus_mapping).nb_bits as usize)
+            ::std::slice::from_raw_parts(
+                (*self.modbus_mapping).tab_bits,
+                (*self.modbus_mapping).nb_bits as usize,
+            )
         }
     }
 
@@ -181,7 +206,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -189,7 +214,10 @@ impl ModbusMapping {
     /// ```
     pub fn get_bits_mut(&self) -> &mut [u8] {
         unsafe {
-            ::std::slice::from_raw_parts_mut((*self.modbus_mapping).tab_bits, (*self.modbus_mapping).nb_bits as usize)
+            ::std::slice::from_raw_parts_mut(
+                (*self.modbus_mapping).tab_bits,
+                (*self.modbus_mapping).nb_bits as usize,
+            )
         }
     }
 
@@ -206,7 +234,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -214,8 +242,10 @@ impl ModbusMapping {
     /// ```
     pub fn get_input_bits(&self) -> &[u8] {
         unsafe {
-            ::std::slice::from_raw_parts((*self.modbus_mapping).tab_input_bits,
-                                         (*self.modbus_mapping).nb_input_bits as usize)
+            ::std::slice::from_raw_parts(
+                (*self.modbus_mapping).tab_input_bits,
+                (*self.modbus_mapping).nb_input_bits as usize,
+            )
         }
     }
 
@@ -232,7 +262,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -240,8 +270,10 @@ impl ModbusMapping {
     /// ```
     pub fn get_input_bits_mut(&self) -> &mut [u8] {
         unsafe {
-            ::std::slice::from_raw_parts_mut((*self.modbus_mapping).tab_input_bits,
-                                             (*self.modbus_mapping).nb_input_bits as usize)
+            ::std::slice::from_raw_parts_mut(
+                (*self.modbus_mapping).tab_input_bits,
+                (*self.modbus_mapping).nb_input_bits as usize,
+            )
         }
     }
 
@@ -258,7 +290,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -266,8 +298,10 @@ impl ModbusMapping {
     /// ```
     pub fn get_input_registers(&self) -> &[u16] {
         unsafe {
-            ::std::slice::from_raw_parts((*self.modbus_mapping).tab_input_registers,
-                                         (*self.modbus_mapping).nb_input_registers as usize)
+            ::std::slice::from_raw_parts(
+                (*self.modbus_mapping).tab_input_registers,
+                (*self.modbus_mapping).nb_input_registers as usize,
+            )
         }
     }
 
@@ -284,7 +318,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -292,8 +326,10 @@ impl ModbusMapping {
     /// ```
     pub fn get_input_registers_mut(&self) -> &mut [u16] {
         unsafe {
-            ::std::slice::from_raw_parts_mut((*self.modbus_mapping).tab_input_registers,
-                                             (*self.modbus_mapping).nb_input_registers as usize)
+            ::std::slice::from_raw_parts_mut(
+                (*self.modbus_mapping).tab_input_registers,
+                (*self.modbus_mapping).nb_input_registers as usize,
+            )
         }
     }
 
@@ -310,7 +346,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -318,8 +354,10 @@ impl ModbusMapping {
     /// ```
     pub fn get_registers(&self) -> &[u16] {
         unsafe {
-            ::std::slice::from_raw_parts((*self.modbus_mapping).tab_registers,
-                                         (*self.modbus_mapping).nb_registers as usize)
+            ::std::slice::from_raw_parts(
+                (*self.modbus_mapping).tab_registers,
+                (*self.modbus_mapping).nb_registers as usize,
+            )
         }
     }
 
@@ -336,7 +374,7 @@ impl ModbusMapping {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus_mapping = ModbusMapping::new(5, 5, 5, 5).unwrap();
     ///
@@ -344,8 +382,10 @@ impl ModbusMapping {
     /// ```
     pub fn get_registers_mut(&self) -> &mut [u16] {
         unsafe {
-            ::std::slice::from_raw_parts_mut((*self.modbus_mapping).tab_registers,
-                                             (*self.modbus_mapping).nb_registers as usize)
+            ::std::slice::from_raw_parts_mut(
+                (*self.modbus_mapping).tab_registers,
+                (*self.modbus_mapping).nb_registers as usize,
+            )
         }
     }
 }

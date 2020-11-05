@@ -1,8 +1,6 @@
-use failure::Error;
+use crate::prelude::*;
 use libmodbus_sys as ffi;
-use modbus::Modbus;
 use std::ffi::CString;
-
 
 /// The TCP backend implements a Modbus variant used for communications over TCP/IPv4 networks.
 /// It does not require a checksum calculation as lower layer takes care of the same.
@@ -30,7 +28,7 @@ impl ModbusTCP for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let modbus = Modbus::new_tcp("127.0.0.1", Modbus::TCP_DEFAULT_PORT as i32).unwrap();
@@ -46,7 +44,10 @@ impl ModbusTCP for Modbus {
             let ctx = ffi::modbus_new_tcp(ip.as_ptr(), port);
 
             if ctx.is_null() {
-                bail!(::std::io::Error::last_os_error())
+                Err(Error::Tcp {
+                    msg: "new_tcp".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                })
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -65,7 +66,7 @@ impl ModbusTCP for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut socket = modbus.tcp_listen(1).unwrap();
@@ -75,12 +76,14 @@ impl ModbusTCP for Modbus {
     fn tcp_accept(&mut self, socket: &mut i32) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_tcp_accept(self.ctx, socket) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Tcp {
+                    msg: "tcp_accept".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 socket => Ok(socket),
             }
         }
     }
-
 
     /// `tcp_listen` - create and listen a TCP Modbus socket (IPv4)
     ///
@@ -95,7 +98,7 @@ impl ModbusTCP for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusTCP};
     ///
     /// let mut modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     ///
@@ -104,7 +107,10 @@ impl ModbusTCP for Modbus {
     fn tcp_listen(&mut self, num_connection: i32) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_tcp_listen(self.ctx, num_connection) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Tcp {
+                    msg: "tcp_listen".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 socket => Ok(socket),
             }
         }

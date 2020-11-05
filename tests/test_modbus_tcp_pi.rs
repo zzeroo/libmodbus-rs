@@ -1,7 +1,4 @@
-extern crate libmodbus_rs;
-
-use libmodbus_rs::{Modbus, ModbusTCPPI};
-
+use libmodbus::{Modbus, ModbusTCPPI};
 
 #[test]
 fn new_tcp_pi() {

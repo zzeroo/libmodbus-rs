@@ -1,7 +1,4 @@
-extern crate libmodbus_rs;
-
-use libmodbus_rs::{Modbus, ModbusTCP};
-
+use libmodbus::{Modbus, ModbusTCP};
 
 #[test]
 fn new_tcp() {

@@ -1,7 +1,8 @@
-# libmodbus-rs
-## [libmodbus](http://libmodbus.org/) bindings for Rust &nbsp;
+# libmodbus
 
-**This crate is an reduced version without active bindgen! I need this because our build system can not deliver rust and libclang. Please don't use in production and expect odd behavior.**
+> This crate was renamed to just *libmodbus*. Before version 1.0.0 the name of the crate was libmodbus-rs.
+
+## [libmodbus](http://libmodbus.org/) bindings for Rust
 
 Libmodbus is a free software library to send and receive data with a device that respects the Modbus protocol. That crate contains the Rust bindings for the libmodbus library (written in C).
 Like libmodbus self, this crate supports serial port and Ethernet connections for Modbus server and clients.
@@ -9,6 +10,7 @@ Like libmodbus self, this crate supports serial port and Ethernet connections fo
 
 [![Crates.io version](https://img.shields.io/crates/v/libmodbus-rs.svg)](https://crates.io/crates/libmodbus-rs) &nbsp;
 [![Build Status](https://travis-ci.org/zzeroo/libmodbus-rs.svg?branch=master)](https://travis-ci.org/zzeroo/libmodbus-rs) &nbsp;
+[![Build status](https://ci.appveyor.com/api/projects/status/v24293bvng52ihn5/branch/master?svg=true)](https://ci.appveyor.com/project/zzeroo/libmodbus-rs/branch/master) &nbsp;
 [![Coverage Status](https://coveralls.io/repos/github/zzeroo/libmodbus-rs/badge.svg?branch=master)](https://coveralls.io/github/zzeroo/libmodbus-rs?branch=master)
 
 [Homepage |][homepage] &nbsp;
@@ -27,7 +29,7 @@ Include the dependencies into your `Cargo.toml` file.
 
 ```toml
 [dependencies]
-libmodbus-rs = "0.6"
+libmodbus-rs = "1"
 ```
 
 ### or development (github master)
@@ -43,7 +45,7 @@ For example if you what to build an modbus server, in the modbus tcp context, in
 ```rust
 extern crate libmodbus_rs;
 
-use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};
+use libmodbus::{Modbus, ModbusServer, ModbusTCP};
 ```
 
 The examples in the examples directory show this.
@@ -56,7 +58,7 @@ The examples in the examples directory show this.
 
 ## Building libmodbus-rs
 
-The libmodbus ffi bindings (libmodbus-sys) are build using [bindgen][bindgen]. [Bindgen need Clang 3.9 or greater on your system.][bindgen-reg]
+The libmodbus ffi bindings (libmodbus-sys) are build using [bindgen][bindgen]. [Bindgen need Clang 3.9 or greater on your system.][bindgen-requirements]
 
 ### Dependencies Archlinux
 
@@ -72,7 +74,29 @@ apt install autoconf build-essential curl clang git-core libtool
 
 Look also at the local ci/ docker files under `./ci/docker-archlinux` and `.ci/docker-debian9` for a known working, minimal setup.
 
-For more information about the bindgen requirements please visit [https://servo.github.io/rust-bindgen/requirements.html][bindgen-reg]
+For more information about the bindgen requirements please visit [https://servo.github.io/rust-bindgen/requirements.html][bindgen-requirements]
+
+## Dependencies Windows
+
+Follow the msys2 instructions <https://www.msys2.org>
+
+```sh
+pacman -Syu
+```
+
+Followed by the second update step
+
+```sh
+pacman -Su
+```
+
+Finally install clang
+
+```sh
+pacman -S  mingw64/mingw-w64-x86_64-clang
+```
+
+----
 
 If all dependencies are solved, compile with `cargo build` and/ or run the tests with `cargo test`.
 
@@ -82,11 +106,10 @@ cd libmodbus-rs
 cargo build
 ```
 
-
 ## Examples
 
-All original libmodbus examples are reproduced in Rust. You can find them in the
-`examples` directory of this crate.
+Most of the original libmodbus examples are reproduced in Rust.
+You can found them in the `examples` directory of this crate.
 
 **Please have look at the README.md in the examples directory for more information about the examples.**
 
@@ -97,15 +120,14 @@ cargo run --example random-test-server
 ```
 
 In another shell start the client after the server
+
 ```sh
 cargo run --example random-test-client
 ```
 
-
 # License
 
 `libmodbus-rs` is distributed under the terms of the LGPL-2.1 license, which is the same license, [libmodbus](http://libmodbus.org/) is using.
-
 
 # Links
 
@@ -124,4 +146,4 @@ This project hosts the original libmodbus documentation, used here, as well. Ple
 [libmodbus-repo]: https://github.com/stephane/libmodbus.git
 [libmodbus-doc]: http://zzeroo.github.io/libmodbus-rs/libmodbus/libmodbus.html
 [bindgen]: https://github.com/servo/rust-bindgen
-[bindgen-reg]: https://servo.github.io/rust-bindgen/requirements.html
+[bindgen-requirements]: https://servo.github.io/rust-bindgen/requirements.html

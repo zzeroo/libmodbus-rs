@@ -1,6 +1,8 @@
-#![doc(html_logo_url = "https://zzeroo.github.io/share/zzeroo-logo.png",
-       html_favicon_url = "https://zzeroo.github.io/share/favicon.ico",
-html_root_url = "https://zzeroo.com/")]
+#![doc(
+    html_logo_url = "https://zzeroo.github.io/share/zzeroo-logo.png",
+    html_favicon_url = "https://zzeroo.github.io/share/favicon.ico",
+    html_root_url = "https://zzeroo.com/"
+)]
 //! This is an 'hopefully' safe Rust interface for the [libmodbus](http://libmodbus.org/) C library from
 //! http://libmodbus.org/.
 //!
@@ -172,25 +174,24 @@ html_root_url = "https://zzeroo.com/")]
 // `error_chain!` can recurse deeply(3)
 #![recursion_limit = "1024"]
 
-#[macro_use] extern crate failure;
 extern crate libc;
 extern crate libmodbus_sys;
 
+pub mod error;
+mod modbus;
 mod modbus_client;
 mod modbus_mapping;
 mod modbus_rtu;
 mod modbus_server;
-mod modbus_tcp_pi;
 mod modbus_tcp;
-mod modbus;
-pub mod error;
+mod modbus_tcp_pi;
 pub mod prelude;
 
 pub use self::error::*;
+pub use self::modbus::{ErrorRecoveryMode, Exception, FunctionCode, Modbus, Timeout, *};
 pub use self::modbus_client::ModbusClient;
 pub use self::modbus_mapping::ModbusMapping;
 pub use self::modbus_rtu::{ModbusRTU, RequestToSendMode, SerialMode};
 pub use self::modbus_server::ModbusServer;
-pub use self::modbus_tcp_pi::ModbusTCPPI;
 pub use self::modbus_tcp::ModbusTCP;
-pub use self::modbus::{Modbus, Timeout, ErrorRecoveryMode, Exception, FunctionCode};
+pub use self::modbus_tcp_pi::ModbusTCPPI;

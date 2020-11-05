@@ -1,8 +1,6 @@
-use failure::Error;
+use crate::prelude::*;
 use libmodbus_sys as ffi;
-use modbus::Modbus;
 use std::ffi::CString;
-
 
 /// The TCP PI (Protocol Independent) backend implements a Modbus variant used for communications over TCP IPv4 and
 /// IPv6 networks.
@@ -38,7 +36,7 @@ impl ModbusTCPPI for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusTCPPI};
+    /// use libmodbus::{Modbus, ModbusTCPPI};
     ///
     /// let modbus = Modbus::new_tcp_pi("::1", "1502").unwrap();
     ///
@@ -54,7 +52,10 @@ impl ModbusTCPPI for Modbus {
             let ctx = ffi::modbus_new_tcp_pi(node.as_ptr(), service.as_ptr());
 
             if ctx.is_null() {
-                bail!(::std::io::Error::last_os_error())
+                Err(Error::TcpPi {
+                    msg: "new_tcp_pi".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                })
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -73,7 +74,7 @@ impl ModbusTCPPI for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
     ///
     /// let mut modbus = Modbus::new_tcp_pi("::0", "1502").unwrap();
     /// let mut socket = modbus.tcp_pi_listen(1).unwrap();
@@ -82,7 +83,10 @@ impl ModbusTCPPI for Modbus {
     fn tcp_pi_accept(&mut self, socket: &mut i32) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_tcp_pi_accept(self.ctx, socket) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::TcpPi {
+                    msg: "tcp_pi_accept".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 socket => Ok(socket),
             }
         }
@@ -107,7 +111,7 @@ impl ModbusTCPPI for Modbus {
     /// * bandwidth-server-many-up.rs   - handles several connection at once
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
+    /// use libmodbus::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
     ///
     /// let mut modbus = Modbus::new_tcp_pi("::0", "1502").unwrap();
     /// let mut socket = modbus.tcp_pi_listen(1).unwrap();
@@ -125,7 +129,10 @@ impl ModbusTCPPI for Modbus {
     fn tcp_pi_listen(&mut self, num_connection: i32) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_tcp_pi_listen(self.ctx, num_connection) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::TcpPi {
+                    msg: "tcp_pi_listen".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 socket => Ok(socket),
             }
         }

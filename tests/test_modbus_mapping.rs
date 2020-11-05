@@ -1,8 +1,4 @@
-#![allow(unused_imports)]
-extern crate libmodbus_rs;
-
-use libmodbus_rs::{Modbus, ModbusMapping, ModbusTCP};
-
+use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
 
 #[test]
 fn new() {
