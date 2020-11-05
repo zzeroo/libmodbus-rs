@@ -2,11 +2,10 @@
 //
 // It shows how to use the ModbusTCPPI context.
 //
-use failure::Error;
 use libmodbus::{Modbus, ModbusMapping, ModbusServer, ModbusTCP};
 
 
-fn run() -> Result<(), Error> {
+fn run() -> Result<(), Box<dyn std::error::Error>> {
     let mut modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
     let mut socket = modbus.tcp_listen(1)?;
     modbus.tcp_accept(&mut socket)?;

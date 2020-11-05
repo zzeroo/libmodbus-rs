@@ -8,7 +8,7 @@ enum Backend {
     RTU,
 }
 
-const CLIENT_ID: u8 = 1;
+const CLIENT_ID: u8 = 247;
 
 fn run(matches: &ArgMatches) -> Result<(), Box<dyn std::error::Error>> {
     let backend;
@@ -37,7 +37,7 @@ fn run(matches: &ArgMatches) -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    // modbus.set_debug(true)?;
+    modbus.set_debug(true)?;
     modbus.connect()?;
 
     let mut dest = vec![0u8; 100];

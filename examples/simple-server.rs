@@ -47,7 +47,7 @@ fn run(matches: &ArgMatches) -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    // modbus.set_debug(true)?;
+    modbus.set_debug(true)?;
     modbus.connect()?;
 
     let modbus_mapping = ModbusMapping::new(500, 500, 500, 500).unwrap();
