@@ -1,7 +1,5 @@
 // FIXME: Not working ATM
 
-extern crate clap;
-
 use clap::{Arg, ArgMatches, App};
 use std::process::Command;
 

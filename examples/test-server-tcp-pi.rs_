@@ -1,9 +1,5 @@
-extern crate clap;
-extern crate failure;
-extern crate libmodbus_rs;
-
 use failure::Error;
-use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
+use libmodbus::{Modbus, ModbusMapping, ModbusServer, ModbusTCPPI};
 
 
 fn run() -> Result<(), Error> {

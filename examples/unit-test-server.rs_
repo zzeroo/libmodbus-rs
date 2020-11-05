@@ -2,15 +2,12 @@
 #![allow(unused_assignments)]
 #![allow(dead_code)]
 
-extern crate failure;
-extern crate libmodbus_rs;
-
 mod unit_test_config;
 
 use failure::Error;
-use libmodbus_rs::{Modbus, ModbusMapping, ModbusClient, ModbusServer, ModbusTCP, ModbusTCPPI, ModbusRTU};
-use libmodbus_rs::Exception;
-use libmodbus_rs::prelude::*;
+use libmodbus::{Modbus, ModbusMapping, ModbusClient, ModbusServer, ModbusTCP, ModbusTCPPI, ModbusRTU};
+use libmodbus::Exception;
+use libmodbus::prelude::*;
 use std::env;
 use std::thread::sleep;
 use std::time::Duration;

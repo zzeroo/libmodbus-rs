@@ -1,0 +1,44 @@
+# Appveyor configuration for Rust using rustup for Rust installation
+# Based on the template https://github.com/starkat99/appveyor-rust
+# Please validate before push https://ci.appveyor.com/tools/validate-yaml
+
+## Operating System (VM environment) ##
+
+# Rust needs at least Visual Studio 2013 Appveyor OS for MSVC targets.
+os: Visual Studio 2015
+
+## Build Matrix ##
+
+environment:
+  matrix:
+    - compiler: msys2
+      ARCH: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      channel: stable
+      target: x86_64-pc-windows-gnu
+    - compiler: msys2
+      ARCH: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: MINGW64
+      channel: nightly
+      target: x86_64-pc-windows-gnu
+    # - compiler: msys2
+    #   ARCH: x86
+    #   MSYS2_ARCH: i686
+    #   MSYS2_DIR: msys64
+    #   MSYSTEM: MINGW32
+    #   channel: stable
+    #   target: i686-pc-windows-gnu
+
+### Allowed failures ###
+
+matrix:
+  allow_failures:
+    - channel: nightly
+
+build_script:
+  - '%APPVEYOR_BUILD_FOLDER%\appveyor.bat'
+

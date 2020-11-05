@@ -1,8 +1,6 @@
-extern crate libmodbus_rs;
-
 mod unit_test_config;
 
-use libmodbus_rs::{Modbus, ModbusMapping, ModbusServer, ModbusTCP, ModbusRTU};
+use libmodbus::{Modbus, ModbusMapping, ModbusServer, ModbusTCP, ModbusRTU};
 use std::env;
 use unit_test_config::*;
 

@@ -1,8 +1,5 @@
-use failure::Error;
+use crate::prelude::*;
 use libmodbus_sys as ffi;
-use modbus_mapping::ModbusMapping;
-use modbus::Modbus;
-
 
 /// The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus
 /// offers the following functions to handle requests:
@@ -14,7 +11,12 @@ use modbus::Modbus;
 ///
 pub trait ModbusServer {
     fn receive(&self, request: &mut [u8]) -> Result<i32, Error>;
-    fn reply(&self, request: &[u8], request_len: i32, modbus_mapping: &ModbusMapping) -> Result<i32, Error>;
+    fn reply(
+        &self,
+        request: &[u8],
+        request_len: i32,
+        modbus_mapping: &ModbusMapping,
+    ) -> Result<i32, Error>;
 }
 
 impl ModbusServer for Modbus {
@@ -31,7 +33,7 @@ impl ModbusServer for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusServer, ModbusTCP};
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut query = vec![0; Modbus::MAX_ADU_LENGTH as usize];
     ///
@@ -43,7 +45,10 @@ impl ModbusServer for Modbus {
         unsafe {
             let len = ffi::modbus_receive(self.ctx, request.as_mut_ptr());
             match len {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Server {
+                    msg: "receive".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 len => Ok(len),
             }
         }
@@ -62,19 +67,31 @@ impl ModbusServer for Modbus {
     /// # Examples
     ///
     /// ```rust,no_run
-    /// use libmodbus_rs::{Modbus, ModbusServer, ModbusTCP};
+    /// use libmodbus::{Modbus, ModbusServer, ModbusTCP};
     ///
     /// let modbus = Modbus::new_tcp("127.0.0.1", 1502).unwrap();
     /// let mut query = vec![0; Modbus::MAX_ADU_LENGTH as usize];
     ///
     /// assert!(modbus.receive(&mut query).is_ok());
     /// ```
-    fn reply(&self, request: &[u8], request_len: i32, modbus_mapping: &ModbusMapping) -> Result<i32, Error> {
+    fn reply(
+        &self,
+        request: &[u8],
+        request_len: i32,
+        modbus_mapping: &ModbusMapping,
+    ) -> Result<i32, Error> {
         unsafe {
-            let len =
-                ffi::modbus_reply(self.ctx, request.as_ptr(), request_len, modbus_mapping.modbus_mapping);
+            let len = ffi::modbus_reply(
+                self.ctx,
+                request.as_ptr(),
+                request_len,
+                modbus_mapping.modbus_mapping,
+            );
             match len {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Server {
+                    msg: "reply".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 len => Ok(len),
             }
         }

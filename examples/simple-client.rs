@@ -1,11 +1,5 @@
-extern crate clap;
-extern crate failure;
-extern crate libmodbus_rs;
-
 use clap::{App, Arg, ArgMatches};
-use failure::Error;
-use libmodbus_rs::{Modbus, ModbusRTU, ModbusTCP, ModbusTCPPI};
-
+use libmodbus::{Modbus, ModbusClient, ModbusRTU, ModbusTCP, ModbusTCPPI};
 
 #[derive(Debug, Eq, PartialEq)]
 enum Backend {
@@ -14,9 +8,9 @@ enum Backend {
     RTU,
 }
 
-const SERVER_ID: u8 = 247;
+const CLIENT_ID: u8 = 1;
 
-fn run(matches: &ArgMatches) -> Result<(), Error> {
+fn run(matches: &ArgMatches) -> Result<(), Box<dyn std::error::Error>> {
     let backend;
     let mut modbus: Modbus;
 
@@ -29,46 +23,52 @@ fn run(matches: &ArgMatches) -> Result<(), Error> {
 
     match backend {
         Backend::RTU => {
-            let serial_interface = matches.value_of("serial_interface").unwrap_or("/dev/ttyUSB1");
+            let serial_interface = matches
+                .value_of("serial_interface")
+                .unwrap_or("/dev/ttyUSB1");
             modbus = Modbus::new_rtu(&serial_interface, 9600, 'N', 8, 1)?;
-            modbus.set_slave(SERVER_ID)?;
-        },
+            modbus.set_slave(CLIENT_ID)?;
+        }
         Backend::TCP => {
             modbus = Modbus::new_tcp("127.0.0.1", 1502)?;
-        },
+        }
         Backend::TCPPI => {
             modbus = Modbus::new_tcp_pi("::1", "1502")?;
-        },
+        }
     }
 
-    modbus.set_debug(true)?;
+    // modbus.set_debug(true)?;
     modbus.connect()?;
 
-    // Work HERE
+    let mut dest = vec![0u8; 100];
+    modbus.read_bits(0, 1, &mut dest)?;
+    println!("{:?}", &dest);
 
     Ok(())
 }
-
-
 
 fn main() {
     let matches = App::new("simple-client")
         .version(env!("CARGO_PKG_VERSION"))
         .about("Simple Modbus Client with support for the different contextes (rtu, tcp, tcppi)!")
         .author("Stefan Müller (zzeroo) <s.mueller@it.kls-glt.de>")
-        .arg(Arg::with_name("backend")
-            .help("which backend shoud be used")
-            .long("backend")
-            .short("b")
-            .possible_values(&["rtu", "tcp", "tcppi"])
-            .takes_value(true)
-            .required(true))
-        .arg(Arg::with_name("serial_interface")
-            .help("which backend shoud be used")
-            .long("serial_interface")
-            .short("s")
-            .takes_value(true)
-            .required(false))
+        .arg(
+            Arg::with_name("backend")
+                .help("which backend shoud be used")
+                .long("backend")
+                .short("b")
+                .possible_values(&["rtu", "tcp", "tcppi"])
+                .takes_value(true)
+                .required(true),
+        )
+        .arg(
+            Arg::with_name("serial_interface")
+                .help("which backend shoud be used")
+                .long("serial_interface")
+                .short("s")
+                .takes_value(true)
+                .required(false),
+        )
         .get_matches();
 
     if let Err(ref err) = run(&matches) {

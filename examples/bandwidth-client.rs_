@@ -1,9 +1,8 @@
-extern crate libmodbus_rs;
 extern crate time;
 
 mod unit_test_config;
 
-use libmodbus_rs::{Modbus, ModbusClient, ModbusTCP, ModbusRTU};
+use libmodbus::{Modbus, ModbusClient, ModbusTCP, ModbusRTU};
 use std::env;
 use std::io::Error;
 use std::mem::size_of;

@@ -1,10 +1,8 @@
-use failure::Error;
+use crate::prelude::*;
 use libc::{c_char, c_int};
 use libmodbus_sys as ffi;
-use modbus::Modbus;
 use std::ffi::CString;
 use std::str;
-
 
 #[derive(Debug, PartialEq)]
 #[allow(non_camel_case_types)]
@@ -54,7 +52,13 @@ pub enum RequestToSendMode {
 /// [`rtu_set_rts_delay()`](struct.Modbus.html#method.rtu_set_rts_delay)
 ///
 pub trait ModbusRTU {
-    fn new_rtu(device: &str, baud: i32, parity: char, data_bit: i32, stop_bit: i32) -> Result<Modbus, Error>;
+    fn new_rtu(
+        device: &str,
+        baud: i32,
+        parity: char,
+        data_bit: i32,
+        stop_bit: i32,
+    ) -> Result<Modbus, Error>;
     fn rtu_get_serial_mode(&self) -> Result<SerialMode, Error>;
     fn rtu_set_serial_mode(&mut self, mode: SerialMode) -> Result<(), Error>;
     fn rtu_get_rts(&self) -> Result<RequestToSendMode, Error>;
@@ -89,7 +93,7 @@ impl ModbusRTU for Modbus {
     /// # Examples
     ///
     /// ```
-    /// use libmodbus_rs::{Modbus, ModbusRTU};
+    /// use libmodbus::{Modbus, ModbusRTU};
     ///
     /// const YOUR_DEVICE_ID: u8 = 1;
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
@@ -100,17 +104,28 @@ impl ModbusRTU for Modbus {
     ///     Err(e) => println!("Error: {}", e),
     /// }
     /// ```
-    fn new_rtu(device: &str, baud: i32, parity: char, data_bit: i32, stop_bit: i32) -> Result<Modbus, Error> {
+    fn new_rtu(
+        device: &str,
+        baud: i32,
+        parity: char,
+        data_bit: i32,
+        stop_bit: i32,
+    ) -> Result<Modbus, Error> {
         unsafe {
             let device = CString::new(device).unwrap();
-            let ctx = ffi::modbus_new_rtu(device.as_ptr(),
-                                                    baud as c_int,
-                                                    parity as c_char,
-                                                    data_bit as c_int,
-                                                    stop_bit as c_int);
+            let ctx = ffi::modbus_new_rtu(
+                device.as_ptr(),
+                baud as c_int,
+                parity as c_char,
+                data_bit as c_int,
+                stop_bit as c_int,
+            );
 
             if ctx.is_null() {
-                bail!(::std::io::Error::last_os_error())
+                Err(Error::Rtu {
+                    msg: "new_rtu".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                })
             } else {
                 Ok(Modbus { ctx: ctx })
             }
@@ -140,8 +155,8 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```
-    /// use libmodbus_rs::{Modbus, ModbusRTU, SerialMode};
+    /// ```rust,no_run
+    /// use libmodbus::{Modbus, ModbusRTU, SerialMode};
     ///
     /// let modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
@@ -153,7 +168,10 @@ impl ModbusRTU for Modbus {
             match mode {
                 mode if mode == SerialMode::RtuRS232 as i32 => Ok(SerialMode::RtuRS232),
                 mode if mode == SerialMode::RtuRS485 as i32 => Ok(SerialMode::RtuRS485),
-                _ => bail!(::std::io::Error::last_os_error()),
+                _ => Err(Error::Rtu {
+                    msg: "rtu_get_serial_mode".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
             }
         }
     }
@@ -184,8 +202,8 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```
-    /// use libmodbus_rs::{Modbus, ModbusRTU, SerialMode};
+    /// ```rust,no_run
+    /// use libmodbus::{Modbus, ModbusRTU, SerialMode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
     /// assert!(modbus.rtu_set_serial_mode(SerialMode::RtuRS232).is_ok());
@@ -194,7 +212,10 @@ impl ModbusRTU for Modbus {
         unsafe {
             let mode = ffi::modbus_rtu_set_serial_mode(self.ctx, mode as c_int) as i32;
             match mode {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Rtu {
+                    msg: "rtu_set_serial_mode".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -219,8 +240,8 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```rust
-    /// use libmodbus_rs::{Modbus, ModbusRTU, SerialMode, RequestToSendMode};
+    /// ```rust,no_run
+    /// use libmodbus::{Modbus, ModbusRTU, SerialMode, RequestToSendMode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
     /// assert!(modbus.rtu_set_rts(RequestToSendMode::RtuRtsDown).is_ok());
@@ -228,7 +249,10 @@ impl ModbusRTU for Modbus {
     fn rtu_set_rts(&mut self, mode: RequestToSendMode) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_rtu_set_rts(self.ctx, mode as c_int) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Rtu {
+                    msg: "rtu_set_rts".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -247,8 +271,8 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```no_run
-    /// use libmodbus_rs::{Modbus, ModbusRTU, SerialMode};
+    /// ```rust,no_run
+    /// use libmodbus::{Modbus, ModbusRTU, SerialMode};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
     /// assert!(modbus.rtu_set_serial_mode(SerialMode::RtuRS485).is_ok());
@@ -260,7 +284,10 @@ impl ModbusRTU for Modbus {
                 ffi::MODBUS_RTU_RTS_NONE => Ok(RequestToSendMode::RtuRtsNone),
                 ffi::MODBUS_RTU_RTS_UP => Ok(RequestToSendMode::RtuRtsUp),
                 ffi::MODBUS_RTU_RTS_DOWN => Ok(RequestToSendMode::RtuRtsDown),
-                _ => bail!(::std::io::Error::last_os_error()),
+                _ => Err(Error::Rtu {
+                    msg: "rtu_get_rts".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
             }
         }
     }
@@ -296,8 +323,8 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```
-    /// use libmodbus_rs::{Modbus, ModbusRTU};
+    /// ```rust,no_run
+    /// use libmodbus::{Modbus, ModbusRTU};
     /// let modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
     /// modbus.rtu_get_rts_delay();
@@ -305,7 +332,10 @@ impl ModbusRTU for Modbus {
     fn rtu_get_rts_delay(&self) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_rtu_get_rts_delay(self.ctx) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Rtu {
+                    msg: "rtu_get_rts_delay".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 delay => Ok(delay),
             }
         }
@@ -325,8 +355,8 @@ impl ModbusRTU for Modbus {
     ///
     /// # Examples
     ///
-    /// ```
-    /// use libmodbus_rs::{Modbus, ModbusRTU};
+    /// ```rust,no_run
+    /// use libmodbus::{Modbus, ModbusRTU};
     /// let mut modbus = Modbus::new_rtu("/dev/ttyUSB0", 115200, 'N', 8, 1).unwrap();
     ///
     /// let _ = modbus.rtu_set_rts_delay(100).unwrap();
@@ -334,7 +364,10 @@ impl ModbusRTU for Modbus {
     fn rtu_set_rts_delay(&mut self, us: i32) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_rtu_set_rts_delay(self.ctx, us as c_int) {
-                -1 => bail!(::std::io::Error::last_os_error()),
+                -1 => Err(Error::Rtu {
+                    msg: "rtu_set_rts_delay".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }

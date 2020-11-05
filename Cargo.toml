@@ -1,6 +1,6 @@
 [package]
-name = "libmodbus-rs"
-version = "0.9.0"
+name = "libmodbus"
+version = "1.0.0"
 authors = ["Stefan Müller <co@zzeroo.com>"]
 readme = "README.md"
 keywords = ["modbus", "libmodbus"]
@@ -10,18 +10,18 @@ homepage = "http://zzeroo.github.io/libmodbus-rs"
 description = "libmodbus bindings for Rust"
 license = "LGPL-2.1" # same as libmodbus
 categories = ["api-bindings"]
+edition = "2018"
 
 [badges]
 travis-ci = { repository = "zzeroo/libmodbus-rs" }
 
 [dependencies]
-failure = "0.1.5"
-libc = "0.2.55"
-libmodbus-sys = { path = "libmodbus-sys", version = "0.9" }
-rand = "0.6.5"
-time = "0.1.42"
+libc = "0.2.80"
+libmodbus-sys = { path = "libmodbus-sys", version = "1" }
+rand = "0.7.3"
+time = "0.2.22"
 
-[dependencies.clap]
+[dev-dependencies.clap]
 version = "2.33"
 default-features = false
 features = [ "color" ]
