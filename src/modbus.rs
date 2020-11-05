@@ -1,6 +1,6 @@
+use crate::prelude::*;
 use libc::{c_int, c_uint};
 use libmodbus_sys as ffi;
-use crate::prelude::*;
 
 /// Modbus protocol exceptions
 ///
@@ -113,9 +113,7 @@ impl Timeout {
     /// assert_eq!(Timeout::new(1, 2), Timeout { sec: 1, usec: 2 });
     /// ```
     pub fn new(sec: u32, usec: u32) -> Self {
-        Timeout {
-            sec, usec,
-        }
+        Timeout { sec, usec }
     }
 
     /// Create a new `Timeout` struct from `sec` parameter given
@@ -135,7 +133,8 @@ impl Timeout {
     /// ```
     pub fn new_sec(sec: u32) -> Self {
         Timeout {
-            sec, ..Default::default()
+            sec,
+            ..Default::default()
         }
     }
 
@@ -156,7 +155,8 @@ impl Timeout {
     /// ```
     pub fn new_usec(usec: u32) -> Self {
         Timeout {
-            usec, ..Default::default()
+            usec,
+            ..Default::default()
         }
     }
 }
@@ -217,7 +217,6 @@ impl Modbus {
     /// Random number to avoid errno conflicts
     pub const ENOBASE: u32 = ffi::MODBUS_ENOBASE;
 
-
     pub const RTU_MAX_ADU_LENGTH: usize = ffi::MODBUS_RTU_MAX_ADU_LENGTH as usize;
     pub const TCP_DEFAULT_PORT: u32 = ffi::MODBUS_TCP_DEFAULT_PORT;
     pub const TCP_MAX_ADU_LENGTH: usize = ffi::MODBUS_TCP_MAX_ADU_LENGTH as usize;
@@ -250,7 +249,10 @@ impl Modbus {
     pub fn connect(&self) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_connect(self.ctx) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "connect".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -277,7 +279,10 @@ impl Modbus {
     pub fn flush(&self) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_flush(self.ctx) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "flush".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -323,7 +328,10 @@ impl Modbus {
     pub fn set_slave(&mut self, slave: u8) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_set_slave(self.ctx, slave as c_int) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "set_slave".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -345,7 +353,10 @@ impl Modbus {
     pub fn get_slave(&self) -> Result<u8, Error> {
         unsafe {
             match ffi::modbus_get_slave(self.ctx) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "get_slave".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 num => Ok(num as u8),
             }
         }
@@ -385,7 +396,10 @@ impl Modbus {
     pub fn set_debug(&mut self, flag: bool) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_set_debug(self.ctx, flag as c_int) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "set_debug".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -415,7 +429,10 @@ impl Modbus {
         let mut timeout = Timeout { sec: 0, usec: 0 };
         unsafe {
             match ffi::modbus_get_byte_timeout(self.ctx, &mut timeout.sec, &mut timeout.usec) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "get_byte_timeout".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(timeout),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -458,7 +475,10 @@ impl Modbus {
     pub fn set_byte_timeout(&mut self, timeout: Timeout) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_set_byte_timeout(self.ctx, timeout.sec, timeout.usec) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "set_byte_timeout".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -488,7 +508,10 @@ impl Modbus {
         let mut timeout = Timeout { sec: 0, usec: 0 };
         unsafe {
             match ffi::modbus_get_response_timeout(self.ctx, &mut timeout.sec, &mut timeout.usec) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "get_response_timeout".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(timeout),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -530,7 +553,10 @@ impl Modbus {
     pub fn set_response_timeout(&mut self, timeout: Timeout) -> Result<(), Error> {
         unsafe {
             match ffi::modbus_set_response_timeout(self.ctx, timeout.sec, timeout.usec) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "set_response_timeout".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -580,13 +606,17 @@ impl Modbus {
     /// assert!(modbus.set_error_recovery(Some(&[ErrorRecoveryMode::Link, ErrorRecoveryMode::Protocol])).is_ok());
     /// ```
     pub fn set_error_recovery(&mut self, flags: Option<&[ErrorRecoveryMode]>) -> Result<(), Error> {
-        let flags = flags.unwrap_or(&[])
-            .iter()
-            .fold(ffi::modbus_error_recovery_mode::MODBUS_ERROR_RECOVERY_NONE, |acc, v| acc | v.as_raw());
+        let flags = flags.unwrap_or(&[]).iter().fold(
+            ffi::modbus_error_recovery_mode::MODBUS_ERROR_RECOVERY_NONE,
+            |acc, v| acc | v.as_raw(),
+        );
 
         unsafe {
             match ffi::modbus_set_error_recovery(self.ctx, flags) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "set_error_recovery".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(()),
                 _ => panic!("libmodbus API incompatible response"),
             }
@@ -613,10 +643,12 @@ impl Modbus {
     /// assert!(modbus.set_socket(1337).is_ok());
     /// ```
     pub fn set_socket(&mut self, socket: i32) -> Result<(), Error> {
-
         unsafe {
             match ffi::modbus_set_socket(self.ctx, socket) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "set_socket".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 0 => Ok(()),
                 _ => unreachable!(),
             }
@@ -644,7 +676,10 @@ impl Modbus {
     pub fn get_socket(&self) -> Result<i32, Error> {
         unsafe {
             match ffi::modbus_get_socket(self.ctx) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Modbus {
+                    msg: "get_socket".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 socket => Ok(socket),
             }
         }
@@ -713,13 +748,16 @@ impl Modbus {
     /// ```
     pub fn reply_exception(&self, request: &[u8], exception_code: Exception) -> Result<i32, Error> {
         unsafe {
-            match ffi::modbus_reply_exception(self.ctx, request.as_ptr(), exception_code as c_uint) {
-                -1 => Err(Error::Modbus { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+            match ffi::modbus_reply_exception(self.ctx, request.as_ptr(), exception_code as c_uint)
+            {
+                -1 => Err(Error::Modbus {
+                    msg: "reply_exception".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 len => Ok(len),
             }
         }
     }
-
 
     /// `strerror`  - return the error message
     ///
@@ -732,14 +770,9 @@ impl Modbus {
     /// assert_eq!(Modbus::strerror(112345694), "Too many data");
     /// ```
     pub fn strerror(errnum: i32) -> String {
-
-        let c_str = unsafe {
-            ::std::ffi::CStr::from_ptr(ffi::modbus_strerror(errnum))
-        };
+        let c_str = unsafe { ::std::ffi::CStr::from_ptr(ffi::modbus_strerror(errnum)) };
         String::from_utf8_lossy(c_str.to_bytes()).into_owned()
     }
-
-
 
     /// `close` - close a Modbus connection
     ///
@@ -846,7 +879,14 @@ pub fn set_bits_from_byte(dest: &mut [u8], index: u32, value: u8) {
 /// assert_eq!(modbus_mapping.get_input_bits_mut(), [1u8, 1, 0, 0, 0]);
 /// ```
 pub fn set_bits_from_bytes(dest: &mut [u8], index: u16, num_bit: u16, bytes: &[u8]) {
-    unsafe { ffi::modbus_set_bits_from_bytes(dest.as_mut_ptr(), index as c_int, num_bit as c_uint, bytes.as_ptr()) }
+    unsafe {
+        ffi::modbus_set_bits_from_bytes(
+            dest.as_mut_ptr(),
+            index as c_int,
+            num_bit as c_uint,
+            bytes.as_ptr(),
+        )
+    }
 }
 
 /// `get_byte_from_bits` - get the value from many bit
@@ -1080,7 +1120,6 @@ pub fn set_float_dcba(src: f32, dest: &mut [u16]) {
     // &mut [u16; 2] is not working here
     unsafe { ffi::modbus_set_float_dcba(src, dest.as_mut_ptr()) }
 }
-
 
 impl Drop for Modbus {
     fn drop(&mut self) {

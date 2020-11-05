@@ -1,6 +1,5 @@
-use libmodbus_sys as ffi;
 use crate::prelude::*;
-
+use libmodbus_sys as ffi;
 
 /// The server is waiting for request from clients and must answer when it is concerned by the request. The libmodbus
 /// offers the following functions to handle requests:
@@ -12,7 +11,12 @@ use crate::prelude::*;
 ///
 pub trait ModbusServer {
     fn receive(&self, request: &mut [u8]) -> Result<i32, Error>;
-    fn reply(&self, request: &[u8], request_len: i32, modbus_mapping: &ModbusMapping) -> Result<i32, Error>;
+    fn reply(
+        &self,
+        request: &[u8],
+        request_len: i32,
+        modbus_mapping: &ModbusMapping,
+    ) -> Result<i32, Error>;
 }
 
 impl ModbusServer for Modbus {
@@ -41,7 +45,10 @@ impl ModbusServer for Modbus {
         unsafe {
             let len = ffi::modbus_receive(self.ctx, request.as_mut_ptr());
             match len {
-                -1 => Err(Error::Server { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Server {
+                    msg: "receive".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 len => Ok(len),
             }
         }
@@ -67,12 +74,24 @@ impl ModbusServer for Modbus {
     ///
     /// assert!(modbus.receive(&mut query).is_ok());
     /// ```
-    fn reply(&self, request: &[u8], request_len: i32, modbus_mapping: &ModbusMapping) -> Result<i32, Error> {
+    fn reply(
+        &self,
+        request: &[u8],
+        request_len: i32,
+        modbus_mapping: &ModbusMapping,
+    ) -> Result<i32, Error> {
         unsafe {
-            let len =
-                ffi::modbus_reply(self.ctx, request.as_ptr(), request_len, modbus_mapping.modbus_mapping);
+            let len = ffi::modbus_reply(
+                self.ctx,
+                request.as_ptr(),
+                request_len,
+                modbus_mapping.modbus_mapping,
+            );
             match len {
-                -1 => Err(Error::Server { msg: "".to_owned(), source: ::std::io::Error::last_os_error() }),
+                -1 => Err(Error::Server {
+                    msg: "reply".to_owned(),
+                    source: ::std::io::Error::last_os_error(),
+                }),
                 len => Ok(len),
             }
         }

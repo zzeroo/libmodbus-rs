@@ -1,6 +1,5 @@
 use libmodbus::{Modbus, ModbusMapping, ModbusTCP};
 
-
 #[test]
 fn new() {
     assert!(ModbusMapping::new(500, 500, 500, 500).is_ok());

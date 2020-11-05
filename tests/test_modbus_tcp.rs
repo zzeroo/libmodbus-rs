@@ -1,6 +1,5 @@
 use libmodbus::{Modbus, ModbusTCP};
 
-
 #[test]
 fn new_tcp() {
     assert!(Modbus::new_tcp("127.0.0.1", 1502).is_ok());
