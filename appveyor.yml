@@ -30,6 +30,7 @@ environment:
       MSYS2_ARCH: i686
       MSYS2_DIR: msys64
       MSYSTEM: MINGW32
+      LIBCLANG_PATH: C:\Program Files (x86)\LLVM\bin\
       channel: stable
       target: i686-pc-windows-gnu
 

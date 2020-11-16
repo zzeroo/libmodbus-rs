@@ -113,8 +113,6 @@ fn add_c_files(build: &mut cc::Build, path: impl AsRef<Path>) {
 }
 
 fn run_bindgen(include: &PathBuf) {
-    println!("YIPPIE bindgen");
-
     let out_path = PathBuf::from(env::var("OUT_DIR").expect("can't access $OUT_DIR"));
     // Configure and generate bindings.
     let bindings = bindgen::builder()
