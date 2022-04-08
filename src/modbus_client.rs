@@ -44,7 +44,7 @@ pub trait ModbusClient {
         dest: &mut [u16],
     ) -> Result<u16, Error>;
     fn mask_write_register(&self, address: u16, and_mask: u16, or_mask: u16) -> Result<(), Error>;
-    fn send_raw_request(&self, raw_request: &mut [u8], lenght: usize) -> Result<u16, Error>;
+    fn send_raw_request(&self, raw_request: &mut [u8], length: usize) -> Result<u16, Error>;
     fn receive_confirmation(&self, response: &mut [u8]) -> Result<u16, Error>;
 }
 
