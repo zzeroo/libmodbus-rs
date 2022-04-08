@@ -44,7 +44,7 @@ pub trait ModbusClient {
         dest: &mut [u16],
     ) -> Result<u16, Error>;
     fn mask_write_register(&self, address: u16, and_mask: u16, or_mask: u16) -> Result<(), Error>;
-    fn send_raw_request(&self, raw_request: &mut [u8], lenght: usize) -> Result<u16, Error>;
+    fn send_raw_request(&self, raw_request: &mut [u8], length: usize) -> Result<u16, Error>;
     fn receive_confirmation(&self, response: &mut [u8]) -> Result<u16, Error>;
 }
 
@@ -552,7 +552,7 @@ impl ModbusClient for Modbus {
     ///
     /// # Return value
     ///
-    /// The function returns a Result, containing the full message lenght,  counting the extra data relating to the
+    /// The function returns a Result, containing the full message length,  counting the extra data relating to the
     /// backend, if successful. Otherwise it contains an Error.
     ///
     /// # Examples
@@ -568,9 +568,9 @@ impl ModbusClient for Modbus {
     /// assert_eq!(modbus.send_raw_request(&mut raw_request, request_len).unwrap(), 6);
     /// assert!(modbus.receive_confirmation(&mut response).is_ok());
     /// ```
-    fn send_raw_request(&self, raw_request: &mut [u8], lenght: usize) -> Result<u16, Error> {
+    fn send_raw_request(&self, raw_request: &mut [u8], length: usize) -> Result<u16, Error> {
         unsafe {
-            match ffi::modbus_send_raw_request(self.ctx, raw_request.as_mut_ptr(), lenght as c_int)
+            match ffi::modbus_send_raw_request(self.ctx, raw_request.as_mut_ptr(), length as c_int)
             {
                 -1 => Err(Error::Client {
                     msg: "send_raw_request".to_owned(),
